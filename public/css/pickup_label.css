@@ -1,0 +1,147 @@
+* {
+	padding: 0;
+	margin: 0;
+}
+
+body {
+	font-family: "微软雅黑", Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	text-align: center;
+}
+
+.content {
+	border: 1px solid #000;
+	width: 98mm;
+	height: 118mm;
+	text-align: left;
+	margin: 0 auto;
+	margin-top:2px;
+}
+
+.div1 {
+	height: 14mm;
+	border-bottom: 1px solid #000;
+	font-size: 32px;
+	font-weight: bold;
+	line-height: 14mm;
+	text-align: center;
+}
+
+.div2 {
+	height: 35mm;
+	border-bottom: 1px solid #000;
+}
+
+.div3 {
+	height: 45mm;
+	border-bottom: 1px dashed #000;
+}
+
+.div4 {
+	height: 5mm;
+	border-bottom: 1px solid #000;
+}
+
+.div5 {
+	height: 18mm;
+}
+
+.fl {
+	float: left;
+}
+
+.div1_in1 {
+	width: 32mm;
+}
+
+.div1_in2 {
+	width: 32mm;
+}
+
+.div1_in3 {
+	width: 32mm;
+}
+
+.div2_in {
+	font-size: 32px;
+	font-weight: bold;
+	line-height: 14mm;
+	text-align: center;
+}
+
+.div2_in1 {
+	width: 32mm;
+}
+
+.div2_in2 {
+	width: 32mm;
+}
+
+.div2_in3 {
+	width: 32mm;
+}
+
+.clear {
+	clear: both;
+}
+
+.div2_zone {
+	font-weight: bold;
+	font-size: 20px;
+}
+
+.div2_sj {
+	width: 40mm;
+}
+
+.div3_barcode {
+	width: 60mm;
+	height: 15mm;
+	float: left;
+	text-align: center;
+}
+
+.div3_barcode_msg {
+	width: 38mm;
+	height: 15mm;
+	float: left;
+}
+
+.div3_01 {
+	width: 60mm;
+	float: left;
+}
+
+.div3_02 {
+	width: 38mm;
+	float: left;
+}
+
+.div4_01 {
+	width: 45mm;
+	float: left;
+}
+
+.div4_02 {
+	width: 50mm;
+	float: left;
+}
+.fb{font-weight:bold;}
+.div5_01 {
+	width: 38mm;
+	float: left;
+}
+
+.div5_02 {
+	width: 60mm;
+	float: left;
+}
+
+.div3_01 p,.pl8 {
+	padding-left: 8mm;
+	line-height: 19px;
+}
+
+.div5 p {
+	padding-left: 8mm;
+}

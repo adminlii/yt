@@ -1,0 +1,148 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta http-equiv="x-ua-compatible" content="ie=7" />
+<title>订单管理系统</title>
+<script type="text/javascript" src="/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="/js/jquery-ui.min.js"></script>
+</head>
+<body>
+	<script language="javascript" src="/lodop/LodopFuncs.js"></script>
+	<object id="LODOP_OB" classid="clsid:2105C259-1E0C-4534-8141-A753534CB4CA" width=0 height=0>
+		<embed id="LODOP_EM" type="application/x-print-lodop" width=0 height=0 pluginspage="install_lodop32.exe"></embed>
+	</object>
+	<script> 
+	var LODOP;	
+    $(function(){
+    	var max = 500;
+    	$('.print-batch').text('批量打印配货单');
+    	LODOP=getLodop(document.getElementById('LODOP_OB'),document.getElementById('LODOP_EM')); 
+    	$('.print').click(function(){
+       		var id = $(this).attr('id');
+       		//获取js文件，然后运行方法
+       		$.getScript('/common/print-order-lodop/print/ref_id/301077531957-0/paper/'+id, function(){
+       			 print_lodop(); 
+      			});    		
+    	});
+    	$('.print-batch').click(function(){
+    		var param = {};
+    		param.paper = 'pickup-batch';
+    		var ref_id = [];
+    		max = $('#num').val();
+    		if($.trim(max)==''){
+    			max=10;
+    		}
+    		max = parseInt(max);
+    		if(!max){
+    			max = 10;
+    		}
+    		
+    		for(var a=1;a<=max;a++){
+        		ref_id.push(a+'');    			
+    		}
+    		param.ref_id = ref_id;
+    		$.ajax({
+    			   type: "POST",
+    			   async: false,
+    			   url: "/common/print-order-lodop/print-batch/",
+    			   data: param,
+    			   dataType:'script',
+    			   success: function(msg){
+    				   print_lodop(); 
+    			   }
+    			});
+       				
+    	});
+
+    	$('.print-batch-one-piece').click(function(){
+    		var param = {};
+    		param.paper = 'pickup-batch';
+    		var ref_id = [];
+    		max = $('#num').val();
+    		if($.trim(max)==''){
+    			max=10;
+    		}
+    		max = parseInt(max);
+    		if(!max){
+    			max = 10;
+    		}
+    		
+    		for(var a=1;a<=max;a++){
+        		ref_id.push(a+'');    			
+    		}
+    		param.ref_id = ref_id;
+    		$.ajax({
+    			   type: "POST",
+    			   async: false,
+    			   url: "/common/print-order-lodop/print-batch-one-piece/",
+    			   data: param,
+    			   dataType:'script',
+    			   success: function(msg){
+    				   print_lodop(); 
+    			   }
+    			});
+       				
+    	});
+
+    	$('.print-batch-mult-piece').click(function(){
+    		var param = {};
+    		param.paper = 'pickup-batch';
+    		var ref_id = [];
+    		max = $('#num').val();
+    		if($.trim(max)==''){
+    			max=10;
+    		}
+    		max = parseInt(max);
+    		if(!max){
+    			max = 10;
+    		}
+    		
+    		for(var a=1;a<=max;a++){
+        		ref_id.push(a+'');    			
+    		}
+    		param.ref_id = ref_id;
+    		$.ajax({
+    			   type: "POST",
+    			   async: false,
+    			   url: "/common/print-order-lodop/print-batch-mult-piece/",
+    			   data: param,
+    			   dataType:'script',
+    			   success: function(msg){
+    				   print_lodop(); 
+    			   }
+    			});
+       				
+    	});
+    	$('.setup').click(function(){
+    		var id = $(this).attr('id');
+    		//获取js文件，然后运行方法
+    		$.getScript('/common/print-order-lodop/print/ref_id/301077531957-0/paper/'+id, function(){
+    			setup_lodop(); 
+   			});
+    	});
+    	$('.preview').click(function(){
+    		var id = $(this).attr('id');
+    		//获取js文件，然后运行方法
+    		$.getScript('/common/print-order-lodop/print/ref_id/301077531957-0/paper/'+id, function(){
+    			preview_lodop(); 
+   			});
+    	});
+    })
+    </script>
+	<button id='A4' class='print'>A4</button>
+	<button id='B4' class='print'>B4</button>
+	<button id='B4' class='print'>C4</button>
+	<button id='pickup' class='print'>pickupPrint</button>
+	<button id='pickup' class='preview'>pickupPreview</button>
+	<button id='pickup' class='setup'>pickupSetup</button>
+	
+	
+	<button class='print-batch'></button>
+	<button class='print-batch-one-piece'>批量一票一件下架</button>
+	<button class='print-batch-mult-piece'>批量一票多件下架</button>
+	<input type='text' id='num' value='' placeholder='请输入需要打印的份数'>
+	<div id='wrap'></div>
+</body>
+</html>

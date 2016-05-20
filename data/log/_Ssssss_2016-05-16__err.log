@@ -1,0 +1,46 @@
+2016-05-16T14:34:59+08:00 INFO (6): 
+2016-05-16 14:34:59:
+result:Array
+(
+    [1] => Array
+        (
+            [invoice_enname] => com
+            [invoice_cnname] => com
+            [invoice_quantity] => 1
+            [unit_code] => PCE
+            [invoice_unitcharge] => 0
+            [invoice_weight] => 1
+            [sku] => 
+            [hs_code] => fdsafdsa2
+            [invoice_note] => 
+            [invoice_url] => 
+            [invoice_totalcharge] => 0
+            [invoice_totalWeight] => 1
+            [invoice_currencycode] => USD
+        )
+
+)
+2016-05-16T15:21:21+08:00 INFO (6): 
+2016-05-16 15:21:21:
+result:Array
+(
+    [1] => Array
+        (
+            [invoice_quantity] => 1
+            [invoice_weight] => 2
+            [invoice_length] => 
+            [invoice_width] => 
+            [invoice_height] => 
+            [invoice_enname] => 平板
+            [invoice_cnname] => ipad
+            [invoice_shippertax] => fjrzzs
+            [invoice_consigneetax] => sjrzzs
+            [invoice_totalcharge_all] => 1200
+            [hs_code] => hs_code
+            [invoice_unitcharge] => 0
+            [invoice_totalcharge] => 0
+            [invoice_totalWeight] => 2
+            [invoice_currencycode] => USD
+        )
+
+)

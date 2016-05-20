@@ -1,0 +1,8 @@
+var $locale_message={};if(typeof(locale_message_language)=='undefined'){locale_message_language='';}
+var locale_language=locale_message_language;$locale_message=getLanguage(locale_language);function testMessage(){var tmp1=$.getMessage("test",["这里用一个数组就行了","猴子不一定是大圣"]);var tmp2=$.getMessage("test");alert(tmp2);}
+function getLanguage(locale_language){var oms_lang="oms-lang-";var arrLanguage=["en","zh_CN","zh_TW"];var index=$.inArray(locale_language,arrLanguage);var bol=(index==-1)?false:true;var languageEN="en";var languageZH="zh";if(bol){if(index==0){return $locale_message_en;}else if(index==1){return $locale_message_cn;}else if(index==2){return $locale_message_tw;}}else{if(languageZH==locale_language){return $locale_message_cn;}else if(locale_language.indexOf(languageZH)!=-1){return $locale_message_tw;}else if(locale_language.indexOf(languageEN)!=-1){return $locale_message_en;}else{return $locale_message_cn;}}}
+$.formatStr=function(){if(!arguments[1]&&arguments[1]!=''){return arguments[0];}
+    var ary=[];for(i=0;i<arguments[1].length;i++){ary.push(arguments[1][i]+"");}
+    return arguments[0].replace(/\{(\d+)\}/g,function(m,i){return(ary[i])?ary[i]:"";});};$.getMessage=function(){var key=arguments[0];key=(key)?$.trim(key):key;var param=arguments[1];if(!$locale_message){return'Locale language Error';}else{var bol;for(var i=0;i<$locale_message.length;i++){bol=($locale_message[i].key===key)?true:false;if(bol){return $.formatStr($locale_message[i].value,param);}}}
+    return $.getMessage("sys_message_error",[key]);};function isEnLocale(){var locale=$.getMessage("sys_web_locale");if(locale=='en'){return true;}
+    return false;}

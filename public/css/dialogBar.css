@@ -1,0 +1,63 @@
+@CHARSET "UTF-8";
+
+.dialog-module-title{
+    font-weight:500;
+    text-align:right;
+    padding-right:5px;
+}
+.message_system{
+	background-color: #F5F59D;
+    border-radius: 5px 5px 5px 5px;
+    color: #666666;
+    line-height: 20px;
+    float: left;
+    max-width: 80%;
+    padding: 6px 12px;
+    margin-bottom: 5px;
+}
+.message_seller{
+	background-color: #A0EC60;
+    border-radius: 5px 5px 5px 5px;
+    color: #666666;
+    line-height: 20px;
+    float: right;
+    max-width: 80%;
+    padding: 6px 12px;
+    margin-bottom: 5px;
+}
+.message_buyer{
+	background-color: #3CDFFF;
+    border-radius: 5px 5px 5px 5px;
+    color: #66735B;
+    line-height: 20px;
+    float: left;
+    max-width: 80%;
+    padding: 6px 12px;
+    margin-bottom: 5px;
+}
+.message_other{
+	 background-color: #A29BC9;
+    border-radius: 5px 5px 5px 5px;
+    color: #FCFCFC;
+    float: left;
+    line-height: 20px;
+    margin-bottom: 5px;
+    max-width: 80%;
+    padding: 6px 12px;
+}
+.message_empty{
+	background-color: #97F1FF;
+    border-radius: 5px 5px 5px 5px;
+    color: #66735B;
+    line-height: 20px;
+    float: left;
+    max-width: 80%;
+    padding: 6px 12px;
+    margin-bottom: 5px;
+    margin-left: 15px;
+}
+.message_content{
+	font-size: 15px;
+	font-family: "Microsoft YaHei",'微软雅黑','Simsun',Verdana,Arial,Helvetica,sans-serif;
+	overflow-x: hidden;overflow-y: auto;
+}

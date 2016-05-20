@@ -1,0 +1,22 @@
+2016-05-10T16:52:43+08:00 INFO (6): 
+2016-05-10 16:52:43:
+**************start*************
+{"Data":["3878570360"],"Version":"0.0.0.3","RequestTime":"2016-05-10 16:52:41","RequestId":"a2b23daa-a519-48cc-b5c6-e0ebbfeada2b"}
+Array
+(
+    [Data] => 
+    [Version] => 0.0.0.3
+    [RequestId] => a2b23daa-a519-48cc-b5c6-e0ebbfeada2b
+    [ResponseTime] => 2016-05-10T08:52:44.5729005Z
+    [ResponseId] => 065fca1d-29a3-4f67-bbe9-76bc0c9ce909
+    [ResponseResult] => 0
+    [ResponseError] => Array
+        (
+            [Code] => 0x00001109
+            [ShortMessage] => 跟踪号在TMS系统里不存在
+            [LongMessage] => 跟踪号在TMS系统里不存在
+            [ErrorValue] => 4361
+        )
+
+)
+**************end*************

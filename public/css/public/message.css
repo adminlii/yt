@@ -1,0 +1,52 @@
+@charset "utf-8";
+/* CSS Document */
+/* ----------- html layout css ------------- */
+
+
+
+
+
+.mail { border:1px solid #bbd1eb; margin: 0px 0px 0px 8px; background:#fff;}
+
+.mailTab {
+    background: url(/images/pack/bg_goodsTab01.gif) repeat-x scroll center bottom transparent;
+    height:auto;
+    padding-bottom: 2px;
+    width:20%;
+    float:left;
+    border: 1px solid #d6d6d6;
+}
+
+.mailTab ul {}
+.mailTab ul li { float:left; width:32.6%; height:24px; background:#e1edfb;  line-height:24px; border-right:1px solid #bbd1eb; border-bottom:1px solid #bbd1eb; text-align:center; }
+.mailTab ul li.chooseTag { height:24px; float:left; background:#fff; border-right:1px solid #bbd1eb; border-bottom:1px solid #fff; border-radius:2px 2px 0px 0px; border-bottom:none;  }
+.mailTab li.chooseTag a { color:#666;}
+.mailTab a { color:#666;}
+.mailTab a:hover { color:#0090e1; text-decoration:none;}
+
+.mailSch { padding:7px; height:22px;}
+.mailSch input { float:left; width:87%; height:20px; border:1px solid #a5c3e0; border-top:1px solid #89accd; border-right:none; border-radius:3px 0px 0px 3px; box-shadow:1px 1px 1px #e5eaee inset; padding:0px; margin:0px;}
+.mailSch_btn { float:left; width:20px; height:22px; background: url(/images/sidebar/bg_mailSch.gif) no-repeat; border:none; padding-top:6px; margin:0px;}
+
+
+.mail_set { height:22px; line-height:22px; border-top:1px solid #b6d4f7; border-bottom:1px solid #c4defc; background:#e4effc; padding:0px 10px;}
+
+.mail_menu { min-width:150px;}
+.mail_menu dl { }
+.mail_menu dl dt { height:22px; line-height:22px; font-weight:bold; background: url("/images/pack/bg_manage_form01.gif") repeat-x scroll 0 0 transparent}
+.mail_menu dl dt.receipts { }
+.mail_menu dl dt a {cursor: pointer; width:auto; height:22px; background: url(/images/sidebar/bg_mail_menu02.gif) left no-repeat; background-position:10px 5px; color:#333; padding:0px 20px 0px 26px; display:block;}
+.mail_menu dl dt a:hover { width:auto; height:22px; background:#e4effc url(/images/sidebar/bg_mail_menu02.gif) left no-repeat;background-position:10px 5px; display:block; text-decoration:none;}
+.mail_menu dl dt.receipts a { width:auto; height:22px; background: url(/images/sidebar/bg_mail_menu02.gif) left no-repeat; background-position:10px 5px; color:#333; padding:0px 20px 0px 26px; display:block;}
+.mail_menu dl dt.receipts a:hover { width:auto; height:22px; background:#e4effc url(/images/sidebar/bg_mail_menu02.gif) left no-repeat;background-position:10px 5px; display:block; text-decoration:none;}
+.mail_menu dl dd { height:22px; line-height:22px; }
+.mail_menu dl dd a {cursor: pointer; width:auto; height:22px; background: url(/images/sidebar/bg_mail_menu02.gif) left no-repeat;background-size:10px;background-position:26px 5px; color:#333;  padding:0px 20px 0px 39px; display:block;}
+.mail_menu dl dd a:hover { width:auto; height:22px; background:#e4effc url(/images/sidebar/bg_mail_menu02.gif) left no-repeat;background-position:26px 5px;background-size:10px; display:block; text-decoration:none;}
+.mail_menu p { height:auto;line-height: 22px; }
+.mail_menu p a { width:auto; height:auto; color:#333;  padding:0px 20px 0px 39px; display:block;}
+.mail_menu p a:hover {  height:auto; color:#4474b2; border:1px solid #7d96ba; box-shadow:0px 0px 4px #7d96ba; background:#f9f9f9;}
+
+
+.submail { position:absolute; width:auto; padding:5px; background:#f9f9f9; border:1px solid #7d96ba;  border-radius:5px; box-shadow:0px 0px 4px #7d96ba; margin-left:150px; margin-top:-22px;display: none;}
+.submail_cover { position:absolute; width:9px; height:20px; background:#f9f9f9; z-index:50; margin-left:-10px; margin-top:-5px;}
+.submail_ahover{  height:20px; color:#4474b2; border:1px solid #7d96ba; box-shadow:0px 0px 4px #7d96ba; background:#f9f9f9;}

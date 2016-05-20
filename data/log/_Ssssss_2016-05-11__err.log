@@ -1,0 +1,42 @@
+2016-05-11T13:25:28+08:00 INFO (6): 
+2016-05-11 13:25:28:
+result:Array
+(
+    [1] => Array
+        (
+            [invoice_enname] => 
+            [invoice_cnname] => 
+            [invoice_quantity] => 
+            [unit_code] => PCE
+            [invoice_unitcharge] => 0
+            [invoice_weight] => 
+            [sku] => 
+            [hs_code] => 
+            [invoice_note] => 
+            [invoice_url] => 
+            [invoice_totalcharge] => 0
+            [invoice_totalWeight] => 0
+            [invoice_currencycode] => USD
+        )
+
+)
+2016-05-11T15:07:57+08:00 INFO (6): 
+2016-05-11 15:07:57:
+result:Array
+(
+    [1] => Array
+        (
+            [invoice_quantity] => 1
+            [invoice_weight] => 1
+            [invoice_length] => 1
+            [invoice_width] => 1
+            [invoice_height] => 1
+            [invoice_enname] => fdsa
+            [invoice_cnname] => fdas
+            [invoice_unitcharge] => 0
+            [invoice_totalcharge] => 0
+            [invoice_totalWeight] => 1
+            [invoice_currencycode] => USD
+        )
+
+)

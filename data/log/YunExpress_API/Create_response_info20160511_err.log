@@ -1,0 +1,462 @@
+2016-05-11T17:44:04+08:00 INFO (6): 
+2016-05-11 17:44:04:
+**************start*************
+{"Data":["3878570360"],"Version":"0.0.0.3","RequestTime":"2016-05-11 17:44:04","RequestId":"a2b23daa-a519-48cc-b5c6-e0ebbfeada2b"}
+Array
+(
+    [Data] => 
+    [Version] => 0.0.0.3
+    [RequestId] => a2b23daa-a519-48cc-b5c6-e0ebbfeada2b
+    [ResponseTime] => 2016-05-11T09:44:07.5081574Z
+    [ResponseId] => 1d3a5043-e559-4b09-8051-2d9f43dc4530
+    [ResponseResult] => 0
+    [ResponseError] => Array
+        (
+            [Code] => 0x00001109
+            [ShortMessage] => 跟踪号在TMS系统里不存在
+            [LongMessage] => 跟踪号在TMS系统里不存在
+            [ErrorValue] => 4361
+        )
+
+)
+**************end*************
+2016-05-11T17:49:31+08:00 INFO (6): 
+2016-05-11 17:49:31:
+**************start*************
+{"Data":["3878570360"],"Version":"0.0.0.3","RequestTime":"2016-05-11 17:49:31","RequestId":"a2b23daa-a519-48cc-b5c6-e0ebbfeada2b"}
+Array
+(
+    [Data] => 
+    [Version] => 0.0.0.3
+    [RequestId] => a2b23daa-a519-48cc-b5c6-e0ebbfeada2b
+    [ResponseTime] => 2016-05-11T09:49:34.8747324Z
+    [ResponseId] => 85c28e52-b541-4be4-a97e-4cd549eccfd2
+    [ResponseResult] => 0
+    [ResponseError] => Array
+        (
+            [Code] => 0x00001109
+            [ShortMessage] => 跟踪号在TMS系统里不存在
+            [LongMessage] => 跟踪号在TMS系统里不存在
+            [ErrorValue] => 4361
+        )
+
+)
+**************end*************
+2016-05-11T17:49:40+08:00 INFO (6): 
+2016-05-11 17:49:40:
+**************start*************
+{"Data":["3878570360"],"Version":"0.0.0.3","RequestTime":"2016-05-11 17:49:40","RequestId":"a2b23daa-a519-48cc-b5c6-e0ebbfeada2b"}
+Array
+(
+    [Data] => 
+    [Version] => 0.0.0.3
+    [RequestId] => a2b23daa-a519-48cc-b5c6-e0ebbfeada2b
+    [ResponseTime] => 2016-05-11T09:49:43.0803468Z
+    [ResponseId] => 63c94f58-6c44-4b59-8e04-0c7027354adf
+    [ResponseResult] => 0
+    [ResponseError] => Array
+        (
+            [Code] => 0x00001109
+            [ShortMessage] => 跟踪号在TMS系统里不存在
+            [LongMessage] => 跟踪号在TMS系统里不存在
+            [ErrorValue] => 4361
+        )
+
+)
+**************end*************
+2016-05-11T17:56:41+08:00 INFO (6): 
+2016-05-11 17:56:41:
+**************start*************
+{"Data":["0030546165"],"Version":"0.0.0.3","RequestTime":"2016-05-11 17:56:41","RequestId":"a2b23daa-a519-48cc-b5c6-e0ebbfeada2b"}
+Array
+(
+    [Data] => 
+    [Version] => 0.0.0.3
+    [RequestId] => a2b23daa-a519-48cc-b5c6-e0ebbfeada2b
+    [ResponseTime] => 2016-05-11T09:56:44.6086872Z
+    [ResponseId] => a1659672-3305-4d5c-964d-767db00319d9
+    [ResponseResult] => 0
+    [ResponseError] => Array
+        (
+            [Code] => 0x00001109
+            [ShortMessage] => 跟踪号在TMS系统里不存在
+            [LongMessage] => 跟踪号在TMS系统里不存在
+            [ErrorValue] => 4361
+        )
+
+)
+**************end*************
+2016-05-11T18:36:22+08:00 INFO (6): 
+2016-05-11 18:36:22:
+**************start*************
+{"Version":"0.0.0.3","RequestTime":"2016-05-11 18:36:22","RequestId":"a2b23daa-a519-48cc-b5c6-e0ebbfeada2b"}
+Array
+(
+    [Data] => 
+    [Version] => 0.0.0.3
+    [RequestId] => a2b23daa-a519-48cc-b5c6-e0ebbfeada2b
+    [ResponseTime] => 2016-05-11T10:36:25.7968695Z
+    [ResponseId] => e656b829-977a-49a9-82b1-f70ad3bfa0dc
+    [ResponseResult] => 0
+    [ResponseError] => Array
+        (
+            [Code] => 0x00000009
+            [ShortMessage] => 请求数据为空
+            [LongMessage] => 请求数据为空
+            [ErrorValue] => 9
+        )
+
+)
+**************end*************
+2016-05-11T18:37:42+08:00 INFO (6): 
+2016-05-11 18:37:42:
+**************start*************
+{"Version":"0.0.0.3","RequestTime":"2016-05-11 18:37:42","RequestId":"a2b23daa-a519-48cc-b5c6-e0ebbfeada2b"}
+Array
+(
+    [Data] => 
+    [Version] => 0.0.0.3
+    [RequestId] => a2b23daa-a519-48cc-b5c6-e0ebbfeada2b
+    [ResponseTime] => 2016-05-11T10:37:45.1542089Z
+    [ResponseId] => b9166395-64d8-484c-82df-a21b2eac8bf7
+    [ResponseResult] => 0
+    [ResponseError] => Array
+        (
+            [Code] => 0x00000009
+            [ShortMessage] => 请求数据为空
+            [LongMessage] => 请求数据为空
+            [ErrorValue] => 9
+        )
+
+)
+**************end*************
+2016-05-11T18:39:56+08:00 INFO (6): 
+2016-05-11 18:39:56:
+**************start*************
+{"Version":"0.0.0.3","RequestTime":"2016-05-11 18:39:56","RequestId":"a2b23daa-a519-48cc-b5c6-e0ebbfeada2b"}
+Array
+(
+    [Data] => 
+    [Version] => 0.0.0.3
+    [RequestId] => a2b23daa-a519-48cc-b5c6-e0ebbfeada2b
+    [ResponseTime] => 2016-05-11T10:39:59.4392448Z
+    [ResponseId] => 1da37f44-a07f-4352-a403-71508c6d8c43
+    [ResponseResult] => 0
+    [ResponseError] => Array
+        (
+            [Code] => 0x00000009
+            [ShortMessage] => 请求数据为空
+            [LongMessage] => 请求数据为空
+            [ErrorValue] => 9
+        )
+
+)
+**************end*************
+2016-05-11T18:40:36+08:00 INFO (6): 
+2016-05-11 18:40:36:
+**************start*************
+{"Version":"0.0.0.3","RequestTime":"2016-05-11 18:40:36","RequestId":"a2b23daa-a519-48cc-b5c6-e0ebbfeada2b"}
+Array
+(
+    [Data] => 
+    [Version] => 0.0.0.3
+    [RequestId] => a2b23daa-a519-48cc-b5c6-e0ebbfeada2b
+    [ResponseTime] => 2016-05-11T10:40:39.4689151Z
+    [ResponseId] => 140f976b-f47f-4df5-9aa5-50541b1dd635
+    [ResponseResult] => 0
+    [ResponseError] => Array
+        (
+            [Code] => 0x00000009
+            [ShortMessage] => 请求数据为空
+            [LongMessage] => 请求数据为空
+            [ErrorValue] => 9
+        )
+
+)
+**************end*************
+2016-05-11T18:52:39+08:00 INFO (6): 
+2016-05-11 18:52:39:
+**************start*************
+{"Data":["0030546165"],"Version":"0.0.0.3","RequestTime":"2016-05-11 18:52:39","RequestId":"a2b23daa-a519-48cc-b5c6-e0ebbfeada2b"}
+Array
+(
+    [Data] => 
+    [Version] => 0.0.0.3
+    [RequestId] => a2b23daa-a519-48cc-b5c6-e0ebbfeada2b
+    [ResponseTime] => 2016-05-11T10:52:42.4365849Z
+    [ResponseId] => 9a28299d-aa99-438b-9d65-4ea12816855e
+    [ResponseResult] => 0
+    [ResponseError] => Array
+        (
+            [Code] => 0x00001109
+            [ShortMessage] => 跟踪号在TMS系统里不存在
+            [LongMessage] => 跟踪号在TMS系统里不存在
+            [ErrorValue] => 4361
+        )
+
+)
+**************end*************
+2016-05-11T18:58:10+08:00 INFO (6): 
+2016-05-11 18:58:10:
+**************start*************
+{"Data":["0030546165"],"Version":"0.0.0.3","RequestTime":"2016-05-11 18:58:10","RequestId":"a2b23daa-a519-48cc-b5c6-e0ebbfeada2b"}
+Array
+(
+    [Data] => 
+    [Version] => 0.0.0.3
+    [RequestId] => a2b23daa-a519-48cc-b5c6-e0ebbfeada2b
+    [ResponseTime] => 2016-05-11T10:58:13.4847664Z
+    [ResponseId] => d05e92d6-1e55-4d3b-9a2f-ea0643a58f80
+    [ResponseResult] => 0
+    [ResponseError] => Array
+        (
+            [Code] => 0x00001109
+            [ShortMessage] => 跟踪号在TMS系统里不存在
+            [LongMessage] => 跟踪号在TMS系统里不存在
+            [ErrorValue] => 4361
+        )
+
+)
+**************end*************
+2016-05-11T18:59:03+08:00 INFO (6): 
+2016-05-11 18:59:03:
+**************start*************
+{"Data":["0030546165"],"Version":"0.0.0.3","RequestTime":"2016-05-11 18:59:03","RequestId":"a2b23daa-a519-48cc-b5c6-e0ebbfeada2b"}
+Array
+(
+    [Data] => 
+    [Version] => 0.0.0.3
+    [RequestId] => a2b23daa-a519-48cc-b5c6-e0ebbfeada2b
+    [ResponseTime] => 2016-05-11T10:59:06.5092595Z
+    [ResponseId] => 0650b592-dcb6-4675-b510-a627a22d1bd1
+    [ResponseResult] => 0
+    [ResponseError] => Array
+        (
+            [Code] => 0x00001109
+            [ShortMessage] => 跟踪号在TMS系统里不存在
+            [LongMessage] => 跟踪号在TMS系统里不存在
+            [ErrorValue] => 4361
+        )
+
+)
+**************end*************
+2016-05-11T19:01:05+08:00 INFO (6): 
+2016-05-11 19:01:05:
+**************start*************
+{"Data":["0030546165"],"Version":"0.0.0.3","RequestTime":"2016-05-11 19:01:05","RequestId":"a2b23daa-a519-48cc-b5c6-e0ebbfeada2b"}
+Array
+(
+    [Data] => 
+    [Version] => 0.0.0.3
+    [RequestId] => a2b23daa-a519-48cc-b5c6-e0ebbfeada2b
+    [ResponseTime] => 2016-05-11T11:01:08.5014738Z
+    [ResponseId] => 66a0fe9c-d9b3-420d-abc0-db363dce71e1
+    [ResponseResult] => 0
+    [ResponseError] => Array
+        (
+            [Code] => 0x00001109
+            [ShortMessage] => 跟踪号在TMS系统里不存在
+            [LongMessage] => 跟踪号在TMS系统里不存在
+            [ErrorValue] => 4361
+        )
+
+)
+**************end*************
+2016-05-11T19:02:44+08:00 INFO (6): 
+2016-05-11 19:02:44:
+**************start*************
+{"Data":["0030546165"],"Version":"0.0.0.3","RequestTime":"2016-05-11 19:02:44","RequestId":"a2b23daa-a519-48cc-b5c6-e0ebbfeada2b"}
+Array
+(
+    [Data] => 
+    [Version] => 0.0.0.3
+    [RequestId] => a2b23daa-a519-48cc-b5c6-e0ebbfeada2b
+    [ResponseTime] => 2016-05-11T11:02:47.3120473Z
+    [ResponseId] => e71c4c90-5529-4320-a19f-09b3062508e9
+    [ResponseResult] => 0
+    [ResponseError] => Array
+        (
+            [Code] => 0x00001109
+            [ShortMessage] => 跟踪号在TMS系统里不存在
+            [LongMessage] => 跟踪号在TMS系统里不存在
+            [ErrorValue] => 4361
+        )
+
+)
+**************end*************
+2016-05-11T19:02:51+08:00 INFO (6): 
+2016-05-11 19:02:51:
+**************start*************
+{"Data":["0030546165"],"Version":"0.0.0.3","RequestTime":"2016-05-11 19:02:51","RequestId":"a2b23daa-a519-48cc-b5c6-e0ebbfeada2b"}
+Array
+(
+    [Data] => 
+    [Version] => 0.0.0.3
+    [RequestId] => a2b23daa-a519-48cc-b5c6-e0ebbfeada2b
+    [ResponseTime] => 2016-05-11T11:02:54.1760594Z
+    [ResponseId] => 88381446-918b-4043-9e72-d5b6c86c42b7
+    [ResponseResult] => 0
+    [ResponseError] => Array
+        (
+            [Code] => 0x00001109
+            [ShortMessage] => 跟踪号在TMS系统里不存在
+            [LongMessage] => 跟踪号在TMS系统里不存在
+            [ErrorValue] => 4361
+        )
+
+)
+**************end*************
+2016-05-11T19:03:22+08:00 INFO (6): 
+2016-05-11 19:03:22:
+**************start*************
+{"Data":["0030546165"],"Version":"0.0.0.3","RequestTime":"2016-05-11 19:03:22","RequestId":"a2b23daa-a519-48cc-b5c6-e0ebbfeada2b"}
+Array
+(
+    [Data] => 
+    [Version] => 0.0.0.3
+    [RequestId] => a2b23daa-a519-48cc-b5c6-e0ebbfeada2b
+    [ResponseTime] => 2016-05-11T11:03:25.9065151Z
+    [ResponseId] => 8a0889eb-9810-4bb8-9900-91ef3425b0ad
+    [ResponseResult] => 0
+    [ResponseError] => Array
+        (
+            [Code] => 0x00001109
+            [ShortMessage] => 跟踪号在TMS系统里不存在
+            [LongMessage] => 跟踪号在TMS系统里不存在
+            [ErrorValue] => 4361
+        )
+
+)
+**************end*************
+2016-05-11T19:04:07+08:00 INFO (6): 
+2016-05-11 19:04:07:
+**************start*************
+{"Data":["0030546165"],"Version":"0.0.0.3","RequestTime":"2016-05-11 19:04:07","RequestId":"a2b23daa-a519-48cc-b5c6-e0ebbfeada2b"}
+Array
+(
+    [Data] => 
+    [Version] => 0.0.0.3
+    [RequestId] => a2b23daa-a519-48cc-b5c6-e0ebbfeada2b
+    [ResponseTime] => 2016-05-11T11:04:10.3977933Z
+    [ResponseId] => dffa4fc9-054c-4a3b-98a9-6ed3bddb9a9d
+    [ResponseResult] => 0
+    [ResponseError] => Array
+        (
+            [Code] => 0x00001109
+            [ShortMessage] => 跟踪号在TMS系统里不存在
+            [LongMessage] => 跟踪号在TMS系统里不存在
+            [ErrorValue] => 4361
+        )
+
+)
+**************end*************
+2016-05-11T19:04:32+08:00 INFO (6): 
+2016-05-11 19:04:32:
+**************start*************
+{"Data":["0030546165"],"Version":"0.0.0.3","RequestTime":"2016-05-11 19:04:32","RequestId":"a2b23daa-a519-48cc-b5c6-e0ebbfeada2b"}
+Array
+(
+    [Data] => 
+    [Version] => 0.0.0.3
+    [RequestId] => a2b23daa-a519-48cc-b5c6-e0ebbfeada2b
+    [ResponseTime] => 2016-05-11T11:04:35.1394367Z
+    [ResponseId] => 91d4f257-1938-485e-b82a-a9a5817d2a83
+    [ResponseResult] => 0
+    [ResponseError] => Array
+        (
+            [Code] => 0x00001109
+            [ShortMessage] => 跟踪号在TMS系统里不存在
+            [LongMessage] => 跟踪号在TMS系统里不存在
+            [ErrorValue] => 4361
+        )
+
+)
+**************end*************
+2016-05-11T19:05:21+08:00 INFO (6): 
+2016-05-11 19:05:21:
+**************start*************
+{"Data":["0030546165"],"Version":"0.0.0.3","RequestTime":"2016-05-11 19:05:21","RequestId":"a2b23daa-a519-48cc-b5c6-e0ebbfeada2b"}
+Array
+(
+    [Data] => 
+    [Version] => 0.0.0.3
+    [RequestId] => a2b23daa-a519-48cc-b5c6-e0ebbfeada2b
+    [ResponseTime] => 2016-05-11T11:05:24.5915236Z
+    [ResponseId] => aac69156-9a61-4bcd-95c9-80c681ce8e2e
+    [ResponseResult] => 0
+    [ResponseError] => Array
+        (
+            [Code] => 0x00001109
+            [ShortMessage] => 跟踪号在TMS系统里不存在
+            [LongMessage] => 跟踪号在TMS系统里不存在
+            [ErrorValue] => 4361
+        )
+
+)
+**************end*************
+2016-05-11T19:05:59+08:00 INFO (6): 
+2016-05-11 19:05:59:
+**************start*************
+{"Data":["0030546165"],"Version":"0.0.0.3","RequestTime":"2016-05-11 19:05:59","RequestId":"a2b23daa-a519-48cc-b5c6-e0ebbfeada2b"}
+Array
+(
+    [Data] => 
+    [Version] => 0.0.0.3
+    [RequestId] => a2b23daa-a519-48cc-b5c6-e0ebbfeada2b
+    [ResponseTime] => 2016-05-11T11:06:02.4371901Z
+    [ResponseId] => 875ef091-8ecd-4d88-bd63-6a38cc91bb46
+    [ResponseResult] => 0
+    [ResponseError] => Array
+        (
+            [Code] => 0x00001109
+            [ShortMessage] => 跟踪号在TMS系统里不存在
+            [LongMessage] => 跟踪号在TMS系统里不存在
+            [ErrorValue] => 4361
+        )
+
+)
+**************end*************
+2016-05-11T19:06:15+08:00 INFO (6): 
+2016-05-11 19:06:15:
+**************start*************
+{"Data":["0030546165"],"Version":"0.0.0.3","RequestTime":"2016-05-11 19:06:15","RequestId":"a2b23daa-a519-48cc-b5c6-e0ebbfeada2b"}
+Array
+(
+    [Data] => 
+    [Version] => 0.0.0.3
+    [RequestId] => a2b23daa-a519-48cc-b5c6-e0ebbfeada2b
+    [ResponseTime] => 2016-05-11T11:06:18.910819Z
+    [ResponseId] => 2d5aa0eb-edab-4cf4-8c66-a4b259a4b4db
+    [ResponseResult] => 0
+    [ResponseError] => Array
+        (
+            [Code] => 0x00001109
+            [ShortMessage] => 跟踪号在TMS系统里不存在
+            [LongMessage] => 跟踪号在TMS系统里不存在
+            [ErrorValue] => 4361
+        )
+
+)
+**************end*************
+2016-05-11T19:06:24+08:00 INFO (6): 
+2016-05-11 19:06:24:
+**************start*************
+{"Data":["0030546165"],"Version":"0.0.0.3","RequestTime":"2016-05-11 19:06:24","RequestId":"a2b23daa-a519-48cc-b5c6-e0ebbfeada2b"}
+Array
+(
+    [Data] => 
+    [Version] => 0.0.0.3
+    [RequestId] => a2b23daa-a519-48cc-b5c6-e0ebbfeada2b
+    [ResponseTime] => 2016-05-11T11:06:27.475234Z
+    [ResponseId] => c8a25ba9-6e43-42fc-ba54-eba3319a0190
+    [ResponseResult] => 0
+    [ResponseError] => Array
+        (
+            [Code] => 0x00001109
+            [ShortMessage] => 跟踪号在TMS系统里不存在
+            [LongMessage] => 跟踪号在TMS系统里不存在
+            [ErrorValue] => 4361
+        )
+
+)
+**************end*************

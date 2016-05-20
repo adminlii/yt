@@ -1,0 +1,707 @@
+2016-05-16T18:22:14+08:00 INFO (6): 
+2016-05-16 18:22:14:
+**************start*************
+Array
+(
+    [str] => 
+<orders>
+  <pretype>60</pretype>
+  <orgcode>000123</orgcode>
+  <custcode>00000</custcode>
+  <postInfos>
+    <order>
+      <mailnum>lv12345678901234</mailnum>
+      <rcvarea>5</rcvarea>
+      <prptycode>3</prptycode>
+      <prodcode>12344</prodcode>
+      <clctname>zhangsan</clctname>
+      <clctcode>123456</clctcode>
+      <actualweight>1</actualweight>
+      <length>1</length>
+      <width>1</width>
+      <height>1</height>
+      <volweight>1</volweight>
+      <billingweight>1</billingweight>
+      <bjmoney>122</bjmoney>
+      <bxmoney>122</bxmoney>
+      <loanmoney>1</loanmoney>
+      <minordernum>1</minordernum>
+      <mpostalnum>lv12345678901234</mpostalnum>
+      <ordernum>12345678</ordernum>
+      <forecastshut>0</forecastshut>
+      <internals>1</internals>
+      <portoffice>12345</portoffice>
+      <sendcountry>CN</sendcountry>
+      <mainminorder>2</mainminorder>
+      <mainbilling>1</mainbilling>
+      <transport>2</transport>
+      <ordersources>1223</ordersources>
+      <identityplate>5555</identityplate>
+      <itemnames>内件1，内件2</itemnames>
+      <sender>
+        <name>张三</name>
+        <postcode>123456</postcode>
+        <phone>12345678</phone>
+        <mobile>12345678901</mobile>
+        <country>CN</country>
+        <provcode>320000</provcode>
+        <citycode>320100</citycode>
+        <countycode>320110</countycode>
+        <company>武汉ems</company>
+        <street>中南街道</street>
+      </sender>
+      <receiver>
+        <name>张三</name>
+        <postcode>12345</postcode>
+        <phone>12345678</phone>
+        <mobile>12345678901</mobile>
+        <country>CN</country>
+        <provcode>320000</provcode>
+        <citycode>320100</citycode>
+        <countycode>320110</countycode>
+        <company>武汉ems</company>
+        <street>中南街道</street>
+      </receiver>
+      <items>
+        <item>
+          <cnname>内件1</cnname>
+          <count>2</count>
+          <weight>1.22</weight>
+          <currency>1</currency>
+          <cost>1.22</cost>
+          <intemcom>木头</intemcom>
+          <origin>CN</origin>
+          <trade>1</trade>
+          <enname>ename</enname>
+          <HS>hs123</HS>
+          <intemsize></intemsize>
+          <sellurl></sellurl>
+        </item>
+        <item>
+          <cnname>内件1</cnname>
+          <count>2</count>
+          <weight>1.22</weight>
+          <currency>1</currency>
+          <cost>1.22</cost>
+          <intemcom>木头</intemcom>
+          <origin>CN</origin>
+          <trade>1</trade>
+          <enname>ename</enname>
+          <HS>hs123</HS>
+          <intemsize></intemsize>
+          <sellurl></sellurl>
+        </item>
+      </items>
+    </order>
+  </postInfos>
+</orders>      
+
+)
+
+**************end*************
+2016-05-16T18:22:18+08:00 INFO (6): 
+2016-05-16 18:22:18:
+**************start*************
+Array
+(
+    [str] => 
+<orders>
+  <pretype>60</pretype>
+  <orgcode>000123</orgcode>
+  <custcode>00000</custcode>
+  <postInfos>
+    <order>
+      <mailnum>lv12345678901234</mailnum>
+      <rcvarea>5</rcvarea>
+      <prptycode>3</prptycode>
+      <prodcode>12344</prodcode>
+      <clctname>zhangsan</clctname>
+      <clctcode>123456</clctcode>
+      <actualweight>1</actualweight>
+      <length>1</length>
+      <width>1</width>
+      <height>1</height>
+      <volweight>1</volweight>
+      <billingweight>1</billingweight>
+      <bjmoney>122</bjmoney>
+      <bxmoney>122</bxmoney>
+      <loanmoney>1</loanmoney>
+      <minordernum>1</minordernum>
+      <mpostalnum>lv12345678901234</mpostalnum>
+      <ordernum>12345678</ordernum>
+      <forecastshut>0</forecastshut>
+      <internals>1</internals>
+      <portoffice>12345</portoffice>
+      <sendcountry>CN</sendcountry>
+      <mainminorder>2</mainminorder>
+      <mainbilling>1</mainbilling>
+      <transport>2</transport>
+      <ordersources>1223</ordersources>
+      <identityplate>5555</identityplate>
+      <itemnames>内件1，内件2</itemnames>
+      <sender>
+        <name>张三</name>
+        <postcode>123456</postcode>
+        <phone>12345678</phone>
+        <mobile>12345678901</mobile>
+        <country>CN</country>
+        <provcode>320000</provcode>
+        <citycode>320100</citycode>
+        <countycode>320110</countycode>
+        <company>武汉ems</company>
+        <street>中南街道</street>
+      </sender>
+      <receiver>
+        <name>张三</name>
+        <postcode>12345</postcode>
+        <phone>12345678</phone>
+        <mobile>12345678901</mobile>
+        <country>CN</country>
+        <provcode>320000</provcode>
+        <citycode>320100</citycode>
+        <countycode>320110</countycode>
+        <company>武汉ems</company>
+        <street>中南街道</street>
+      </receiver>
+      <items>
+        <item>
+          <cnname>内件1</cnname>
+          <count>2</count>
+          <weight>1.22</weight>
+          <currency>1</currency>
+          <cost>1.22</cost>
+          <intemcom>木头</intemcom>
+          <origin>CN</origin>
+          <trade>1</trade>
+          <enname>ename</enname>
+          <HS>hs123</HS>
+          <intemsize></intemsize>
+          <sellurl></sellurl>
+        </item>
+        <item>
+          <cnname>内件1</cnname>
+          <count>2</count>
+          <weight>1.22</weight>
+          <currency>1</currency>
+          <cost>1.22</cost>
+          <intemcom>木头</intemcom>
+          <origin>CN</origin>
+          <trade>1</trade>
+          <enname>ename</enname>
+          <HS>hs123</HS>
+          <intemsize></intemsize>
+          <sellurl></sellurl>
+        </item>
+      </items>
+    </order>
+  </postInfos>
+</orders>      
+
+)
+
+**************end*************
+2016-05-16T18:22:22+08:00 INFO (6): 
+2016-05-16 18:22:22:
+**************start*************
+Array
+(
+    [str] => 
+<orders>
+  <pretype>60</pretype>
+  <orgcode>000123</orgcode>
+  <custcode>00000</custcode>
+  <postInfos>
+    <order>
+      <mailnum>lv12345678901234</mailnum>
+      <rcvarea>5</rcvarea>
+      <prptycode>3</prptycode>
+      <prodcode>12344</prodcode>
+      <clctname>zhangsan</clctname>
+      <clctcode>123456</clctcode>
+      <actualweight>1</actualweight>
+      <length>1</length>
+      <width>1</width>
+      <height>1</height>
+      <volweight>1</volweight>
+      <billingweight>1</billingweight>
+      <bjmoney>122</bjmoney>
+      <bxmoney>122</bxmoney>
+      <loanmoney>1</loanmoney>
+      <minordernum>1</minordernum>
+      <mpostalnum>lv12345678901234</mpostalnum>
+      <ordernum>12345678</ordernum>
+      <forecastshut>0</forecastshut>
+      <internals>1</internals>
+      <portoffice>12345</portoffice>
+      <sendcountry>CN</sendcountry>
+      <mainminorder>2</mainminorder>
+      <mainbilling>1</mainbilling>
+      <transport>2</transport>
+      <ordersources>1223</ordersources>
+      <identityplate>5555</identityplate>
+      <itemnames>内件1，内件2</itemnames>
+      <sender>
+        <name>张三</name>
+        <postcode>123456</postcode>
+        <phone>12345678</phone>
+        <mobile>12345678901</mobile>
+        <country>CN</country>
+        <provcode>320000</provcode>
+        <citycode>320100</citycode>
+        <countycode>320110</countycode>
+        <company>武汉ems</company>
+        <street>中南街道</street>
+      </sender>
+      <receiver>
+        <name>张三</name>
+        <postcode>12345</postcode>
+        <phone>12345678</phone>
+        <mobile>12345678901</mobile>
+        <country>CN</country>
+        <provcode>320000</provcode>
+        <citycode>320100</citycode>
+        <countycode>320110</countycode>
+        <company>武汉ems</company>
+        <street>中南街道</street>
+      </receiver>
+      <items>
+        <item>
+          <cnname>内件1</cnname>
+          <count>2</count>
+          <weight>1.22</weight>
+          <currency>1</currency>
+          <cost>1.22</cost>
+          <intemcom>木头</intemcom>
+          <origin>CN</origin>
+          <trade>1</trade>
+          <enname>ename</enname>
+          <HS>hs123</HS>
+          <intemsize></intemsize>
+          <sellurl></sellurl>
+        </item>
+        <item>
+          <cnname>内件1</cnname>
+          <count>2</count>
+          <weight>1.22</weight>
+          <currency>1</currency>
+          <cost>1.22</cost>
+          <intemcom>木头</intemcom>
+          <origin>CN</origin>
+          <trade>1</trade>
+          <enname>ename</enname>
+          <HS>hs123</HS>
+          <intemsize></intemsize>
+          <sellurl></sellurl>
+        </item>
+      </items>
+    </order>
+  </postInfos>
+</orders>      
+
+)
+
+**************end*************
+2016-05-16T18:22:25+08:00 INFO (6): 
+2016-05-16 18:22:25:
+**************start*************
+Array
+(
+    [str] => 
+<orders>
+  <pretype>60</pretype>
+  <orgcode>000123</orgcode>
+  <custcode>00000</custcode>
+  <postInfos>
+    <order>
+      <mailnum>lv12345678901234</mailnum>
+      <rcvarea>5</rcvarea>
+      <prptycode>3</prptycode>
+      <prodcode>12344</prodcode>
+      <clctname>zhangsan</clctname>
+      <clctcode>123456</clctcode>
+      <actualweight>1</actualweight>
+      <length>1</length>
+      <width>1</width>
+      <height>1</height>
+      <volweight>1</volweight>
+      <billingweight>1</billingweight>
+      <bjmoney>122</bjmoney>
+      <bxmoney>122</bxmoney>
+      <loanmoney>1</loanmoney>
+      <minordernum>1</minordernum>
+      <mpostalnum>lv12345678901234</mpostalnum>
+      <ordernum>12345678</ordernum>
+      <forecastshut>0</forecastshut>
+      <internals>1</internals>
+      <portoffice>12345</portoffice>
+      <sendcountry>CN</sendcountry>
+      <mainminorder>2</mainminorder>
+      <mainbilling>1</mainbilling>
+      <transport>2</transport>
+      <ordersources>1223</ordersources>
+      <identityplate>5555</identityplate>
+      <itemnames>内件1，内件2</itemnames>
+      <sender>
+        <name>张三</name>
+        <postcode>123456</postcode>
+        <phone>12345678</phone>
+        <mobile>12345678901</mobile>
+        <country>CN</country>
+        <provcode>320000</provcode>
+        <citycode>320100</citycode>
+        <countycode>320110</countycode>
+        <company>武汉ems</company>
+        <street>中南街道</street>
+      </sender>
+      <receiver>
+        <name>张三</name>
+        <postcode>12345</postcode>
+        <phone>12345678</phone>
+        <mobile>12345678901</mobile>
+        <country>CN</country>
+        <provcode>320000</provcode>
+        <citycode>320100</citycode>
+        <countycode>320110</countycode>
+        <company>武汉ems</company>
+        <street>中南街道</street>
+      </receiver>
+      <items>
+        <item>
+          <cnname>内件1</cnname>
+          <count>2</count>
+          <weight>1.22</weight>
+          <currency>1</currency>
+          <cost>1.22</cost>
+          <intemcom>木头</intemcom>
+          <origin>CN</origin>
+          <trade>1</trade>
+          <enname>ename</enname>
+          <HS>hs123</HS>
+          <intemsize></intemsize>
+          <sellurl></sellurl>
+        </item>
+        <item>
+          <cnname>内件1</cnname>
+          <count>2</count>
+          <weight>1.22</weight>
+          <currency>1</currency>
+          <cost>1.22</cost>
+          <intemcom>木头</intemcom>
+          <origin>CN</origin>
+          <trade>1</trade>
+          <enname>ename</enname>
+          <HS>hs123</HS>
+          <intemsize></intemsize>
+          <sellurl></sellurl>
+        </item>
+      </items>
+    </order>
+  </postInfos>
+</orders>      
+
+)
+
+**************end*************
+2016-05-16T18:22:29+08:00 INFO (6): 
+2016-05-16 18:22:29:
+**************start*************
+Array
+(
+    [str] => 
+<orders>
+  <pretype>60</pretype>
+  <orgcode>000123</orgcode>
+  <custcode>00000</custcode>
+  <postInfos>
+    <order>
+      <mailnum>lv12345678901234</mailnum>
+      <rcvarea>5</rcvarea>
+      <prptycode>3</prptycode>
+      <prodcode>12344</prodcode>
+      <clctname>zhangsan</clctname>
+      <clctcode>123456</clctcode>
+      <actualweight>1</actualweight>
+      <length>1</length>
+      <width>1</width>
+      <height>1</height>
+      <volweight>1</volweight>
+      <billingweight>1</billingweight>
+      <bjmoney>122</bjmoney>
+      <bxmoney>122</bxmoney>
+      <loanmoney>1</loanmoney>
+      <minordernum>1</minordernum>
+      <mpostalnum>lv12345678901234</mpostalnum>
+      <ordernum>12345678</ordernum>
+      <forecastshut>0</forecastshut>
+      <internals>1</internals>
+      <portoffice>12345</portoffice>
+      <sendcountry>CN</sendcountry>
+      <mainminorder>2</mainminorder>
+      <mainbilling>1</mainbilling>
+      <transport>2</transport>
+      <ordersources>1223</ordersources>
+      <identityplate>5555</identityplate>
+      <itemnames>内件1，内件2</itemnames>
+      <sender>
+        <name>张三</name>
+        <postcode>123456</postcode>
+        <phone>12345678</phone>
+        <mobile>12345678901</mobile>
+        <country>CN</country>
+        <provcode>320000</provcode>
+        <citycode>320100</citycode>
+        <countycode>320110</countycode>
+        <company>武汉ems</company>
+        <street>中南街道</street>
+      </sender>
+      <receiver>
+        <name>张三</name>
+        <postcode>12345</postcode>
+        <phone>12345678</phone>
+        <mobile>12345678901</mobile>
+        <country>CN</country>
+        <provcode>320000</provcode>
+        <citycode>320100</citycode>
+        <countycode>320110</countycode>
+        <company>武汉ems</company>
+        <street>中南街道</street>
+      </receiver>
+      <items>
+        <item>
+          <cnname>内件1</cnname>
+          <count>2</count>
+          <weight>1.22</weight>
+          <currency>1</currency>
+          <cost>1.22</cost>
+          <intemcom>木头</intemcom>
+          <origin>CN</origin>
+          <trade>1</trade>
+          <enname>ename</enname>
+          <HS>hs123</HS>
+          <intemsize></intemsize>
+          <sellurl></sellurl>
+        </item>
+        <item>
+          <cnname>内件1</cnname>
+          <count>2</count>
+          <weight>1.22</weight>
+          <currency>1</currency>
+          <cost>1.22</cost>
+          <intemcom>木头</intemcom>
+          <origin>CN</origin>
+          <trade>1</trade>
+          <enname>ename</enname>
+          <HS>hs123</HS>
+          <intemsize></intemsize>
+          <sellurl></sellurl>
+        </item>
+      </items>
+    </order>
+  </postInfos>
+</orders>      
+
+)
+
+**************end*************
+2016-05-16T18:22:33+08:00 INFO (6): 
+2016-05-16 18:22:33:
+**************start*************
+Array
+(
+    [str] => 
+<orders>
+  <pretype>60</pretype>
+  <orgcode>000123</orgcode>
+  <custcode>00000</custcode>
+  <postInfos>
+    <order>
+      <mailnum>lv12345678901234</mailnum>
+      <rcvarea>5</rcvarea>
+      <prptycode>3</prptycode>
+      <prodcode>12344</prodcode>
+      <clctname>zhangsan</clctname>
+      <clctcode>123456</clctcode>
+      <actualweight>1</actualweight>
+      <length>1</length>
+      <width>1</width>
+      <height>1</height>
+      <volweight>1</volweight>
+      <billingweight>1</billingweight>
+      <bjmoney>122</bjmoney>
+      <bxmoney>122</bxmoney>
+      <loanmoney>1</loanmoney>
+      <minordernum>1</minordernum>
+      <mpostalnum>lv12345678901234</mpostalnum>
+      <ordernum>12345678</ordernum>
+      <forecastshut>0</forecastshut>
+      <internals>1</internals>
+      <portoffice>12345</portoffice>
+      <sendcountry>CN</sendcountry>
+      <mainminorder>2</mainminorder>
+      <mainbilling>1</mainbilling>
+      <transport>2</transport>
+      <ordersources>1223</ordersources>
+      <identityplate>5555</identityplate>
+      <itemnames>内件1，内件2</itemnames>
+      <sender>
+        <name>张三</name>
+        <postcode>123456</postcode>
+        <phone>12345678</phone>
+        <mobile>12345678901</mobile>
+        <country>CN</country>
+        <provcode>320000</provcode>
+        <citycode>320100</citycode>
+        <countycode>320110</countycode>
+        <company>武汉ems</company>
+        <street>中南街道</street>
+      </sender>
+      <receiver>
+        <name>张三</name>
+        <postcode>12345</postcode>
+        <phone>12345678</phone>
+        <mobile>12345678901</mobile>
+        <country>CN</country>
+        <provcode>320000</provcode>
+        <citycode>320100</citycode>
+        <countycode>320110</countycode>
+        <company>武汉ems</company>
+        <street>中南街道</street>
+      </receiver>
+      <items>
+        <item>
+          <cnname>内件1</cnname>
+          <count>2</count>
+          <weight>1.22</weight>
+          <currency>1</currency>
+          <cost>1.22</cost>
+          <intemcom>木头</intemcom>
+          <origin>CN</origin>
+          <trade>1</trade>
+          <enname>ename</enname>
+          <HS>hs123</HS>
+          <intemsize></intemsize>
+          <sellurl></sellurl>
+        </item>
+        <item>
+          <cnname>内件1</cnname>
+          <count>2</count>
+          <weight>1.22</weight>
+          <currency>1</currency>
+          <cost>1.22</cost>
+          <intemcom>木头</intemcom>
+          <origin>CN</origin>
+          <trade>1</trade>
+          <enname>ename</enname>
+          <HS>hs123</HS>
+          <intemsize></intemsize>
+          <sellurl></sellurl>
+        </item>
+      </items>
+    </order>
+  </postInfos>
+</orders>      
+
+)
+
+**************end*************
+2016-05-16T18:22:39+08:00 INFO (6): 
+2016-05-16 18:22:39:
+**************start*************
+Array
+(
+    [str] => 
+<orders>
+  <pretype>60</pretype>
+  <orgcode>000123</orgcode>
+  <custcode>00000</custcode>
+  <postInfos>
+    <order>
+      <mailnum>lv12345678901234</mailnum>
+      <rcvarea>5</rcvarea>
+      <prptycode>3</prptycode>
+      <prodcode>12344</prodcode>
+      <clctname>zhangsan</clctname>
+      <clctcode>123456</clctcode>
+      <actualweight>1</actualweight>
+      <length>1</length>
+      <width>1</width>
+      <height>1</height>
+      <volweight>1</volweight>
+      <billingweight>1</billingweight>
+      <bjmoney>122</bjmoney>
+      <bxmoney>122</bxmoney>
+      <loanmoney>1</loanmoney>
+      <minordernum>1</minordernum>
+      <mpostalnum>lv12345678901234</mpostalnum>
+      <ordernum>12345678</ordernum>
+      <forecastshut>0</forecastshut>
+      <internals>1</internals>
+      <portoffice>12345</portoffice>
+      <sendcountry>CN</sendcountry>
+      <mainminorder>2</mainminorder>
+      <mainbilling>1</mainbilling>
+      <transport>2</transport>
+      <ordersources>1223</ordersources>
+      <identityplate>5555</identityplate>
+      <itemnames>内件1，内件2</itemnames>
+      <sender>
+        <name>张三</name>
+        <postcode>123456</postcode>
+        <phone>12345678</phone>
+        <mobile>12345678901</mobile>
+        <country>CN</country>
+        <provcode>320000</provcode>
+        <citycode>320100</citycode>
+        <countycode>320110</countycode>
+        <company>武汉ems</company>
+        <street>中南街道</street>
+      </sender>
+      <receiver>
+        <name>张三</name>
+        <postcode>12345</postcode>
+        <phone>12345678</phone>
+        <mobile>12345678901</mobile>
+        <country>CN</country>
+        <provcode>320000</provcode>
+        <citycode>320100</citycode>
+        <countycode>320110</countycode>
+        <company>武汉ems</company>
+        <street>中南街道</street>
+      </receiver>
+      <items>
+        <item>
+          <cnname>内件1</cnname>
+          <count>2</count>
+          <weight>1.22</weight>
+          <currency>1</currency>
+          <cost>1.22</cost>
+          <intemcom>木头</intemcom>
+          <origin>CN</origin>
+          <trade>1</trade>
+          <enname>ename</enname>
+          <HS>hs123</HS>
+          <intemsize></intemsize>
+          <sellurl></sellurl>
+        </item>
+        <item>
+          <cnname>内件1</cnname>
+          <count>2</count>
+          <weight>1.22</weight>
+          <currency>1</currency>
+          <cost>1.22</cost>
+          <intemcom>木头</intemcom>
+          <origin>CN</origin>
+          <trade>1</trade>
+          <enname>ename</enname>
+          <HS>hs123</HS>
+          <intemsize></intemsize>
+          <sellurl></sellurl>
+        </item>
+      </items>
+    </order>
+  </postInfos>
+</orders>      
+
+)
+
+**************end*************

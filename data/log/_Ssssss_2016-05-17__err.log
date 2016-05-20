@@ -1,0 +1,218 @@
+2016-05-17T17:57:20+08:00 INFO (6): 
+2016-05-17 17:57:20:
+result:Array
+(
+    [1] => Array
+        (
+            [invoice_cnname] => comp1
+            [invoice_enname] => comp1
+            [invoice_totalcharge_all] => 1000
+            [invoice_quantity] => 1
+            [invoice_weight] => 1
+            [invoice_unitcharge] => 0
+            [invoice_totalcharge] => 0
+            [invoice_totalWeight] => 1
+            [invoice_currencycode] => USD
+        )
+
+    [2] => Array
+        (
+            [invoice_quantity] => 2
+            [invoice_weight] => 2
+            [invoice_enname] => comp1
+            [invoice_cnname] => comp1
+            [invoice_shippertax] => 
+            [invoice_consigneetax] => 
+            [invoice_totalcharge_all] => 1000
+            [hs_code] => 
+            [invoice_unitcharge] => 0
+            [invoice_totalcharge] => 0
+            [invoice_totalWeight] => 4
+            [invoice_currencycode] => USD
+        )
+
+)
+2016-05-17T17:57:20+08:00 INFO (6): 
+2016-05-17 17:57:20:
+result:Array
+(
+    [1] => Array
+        (
+            [invoice_cnname] => comp1
+            [invoice_enname] => comp1
+            [invoice_totalcharge_all] => 1000
+            [invoice_quantity] => 1
+            [invoice_weight] => 1
+            [invoice_unitcharge] => 0
+            [invoice_totalcharge] => 0
+            [invoice_totalWeight] => 1
+            [invoice_currencycode] => USD
+        )
+
+    [2] => Array
+        (
+            [invoice_quantity] => 2
+            [invoice_weight] => 2
+            [invoice_enname] => comp1
+            [invoice_cnname] => comp1
+            [invoice_shippertax] => 
+            [invoice_consigneetax] => 
+            [invoice_totalcharge_all] => 1000
+            [hs_code] => 
+            [invoice_unitcharge] => 0
+            [invoice_totalcharge] => 0
+            [invoice_totalWeight] => 4
+            [invoice_currencycode] => USD
+        )
+
+)
+2016-05-17T17:57:22+08:00 INFO (6): 
+2016-05-17 17:57:22:
+result:Array
+(
+    [1] => Array
+        (
+            [invoice_cnname] => comp1
+            [invoice_enname] => comp1
+            [invoice_totalcharge_all] => 1000
+            [invoice_quantity] => 1
+            [invoice_weight] => 1
+            [invoice_unitcharge] => 0
+            [invoice_totalcharge] => 0
+            [invoice_totalWeight] => 1
+            [invoice_currencycode] => USD
+        )
+
+    [2] => Array
+        (
+            [invoice_quantity] => 2
+            [invoice_weight] => 2
+            [invoice_enname] => comp1
+            [invoice_cnname] => comp1
+            [invoice_shippertax] => 
+            [invoice_consigneetax] => 
+            [invoice_totalcharge_all] => 1000
+            [hs_code] => 
+            [invoice_unitcharge] => 0
+            [invoice_totalcharge] => 0
+            [invoice_totalWeight] => 4
+            [invoice_currencycode] => USD
+        )
+
+    [3] => Array
+        (
+            [invoice_quantity] => 3
+            [invoice_weight] => 3
+            [invoice_enname] => comp1
+            [invoice_cnname] => comp1
+            [invoice_shippertax] => 
+            [invoice_consigneetax] => 
+            [invoice_totalcharge_all] => 1000
+            [hs_code] => 
+            [invoice_unitcharge] => 0
+            [invoice_totalcharge] => 0
+            [invoice_totalWeight] => 9
+            [invoice_currencycode] => USD
+        )
+
+)
+2016-05-17T17:57:22+08:00 INFO (6): 
+2016-05-17 17:57:22:
+result:Array
+(
+    [1] => Array
+        (
+            [invoice_cnname] => comp1
+            [invoice_enname] => comp1
+            [invoice_totalcharge_all] => 1000
+            [invoice_quantity] => 1
+            [invoice_weight] => 1
+            [invoice_unitcharge] => 0
+            [invoice_totalcharge] => 0
+            [invoice_totalWeight] => 1
+            [invoice_currencycode] => USD
+        )
+
+    [2] => Array
+        (
+            [invoice_quantity] => 2
+            [invoice_weight] => 2
+            [invoice_enname] => comp1
+            [invoice_cnname] => comp1
+            [invoice_shippertax] => 
+            [invoice_consigneetax] => 
+            [invoice_totalcharge_all] => 1000
+            [hs_code] => 
+            [invoice_unitcharge] => 0
+            [invoice_totalcharge] => 0
+            [invoice_totalWeight] => 4
+            [invoice_currencycode] => USD
+        )
+
+    [3] => Array
+        (
+            [invoice_quantity] => 3
+            [invoice_weight] => 3
+            [invoice_enname] => comp1
+            [invoice_cnname] => comp1
+            [invoice_shippertax] => 
+            [invoice_consigneetax] => 
+            [invoice_totalcharge_all] => 1000
+            [hs_code] => 
+            [invoice_unitcharge] => 0
+            [invoice_totalcharge] => 0
+            [invoice_totalWeight] => 9
+            [invoice_currencycode] => USD
+        )
+
+)
+2016-05-17T17:57:22+08:00 INFO (6): 
+2016-05-17 17:57:22:
+result:Array
+(
+    [1] => Array
+        (
+            [invoice_cnname] => comp1
+            [invoice_enname] => comp1
+            [invoice_totalcharge_all] => 1000
+            [invoice_quantity] => 1
+            [invoice_weight] => 1
+            [invoice_unitcharge] => 0
+            [invoice_totalcharge] => 0
+            [invoice_totalWeight] => 1
+            [invoice_currencycode] => USD
+        )
+
+    [2] => Array
+        (
+            [invoice_quantity] => 2
+            [invoice_weight] => 2
+            [invoice_enname] => comp1
+            [invoice_cnname] => comp1
+            [invoice_shippertax] => 
+            [invoice_consigneetax] => 
+            [invoice_totalcharge_all] => 1000
+            [hs_code] => 
+            [invoice_unitcharge] => 0
+            [invoice_totalcharge] => 0
+            [invoice_totalWeight] => 4
+            [invoice_currencycode] => USD
+        )
+
+    [3] => Array
+        (
+            [invoice_quantity] => 3
+            [invoice_weight] => 3
+            [invoice_enname] => comp1
+            [invoice_cnname] => comp1
+            [invoice_shippertax] => 
+            [invoice_consigneetax] => 
+            [invoice_totalcharge_all] => 1000
+            [hs_code] => 
+            [invoice_unitcharge] => 0
+            [invoice_totalcharge] => 0
+            [invoice_totalWeight] => 9
+            [invoice_currencycode] => USD
+        )
+
+)

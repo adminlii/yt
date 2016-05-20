@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+	<s:Body>
+		<MakeLableFileToBase64 xmlns="http://tempuri.org/" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+			<authToken>ukwh6lNEFNfBDGt6xue0uG7CkgNHIyyL</authToken>
+			<configInfoJson>{"LableFileType":"1","LablePaperType":"1","LableContentType":"1"}</configInfoJson>
+			<orderInfoJson>[{"LabelTemplateType":"SGGH","CustomerCode":"DJSH","OrderNo":"ORDERNO_001","ProductCode":"A1","ProductName":"产品名称1","ProductPrintSign":"产品标记1","TrackingNumber":"TRACKINGNUMBER_001","DestinationCountryCode":"US","DestinationCountryEName":"国家英文名1","DestinationCountryName":"国家中文名1","ReturnAddress":"回邮地址1","ConsigneeName":"ZHANGSAN","ConsigneeCompanyName":"4PX","ConsigneePostCode":"12345","ConsigneePhone":"10086","ConsigneeAddress":"ConsigneeAddress","BuyerID":"900125","LablePrintDeclareInfoSign":"Y","InsuranceSign":"Y","HighValueSign":"Y","PrintTimeSign":"Y","ReturnSign":"Y","Weight":"1","Pieces":"5","ShipmentZoneCode":"A","LabelAccount":"123456","LabelSignature":"签名1","DeclarationType":"1","Extraservice":"保险1,出口退税"}]</orderInfoJson>
+		</MakeLableFileToBase64>
+	</s:Body>
+</s:Envelope>

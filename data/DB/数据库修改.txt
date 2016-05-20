@@ -1,0 +1,37 @@
+﻿#2014-10-18 修改发件人表
+#Frank
+ALTER TABLE `csi_shipper_trailer_address`
+MODIFY COLUMN `shipper_account`  int(10) NOT NULL AUTO_INCREMENT COMMENT '发件人地址使用的账号，一般用于未录入发件人信息系统自动查找默认信息时使用的ID' ,
+ADD COLUMN `customer_id`  int(10) NOT NULL COMMENT '客户ID' FIRST ;
+ALTER TABLE `csi_shipper_trailer_address`
+MODIFY COLUMN `customer_id`  int(10) NOT NULL COMMENT '客户ID' AFTER `shipper_account`;
+
+#2014-10-20 轨迹明细表，修改主键
+ALTER TABLE `tak_trackdetails`
+MODIFY COLUMN `trk_id`  int(14) NOT NULL AUTO_INCREMENT COMMENT '轨迹id，取自序列seq_track' FIRST ;
+
+#2016-1-20  csd_order 增加长度、宽度和高度字段 
+ALTER TABLE csd_order ADD length INT NOT NULL DEFAULT '0'; 
+ALTER TABLE csd_order ADD width INT NOT NULL DEFAULT '0';
+ALTER TABLE csd_order ADD height INT NOT NULL DEFAULT '0';
+
+#2016-1-22  yuntms新增bulletin_board表
+CREATE TABLE `bulletin_board` (
+  `bb_id` int(11) NOT NULL AUTO_INCREMENT,
+  `code` varchar(12) NOT NULL DEFAULT '' COMMENT '应用代码(Notice：通知、Update：更新、等)',
+  `v_code` varchar(32) NOT NULL DEFAULT '' COMMENT '版本代码',
+  `v_title` varchar(255) NOT NULL DEFAULT '' COMMENT 'Title-简单描述',
+  `v_title_en` varchar(255) NOT NULL DEFAULT '' COMMENT 'Title-简单描述(EN)',
+  `v_operator` int(11) NOT NULL DEFAULT '0' COMMENT '操作人',
+  `v_content` text NOT NULL COMMENT '正文',
+  `v_content_en` text NOT NULL COMMENT '正文(EN)',
+  `v_add_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `v_published` datetime DEFAULT NULL COMMENT '发布时间（大于该时间时，公告栏才会显示次信息）',
+  `v_system` tinyint(1) DEFAULT '0' COMMENT '公告类型,0：所有系统支持, 1: 订单系统, 2: 仓配系统',
+  `v_pop_up_display` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否弹出显示(1:是  0:否)',
+  PRIMARY KEY (`bb_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='系统公告表';
+
+#2016-2-18 出货批次表,增加出货总单状态
+ALTER TABLE `bsn_departurebatch`
+ADD COLUMN `departbatch_status` varchar(10) DEFAULT NULL COMMENT '出货总单状态,D已完成,P已预报,F预报失败' AFTER `departbatch_state`;

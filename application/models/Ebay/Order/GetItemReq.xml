@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GetItemRequest xmlns="urn:ebay:apis:eBLBaseComponents">
+	<!-- Call-specific Input Fields -->
+	<IncludeCrossPromotion> boolean </IncludeCrossPromotion>
+	<IncludeItemCompatibilityList> boolean </IncludeItemCompatibilityList>
+	<IncludeItemSpecifics> boolean </IncludeItemSpecifics>
+	<IncludeTaxTable> boolean </IncludeTaxTable>
+	<IncludeWatchCount> boolean </IncludeWatchCount>
+	<ItemID> ItemIDType (string) </ItemID>
+	<SKU> SKUType (string) </SKU>
+	<TransactionID> string </TransactionID>
+	<VariationSKU> SKUType (string) </VariationSKU>
+	<VariationSpecifics> NameValueListArrayType
+		<NameValueList> NameValueListType
+			<Name> string </Name>
+			<Value> string </Value>
+			<!-- ... more Value values allowed here ... -->
+		</NameValueList>
+		<!-- ... more NameValueList nodes allowed here ... -->
+	</VariationSpecifics>
+	<!-- Standard Input Fields -->
+	<DetailLevel> DetailLevelCodeType </DetailLevel>
+	<!-- ... more DetailLevel values allowed here ... -->
+	<ErrorLanguage> string </ErrorLanguage>
+	<MessageID> string </MessageID>
+	<OutputSelector> string </OutputSelector>
+	<!-- ... more OutputSelector values allowed here ... -->
+	<Version> string </Version>
+	<WarningLevel> WarningLevelCodeType </WarningLevel>
+</GetItemRequest>

@@ -1,0 +1,741 @@
+﻿﻿@charset "utf-8";
+/* CSS Document */
+/* ----------- html layout css ------------- */
+
+.ec-ui-tips{
+    background:url(/images/base/bg_tips01.png) no-repeat;
+    padding-left:16px;
+}
+.ec-f-left{
+    float:left;
+}
+.ec-center{
+    text-align:center;
+
+}
+
+#module-container{ padding:0px 5px;padding-bottom:20px; }
+#search-module{ padding-bottom:10px; border-bottom:1px solid #e0e0e0; }
+#module-table{
+    padding-bottom:10px;
+}
+.search-module-condition{
+    padding-top:4px;
+}
+.table-module { table-layout:fixed; background:#d1e7fc; border:1px solid #d1e7fc;}
+.table-module tr {  }
+.table-module td { line-height:20px; padding:5px; border-right:1px solid #fff; border-bottom:1px solid #fff;}
+.table-module,.table-module td{  }
+.table-module-b1 { background:#fff; }
+.table-module-b2 { background:#f2f2f2;}
+.table-module-b3 { background:#fcf5dd;}
+.table-module-b4 { background:#D5E3E2;}
+.table-module-title { background: url(/images/pack/bg_manage_form01.gif) repeat-x; color:#333;}
+
+#table-module-list-data tr:hover{
+    background: #dbecfa;
+}
+
+#search-module{
+
+    height:auto;
+    overflow:hidden;
+    padding-bottom:10px; background: url(/images/pack/bg_search01.gif) bottom repeat-x ;
+    padding :5px 10px 5px;
+}
+.search-module-left{
+    float: left;
+    width:10%;
+}
+.search-module-right{
+    float: left;
+    width:88%;
+}
+
+.opration_area {
+    height: 36px;
+    margin-top: 3px;
+    padding: 0 2px;
+}
+.opration_area_lft { float:left; height:32px;padding-top: 3px; }
+.opration_area_rit {
+    float: right;
+    height: 32px;
+    text-align: right;
+    padding-top: 3px;
+}
+
+.dialog-edit-alert-tip .dialog-module td{
+    padding:3px 0;
+}
+
+.dialog-edit-alert-tip .dialog-module td input{
+    width:250px;
+}
+
+.dialog-edit-alert-tip .dialog-module .dialog-module-title{
+    font-weight:bold;
+    text-align:right;
+    padding-right:5px;
+}
+
+#dialog-auto-alert-tip{
+    width:100%;
+}
+.tip-error-message{
+    clear:both;
+    background:url(/images/base/bg_tips03.png) no-repeat 0 0px;
+    margin-top:2px;
+    padding-left:16px;
+}
+#dialog-auto-alert-tip .tip-error-message,#dialog-auto-alert-tip .tip-success-message{
+    clear:both;
+    width:100%;
+    float:left;
+}
+
+#dialog-auto-alert-tip .tip-error-message{
+    float:left;
+    width:90%;
+    clear:both;
+    background:url(/images/base/bg_tips03.png) no-repeat 0 2px;
+    margin-top:2px;
+    padding-left:16px;
+}
+
+#dialog-auto-alert-tip .tip-success-message{
+    float:left;
+    width:90%;
+    clear:both;
+    background:url(/images/base/bg_tips02.png) no-repeat 0 2px;
+    margin-top:2px;
+    padding-left:16px;
+}
+
+#dialog-auto-alert-tip .tip-load-message{
+   	background: url("/images/base/bg_tips04.gif") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+    clear: both;
+    float: left;
+    height: 24px;
+    line-height: 25px;
+    margin-top: 2px;
+    padding-left: 28px;
+    width: 90%;
+}
+#dialog-auto-alert-tip .tip-warning-message{
+    float:left;
+    width:90%;
+    clear:both;
+    background:url(/images/base/bg_tips01.png) no-repeat 0 2px;
+    margin-top:2px;
+    padding-left:16px;
+}
+
+#dialog-auto-alertConfirm-tip .tip-warning-message{
+    float:left;
+    width:90%;
+    clear:both;
+    background:url(/images/base/bg_tips01.png) no-repeat 0 2px;
+    margin-top:2px;
+    padding-left:16px;
+}
+.validateTips{
+    padding-top:10px;
+}
+.validateTips .tip-error-message{
+    float:left;
+    width:90%;
+    clear:both;
+    background:url(/images/base/bg_tips03.png) no-repeat 0 2px;
+    margin-top:5px;
+    padding-left:16px;
+}
+
+.validateTips .tip-success-message{
+    float:left;
+    width:90%;
+    clear:both;
+    background:url(/images/base/bg_tips02.png) no-repeat 0 2px;
+    margin-top:2px;
+    padding-left:16px;
+}
+
+.validateTips .tip-warning-message{
+    float:left;
+    width:90%;
+    clear:both;
+    background:url(/images/base/bg_tips01.png) no-repeat 0 2px;
+    margin-top:2px;
+    padding-left:16px;
+}
+
+.baseBtn { height:24px; line-height:24px; background:url(/images/base/bg_baseBtn01.gif)  bottom repeat-x; border:1px solid #979797; border-radius:3px; padding:0px 10px; text-align:center; color:#333; cursor:pointer;}
+
+
+.pagination {
+    font-size: 12px;
+    margin:3px auto;
+    text-align: center;
+    background:  repeat-x scroll center -26px transparent;
+    height: 26px;
+    line-height: 26px;
+}
+
+.pagination a {
+    text-decoration: none;
+    border: solid 1px #AAE;
+    color: #15B;
+}
+
+.pagination a, .pagination span {
+    padding: 0.3em 0.5em;
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+
+.pagination .current {
+    background: #26B;
+    color: #fff;
+    border: solid 1px #AAE;
+}
+
+.pagination .current.prev, .pagination .current.next{
+    color:#999;
+    border-color:#a5c3e0;
+    background:#fff;
+}
+
+
+.page { text-align:right; margin-top:12px; height:26px; }
+.page_lft { float:left; height:26px; line-height:26px;}
+.page_rit { float:right; text-align:right; height:26px; padding:3px 0px; cursor:pointer;}
+.page_number { border:1px solid #ccc; height:20px; line-height:20px; margin-left:5px; padding:2px 7px; color:#666;}
+.page_over { border:1px solid #a5c3e0; text-decoration:none; color:#488fcd; background:#f6fbff;}
+.page_current { border:1px solid #0090e1; color:#3a739d; height:20px; line-height:20px; margin-left:5px; padding:2px 7px; cursor:pointer;}
+.page_disable { border:1px solid #ddd; color:#ddd; height:20px; line-height:20px; margin-left:5px; padding:2px 7px; cursor:pointer;}
+
+
+.input_text { width:140px; height:21px; line-height:21px; border:1px solid #a5c3e0; border-top:1px solid #89accd; border-right:1px solid #89accd; padding:0px 3px; border-radius:3px; box-shadow:1px 2px 2px #e5eaee inset; font-size:12px; }
+.input_text2 { height:22px; line-height:22px;border:#bdd3ea 1px solid; padding:0px 0px 0px 3px;}
+
+
+
+
+.goods_property { height:36px; padding:0px 10px; background:#f6f6f6; margin-top:15px;}
+.goods_property_lft { float:left; height:33px; padding-top:3px;}
+
+
+.insert_form { }
+.insert_form tr { }
+.insert_form td { text-align:left;padding:2px; border:none; line-height:20px; vertical-align:top; color:#999; }
+
+
+
+.pack_case { line-height:20px; padding:15px 10px; border-bottom:1px dashed #ccc;}
+
+.pack_pic { width:200px; height:150px; border:1px solid #d5e9fc; overflow:hidden;}
+
+.pack_weight { padding:10px; border:1px solid #e2e2e2; margin-top:15px;}
+
+.pack_check { padding:15px 10px 10px 10px; font-size:18px;}
+
+.pack_manager {height:18px;line-height: 18px;}
+.pack_manager a { color: #666666;float: left;padding: 1px 8px;margin: 0px 12px 0px 0px;text-decoration: none;border:1px solid #e2e2e2; border-radius: 3px 3px 3px 3px;}
+.pack_manager a.current { background-color: #0188CC;color: #FFFFFF; border-radius: 3px 3px 3px 3px;border:1px solid #0188CC;}
+.pack_manager a:hover {background-color: #CBE9F1;color: #666666; border-radius: 3px 3px 3px 3px;border:1px solid #e2e2e2;}
+.pack_manager a.current span { color: #F4FD88;}
+.pack_manager a:hover span{color: #FF0000;}
+
+
+/* ----------- 订单明细样式 ------------- */
+.depotState_title { height:32px; line-height:32px; background: url(/images/pack/bg_depotState.gif) repeat-x; padding-left:10px;}
+.depotState { border:1px solid #91bcdf; margin-top:12px;}
+.depotState h2 { height:32px; line-height:32px; background: url(/images/pack/bg_depotState.gif) repeat-x; font-size:14px; font-weight:bold; padding-left:15px;}
+.depotState_list { padding:0px 12px 18px 12px;}
+.depot_path { text-align:right;}
+.depotForm tr {}
+.depotForm td { line-height:22px; padding:2px; }
+
+.depotTab2 { height:32px; background: url(/images/pack/bg_depotState.gif) repeat-x; }
+.depotTab2 ul {}
+.depotTab2 ul li { background:#fff; height:32px; line-height:32px; padding:0px 15px; float:left; font-size:14px; }
+.depotTab2 ul li.chooseTag { height:30px; background:#eaf2f8; border:1px solid #d3e5ef; float:left; padding:0px 15px; font-weight:bold;}
+.depotTab2 li.chooseTag a { height:30px;}
+.depotTab2 a { color:#333;}
+.depotTab2 a:hover { color:#333; text-decoration:none;}
+
+.depot_locus { border-top:1px dashed #ccc; padding:15px 0px 30px 0px; margin-left:35px;}
+.depot_locus_lft { float:left; font-weight:bold; }
+.depot_locus_rit { float:left; line-height:22px; }
+.depot_locus_rit p.tips { border:1px solid #fae2ba; background:#ffffe0 url(/images/master/icon_02.png) no-repeat; background-position:8px 5px; padding:2px 10px 2px 25px;}
+
+/*--步骤样式--*/
+.step_rowTitle {
+    border-bottom: 1px solid #CCCCCC;
+    font-weight: bold;
+    height: 30px;
+    line-height: 30px;
+    margin-bottom: 10px;
+}
+
+/*详细页面样式*/
+.detailTab { height:28px; background: url(/images/pack/bg_goodsTab01.gif) bottom repeat-x; padding-top:12px;}
+.detailTab ul {}
+.detailTab ul li { float:left; background: url(/images/pack/bg_goodsTab03.gif) repeat-x; height:28px;  line-height:28px; border-left:1px solid #d9d9d9; border-right:1px solid #d9d9d9; padding:0px 15px; margin-right:5px; }
+.detailTab ul li.chooseTag { background: url(/images/pack/bg_goodsTab02.gif) repeat-x; float:left; padding:0px 15px; z-index:5;  }
+.detailTab li.chooseTag a { color:#0090e1;}
+.detailTab a { color:#666;}
+.detailTab a:hover { color:#488fcd; text-decoration:none;}
+
+.detail_tab_box {
+    padding: 10px;
+    border:1px solid #d9d9d9; border-top:none;
+}
+
+
+.manage_form, .manage_form td {
+}
+.manage_form {
+    background: none repeat scroll 0 0 #D1E7FC;
+    border: 1px solid #D1E7FC;
+    margin-top: 12px;
+    table-layout: fixed;
+}
+
+.manage_form tr {
+}
+.manage_form_bk {
+    background: none repeat scroll 0 0 #FFFFFF;
+}
+.manage_form_bk2 {
+    height: 15px;
+    border-bottom: 2px azure;
+    background: none repeat scroll 0 0 #F2F2F2;
+}
+.manage_form_bk3 {
+    height: 15px;
+    border-bottom: 2px azure;
+    background: none repeat scroll 0 0 #C0D1E1;
+}
+
+
+.datepicker,.datepickerTo{
+    background: url(/images/operate/date.gif) no-repeat 2px;
+    padding-left: 17px;
+    width:80px;
+}
+
+.toAdvancedSearch,.toBaseSearch{
+    margin-left: 6px;
+}
+
+#searchfilterArea tr td{
+    height:18px;
+	padding-bottom: 5px;
+}
+
+.searchfilterArea tr td{
+    height:18px;
+	padding-bottom: 5px;
+}
+
+.searchFilterText{
+    float:left;
+    text-align:right;
+	height:18px;
+    line-height:18px;
+}
+/**
+.search-module-condition .searchFilterText{
+    height:18px;
+    line-height:18px;
+}
+**/
+#search-module-advancedSearch{
+    display:none;
+}
+
+.selectCss{
+    width:218px;
+}
+.selectCss2{
+    width:150px;
+}
+
+/* 选项卡样式  start**/
+.Tab {
+    background: url("/images/pack/bg_Tab01.gif") repeat-x scroll center bottom transparent;
+    border-left: 1px solid #CCCCCC;
+    height: 29px;
+    margin-top: 10px;
+}
+.tab_box { padding:12px; border:1px solid #d9d9d9; border-top:none;}
+
+
+.Tab { height:29px; border-left:1px solid #ccc; background: url(/images/pack/bg_Tab01.gif)  bottom repeat-x; margin-top:10px;}
+.Tab ul {}
+.Tab ul li { background:#fff; border-top:1px solid #ccc; border-right:1px solid #ccc; height:26px; padding:0px 15px; float:left; line-height:26px; }
+.Tab ul li.chooseTag { height:26px; background: url(/images/base/bg_guild01.gif) repeat-x; float:left; padding:0px 15px; border-top:1px solid #ccc; }
+.Tab li.chooseTag a { color:#333; font-weight:bold;}
+.Tab a { color:#666;}
+.Tab a:hover { color:#488fcd; text-decoration:none;}
+
+.iconlevel1 {
+    background: url("/images/base/ebayicon.png") no-repeat scroll 0 0 transparent;
+    display: block;
+    height: 16px;
+    vertical-align: middle;
+    white-space: nowrap;
+    width: 18px;
+    background-position: -201px -8px;
+}
+.iconlevel2 {
+     background: url("/images/base/ebayicon.png") no-repeat scroll 0 0 transparent;
+     display: block;
+     height: 16px;
+     vertical-align: middle;
+     white-space: nowrap;
+     width: 18px;
+     background-position: -232px -8px;
+ }
+
+.iconlevel3 {
+     background: url("/images/base/ebayicon.png") no-repeat scroll 0 0 transparent;
+     display: block;
+     height: 16px;
+     vertical-align: middle;
+     white-space: nowrap;
+     width: 18px;
+     background-position: -265px -8px;
+ }
+.iconlevel4 {
+    background: url("/images/base/ebayicon.png") no-repeat scroll 0 0 transparent;
+    display: block;
+    height: 16px;
+    vertical-align: middle;
+    white-space: nowrap;
+    width: 18px;
+    background-position: -297px -8px;
+}
+.iconlevel5 {
+    background: url("/images/base/ebayicon.png") no-repeat scroll 0 0 transparent;
+    display: block;
+    height: 16px;
+    vertical-align: middle;
+    white-space: nowrap;
+    width: 18px;
+    background-position: -265px -40px;
+}
+
+/**未付款*/
+.iconmoney1{
+    background: url("/images/base/ebayicon.png") no-repeat scroll 0 0 transparent;
+    display: block;
+    height: 16px;
+    vertical-align: middle;
+    white-space: nowrap;
+    width: 18px;
+    background-position: -8px -169px;
+}
+/**已付款*/
+.iconmoney2{
+    background: url("/images/base/ebayicon.png") no-repeat scroll 0 0 transparent;
+    display: block;
+    height: 16px;
+    vertical-align: middle;
+    white-space: nowrap;
+    width: 14px;
+    background-position: -39px -169px;
+}
+
+.iconshipebay{
+    background: url("/images/base/ebayicon.png") no-repeat scroll 0 0 transparent;
+    display: block;
+
+    height: 16px;
+    vertical-align: middle;
+    white-space: nowrap;
+    width: 16px;
+    background-position: -104px -199px;
+}
+/* 同步Amazon--已同步 */
+.iconshipamazon{
+	background: url("/images/base/ship-amazon.png") no-repeat scroll 0 0 / 16px auto rgba(0, 0, 0, 0);
+    display: block;
+    height: 16px;
+    vertical-align: middle;
+    white-space: nowrap;
+    width: 16px;
+}
+/* 同步Amazon--已发送，等待响应 */
+.iconshipamazonWait{
+	background: url("/images/base/ship-amazon-wait.png") no-repeat scroll 0 0 / 16px auto rgba(0, 0, 0, 0);
+    display: block;
+    height: 16px;
+    vertical-align: middle;
+    white-space: nowrap;
+    width: 16px;
+}
+/* 同步Amazon--更新追踪号信息，等待再次同步 */
+.iconshipamazonAgain{
+	background: url("/images/base/ship-amazonAgain.png") no-repeat scroll 0 0 / 16px auto rgba(0, 0, 0, 0);
+    display: block;
+    height: 16px;
+    vertical-align: middle;
+    white-space: nowrap;
+    width: 16px;
+}
+
+.iconcaseebay{
+	background: url("/images/base/case.png") no-repeat scroll 0 0 / 16px auto rgba(0, 0, 0, 0);
+    display: block;
+    height: 16px;
+    vertical-align: middle;
+    white-space: nowrap;
+    width: 16px;
+}
+.iconpedding{
+    background: url("/images/base/ebayicon.png") no-repeat scroll 0 0 transparent;
+    display: block;
+
+    height: 16px;
+    vertical-align: middle;
+    white-space: nowrap;
+    width: 16px;
+    background-position: -263px -199px;
+}
+
+.iconfeedback{
+	background: url("/images/base/feedbackIcon2.gif") no-repeat rgba(0, 0, 0, 0);
+    display: block;
+    height: 16px;
+    vertical-align: middle;
+    white-space: nowrap;
+    width: 16px;
+}
+/* 评价--好 */
+.iconfeedback_Positive{
+	background: url("/images/base/icon_Positive.png") no-repeat scroll 0 -2px / 18px auto rgba(0, 0, 0, 0);
+    display: block;
+    height: 16px;
+    vertical-align: middle;
+    white-space: nowrap;
+    width: 16px;
+}
+/* 评价--中 */
+.iconfeedback_Neutral{
+	background: url("/images/base/icon_Neutral.png") no-repeat scroll 0 -2px / 18px auto rgba(0, 0, 0, 0);
+    display: block;
+    height: 16px;
+    vertical-align: middle;
+    white-space: nowrap;
+    width: 16px;
+}
+/* 评价--差 */
+.iconfeedback_Negative{
+	background: url("/images/base/icon_Negative.png") no-repeat scroll 0 -2px / 18px auto rgba(0, 0, 0, 0);
+    display: block;
+    height: 16px;
+    vertical-align: middle;
+    white-space: nowrap;
+    width: 16px;
+}
+/* 存在paypal退款 */
+.iconpaypal_refund{
+	background: url("/images/base/paypal_refund.png") no-repeat scroll 0 0 / 19px auto rgba(0, 0, 0, 0);
+    display: block;
+    height: 19px;
+    vertical-align: middle;
+    white-space: nowrap;
+    width: 16px;
+}
+/* 服务商对接，同步中 */
+.icondcking1{
+	background: url("/images/base/docking1.png") no-repeat scroll 0 0 / 19px auto rgba(0, 0, 0, 0);
+    display: block;
+    height: 19px;
+    vertical-align: middle;
+    white-space: nowrap;
+    width: 16px;
+}
+
+/* 服务商对接，已同步 */
+.icondcking2{
+	background: url("/images/base/docking2.png") no-repeat scroll 0 0 / 19px auto rgba(0, 0, 0, 0);
+    display: block;
+    height: 19px;
+    vertical-align: middle;
+    white-space: nowrap;
+    width: 16px;
+}
+
+#dialog-SkyeQuiKey-alert-tip .url-module {
+    clear: both;
+    width: 100%;
+    height: 28px;
+    line-height: 28px;
+    background: url("/images/pack/bg_manage_form01.gif") repeat-x scroll 0 0 transparent;
+    border-bottom: 1px solid #ccc;
+}
+
+#dialog-SkyeQuiKey-alert-tip .url-Box {
+    height: auto;
+    overflow: hidden;
+    padding-left: 3%;
+}
+
+#dialog-SkyeQuiKey-alert-tip .url-Box div {
+    float: left;
+    width:28%;
+}
+
+#dialog-SkyeQuiKey-alert-tip .url-module-title {
+    cursor: pointer;
+}
+
+#dialog-SkyeQuiKey-alert-tip .url-checked {
+    color: #0090E1;
+}
+
+#red,.red {
+    color: red;
+}
+
+/** 多选操作按钮样式---开始 **/
+.dropdown_nav {
+	padding:0px;
+	display:inline-block;
+	list-style:none;
+	-moz-box-shadow:inset 0px 0px 1px #fff;
+	-webkit-box-shadow:inset 0px 0px 1px #fff;
+	
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	background:#e2e2e2;
+	background:-moz-linear-gradient(#f3f3f3, #e2e2e2);
+	background:-webkit-gradient(linear, 0 0, 0 100%, from(#f3f3f3), to(#e2e2e2));
+	border:1px solid #ccc;
+	
+}
+
+.dropdown_nav li{
+	font-family:Arial, Sans-Serif;
+	color:#525252;
+	padding: 0 5px;
+}
+.dropdown_nav li a{
+	font-family:Arial, Sans-Serif;
+	color:#525252;
+	padding: 0 5px;
+}
+
+.dropdown_nav  strong{
+	border-color: #5A5A5A rgba(0, 0, 0, 0) rgba(0, 0, 0, 0);border-style: solid;border-width: 5px;font-size: 0;height: 0;width: 0;line-height: 10px;
+}
+/* The Nav styling starts here, The above code is just to make the page look nice */
+.dropdown_nav li {
+	padding:1px 0px 1px 0px;
+	float:left;
+	position:relative;
+	display:inline-block;
+}
+
+.dropdown_nav li a {
+	padding:0px 5px
+	text-shadow:-1px 1px 0px #f6f6f6;
+	-moz-box-shadow:inset 0px 0px 1px #fff;
+	-webkit-box-shadow:inset 0px 0px 1px #fff;
+	border-right:1px solid #ccc;
+}
+.dropdown_nav li a:hover {
+	color: #0090E1;
+	background:#f9f9f9;
+	background:-moz-linear-gradient(#f9f9f9, #e8e8e8);
+	background:-webkit-gradient(linear, 0 0, 0 100%, from(#f9f9f9), to(#e8e8e8));
+}
+.dropdown_nav li a:active {
+	background:#e2e2e2;
+	background:-moz-linear-gradient(#e2e2e2, #f3f3f3);
+	background:-webkit-gradient(linear, 0 0, 0 100%, from(#e2e2e2), to(#f3f3f3));
+}
+
+.dropdown_nav li a.first {
+	-moz-border-radius:5px 0px 0px 5px;
+	-webkit-border-radius:5px 0px 0px 5px;
+}
+
+/* Sub-Nav styling */
+.dropdown_nav .sub_nav {
+	z-index:10;
+	padding:0px;
+	position:absolute;
+	border:1px solid #ccc;
+	background:#e2e2e2;
+	margin-right: -1px;
+}
+
+.dropdown_nav .sub_nav li {
+	 padding: 0px;
+	 height: 24px;
+}
+
+.dropdown_nav .sub_nav li a {
+	height: 23px;	
+	display:block;
+	border-bottom:1px solid #ccc;
+	background:-moz-linear-gradient(#f3f3f3, #e2e2e2);
+	background:-webkit-gradient(linear, 0 0, 0 100%, from(#f3f3f3), to(#e2e2e2));
+}
+.dropdown_nav .sub_nav li a:hover {
+	background:#f9f9f9;
+	background:-moz-linear-gradient(#f9f9f9, #e8e8e8);
+	background:-webkit-gradient(linear, 0 0, 0 100%, from(#f9f9f9), to(#e8e8e8));
+}
+.dropdown_nav .sub_nav li a:active {
+	background:#e2e2e2;
+	background:-moz-linear-gradient(#e2e2e2, #f3f3f3);
+	background:-webkit-gradient(linear, 0 0, 0 100%, from(#e2e2e2), to(#f3f3f3));
+}
+/** 多选操作按钮样式---结束 **/
+
+.base_hide{
+	display: none;
+}
+
+/**  **/
+.iconLoad {
+    background: url("/images/base/download.png") no-repeat scroll 0 0 / 32px auto rgba(0, 0, 0, 0);
+    display: block;
+    height: 32px;
+    vertical-align: middle;
+    white-space: nowrap;
+    width: 30px;
+	float: left; 
+	padding: 0px 2px;
+}
+
+.load_div {
+    display: block;
+    position: fixed;
+    right: -90px;
+    top: 135px;
+    width: 120px;
+    z-index: 1;
+	cursor: pointer;
+	opacity: 0.8;
+}
+
+.load_div:hover{
+	opacity: 1;
+ 	right: -7px;
+}	
+
+.load_div_text {
+	background-color: #4E5C72;
+	line-height: 32px;
+	color: #FCFCFC;
+	position: absolute;
+	left:20px;
+	z-index: -1;
+	padding:0 5px 0 15px;
+}

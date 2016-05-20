@@ -1,0 +1,535 @@
+2014-07-22T10:53:35+08:00 INFO (6): 
+2014-07-22 10:53:35:
+Array
+(
+    [ask] => Success
+    [message] => 
+    [data] => Array
+        (
+            [customer_id] => 81
+            [customer_code] => 100002
+            [customer_password] => 
+            [customer_firstname] => 马俊玲
+            [customer_lastname] => 
+            [customer_license] => 
+            [customer_idcard] => 
+            [customer_email] => 305111520@qq.com
+            [customer_email_verify] => 1
+            [customer_currency] => RMB
+            [customer_activate_code] => 
+            [customer_telephone] => 12345678912
+            [customer_fax] => 
+            [customer_status] => 2
+            [customer_company_name] => 马俊玲
+            [trade_name] => 
+            [trade_co] => 
+            [customer_logo] => 
+            [customer_saler_user_id] => 286
+            [customer_cser_user_id] => 287
+            [customer_verify_code] => 
+            [customer_signature] => 
+            [reg_step] => 3
+            [customer_reg_time] => 2014-04-12 10:06:23
+            [last_login_time] => 2014-05-05 12:05:05
+            [customer_update_time] => 2014-05-05 12:05:05
+            [password_update_time] => 
+            [saler] => Array
+                (
+                    [user_name] => 销售1号
+                    [user_name_en] => 销售1号
+                    [user_email] => 
+                    [user_phone] => 
+                    [user_mobile_phone] => 
+                )
+
+            [cser] => Array
+                (
+                    [user_name] => 客户1号
+                    [user_name_en] => 客户1号
+                    [user_email] => 
+                    [user_phone] => 
+                    [user_mobile_phone] => 
+                )
+
+            [customer_balance] => Array
+                (
+                    [cb_id] => 15
+                    [customer_code] => 100002
+                    [customer_id] => 81
+                    [cb_value] => 0.000
+                    [cb_hold_value] => 0.000
+                    [cb_credit_line] => 0.000
+                    [cb_hold_credit_line] => 0.000
+                    [cb_update_time] => 2014-05-18 07:41:26
+                )
+
+        )
+
+    [req] => Array
+        (
+            [service] => getCustomer
+            [paramsJson] => {"customer_code":"100002"}
+            [appToken] => ec
+            [appKey] => ec
+        )
+
+)
+2014-07-22T14:40:04+08:00 INFO (6): 
+2014-07-22 14:40:04:
+Array
+(
+    [ask] => Failure
+    [message] => operation failure
+    [req] => Array
+        (
+            [service] => createProduct
+            [paramsJson] => {"customer_code":"100002","product_sku":"DDDDDDDDDDDDDDDD","product_barcode":"100002-DDDDDDDDDDDDDDDD","product_title_en":"ddd","product_title":"ddd","product_length":"0.00","product_width":"0.00","product_height":"0.00","product_weight":"0.000","product_declared_name":"sdfa","product_declared_value":"10.00","warning_qty":"","currency_code":"","product_barcode_type":"0","product_type":"0","contain_battery":"0","pc_id":"","cat_id0":"400000","cat_id1":"500000","cat_id2":"600002","pu_code":"EA","attachedArr":[{"pa_file_type":"link","pa_path":"http:\/\/www.ruston-oms.com\/default\/system\/view-img?pa_id=3357"},{"pa_file_type":"link","pa_path":"http:\/\/www.ruston-oms.com\/default\/system\/view-img?pa_id=3358"},{"pa_file_type":"link","pa_path":"http:\/\/www.ruston-oms.com\/default\/system\/view-img?pa_id=3359"},{"pa_file_type":"link","pa_path":"http:\/\/www.ruston-oms.com\/default\/system\/view-img?pa_id=3360"},{"pa_file_type":"link","pa_path":"http:\/\/www.ruston-oms.com\/default\/system\/view-img?pa_id=3361"},{"pa_file_type":"link","pa_path":"http:\/\/www.ruston-oms.com\/default\/system\/view-img?pa_id=3362"},{"pa_file_type":"link","pa_path":"http:\/\/www.ruston-oms.com\/default\/system\/view-img?pa_id=3363"},{"pa_file_type":"link","pa_path":"http:\/\/www.ruston-oms.com\/default\/system\/view-img?pa_id=3364"}]}
+            [appToken] => ec
+            [appKey] => ec
+        )
+
+)
+2014-07-22T14:42:18+08:00 INFO (6): 
+2014-07-22 14:42:18:
+Array
+(
+    [ask] => Success
+    [message] => 
+    [req] => Array
+        (
+            [service] => createProduct
+            [paramsJson] => {"customer_code":"100002","product_sku":"DDDDDDDDDDDDDDDD","product_barcode":"100002-DDDDDDDDDDDDDDDD","product_title_en":"ddd","product_title":"ddd","product_length":"0.00","product_width":"0.00","product_height":"0.00","product_weight":"0.000","product_declared_name":"sdfa","product_declared_value":"10.00","warning_qty":"","currency_code":"","product_barcode_type":"0","product_type":"0","contain_battery":"0","pc_id":"","cat_id0":"400000","cat_id1":"500000","cat_id2":"600002","pu_code":"EA","attachedArr":[{"pa_file_type":"link","pa_path":"http:\/\/www.ruston-oms.com\/default\/system\/view-img?pa_id=3357"},{"pa_file_type":"link","pa_path":"http:\/\/www.ruston-oms.com\/default\/system\/view-img?pa_id=3358"},{"pa_file_type":"link","pa_path":"http:\/\/www.ruston-oms.com\/default\/system\/view-img?pa_id=3359"},{"pa_file_type":"link","pa_path":"http:\/\/www.ruston-oms.com\/default\/system\/view-img?pa_id=3360"},{"pa_file_type":"link","pa_path":"http:\/\/www.ruston-oms.com\/default\/system\/view-img?pa_id=3361"},{"pa_file_type":"link","pa_path":"http:\/\/www.ruston-oms.com\/default\/system\/view-img?pa_id=3362"},{"pa_file_type":"link","pa_path":"http:\/\/www.ruston-oms.com\/default\/system\/view-img?pa_id=3363"},{"pa_file_type":"link","pa_path":"http:\/\/www.ruston-oms.com\/default\/system\/view-img?pa_id=3364"}]}
+            [appToken] => ec
+            [appKey] => ec
+        )
+
+)
+2014-07-22T14:44:26+08:00 INFO (6): 
+2014-07-22 14:44:26:
+Array
+(
+    [ask] => Failure
+    [message] => sku not exists
+    [data] => Array
+        (
+        )
+
+    [req] => Array
+        (
+            [service] => createOrder
+            [paramsJson] => {"reference_no":"","order_code":"100002-140714-0003","customer_code":"100002","warehouse_code":"HRBW","sm_code":"A3","order_type":"0","platform":"ALIEXPRESS","order_platform_type":"sale","create_type":"hand","force-verify":1,"mail_no":"","parcel_declared_value":"10.00","remark":"","address":{"firstname":"Andrey\u00a0Aleksandrovich\u00a0Bass","lastname":"","company":"","country_code":"RU","postcode":"454106","state":"Chelyabinsk","city":"Chelyabinsk\u00a0region,\u00a0Ru","suburb":"","street1":"Kosareva\u00a018-74","street2":"","phone":"8388851","email":""},"orderProduct":[{"product_barcode":"100030-2235","sku":"2235","op_quantity":"1","pc_id":"","order_item_id":null}]}
+            [appToken] => ec
+            [appKey] => ec
+        )
+
+)
+2014-07-22T14:56:01+08:00 INFO (6): 
+2014-07-22 14:56:01:
+Array
+(
+    [ask] => Failure
+    [message] => Order Create Fail:SQLSTATE[42S22]: Column not found: 1054 Unknown column 'mail_no' in 'field list'
+    [data] => Array
+        (
+        )
+
+    [req] => Array
+        (
+            [service] => createOrder
+            [paramsJson] => {"reference_no":"","order_code":"100002-140722-0003","customer_code":"100002","warehouse_code":"HRBW","sm_code":"A3","order_type":"0","platform":"ALIEXPRESS","order_platform_type":"sale","create_type":"hand","force-verify":1,"mail_no":"","parcel_declared_value":"10.00","remark":"","address":{"firstname":"adfadfa","lastname":"","company":"","country_code":"RU","postcode":"354054","state":"","city":"dfddfdfd","suburb":"","street1":"adfafa","street2":"","phone":"9654844881","email":""},"orderProduct":[{"product_barcode":"100002-002","sku":"002","op_quantity":"5","pc_id":"","order_item_id":""}]}
+            [appToken] => ec
+            [appKey] => ec
+        )
+
+)
+2014-07-22T14:56:30+08:00 INFO (6): 
+2014-07-22 14:56:30:
+Array
+(
+    [ask] => Success
+    [message] => 
+    [data] => Array
+        (
+            [charged_weight] => 0.650
+            [orderFee] => Array
+                (
+                    [0] => Array
+                        (
+                            [bi_id] => 3203
+                            [bm_id] => 351
+                            [customer_id] => 81
+                            [customer_code] => 100002
+                            [sp_code] => 
+                            [bill_code] => 
+                            [cs_code] => B63561407220001
+                            [ft_code] => shipping
+                            [bi_amount] => 65.500
+                            [currency_code] => RMB
+                            [currency_rate] => 1.0000
+                            [bi_sp_type] => 1
+                            [bi_creator_id] => 0
+                            [bi_balance_sign] => 0
+                            [bi_writeoff_sign] => N
+                            [bi_credit_pay] => 0
+                            [bi_note] => 
+                            [bi_billing_date] => 2014-07-22 14:56:29
+                            [bi_writeoff_sign_time] => 0000-00-00 00:00:00
+                            [bi_add_time] => 2014-07-22 14:56:29
+                            [bi_update_time] => 0000-00-00 00:00:00
+                        )
+
+                )
+
+        )
+
+    [orderCode] => 100002-140722-0003
+    [orderStatus] => 3
+    [abnormalStatus] => 1
+    [req] => Array
+        (
+            [service] => createOrder
+            [paramsJson] => {"reference_no":"","order_code":"100002-140722-0003","customer_code":"100002","warehouse_code":"HRBW","sm_code":"A3","order_type":"0","platform":"ALIEXPRESS","order_platform_type":"sale","create_type":"hand","force-verify":1,"mail_no":"","parcel_declared_value":"10.00","remark":"","address":{"firstname":"adfadfa","lastname":"","company":"","country_code":"RU","postcode":"354054","state":"","city":"dfddfdfd","suburb":"","street1":"adfafa","street2":"","phone":"9654844881","email":""},"orderProduct":[{"product_barcode":"100002-002","sku":"002","op_quantity":"5","pc_id":"","order_item_id":""}]}
+            [appToken] => ec
+            [appKey] => ec
+        )
+
+)
+2014-07-22T15:26:59+08:00 INFO (6): 
+2014-07-22 15:26:59:
+Array
+(
+    [ask] => Success
+    [message] => 
+    [req] => Array
+        (
+            [service] => createProduct
+            [paramsJson] => {"customer_code":"100002","product_sku":"DD","product_barcode":"100002-DD","product_title_en":"ddd","product_title":"ddd","product_length":"0.00","product_width":"0.00","product_height":"0.00","product_weight":"0.000","product_declared_name":"sdfa","product_declared_value":"10.00","warning_qty":"","currency_code":"","product_barcode_type":"0","product_type":"0","contain_battery":"0","pc_id":"","cat_id0":"400000","cat_id1":"500000","cat_id2":"600002","pu_code":"EA","attachedArr":[{"pa_file_type":"link","pa_path":"http:\/\/www.ruston-oms.com\/default\/system\/view-img?pa_id=3386"},{"pa_file_type":"link","pa_path":"http:\/\/www.ruston-oms.com\/default\/system\/view-img?pa_id=3387"},{"pa_file_type":"link","pa_path":"http:\/\/www.ruston-oms.com\/default\/system\/view-img?pa_id=3388"},{"pa_file_type":"link","pa_path":"http:\/\/www.ruston-oms.com\/default\/system\/view-img?pa_id=3389"},{"pa_file_type":"link","pa_path":"http:\/\/www.ruston-oms.com\/default\/system\/view-img?pa_id=3390"},{"pa_file_type":"link","pa_path":"http:\/\/www.ruston-oms.com\/default\/system\/view-img?pa_id=3391"}]}
+            [appToken] => ec
+            [appKey] => ec
+        )
+
+)
+2014-07-22T15:27:33+08:00 INFO (6): 
+2014-07-22 15:27:33:
+Array
+(
+    [ask] => Success
+    [message] => 
+    [transferWarehouseCode] => HRBW
+    [req] => Array
+        (
+            [service] => createAsn
+            [paramsJson] => {"receiving_code":"RV100002-140722-0001","reference_no":"","tracking_number":"","warehouse_code":"HRBW","transit_warehouse_code":"HRBW","customer_code":"100002","receiving_type":"0","income_type":"0","shipping_method":"","box_total":"1","receiving_source_type":"0","receiving_description":"","state_id":"6","city_id":"76","zone_id":"693","state_name":"\u5e7f\u4e1c","city_name":"\u5e7f\u5dde","zone_name":"\u5929\u6cb3\u533a","address":"","contacter":"","contact_phone":"","expected_date":"2014-07-22","eda_date":"0000-00-00","detail":{"100002-DD":{"product_barcode":"100002-DD","sku":"DD","quantity":"10","order_item_id":""}},"detail_split":[{"product_barcode":"100002-DD","sku":"DD","quantity":"10","box_no":"1","package_type":"ow"}]}
+            [appToken] => ec
+            [appKey] => ec
+        )
+
+)
+2014-07-22T15:27:33+08:00 INFO (6): 
+2014-07-22 15:27:33:
+Array
+(
+    [ask] => Success
+    [message] => 
+    [data] => Array
+        (
+            [receiving_id] => 136
+            [receiving_code] => RV100002-140722-0001
+            [tracking_number] => 
+            [shipping_method] => 
+            [income_type] => 0
+            [po_code] => 
+            [reference_no] => 
+            [warehouse_id] => 1
+            [to_warehouse_id] => 1
+            [supplier_id] => 0
+            [receiving_update_user] => 0
+            [receiving_add_user] => 0
+            [customer_id] => 81
+            [customer_code] => 100002
+            [receiving_type] => 0
+            [receiving_status] => 5
+            [receiving_source_type] => 0
+            [contacter] => 
+            [contact_phone] => 
+            [receiving_description] => 
+            [receiving_batch] => 0
+            [receiving_add_time] => 2014-07-22 15:27:33
+            [receiving_update_time] => 2014-07-22 15:27:33
+            [total_packages] => 1
+            [expected_date] => 2014-07-22
+            [receiving_transfer_status] => 0
+            [receiving_exception] => 0
+            [receiving_exception_handle] => 0
+            [tax_type] => 
+            [insurance_type] => 
+            [customer_type] => 
+            [wms_qty_confirm] => 0
+            [receiving_detail] => Array
+                (
+                    [0] => Array
+                        (
+                            [rd_id] => 1427
+                            [receiving_id] => 136
+                            [receiving_code] => RV100002-140722-0001
+                            [sm_code] => 
+                            [rd_transfer_status] => 0
+                            [receiving_line_no] => 0
+                            [rd_status] => 0
+                            [receiving_exception] => 0
+                            [receiving_exception_handle] => 0
+                            [exception_process_instruction] => 0
+                            [product_id] => 5659
+                            [product_barcode] => 100002-DD
+                            [rd_receiving_qty] => 10
+                            [rd_putaway_qty] => 0
+                            [rd_received_qty] => 0
+                            [rd_delivery_qty] => 0
+                            [is_qc] => 0
+                            [is_priority] => 0
+                            [is_need_dev_photo] => 0
+                            [is_need_dev_desc] => 0
+                            [rd_note] => 
+                            [rd_add_time] => 0000-00-00 00:00:00
+                            [rd_update_time] => 0000-00-00 00:00:00
+                            [product_package_type] => 
+                            [valid_date] => 
+                            [order_item_id] => 
+                        )
+
+                )
+
+            [receiving_detail_batch] => Array
+                (
+                )
+
+            [quality_control] => Array
+                (
+                )
+
+            [receiving_operation_node] => Array
+                (
+                    [0] => Array
+                        (
+                            [ron_id] => 52
+                            [receiving_code] => RV100002-140722-0001
+                            [ot_code] => auditAsn
+                            [ot_attribute] => 
+                            [ron_note] => 
+                            [ron_add_time] => 2014-07-22 15:27:33
+                            [user_id] => 0
+                        )
+
+                )
+
+        )
+
+    [req] => Array
+        (
+            [service] => getAsn
+            [paramsJson] => {"receiving_code":"RV100002-140722-0001"}
+            [appToken] => ec
+            [appKey] => ec
+        )
+
+)
+2014-07-22T15:27:33+08:00 INFO (6): 
+2014-07-22 15:27:33:
+Array
+(
+    [ask] => Success
+    [message] => 
+    [data] => Array
+        (
+            [0] => Array
+                (
+                    [pi_id] => 1194
+                    [product_barcode] => 100002-DD
+                    [customer_id] => 81
+                    [customer_code] => 100002
+                    [product_id] => 5659
+                    [warehouse_id] => 1
+                    [pi_planned] => 0
+                    [pi_onway] => 10
+                    [pi_pending] => 0
+                    [pi_sellable] => 0
+                    [pi_unsellable] => 0
+                    [pi_reserved] => 0
+                    [pi_outbound] => 0
+                    [pi_shipped] => 0
+                    [pi_hold] => 0
+                    [pi_no_stock] => 0
+                    [pi_warning_qty] => 0
+                    [buyer_id] => 0
+                    [pi_add_time] => 2014-07-22 15:27:33
+                    [pi_update_time] => 0000-00-00 00:00:00
+                    [warehouse_code] => HRBW
+                    [warehouse_desc] => 哈尔滨仓
+                )
+
+        )
+
+    [req] => Array
+        (
+            [service] => getInventory
+            [paramsJson] => {"customer_code":"100002","warehouse_code":"HRBW","sku":"DD","page":1,"pageSize":200}
+            [appToken] => ec
+            [appKey] => ec
+        )
+
+)
+2014-07-22T15:27:34+08:00 INFO (6): 
+2014-07-22 15:27:34:
+Array
+(
+    [ask] => Success
+    [message] => 
+    [data] => Array
+        (
+        )
+
+    [req] => Array
+        (
+            [service] => getInventory
+            [paramsJson] => {"customer_code":"100002","warehouse_code":"HRBW","sku":"DD","page":2,"pageSize":200}
+            [appToken] => ec
+            [appKey] => ec
+        )
+
+)
+2014-07-22T16:18:19+08:00 INFO (6): 
+2014-07-22 16:18:19:
+Array
+(
+    [ask] => Failure
+    [message] => customer_code not exists
+    [req] => Array
+        (
+            [service] => createProduct
+            [paramsJson] => {"customer_code":"000012","product_sku":"EA140722161819","product_barcode":"000012-EA140722161819","product_title_en":"EA140722161819","product_title":"EA140722161819","product_length":"29.70","product_width":"21.00","product_height":"4.00","product_weight":"0.350","product_declared_name":"EA140722161819","product_declared_value":"10.00","warning_qty":"0","currency_code":"","product_barcode_type":"0","product_type":"0","contain_battery":"0","pc_id":"0","cat_id0":"400001","cat_id1":"500013","cat_id2":"600109","pu_code":"EA","attachedArr":[{"pa_file_type":"link","pa_path":"http:\/\/www.ruston_oms.com\/default\/system\/view-img?pa_id=3463"},{"pa_file_type":"link","pa_path":"http:\/\/www.ruston_oms.com\/default\/system\/view-img?pa_id=3464"},{"pa_file_type":"link","pa_path":"http:\/\/www.ruston_oms.com\/default\/system\/view-img?pa_id=3465"},{"pa_file_type":"link","pa_path":"http:\/\/www.ruston_oms.com\/default\/system\/view-img?pa_id=3466"}]}
+            [appToken] => ec
+            [appKey] => ec
+        )
+
+)
+2014-07-22T16:18:40+08:00 INFO (6): 
+2014-07-22 16:18:40:
+Array
+(
+    [ask] => Success
+    [message] => 
+    [req] => Array
+        (
+            [service] => createProduct
+            [paramsJson] => {"customer_code":"100002","product_sku":"EA140722161840","product_barcode":"100002-EA140722161840","product_title_en":"EA140722161840","product_title":"EA140722161840","product_length":"29.70","product_width":"21.00","product_height":"4.00","product_weight":"0.350","product_declared_name":"EA140722161840","product_declared_value":"10.00","warning_qty":"0","currency_code":"","product_barcode_type":"0","product_type":"0","contain_battery":"0","pc_id":"0","cat_id0":"400001","cat_id1":"500013","cat_id2":"600109","pu_code":"EA","attachedArr":[{"pa_file_type":"link","pa_path":"http:\/\/www.ruston_oms.com\/default\/system\/view-img?pa_id=3467"},{"pa_file_type":"link","pa_path":"http:\/\/www.ruston_oms.com\/default\/system\/view-img?pa_id=3468"},{"pa_file_type":"link","pa_path":"http:\/\/www.ruston_oms.com\/default\/system\/view-img?pa_id=3469"},{"pa_file_type":"link","pa_path":"http:\/\/www.ruston_oms.com\/default\/system\/view-img?pa_id=3470"}]}
+            [appToken] => ec
+            [appKey] => ec
+        )
+
+)
+2014-07-22T16:20:13+08:00 INFO (6): 
+2014-07-22 16:20:13:
+Array
+(
+    [ask] => Success
+    [message] => 
+    [req] => Array
+        (
+            [service] => createProduct
+            [paramsJson] => {"customer_code":"100002","product_sku":"EA140722162012","product_barcode":"100002-EA140722162012","product_title_en":"EA140722162012","product_title":"EA140722162012","product_length":"29.70","product_width":"21.00","product_height":"4.00","product_weight":"0.350","product_declared_name":"EA140722162012","product_declared_value":"10.00","warning_qty":"0","currency_code":"","product_barcode_type":"0","product_type":"0","contain_battery":"0","pc_id":"0","cat_id0":"400001","cat_id1":"500013","cat_id2":"600109","pu_code":"EA","attachedArr":[{"pa_file_type":"link","pa_path":"http:\/\/www.ruston_oms.com\/default\/system\/view-img?pa_id=3474"},{"pa_file_type":"link","pa_path":"http:\/\/www.ruston_oms.com\/default\/system\/view-img?pa_id=3475"},{"pa_file_type":"link","pa_path":"http:\/\/www.ruston_oms.com\/default\/system\/view-img?pa_id=3476"},{"pa_file_type":"link","pa_path":"http:\/\/www.ruston_oms.com\/default\/system\/view-img?pa_id=3477"}]}
+            [appToken] => ec
+            [appKey] => ec
+        )
+
+)
+2014-07-22T16:59:10+08:00 INFO (6): 
+2014-07-22 16:59:10:
+Array
+(
+    [ask] => Success
+    [message] => 
+    [req] => Array
+        (
+            [service] => createProduct
+            [paramsJson] => {"customer_code":"100002","product_sku":"EA140722165909","product_barcode":"100002-EA140722165909","product_title_en":"EA140722165909","product_title":"EA140722165909","product_length":"29.70","product_width":"21.00","product_height":"4.00","product_weight":"0.350","product_declared_name":"EA140722165909","product_declared_value":"10.00","warning_qty":"0","currency_code":"","product_barcode_type":"0","product_type":"0","contain_battery":"0","pc_id":"0","cat_id0":"400001","cat_id1":"500013","cat_id2":"600109","pu_code":"EA","attachedArr":[{"pa_file_type":"link","pa_path":"http:\/\/www.ruston_oms.com\/default\/system\/view-img?pa_id=3520"},{"pa_file_type":"link","pa_path":"http:\/\/www.ruston_oms.com\/default\/system\/view-img?pa_id=3521"},{"pa_file_type":"link","pa_path":"http:\/\/www.ruston_oms.com\/default\/system\/view-img?pa_id=3522"},{"pa_file_type":"link","pa_path":"http:\/\/www.ruston_oms.com\/default\/system\/view-img?pa_id=3523"}]}
+            [appToken] => ec
+            [appKey] => ec
+        )
+
+)
+2014-08-29T11:47:38+08:00 INFO (6): 
+2014-08-29 11:47:38:
+Array
+(
+    [ask] => Success
+    [message] => 
+    [data] => Array
+        (
+            [customer_id] => 81
+            [customer_code] => 100002
+            [customer_password] => 
+            [customer_firstname] => 马俊玲
+            [customer_lastname] => 
+            [customer_license] => 
+            [customer_idcard] => 
+            [customer_email] => 305111520@qq.com
+            [customer_email_verify] => 1
+            [customer_currency] => RMB
+            [customer_activate_code] => 
+            [customer_telephone] => 12345678912
+            [customer_fax] => 
+            [customer_status] => 2
+            [customer_company_name] => 马俊玲
+            [trade_name] => 
+            [trade_co] => 
+            [customer_logo] => 
+            [customer_saler_user_id] => 286
+            [customer_cser_user_id] => 287
+            [customer_verify_code] => 
+            [customer_signature] => 
+            [reg_step] => 3
+            [customer_reg_time] => 2014-04-12 10:06:23
+            [last_login_time] => 2014-05-05 12:05:05
+            [customer_update_time] => 2014-05-05 12:05:05
+            [password_update_time] => 
+            [saler] => Array
+                (
+                    [user_name] => 销售1号
+                    [user_name_en] => 销售1号
+                    [user_email] => 
+                    [user_phone] => 
+                    [user_mobile_phone] => 
+                )
+
+            [cser] => Array
+                (
+                    [user_name] => 客户1号
+                    [user_name_en] => 客户1号
+                    [user_email] => 
+                    [user_phone] => 
+                    [user_mobile_phone] => 
+                )
+
+            [customer_balance] => Array
+                (
+                    [cb_id] => 15
+                    [customer_code] => 100002
+                    [customer_id] => 81
+                    [cb_value] => 0.000
+                    [cb_hold_value] => 0.000
+                    [cb_credit_line] => 0.000
+                    [cb_hold_credit_line] => 0.000
+                    [cb_update_time] => 2014-05-18 07:41:26
+                )
+
+        )
+
+    [req] => Array
+        (
+            [service] => getCustomer
+            [paramsJson] => {"customer_code":"100002"}
+            [appToken] => ec
+            [appKey] => ec
+        )
+
+)

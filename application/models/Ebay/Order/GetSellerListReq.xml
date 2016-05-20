@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GetSellerListRequest xmlns="urn:ebay:apis:eBLBaseComponents">
+	<!-- Call-specific Input Fields -->
+	<AdminEndedItemsOnly> boolean </AdminEndedItemsOnly>
+	<CategoryID> int </CategoryID>
+	<EndTimeFrom> dateTime </EndTimeFrom>
+	<EndTimeTo> dateTime </EndTimeTo>
+	<GranularityLevel> GranularityLevelCodeType </GranularityLevel>
+	<IncludeVariations> boolean </IncludeVariations>
+	<IncludeWatchCount> boolean </IncludeWatchCount>
+	<MotorsDealerUsers> UserIDArrayType
+		<UserID> UserIDType (string) </UserID>
+		<!-- ... more UserID values allowed here ... -->
+	</MotorsDealerUsers>
+	<Pagination> PaginationType
+		<EntriesPerPage> int </EntriesPerPage>
+		<PageNumber> int </PageNumber>
+	</Pagination>
+	<SKUArray> SKUArrayType
+		<SKU> SKUType (string) </SKU>
+		<!-- ... more SKU values allowed here ... -->
+	</SKUArray>
+	<Sort> int </Sort>
+	<StartTimeFrom> dateTime </StartTimeFrom>
+	<StartTimeTo> dateTime </StartTimeTo>
+	<UserID> UserIDType (string) </UserID>
+	<!-- Standard Input Fields -->
+	<DetailLevel> DetailLevelCodeType </DetailLevel>
+	<!-- ... more DetailLevel values allowed here ... -->
+	<ErrorLanguage> string </ErrorLanguage>
+	<MessageID> string </MessageID>
+	<OutputSelector> string </OutputSelector>
+	<!-- ... more OutputSelector values allowed here ... -->
+	<Version> string </Version>
+	<WarningLevel> WarningLevelCodeType </WarningLevel>
+</GetSellerListRequest>

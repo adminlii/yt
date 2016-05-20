@@ -1,0 +1,132 @@
+2016-04-29T00:02:59+08:00 INFO (6): 
+2016-04-29 00:02:59:
+result:Array
+(
+    [1] => Array
+        (
+            [invoice_enname] => iphone525252525
+            [invoice_cnname] => 苹果手机999
+            [invoice_quantity] => 1
+            [unit_code] => PCE
+            [invoice_unitcharge] => 999
+            [invoice_weight] => 0.5
+            [sku] => SKU0000052525252
+            [hs_code] => 
+            [invoice_note] => 
+            [invoice_url] => 
+            [invoice_totalcharge] => 999
+            [invoice_totalWeight] => 0.5
+            [invoice_currencycode] => USD
+        )
+
+)
+2016-04-29T10:28:07+08:00 INFO (6): 
+2016-04-29 10:28:07:
+result:Array
+(
+    [1] => Array
+        (
+            [invoice_enname] => iphone989898
+            [invoice_cnname] => 苹果手机989898
+            [invoice_quantity] => 1
+            [unit_code] => PCE
+            [invoice_unitcharge] => 999
+            [invoice_weight] => 0.5
+            [sku] => DDDDDDD201604290001
+            [hs_code] => 
+            [invoice_note] => 
+            [invoice_url] => 
+            [invoice_totalcharge] => 999
+            [invoice_totalWeight] => 0.5
+            [invoice_currencycode] => USD
+        )
+
+)
+2016-04-29T10:41:05+08:00 INFO (6): 
+2016-04-29 10:41:05:
+result:Array
+(
+    [1] => Array
+        (
+            [invoice_enname] => iphone989898
+            [invoice_cnname] => 苹果手机989898
+            [invoice_quantity] => 1
+            [unit_code] => PCE
+            [invoice_unitcharge] => 999
+            [invoice_weight] => 0.5
+            [sku] => 
+            [hs_code] => 
+            [invoice_note] => 
+            [invoice_url] => 
+            [invoice_totalcharge] => 999
+            [invoice_totalWeight] => 0.5
+            [invoice_currencycode] => USD
+        )
+
+)
+2016-04-29T11:25:03+08:00 INFO (6): 
+2016-04-29 11:25:03:
+result:Array
+(
+    [1] => Array
+        (
+            [invoice_enname] => FDDFFGFGG
+            [invoice_cnname] => 手机壳
+            [invoice_quantity] => 1
+            [unit_code] => PCE
+            [invoice_unitcharge] => 12
+            [invoice_weight] => 1
+            [sku] => DFDFDF12121212
+            [hs_code] => 2332132132
+            [invoice_note] => 
+            [invoice_url] => 
+            [invoice_totalcharge] => 12
+            [invoice_totalWeight] => 1
+            [invoice_currencycode] => USD
+        )
+
+)
+2016-04-29T11:27:42+08:00 INFO (6): 
+2016-04-29 11:27:42:
+result:Array
+(
+    [1] => Array
+        (
+            [invoice_enname] => iphone989898
+            [invoice_cnname] => 苹果手机989898
+            [invoice_quantity] => 1
+            [unit_code] => PCE
+            [invoice_unitcharge] => 999
+            [invoice_weight] => 0.5
+            [sku] => SKU0202020202
+            [hs_code] => 
+            [invoice_note] => 
+            [invoice_url] => 
+            [invoice_totalcharge] => 999
+            [invoice_totalWeight] => 0.5
+            [invoice_currencycode] => USD
+        )
+
+)
+2016-04-29T21:57:57+08:00 INFO (6): 
+2016-04-29 21:57:57:
+result:Array
+(
+    [1] => Array
+        (
+            [invoice_enname] => iphone0000001
+            [invoice_cnname] => 苹果手机00000001
+            [invoice_quantity] => 1
+            [unit_code] => PCE
+            [invoice_unitcharge] => 999
+            [invoice_weight] => 0.5
+            [sku] => grgyhfhf
+            [hs_code] => 
+            [invoice_note] => 
+            [invoice_url] => 
+            [invoice_totalcharge] => 999
+            [invoice_totalWeight] => 0.5
+            [invoice_currencycode] => USD
+        )
+
+)

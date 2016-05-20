@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="http://tempuri.org/">
+	<SOAP-ENV:Body>
+		<ns1:MakeLableFileToBase64>
+			<ns1:authToken>ukwh6lNEFNfBDGt6xue0uG7CkgNHIyyL</ns1:authToken>
+			<ns1:configInfoJson>{"LableFileType":"1","LablePaperType":"1","LableContentType":"1"}</ns1:configInfoJson>
+			<ns1:orderInfoJson>{"LabelTemplateType":"SGPY","CustomerCode":"7","OrderNo":"13213213213","ProductCode":"ProductCode","ProductName":"ProductName","ProductPrintSign":"ProductPrintSign","TrackingNumber":"TrackingNumber","DestinationCountryCode":"DestinationCountryCode","DestinationCountryEName":"DestinationCountryEName","DestinationCountryName":"DestinationCountryName","ReturnAddress":"ReturnAddress","ConsigneeName":"ConsigneeName","ConsigneeCompanyName":"ConsigneeCompanyName","ConsigneePostCode":"ConsigneePostCode","ConsigneePhone":"ConsigneePhone","ConsigneeAddress":"ConsigneeAddress","BuyerID":"BuyerID","LablePrintDeclareInfoSign":"Y","InsuranceSign":"Y","HighValueSign":"","PrintTimeSign":"Y","ReturnSign":"","Weight":"0.5KG","Pieces":"4","ShipmentZoneCode":"ShipmentZoneCode","LabelAccount":"LabelAccount","LabelSignature":"LabelSignature","Extraservice":"Extraservice","DeclarationType":"1","DeclareInvoiceArray":[{"GoodsDescription":"GoodsDescription","Remarks":"Remarks","UnitPrice":"10","Quantity":"10","TotalCharge":"100"},{"GoodsDescription":"GoodsDescription","Remarks":"Remarks","UnitPrice":"10","Quantity":"10","TotalCharge":"100"}]}
+			</ns1:orderInfoJson>
+		</ns1:MakeLableFileToBase64>
+	</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

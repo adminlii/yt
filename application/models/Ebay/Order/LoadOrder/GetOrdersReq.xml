@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GetOrdersRequest xmlns="urn:ebay:apis:eBLBaseComponents">
+	<!-- Call-specific Input Fields -->
+	<CreateTimeFrom> dateTime </CreateTimeFrom>
+	<CreateTimeTo> dateTime </CreateTimeTo>
+	<IncludeFinalValueFee> boolean </IncludeFinalValueFee>
+	<ListingType> ListingTypeCodeType </ListingType>
+	<ModTimeFrom> dateTime </ModTimeFrom>
+	<ModTimeTo> dateTime </ModTimeTo>
+	<NumberOfDays> int </NumberOfDays>
+	<OrderIDArray> OrderIDArrayType
+		<OrderID> OrderIDType (string) </OrderID>
+		<!-- ... more OrderID values allowed here ... -->
+	</OrderIDArray>
+	<OrderRole> TradingRoleCodeType </OrderRole>
+	<OrderStatus> OrderStatusCodeType </OrderStatus>
+	<Pagination> PaginationType
+		<EntriesPerPage> int </EntriesPerPage>
+		<PageNumber> int </PageNumber>
+	</Pagination>
+	<SortingOrder> SortOrderCodeType </SortingOrder>
+	<!-- Standard Input Fields -->
+	<DetailLevel> DetailLevelCodeType </DetailLevel>
+	<!-- ... more DetailLevel values allowed here ... -->
+	<ErrorLanguage> string </ErrorLanguage>
+	<MessageID> string </MessageID>
+	<OutputSelector> string </OutputSelector>
+	<!-- ... more OutputSelector values allowed here ... -->
+	<Version> string </Version>
+	<WarningLevel> WarningLevelCodeType </WarningLevel>
+</GetOrdersRequest>

@@ -1,0 +1,330 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta http-equiv="x-ua-compatible" content="ie=7" />
+<title>仓配管理系统</title>
+<script type="text/javascript" src="/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="/js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="/js/jquery-myProject.js"></script>
+<script type="text/javascript" src="/js/jquery-myAjaxForm.js"></script>
+<script type="text/javascript" src="/js/init.js?v=20140213"></script>
+<link href="/css/ui-lightness/jquery-ui.min.css" rel="stylesheet" type="text/css" />
+<link type="text/css" rel="stylesheet" href="/css/global.css" />
+<link type="text/css" rel="stylesheet" href="/css/public/index.css" />
+<link type="text/css" rel="stylesheet" href="/css/public/layout.css" />
+<link type="text/css" rel="stylesheet" href="/css/public/head.css" />
+<style>
+*{padding:0px;margin:0px;}
+body {
+	font: 12px/150% Arial, Helvetica, sans-serif, '宋体';
+}
+
+#print_content {
+	background: none repeat scroll 0 0 white;
+	margin-left: auto;
+	margin-right: auto;
+	position: relative;
+	text-align: center;
+	width: 19cm;
+	padding: 0px;
+	font-size: 13px;
+}
+
+#print_content table {
+	border-collapse: collapse;
+	border: none;
+	width: 100%;
+}
+
+#print_content td {
+	border: solid #000000 1px;
+	height: 27px;
+}
+
+#print_content .barcode {
+	display: inline-block;
+	float: left;
+}
+
+.printTitle {
+	display: inline-block;
+	font-size: 24px;
+	float: left;
+	margin-top: 20px;
+	margin-left: 138px;
+	height: 50px;
+}
+
+.printDate {
+	margin-top: 14px;
+	display: inline-block;
+	width: 200px;
+	float: right;
+}
+
+.fontBold {
+	font-weight: bold;
+}
+.clear{clear:both;height:1px;overflow:hidden;}
+</style>
+</head>
+<body>
+	
+	<div id="print_content">
+		<div style="page-break-after: always; clear: both;">
+			<div style="text-align: left; margin: 0px 0 10px 0;">
+				<div class="barcode">
+					<img src="/default/index/barcode/code/QC11404210051">
+				</div>
+				<div class="printTitle">免检单&amp;上架单 &nbsp;&nbsp;1</div>
+				<div class="printDate">
+					打印时间：2014-04-21 14:34:38<br> 当前状态：草稿<br>
+				</div>
+				<div class='clear'></div>
+			</div>
+			<div style="clear: both;" class="qccontent">
+				<table>
+					<tbody>
+						<tr class="fontBold">
+							<td style="width: 10%">货品图片</td>
+							<td style="width: 14%">产品代码</td>
+							<td>单号</td>
+							<td style="width: 12%">收货员</td>
+							<td colspan="4" style="width: 24%">入库信息</td>
+						</tr>
+						<tr>
+							<td>
+								<img alt="" src="/default/index/view-product-img/id/6014/img.jpg" width="75" height="75">
+							</td>
+							<td>100001-EA1006</td>
+							<td>
+								RV100001-140421-0002<br> QC11404210051
+							</td>
+							<td>管理员</td>
+							<td colspan="4">
+								收货：2014-04-21 14:33:53 <br>目的仓库：HRBW&nbsp;哈尔滨仓
+							</td>
+						</tr>
+						<tr class="fontBold">
+							<td>产品单重(Kg)</td>
+							<td>预期数</td>
+							<td style="width: 16%">实收总数</td>
+							<td>不合格总数</td>
+							<td style="width: 10%">未贴标数量</td>
+							<td style="width: 10%">推荐货架</td>
+							<td style="width: 10%">不良品货架</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>100</td>
+							<td></td>
+							<td></td>
+							<td>&nbsp;</td>
+							<td></td>
+							<td>ZFAB.A1.01.01</td>
+						</tr>
+						<tr class="fontBold">
+							<td></td>
+							<td>货品分类</td>
+							<td style="width: 16%">包材</td>
+							<td style="width: 10%">申报价值</td>
+							<td>长</td>
+							<td style="width: 10%">宽</td>
+							<td style="width: 10%">高</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td class="fontBold">备注</td>
+							<td colspan="7" style="text-align: left">&nbsp;</td>
+						</tr>
+					</tbody>
+				</table>
+				<div style="width: 220px; height: 50px; float: right; margin-top: 8px">
+					质检人员：__________________<br /> 质检时间：__________________
+				</div>
+				<div class='clear'></div>
+			</div>
+		</div>
+		<div style="page-break-after: always; clear: both;">
+			<div style="text-align: left; margin: 0px 0 10px 0;">
+				<div class="barcode">
+					<img src="/default/index/barcode/code/QC11404210052">
+				</div>
+				<div class="printTitle">免检单&amp;上架单 &nbsp;&nbsp;2</div>
+				<div class="printDate">
+					打印时间：2014-04-21 14:34:38<br> 当前状态：草稿<br>
+				</div>
+				<div class='clear'></div>
+			</div>
+			<div style="clear: both;" class="qccontent">
+				<table>
+					<tbody>
+						<tr class="fontBold">
+							<td style="width: 10%">货品图片</td>
+							<td style="width: 14%">产品代码</td>
+							<td>单号</td>
+							<td style="width: 12%">收货员</td>
+							<td colspan="4" style="width: 24%">入库信息</td>
+						</tr>
+						<tr>
+							<td>
+								<img alt="" src="/default/index/view-product-img/id/6012/img.jpg" width="75" height="75">
+							</td>
+							<td>100001-EA1007</td>
+							<td>
+								RV100001-140421-0002<br> QC11404210052
+							</td>
+							<td>管理员</td>
+							<td colspan="4">
+								收货：2014-04-21 14:33:53 <br>目的仓库：HRBW&nbsp;哈尔滨仓
+							</td>
+						</tr>
+						<tr class="fontBold">
+							<td>产品单重(Kg)</td>
+							<td>预期数</td>
+							<td style="width: 16%">实收总数</td>
+							<td>不合格总数</td>
+							<td style="width: 10%">未贴标数量</td>
+							<td style="width: 10%">推荐货架</td>
+							<td style="width: 10%">不良品货架</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>100</td>
+							<td></td>
+							<td></td>
+							<td>&nbsp;</td>
+							<td></td>
+							<td>ZFAB.A1.01.01</td>
+						</tr>
+						<tr class="fontBold">
+							<td></td>
+							<td>货品分类</td>
+							<td style="width: 16%">包材</td>
+							<td style="width: 10%">申报价值</td>
+							<td>长</td>
+							<td style="width: 10%">宽</td>
+							<td style="width: 10%">高</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td class="fontBold">备注</td>
+							<td colspan="7" style="text-align: left">&nbsp;</td>
+						</tr>
+					</tbody>
+				</table>
+				<div style="width: 220px; height: 50px; float: right; margin-top: 8px">
+					质检人员：__________________<br /> 质检时间：__________________
+				</div>
+				<div class='clear'></div>
+			</div>
+		</div>
+		<div style="clear: both;">
+			<div style="text-align: left; margin: 0px 0 10px 0;">
+				<div class="barcode">
+					<img src="/default/index/barcode/code/QC11404210053">
+				</div>
+				<div class="printTitle">免检单&amp;上架单 &nbsp;&nbsp;3</div>
+				<div class="printDate">
+					打印时间：2014-04-21 14:34:38<br> 当前状态：草稿<br>
+				</div>
+				<div class='clear'></div>
+			</div>
+			<div style="clear: both;" class="qccontent">
+				<table>
+					<tbody>
+						<tr class="fontBold">
+							<td style="width: 10%">货品图片</td>
+							<td style="width: 14%">产品代码</td>
+							<td>单号</td>
+							<td style="width: 12%">收货员</td>
+							<td colspan="4" style="width: 24%">入库信息</td>
+						</tr>
+						<tr>
+							<td>
+								<img alt="" src="/default/index/view-product-img/id/6011/img.jpg" width="75" height="75">
+							</td>
+							<td>100001-EA1008</td>
+							<td>
+								RV100001-140421-0002<br> QC11404210053
+							</td>
+							<td>管理员</td>
+							<td colspan="4">
+								收货：2014-04-21 14:33:53 <br>目的仓库：HRBW&nbsp;哈尔滨仓
+							</td>
+						</tr>
+						<tr class="fontBold">
+							<td>产品单重(Kg)</td>
+							<td>预期数</td>
+							<td style="width: 16%">实收总数</td>
+							<td>不合格总数</td>
+							<td style="width: 10%">未贴标数量</td>
+							<td style="width: 10%">推荐货架</td>
+							<td style="width: 10%">不良品货架</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>100</td>
+							<td></td>
+							<td></td>
+							<td>&nbsp;</td>
+							<td></td>
+							<td>ZFAB.A1.01.01</td>
+						</tr>
+						<tr class="fontBold">
+							<td></td>
+							<td>货品分类</td>
+							<td style="width: 16%">包材</td>
+							<td style="width: 10%">申报价值</td>
+							<td>长</td>
+							<td style="width: 10%">宽</td>
+							<td style="width: 10%">高</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td class="fontBold">备注</td>
+							<td colspan="7" style="text-align: left">&nbsp;</td>
+						</tr>
+					</tbody>
+				</table>
+				<div style="width: 220px; height: 50px; float: right; margin-top: 8px">
+					质检人员：__________________<br /> 质检时间：__________________
+				</div>
+				<div class='clear'></div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" src="/js/jquery-cookie.js"></script>
+	<script type="text/javascript" src="/js/jquery.form.js"></script>
+	<script type="text/javascript" src="/js/jquery.pagination.js"></script>
+	<script type="text/javascript" src="/js/mod.js"></script>
+	<script type="text/javascript" src="/js/searchFilter.js"></script>
+	<script type="text/javascript" src="/js/jquery.myLoading.js"></script>
+</body>
+</html>

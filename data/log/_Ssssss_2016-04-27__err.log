@@ -1,0 +1,220 @@
+2016-04-27T13:48:31+08:00 INFO (6): 
+2016-04-27 13:48:31:
+result:Array
+(
+    [1] => Array
+        (
+            [invoice_enname] => gift1
+            [invoice_cnname] => 好礼物
+            [invoice_quantity] => 1
+            [unit_code] => PCE
+            [invoice_unitcharge] => 100
+            [invoice_weight] => 10
+            [invoice_sku] => GIFT20160427000001
+            [hs_code] => 001
+            [invoice_note] => 
+            [invoice_url] => 
+            [invoice_totalcharge] => 100
+            [invoice_totalWeight] => 10
+            [invoice_currencycode] => USD
+        )
+
+)
+2016-04-27T16:59:28+08:00 INFO (6): 
+2016-04-27 16:59:28:
+result:Array
+(
+    [1] => Array
+        (
+            [invoice_enname] => phonecase
+            [invoice_cnname] => 手机壳
+            [invoice_quantity] => 1
+            [unit_code] => PCE
+            [invoice_unitcharge] => 12
+            [invoice_weight] => 1
+            [sku] => 
+            [hs_code] => 2332132132
+            [invoice_note] => 
+            [invoice_url] => 
+            [invoice_totalcharge] => 12
+            [invoice_totalWeight] => 1
+            [invoice_currencycode] => USD
+        )
+
+)
+2016-04-27T17:00:01+08:00 INFO (6): 
+2016-04-27 17:00:01:
+result:Array
+(
+    [1] => Array
+        (
+            [invoice_enname] => phonecase
+            [invoice_cnname] => 手机壳
+            [invoice_quantity] => 1
+            [unit_code] => PCE
+            [invoice_unitcharge] => 12
+            [invoice_weight] => 1
+            [sku] => 
+            [hs_code] => 2332132132
+            [invoice_note] => 
+            [invoice_url] => 
+            [invoice_totalcharge] => 12
+            [invoice_totalWeight] => 1
+            [invoice_currencycode] => USD
+        )
+
+)
+2016-04-27T17:04:49+08:00 INFO (6): 
+2016-04-27 17:04:49:
+result:Array
+(
+    [1] => Array
+        (
+            [invoice_enname] => FDDFFGFGG
+            [invoice_cnname] => 手机壳
+            [invoice_quantity] => 1
+            [unit_code] => PCE
+            [invoice_unitcharge] => 12
+            [invoice_weight] => 1
+            [sku] => 12452535656544
+            [hs_code] => 2332132132
+            [invoice_note] => 
+            [invoice_url] => 
+            [invoice_totalcharge] => 12
+            [invoice_totalWeight] => 1
+            [invoice_currencycode] => USD
+        )
+
+)
+2016-04-27T17:24:55+08:00 INFO (6): 
+2016-04-27 17:24:55:
+result:Array
+(
+    [1] => Array
+        (
+            [invoice_enname] => FDDFFGFGG
+            [invoice_cnname] => 手机壳
+            [invoice_quantity] => 1
+            [unit_code] => PCE
+            [invoice_unitcharge] => 12
+            [invoice_weight] => 1
+            [sku] => test0000001
+            [hs_code] => 2332132132
+            [invoice_note] => 
+            [invoice_url] => 
+            [invoice_totalcharge] => 12
+            [invoice_totalWeight] => 1
+            [invoice_currencycode] => USD
+        )
+
+)
+2016-04-27T17:30:50+08:00 INFO (6): 
+2016-04-27 17:30:50:
+result:Array
+(
+    [1] => Array
+        (
+            [invoice_enname] => FDDFFGFGG
+            [invoice_cnname] => 手机壳
+            [invoice_quantity] => 1
+            [unit_code] => PCE
+            [invoice_unitcharge] => 12
+            [invoice_weight] => 1
+            [sku] => test000021546
+            [hs_code] => 2332132132
+            [invoice_note] => 
+            [invoice_url] => 
+            [invoice_totalcharge] => 12
+            [invoice_totalWeight] => 1
+            [invoice_currencycode] => USD
+        )
+
+)
+2016-04-27T17:32:35+08:00 INFO (6): 
+2016-04-27 17:32:35:
+result:Array
+(
+    [1] => Array
+        (
+            [invoice_enname] => FDDFFGFGG
+            [invoice_cnname] => 手机壳
+            [invoice_quantity] => 1
+            [unit_code] => PCE
+            [invoice_unitcharge] => 12
+            [invoice_weight] => 1
+            [sku] => test000021546
+            [hs_code] => 2332132132
+            [invoice_note] => 
+            [invoice_url] => 
+            [invoice_totalcharge] => 12
+            [invoice_totalWeight] => 1
+            [invoice_currencycode] => USD
+        )
+
+)
+2016-04-27T17:34:02+08:00 INFO (6): 
+2016-04-27 17:34:02:
+result:Array
+(
+    [1] => Array
+        (
+            [invoice_enname] => FDDFFGFGG
+            [invoice_cnname] => 手机壳
+            [invoice_quantity] => 1
+            [unit_code] => PCE
+            [invoice_unitcharge] => 12
+            [invoice_weight] => 1
+            [sku] => test000021546
+            [hs_code] => 2332132132
+            [invoice_note] => 
+            [invoice_url] => 
+            [invoice_totalcharge] => 12
+            [invoice_totalWeight] => 1
+            [invoice_currencycode] => USD
+        )
+
+)
+2016-04-27T17:42:28+08:00 INFO (6): 
+2016-04-27 17:42:28:
+result:Array
+(
+    [1] => Array
+        (
+            [invoice_enname] => FDDFFGFGG
+            [invoice_cnname] => 手机壳
+            [invoice_quantity] => 1
+            [unit_code] => PCE
+            [invoice_unitcharge] => 12
+            [invoice_weight] => 1
+            [sku] => test00002154645454
+            [hs_code] => 23321321324254254
+            [invoice_note] => 
+            [invoice_url] => 
+            [invoice_totalcharge] => 12
+            [invoice_totalWeight] => 1
+            [invoice_currencycode] => USD
+        )
+
+)
+2016-04-27T19:25:24+08:00 INFO (6): 
+2016-04-27 19:25:24:
+result:Array
+(
+    [1] => Array
+        (
+            [invoice_enname] => FDDFFGFGG
+            [invoice_cnname] => 手机壳
+            [invoice_quantity] => 1
+            [unit_code] => PCE
+            [invoice_unitcharge] => 12
+            [invoice_weight] => 1
+            [sku] => GYGYGYGY01232
+            [hs_code] => 2332132132
+            [invoice_note] => 
+            [invoice_url] => 
+            [invoice_totalcharge] => 12
+            [invoice_totalWeight] => 1
+            [invoice_currencycode] => USD
+        )
+
+)
