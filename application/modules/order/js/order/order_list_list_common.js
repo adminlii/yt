@@ -268,7 +268,6 @@ $(function() {
 //		var width = parent.windowWidth();
 //		var height = parent.windowHeight();
 //        parent.openIframeDialogNew(url,width-100,height-80,'<{t}>order_detail<{/t}>',quickId,paginationCurrentPage,paginationPageSize);
-        console.log(url);
         leftMenu('order/detail','<{t}>order_detail<{/t}>',url);
 	})
 	

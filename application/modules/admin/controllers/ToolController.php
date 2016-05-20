@@ -631,7 +631,7 @@ class Admin_ToolController extends Ec_Controller_Action
             //其他操作省略
         }
     }
-    
+    //测试物流
     public function wlAction(){
         
         $objCommon = new API_Common_ServiceCommonClass();
@@ -653,7 +653,7 @@ class Admin_ToolController extends Ec_Controller_Action
         print_r($process_tarck->getTrackDetail('YT15286100008200001'));
         
     }
-    
+    //测试标签打印，输出pdf
     public function prAction(){
         $printParam["Data"][] = "3878570522";
         $printParam["Version"] = "0.0.0.3";
@@ -674,4 +674,11 @@ class Admin_ToolController extends Ec_Controller_Action
         $pdfData = base64_decode($return['data']['Data']);
         file_put_contents ("D:/test.pdf", $pdfData);
     }
+    //ceshi
+    public function test3Action(){
+        $shipper_hawbcode="YT161341200008";
+        print_r(Service_OrderProcessing::getByField($shipper_hawbcode,"shipper_hawbcode"));
+        print_r(Service_OrderProcessing::getByCondition(array('shipper_hawbcode'=>$shipper_hawbcode),'*',0,0,"ops_create_date desc"));
+    }
+    
 }

@@ -984,6 +984,14 @@ class Process_Order
                     );
                     $this->_verify_tip = '此操作只允许对草稿、暂存、问题件状态的订单进行操作，请确认您选择的订单信息是否正确';
                     break;
+                case 'reverify': // 重发预报
+                    $allowStatus = array(
+                    'D',
+                    'Q',
+                    'U'
+                        );
+                     $this->_verify_tip = '此操作只允许对草稿、暂存、问题件状态的订单进行操作，请确认您选择的订单信息是否正确';
+                     break;
                 case 'pause': // 暂存
                     $allowStatus = array(
                         'D'
@@ -1237,6 +1245,31 @@ class Process_Order
                 }
                 // 插入轨迹 end
                 break;
+            case 'reverify': // 提交预报
+                $updateRow['order_status'] = 'S';
+                $updateRow['post_date'] = date('Y-m-d H:i:s');
+                $log_content[] = Ec::Lang('订单提交预报');
+                // 换号验证 start==============================
+                // 涉及到表
+                // pbr_productrule
+                // atd_customer_document_type
+                // atd_regist_code_available
+                // atd_regist_code_used
+                $product = Service_PbrProductrule::getByField($order['product_code'], 'product_code');
+                if(! $product){
+                    throw new Exception(Ec::Lang('产品不存在') . "[{$order['product_code']}]");
+                }
+                //充值订单进程
+                $row_order_process = array(
+                    "ops_status"=>0,
+                    "ops_syncing_status"=>0,
+                    "ops_note"=>"",
+                    "label_status"=>0,
+                    "trackingnumber_status"=>0,
+                    "release_status"=>0,
+                );
+                Service_OrderProcessing::update($row_order_process,$order["shipper_hawbcode"],"shipper_hawbcode");
+                break;
             case 'pause': // 暂存
                           // $updateRow['order_status'] = 'Q';
                 $updateRow['order_status'] = 'Q';
@@ -1266,7 +1299,6 @@ class Process_Order
             	} else {
             		throw new Exception("无法获取到[{$class}]对应的数据映射文件类");
             	}
-            	var_dump($class);
             	//test
             	$obj->setParam($channel['as_code'], $order['shipper_hawbcode'], $channel['server_channelid'], $channel['server_product_code'],false);
             	//setParam(API服务代码，订单号，服务商渠道ID，服务商系统的产品代码，是否初始化订单数据，取客户单号OR运单号，取csd_order表OR bsn_XX表数据)

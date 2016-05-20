@@ -231,6 +231,7 @@ return array(
 	'transfer_order_status_5' => '已完成',
 	// 订单状态 end
     'verify'=>'提交预报',
+    'reverify'=>'提交预报',
     'pause'=>'暂存',
     'intercept'=>'拦截',
     'discard'=>'废弃',

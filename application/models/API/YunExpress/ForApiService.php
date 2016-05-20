@@ -160,7 +160,7 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
         //保险价值
         $data['insurance_value_gj']   =  empty($this->orderKey["insurance_value_gj"])?0:$this->orderKey["insurance_value_gj"];
         $params = array('CustomerCode'=> $this->_user, 'packageMessage' => array($data));  
-    	echo json_encode($params);die;
+    	//echo json_encode($params);die;
         $sysResult = $this->createAndPreAlertOrderService($params);
   
     	Ec::showError("**************start*************\r\n"

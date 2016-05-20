@@ -34,7 +34,7 @@ class Service_OrderProcess {
             'D' => array(
                     'name' => Ec::Lang('order_status_7'),
                     'actions' => array(
-                        '<input type="button" class="verifyBtn baseBtn opBtn" op="verify" value="' . Ec::Lang('提交预报') . '">', 
+                        '<input type="button" class="verifyBtn baseBtn opBtn" op="reverify" value="' . Ec::Lang('提交预报') . '">', 
                         //'<input type="button" class="pauseBtn baseBtn opBtn" op="pause" value="' . Ec::Lang('暂存') . '">',  
                         '<input type="button" class="editInvoiceBtn baseBtn" op="editInvoice" value="' . Ec::Lang('编辑申报信息') . '">',  
                         '<input type="button" class="importInvoiceBtn baseBtn" op="importInvoice" value="' . Ec::Lang('上传申报信息') . '">',  
