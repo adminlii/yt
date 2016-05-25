@@ -328,11 +328,14 @@ class Process_OrderDhl
         // 验证必填项
         
         if($this->_consignee['consignee_telephone'] !== ''){
-        	if(preg_match('/^\(\d+\)\d+-\d+$|^\d+\s\d+$/', $this->_consignee['consignee_certificatetype'])){
+        	/* if(preg_match('/^\(\d+\)\d+-\d+$|^\d+\s\d+$/', $this->_consignee['consignee_certificatetype'])){
         		$this->_err[] = Ec::Lang('收件人电话不正确');
+        	} */
+        	if(!preg_match("/^(\d){4,25}$/",$this->_consignee['consignee_telephone'])){
+        		$this->_err[] = Ec::Lang('收件人电话格式为4-25位纯数字');
         	}
         }else{
-        	//$this->_err[] = Ec::Lang('收件人电话不能为空');
+        	$this->_err[] = Ec::Lang('收件人电话不能为空');
         }
         
         

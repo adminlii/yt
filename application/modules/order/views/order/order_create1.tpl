@@ -551,9 +551,6 @@ function getTipTpl(){
 			
 			var reg = reg; 
 			var val = $(obj).val();
-			if(val==''){
-				return;
-			}
 			var tip = getTipTpl();
 			if($(obj).siblings('.info').size()==0){
 				$(obj).parent().prepend(tip);
@@ -561,6 +558,10 @@ function getTipTpl(){
 				
 			}
 			var tip = $(obj).siblings('.info');
+			if(val==''){
+				tip.hide();
+				return;
+			}
 			if(!reg.test(val)){
 				$('.Validform_checktip',tip).text(msg);	
 				tip.show();			
@@ -737,7 +738,7 @@ $('.quantity').live('keyup',function(){
     			<tr>
     				<td><p>收件人省/州 : </p><input class="checkchar1" type="text" placeholder='如果国家没有州应不填写' value="<{if isset($shipperConsignee)}><{$shipperConsignee.consignee_province}><{/if}>"
 							name='consignee[consignee_province]' id='consignee_province' /></td>
-    				<td><p>收件人电话 : </p><input type="text" value='<{if isset($shipperConsignee)}><{$shipperConsignee.consignee_telephone}><{/if}>'
+    				<td><p><i>*</i>收件人电话 : </p><input class="order_phone" type="text" value='<{if isset($shipperConsignee)}><{$shipperConsignee.consignee_telephone}><{/if}>'
 							name='consignee[consignee_telephone]' id=consignee_telephone /></td>
     			</tr>
     			<tr>

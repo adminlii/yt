@@ -21,6 +21,9 @@ class Process_Track
 	            	$return['code_type']="shipper_hawbcode";
 	            }
             }
+            if(empty($result["server_hawbcode"])){
+            	throw new Exception(Ec::Lang('服务商跟踪号不存在或未预报成功'));
+            }
             $con_detail = array(
                 'tbs_id' => $result['tbs_id']
             );

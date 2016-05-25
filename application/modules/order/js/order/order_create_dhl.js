@@ -62,9 +62,7 @@ function err_tip(obj,reg,msg){
 			
 			var reg = reg; 
 			var val = $(obj).val();
-			if(val==''){
-				return;
-			}
+			
 			var tip = getTipTpl();
 			if($(obj).siblings('.info').size()==0){
 				$(obj).parent().prepend(tip);
@@ -72,6 +70,10 @@ function err_tip(obj,reg,msg){
 				
 			}
 			var tip = $(obj).siblings('.info');
+			if(val==''){
+				tip.hide();
+				return;
+			}
 			if(!reg.test(val)){
 				$('.Validform_checktip',tip).text(msg);	
 				tip.show();			
