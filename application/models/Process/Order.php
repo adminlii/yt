@@ -301,12 +301,27 @@ class Process_Order
             }
             if($this->_consignee['consignee_name'] === ''){
                 $this->_err[] = Ec::Lang('收件人姓名不可为空');
+            }else{
+            	if(!preg_match('/^[a-zA-Z\s]{1,36}$/', $this->_consignee['consignee_name'])){
+            		$this->_err[] = Ec::Lang('收件人姓名不允许出现非英文，长度最多36字符');
+            	}
             }
             if($this->_consignee['consignee_street'] === ''){
                 $this->_err[] = Ec::Lang('收件人地址不可为空');
+            }else{
+            	if(!preg_match('/^[\w\W]{0,36}$/', $this->_consignee['consignee_street'])){
+            		$this->_err[] = Ec::Lang('收件人地址长度最多36字符');
+            	}
             }
             if ($this->_consignee['consignee_city'] === ''){
             	$this->_err[] = Ec::Lang('收件人城市不可为空');
+            }else{
+            	if(!preg_match('/^[a-zA-Z\s]{1,36}$/', $this->_consignee['consignee_city'])){
+            		$this->_err[] = Ec::Lang('收件人城市不允许出现非英文，长度最多36字符');
+            	}
+            }
+            if(empty($this->_consignee['consignee_postcode'])){
+            	$this->_err[] = Ec::Lang('收件人邮编不可为空');
             }
         }
         
@@ -325,6 +340,10 @@ class Process_Order
         if($this->_order['order_weight'] !== ''){
             if(! is_numeric($this->_order['order_weight'])){
                 $this->_err[] = Ec::Lang('货物重量必须为数字');
+            }else{
+            	/* if(!preg_match("/(^0\.[5-9]$)|(^[1-9]+(\.?\d?)$)/",$this->_order['order_weight'])){
+            		$this->_err[] = Ec::Lang('货物重量须为数字,且小数最多为1位,范围为0.5-999999.9');
+            	} */
             }
         }else{
            $this->_err[] = Ec::Lang('货物重量不能为空');
@@ -554,7 +573,7 @@ class Process_Order
             // print_r($row);
             $ivs = array(
                 'invoice_enname' => $row['invoice_enname'],
-                'unit_code' => empty($row['unit_code']) ? 'PCS' : $row['unit_code'],
+                'unit_code' => empty($row['unit_code']) ? 'PCE' : $row['unit_code'],
                 'invoice_quantity' => $row['invoice_quantity'],
                 'invoice_totalcharge' => $row['invoice_totalcharge'],
                 //新增
@@ -1163,6 +1182,8 @@ class Process_Order
                 if($customerrule){
                     $web_trackshow = $customerrule['web_trackshow'];
                 }
+                //获取收件人
+                $shipperconsigneeInfo = Service_CsdShipperconsignee::getByField($order_id);
                 // 轨迹主干
                 $tak_trackingbusiness = array(
                     'customer_id' => $order['customer_id'],
@@ -1180,7 +1201,7 @@ class Process_Order
 //                     'close_code' => '',
 //                     'hash_code' => '',
 //                     'close_date' => '',
-                    'signatory_name' => '',
+                    'signatory_name' => empty($shipperconsigneeInfo["consignee_name"])?'':$shipperconsigneeInfo["consignee_name"],
 //                     'start_track_date' => '',
 //                     'end_track_date' => '',
 //                     'reference_date' => '',

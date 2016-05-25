@@ -864,4 +864,23 @@ class Common_Common
     
     	return $response;
     }
+    
+    //解析xml
+    public static function object2array($object) { return @json_decode(@json_encode($object),1); }
+    
+    public static function xml_to_array($xml,$style="",$upper=0){
+    	switch($style){
+    		case "wchat":$xml=simplexml_load_string($xml,'SimpleXMLElement',LIBXML_NOCDATA);break;
+    		default:$xml=simplexml_load_string($xml);break;
+    	}
+    	if(empty($xml))
+    		return false;
+    	$return = self::object2array($xml);
+    	switch($upper){
+    		//键值大写
+    		case 1:$return=array_change_key_case($return,CASE_UPPER);break;
+    		case 2:$return=array_change_key_case($return,CASE_LOWER);break;
+    	}
+    	return $return;
+    }
 }

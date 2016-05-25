@@ -301,12 +301,27 @@ class Process_OrderDhl
             }
             if($this->_consignee['consignee_name'] === ''){
                 $this->_err[] = Ec::Lang('收件人姓名不可为空');
+            }else{
+            	if(!preg_match('/^[a-zA-Z\s]{1,36}$/', $this->_consignee['consignee_name'])){
+            		$this->_err[] = Ec::Lang('收件人姓名不允许出现非英文，长度最多36字符');
+            	}
             }
             if($this->_consignee['consignee_street'] === ''){
                 $this->_err[] = Ec::Lang('收件人地址不可为空');
+            }else{
+            	if(!preg_match('/^[\w\W]{0,36}$/', $this->_consignee['consignee_street'])){
+            		$this->_err[] = Ec::Lang('收件人地址长度最多36字符');
+            	}
             }
             if ($this->_consignee['consignee_city'] === ''){
             	$this->_err[] = Ec::Lang('收件人城市不可为空');
+            }else{
+            	if(!preg_match('/^[a-zA-Z\s]{1,36}$/', $this->_consignee['consignee_city'])){
+            		$this->_err[] = Ec::Lang('收件人城市不允许出现非英文，长度最多36字符');
+            	}
+            }
+            if(empty($this->_consignee['consignee_postcode'])){
+            	$this->_err[] = Ec::Lang('收件人邮编不可为空');
             }
         }
         
@@ -1155,6 +1170,8 @@ class Process_OrderDhl
                 if($customerrule){
                     $web_trackshow = $customerrule['web_trackshow'];
                 }
+                //获取收件人
+                $shipperconsigneeInfo = Service_CsdShipperconsignee::getByField($order_id);
                 // 轨迹主干
                 $tak_trackingbusiness = array(
                     'customer_id' => $order['customer_id'],
@@ -1172,7 +1189,7 @@ class Process_OrderDhl
 //                     'close_code' => '',
 //                     'hash_code' => '',
 //                     'close_date' => '',
-                    'signatory_name' => '',
+                    'signatory_name' => empty($shipperconsigneeInfo["consignee_name"])?'':$shipperconsigneeInfo["consignee_name"],
 //                     'start_track_date' => '',
 //                     'end_track_date' => '',
 //                     'reference_date' => '',
@@ -1266,7 +1283,6 @@ class Process_OrderDhl
             	} else {
             		throw new Exception("无法获取到[{$class}]对应的数据映射文件类");
             	}
-            	var_dump($class);
             	//test
             	$obj->setParam($channel['as_code'], $order['shipper_hawbcode'], $channel['server_channelid'], $channel['server_product_code'],false);
             	//setParam(API服务代码，订单号，服务商渠道ID，服务商系统的产品代码，是否初始化订单数据，取客户单号OR运单号，取csd_order表OR bsn_XX表数据)

@@ -69,9 +69,9 @@ $(function(){
 			                <li>
 			                    <a hhref="javascript:void(0);" id='tab_cn_<{$rs.tbs_id}>' class='tab' style="cursor:pointer">中文</a>
 			                </li>
-			                <li class="chooseTag">
+			               <!-- <li class="chooseTag">
 			                    <a href="javascript:void(0);" id="tab_en_<{$rs.tbs_id}>" class="tab" style="cursor:pointer">English</a>
-			                </li>
+			                </li> -->
 			             </ul>
 		            </div>
 		            <div class="tabContent" id="cn_<{$rs.tbs_id}>" style="display:block;">
@@ -86,9 +86,9 @@ $(function(){
 							</tbody>
 							<{foreach from=$rs.detail name=d item=d}>
 							<tr>
-								<td width='135'><{$d.track_occur_date}></td>
-								<td width='300'><{$d.track_area_description}></td>
-								<td><{$d.track_description}></td>
+								<td width='135'><{if $d.Datetime}><{$d.Datetime}><{else}><{$d.track_occur_date}><{/if}></td>
+								<td width='300'><{if $d.Location}><{$d.Location}><{else}><{$d.track_area_description}><{/if}></td>
+								<td><{if $d.Info}><{$d.Info}><{else}><{$d.track_description}><{/if}></td>
 							</tr>
 							<{/foreach}>
 						</table>
@@ -105,9 +105,9 @@ $(function(){
 							</tbody>
 							<{foreach from=$rs.detail name=d item=d}>
 							<tr>
-								<td width='135'><{$d.track_occur_date}></td>
-								<td width='300'><{$d.track_area_description_en}></td>
-								<td><{$d.track_description_en}></td>
+								<td width='135'><{if $d.Datetime}><{$d.Datetime}><{else}><{$d.track_occur_date}><{/if}></td>
+								<td width='300'><{if $d.Location}><{$d.Location}><{else}><{$d.track_area_description_en}><{/if}></td>
+								<td><{if $d.Info}><{$d.Info}><{else}><{$d.track_description_en}><{/if}></td>
 							</tr>
 							<{/foreach}>
 						</table>

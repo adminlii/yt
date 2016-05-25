@@ -143,8 +143,8 @@ class Common_APIChannelDataSet
     	
         $address = Service_CsdShipperconsignee::getByField($this->orderData['order_id'], "order_id", "*");
         // 根据国家代码随机取一个
-        $shipperAddress = $this->getShipperAddress($this->orderData["product_code"], $this->channelId, $this->orderData["country_code"]);
-
+        //$shipperAddress = $this->getShipperAddress($this->orderData["product_code"], $this->channelId, $this->orderData["country_code"]);
+        $shipperAddress = array();//当前没有公共发件人（系统预设的发件人，不是用户预设的发件人）
         //发件人信息
         if (!empty($shipperAddress)){
 	        $this->shipperKey["shipperCompanyName"] = $shipperAddress["shipper_company"];

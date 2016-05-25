@@ -604,7 +604,6 @@ $(function(){
  });
  $(function(){
  	var tip = getTipTpl();
- 	console.log(tip);
 	 if( $("input[name='order[insurance_value_gj]']").siblings('.info').size()==0){
 		 $("input[name='order[insurance_value_gj]']").parent().prepend(tip);
 	 }

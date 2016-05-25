@@ -561,8 +561,6 @@ function getTipTpl(){
 				
 			}
 			var tip = $(obj).siblings('.info');
-			//console.log(val);
-			//console.log(reg.test(val));
 			if(!reg.test(val)){
 				$('.Validform_checktip',tip).text(msg);	
 				tip.show();			
@@ -690,7 +688,7 @@ $('.quantity').live('keyup',function(){
     			<tr>
     				<td><p>客户单号 : </p><input type="text" value='<{if isset($order)}><{$order.refer_hawbcode}><{/if}>'
 							name='order[refer_hawbcode]' id='refer_hawbcode' /></td>
-    				<td><p>货物重量 : </p><input type="text" class="weight" value='<{if isset($order)}><{$order.order_weight}><{/if}>'
+    				<td><p><i>*</i>货物重量 : </p><input type="text" class="weight" value='<{if isset($order)}><{$order.order_weight}><{/if}>'
 							name='order[order_weight]' id='order_weight' /></td>
     			</tr>
     			<tr>
@@ -743,7 +741,7 @@ $('.quantity').live('keyup',function(){
 							name='consignee[consignee_telephone]' id=consignee_telephone /></td>
     			</tr>
     			<tr>
-    				<td><p>收件人城市 : </p><input type="text" class="checkchar1"  value="<{if isset($shipperConsignee)}><{$shipperConsignee.consignee_city}><{/if}>"
+    				<td><p><i>*</i>收件人城市 : </p><input type="text" class="checkchar1"  value="<{if isset($shipperConsignee)}><{$shipperConsignee.consignee_city}><{/if}>"
 							name='consignee[consignee_city]' id='consignee_city' /></td>
     				<td><p>收件人手机 : </p><input class="order_phone" type="text" value='<{if isset($shipperConsignee)}><{$shipperConsignee.consignee_mobile}><{/if}>'
 							name='consignee[consignee_mobile]' id='consignee_mobile' /></td>
@@ -751,13 +749,13 @@ $('.quantity').live('keyup',function(){
     			<tr>
     				<td><p>收件人邮箱 : </p><input type="text"  value='<{if isset($shipperConsignee)}><{$shipperConsignee.consignee_email}><{/if}>'
 							name='consignee[consignee_email]' id='consignee_email' /></td>
-    				<td><p>邮编 : </p><input type="text" value='<{if isset($shipperConsignee)}><{$shipperConsignee.consignee_postcode}><{/if}>'
+    				<td><p><i>*</i>邮编 : </p><input type="text" value='<{if isset($shipperConsignee)}><{$shipperConsignee.consignee_postcode}><{/if}>'
 							name='consignee[consignee_postcode]' id='consignee_postcode' /></td>
     			</tr>
     			<tr>
-    				<td><p>地址1 : </p><input type="text" class="checkchar2" value="<{if isset($shipperConsignee)}><{$shipperConsignee.consignee_street}><{/if}>"
+    				<td><p><i>*</i>地址1 : </p><input type="text" class="checkchar2" value="<{if isset($shipperConsignee)}><{$shipperConsignee.consignee_street}><{/if}>"
 							name='consignee[consignee_street]' id='consignee_street' /></td>
-    				<td><p><i>*</i> 收件人门牌号 : </p><input type="text" value='<{if isset($shipperConsignee)}><{$shipperConsignee.consignee_doorplate}><{/if}>'
+    				<td><p> 收件人门牌号 : </p><input type="text" value='<{if isset($shipperConsignee)}><{$shipperConsignee.consignee_doorplate}><{/if}>'
 							name='consignee[consignee_doorplate]' id='consignee_doorplate' /></td>
     			</tr>
     			<tr>

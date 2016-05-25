@@ -586,7 +586,9 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
 		    					// 更新单号，订单状态改为"P"已预报
 		    					$update_order = array('server_hawbcode' => $notice['notifyResult']['TrackNumber'],"order_status" => "P");
 		    					Service_CsdOrder::update($update_order, $order_process['order_id']);
-		    					
+		    					//更新物流主干
+		    					$update_TakTrackingbusiness = array('server_hawbcode' => $notice['notifyResult']['TrackNumber']);
+		    					Service_TakTrackingbusiness::update($update_TakTrackingbusiness,$shipper_hawbcode,"shipper_hawbcode");
 		    					// 查询订单
 		    					$log_content[] = Ec::Lang('服务商换号') . ',' . Ec::Lang('原服务商单号') . ' ' . ($csd_order['server_hawbcode']?$csd_order['server_hawbcode']:Ec::Lang('为空')) . ' ' . Ec::Lang('更改为') . ' ' . $update_order['server_hawbcode'];
 		    					
@@ -1069,17 +1071,20 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
             $trackdetailserve   = $this->gettrackDetail(1,$serve_hawbcode);
             if($trackdetailserve['ack']!=1){
                $result= $trackdetailserve;
+               $result['type'] = 1;
                break;
             }
             if($mailnum_hawbcode){
                 $trackdetailmailnum = $this->gettrackDetail(2,$mailnum_hawbcode);
                 if($trackdetailmailnum['ack']!=1){
                     $result= $trackdetailmailnum;
+                    $result['type'] = 2;
                     break;
                 }
             }
             //
             $msg = $trackdetailserve["data"].$trackdetailmailnum["data"];
+            $result['data'] = $msg ; 
             $dataNow = date('Y-m-d H:i:s');
             $row=array(
                 "tbs_id"=>$tbs_id,
@@ -1101,6 +1106,13 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
         } catch (Exception  $e) {
             $result["message"] = $e->getMessage();
         }
+        // 记录日志
+        Ec::showError("**************start*************\r\n"
+        		. print_r($param, true)
+        		. "\r\n"
+        				. print_r($result, true)
+        				. "**************end*************\r\n",
+        				'YunExpress_API/gettrack_pross'.date("Ymd"));
         if($dataformat){
            switch ($dataformat){
                case "json":$result=json_encode($result);break;
@@ -1134,7 +1146,20 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
         return $return;
     }
     private function getTrack_mailnum_hawbcode($param){
-    
+    	$return = array("ack"=>0,"message"=>"");
+    	do{
+    		if(empty($param)){
+    			$return['ack'] = -1;
+    			$return['message']="没有需求查询的服务号";
+    			break;
+    		}
+    		$result  = $this->sendData_track_mailnum($param);
+    		if($result['ret']!=1){
+    			$return = $result;
+    			break;
+    		}
+    	}while(0);
+    	return $return;
     }
     
     private function sendData_track_serve($param){
@@ -1147,13 +1172,18 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
                     break;
                 }
                 //$serve_code = $param['server_hawbcode'];
-                $serve_code = $param;
-                $url = "";
-                $sendParams = array();
-                $header =array();
-                $result = $this->curl_send($url,$sendParams,$header);
-                //test(记住要删除)
-                $result = "物流抵达香港口岸";
+                $TrackingNumber = $param["server_code"];
+                $ChannelName	= $param["channel"]; 	
+                $url = "http://test.hwcservice.com/ChinaPost/Api/TrackingService/QueryTrackingStatus?type=json";
+                $sendParams = array(
+                	"data"=>array("TrackingNumber"=>$TrackingNumber,"ChannelName"=>$ChannelName),
+           			"RequestId"=>null,
+                	"RequestTime"=>date('Y-m-d H:i:s'),
+                	"Version"=>"0.0.0.3"	
+                );
+                $sendParams = json_encode($sendParams);
+                $header =array("Content-Type:application/json; charset=utf-8");
+                $result = $this->curl_send($url,$sendParams,$header,"post","tmsuser:123456");
                 if(is_array($result)){
                     $return['ack'] = -2;
                     $return["message"]=$result['error'];
@@ -1174,9 +1204,41 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
         return $return;
     }
     private function sendData_track_mailnum($param){
-    
+    	$return = array("ack"=>0,"message"=>"");
+    	do{
+    		try {
+    			if(empty($param)){
+    				$return['ack'] = -1;
+    				$return['message']="没有需求查询的服务号";
+    				break;
+    			}
+    			$TrackingNumber = $param["server_code"];
+    			$url = "http://shipping.ems.com.cn/partner/api/public/p/track/query/cn/".$TrackingNumber;
+    			$header =array("version: international_eub_us_1.1",
+    						   "authenticate: CommercialServices_fd51e7677e62336a933088af2c9241b6"
+    			);
+    			
+    			$result = $this->curl_send($url,'',$header);
+    			if(is_array($result)){
+    				$return['ack'] = -2;
+    				$return["message"]=$result['error'];
+    				break;
+    			}else if(empty($result)){
+    				$return['ack'] = -3;
+    				$return["message"]="没有接受到任何信息";
+    				break;
+    			}
+    			$return['ack'] = 1;
+    			$return['data'] = $result;
+    		} catch (Exception $e) {
+    			$return['ack'] = -13;
+    			$return['message']=$e->getMessage();
+    			break;
+    		}
+    	}while(0);
+    	return $return;
     }
-    private function  curl_send($url,$data='',$header=array(),$type='get'){
+    private function  curl_send($url,$data='',$header=array(),$type='get',$authentication=false){
       $curl = curl_init();
       curl_setopt($curl,CURLOPT_URL,$url);
       curl_setopt($curl,CURLOPT_RETURNTRANSFER,1);
@@ -1192,6 +1254,9 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
       }
       if(!empty($header)){
           curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
+      }
+      if($authentication){
+      	curl_setopt($curl, CURLOPT_USERPWD, $authentication);
       }
       $result = curl_exec($curl);
       if(curl_errno($curl) != 0){

@@ -9,6 +9,7 @@ class Process_Track
             'message' => Ec::Lang('服务商跟踪号不存在')
         );
         $return['server_hawbcode'] = $server_hawbcode;
+        $return['code_type']="server_hawbcode";
         try{
             $userId = Service_User::getUserId();
             $result = Service_TakTrackingbusiness::getByField($server_hawbcode, 'server_hawbcode');
@@ -16,6 +17,8 @@ class Process_Track
             	$result = Service_TakTrackingbusiness::getByField($server_hawbcode, 'shipper_hawbcode');
 	            if(! $result){
 	                throw new Exception(Ec::Lang('服务商跟踪号不存在'));
+	            }else{
+	            	$return['code_type']="shipper_hawbcode";
 	            }
             }
             $con_detail = array(

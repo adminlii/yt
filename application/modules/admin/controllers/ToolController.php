@@ -681,4 +681,39 @@ class Admin_ToolController extends Ec_Controller_Action
         print_r(Service_OrderProcessing::getByCondition(array('shipper_hawbcode'=>$shipper_hawbcode),'*',0,0,"ops_create_date desc"));
     }
     
+    //物流测试己方
+    public function test4Action(){
+    	$obj  = 	new API_YunExpress_ForApiService();
+    	$code = "61299992140425388429";
+    	$channel = "Fedex";
+    	$return = $obj->gettrackDetail(1,array("server_code"=>$code,"channel"=>$channel));
+    	if($return['ack']==1){
+    		$data = json_decode($return['data'],1);
+    		print_r($data);
+    	}
+    }
+    
+    public function test5Action(){
+    	$obj  = 	new API_YunExpress_ForApiService();
+    	$code = "BZ001452877US";
+    	$return = $obj->gettrackDetail(2,array("server_code"=>$code));
+    	if($return['ack']==1){
+    		//$data = json_decode($return['data'],1);
+    		print_r(Common_Common::xml_to_array($return['data']));
+    	}
+    }
+    
+    public function test6Action(){
+    	//模拟推送成功状态
+    	$obj  = 	new API_YunExpress_ForApiService();
+    	$notic = array(
+    		"ForeCastNumber"=>'YT161451200002',
+    			"NotifyType"=>1002,
+    			"PushStatus"=>1000,
+    			"notifyResult"=>array(
+    					"TrackNumber"=>'123456xujunmade'
+    			),
+    	);
+    	print_r($obj->receiveNotice($notic));
+    }
 }

@@ -208,9 +208,59 @@ class Default_IndexController extends Ec_Controller_DefaultAction
                     $rsArr = array();
                     foreach($order_code as $server_hawbcode){
                         $rs = Process_Track::getTrackDetail($server_hawbcode);
+                        //调取信息
+                        if($rs['ask']){
+                        	$obj  = 	new API_YunExpress_ForApiService();
+                        	//插入头程
+                        	//测试用线上删除
+                        	$server_hawbcode1 = "BZ001452877US";
+                        	$gettrackDetail_rs = $obj->gettrackDetail(2,array("server_code"=>$server_hawbcode1));
+                        	if($gettrackDetail_rs['ack']==1){
+                        		$data = Common_Common::xml_to_array($gettrackDetail_rs['data']);
+                        		
+                        		//头插入
+                        		$tracklist = $data["trace"];
+                        		//更换key值
+                        		foreach ($tracklist as $key=>$val){
+                        			$tracklist[$key]['Datetime'] = $val['acceptTime'];
+                        			$tracklist[$key]['Location'] = $val['acceptAddress'];
+                        			$tracklist[$key]['Info']     = $val['remark'];
+                        		}
+                        		if(is_array($tracklist)&&count($tracklist)>0){
+                        			$rs['data']['detail'] = array_merge(array_reverse($tracklist),$rs['data']['detail']);
+                        		}
+                        	}
+                        	//根据订单获取渠道号
+                        	//不直接插最简单的order_prossing 找渠道 是因为没有给他设置索引
+                        	$orderinfo = Service_CsdOrder::getByField($server_hawbcode,$rs['code_type']);
+                        	if(empty($orderinfo))
+                        		continue;
+							if($orderinfo["product_code"] == "NZ_CP" || $orderinfo["product_code"] == "NZ_DP" || $orderinfo["product_code"] == "NZ_LZ"){
+								$channelid = 1;  //NZ_CP，NZ_DP，NZ_LZ对应渠道SAICHENG
+							}else{
+								$channelid = 2;  //G_DHL对应渠道DHL
+							}
+							$sql = "select sc.formal_code from csi_servechannel sc where sc.server_channelid = {$channelid}";
+							$db = Common_Common::getAdapterForDb2();
+							$channcel = $db->fetchRow($sql);
+							$channcel  = $channcel["formal_code"];
+                        	//测试用线上删除
+                        	$server_hawbcode = "61299992140425388429";
+                        	$channcel = "Fedex";
+                        	$gettrackDetail_rs = $obj->gettrackDetail(1,array("server_code"=>$server_hawbcode,"channel"=>$channcel));
+                        	if($gettrackDetail_rs['ack']==1){
+                        		$data = json_decode($gettrackDetail_rs['data'],1);
+                        		//头插入
+                        		$tracklist = $data["Data"]["TEvent"];
+                        		if(is_array($tracklist)&&count($tracklist)>0){
+                        			//倒序合并
+                        			$rs['data']['detail'] = array_merge(array_reverse($tracklist),$rs['data']['detail']);
+                        		}
+                        	}
+                        }
                         $rsArr[] = $rs;
+
                     }
-//                     print_r($rsArr);exit;
                     $this->view->rsArr = $rsArr;
                 }
             }
