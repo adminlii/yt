@@ -413,12 +413,18 @@ $(function() {
 			}
 		});		
 	});
-
+	function accMul(arg1, arg2) {
+	    var m = 0, s1 = arg1.toString(), s2 = arg2.toString();
+	    try { m += s1.split(".")[1].length } catch (e) { }
+	    try { m += s2.split(".")[1].length } catch (e) { }
+	    return Number(s1.replace(".", "")) * Number(s2.replace(".", "")) / Math.pow(10, m)
+	}; 
 	$('.invoice_unitcharge,.quantity').live('keyup',function(){
 		var tr = $(this).parent().parent();
 		var invoice_quantity = $('.quantity',tr).val();
 		var invoice_unitcharge = $('.invoice_unitcharge',tr).val();
-		var quantity=parseFloat(invoice_unitcharge)*parseFloat(invoice_quantity);
+		//var quantity=parseFloat(invoice_unitcharge)*parseFloat(invoice_quantity);
+		var quantity=accMul(parseFloat(invoice_unitcharge),parseFloat(invoice_quantity));
 		var totalQuantity=isNaN(quantity)?0:quantity;
 		$('.totalcharge',tr).html(totalQuantity);
 		// alert($(this).val());
@@ -431,7 +437,8 @@ $(function() {
 		var tr = $(this).parent().parent();
 		var invoice_quantity = $('.quantity',tr).val();
 		var invoice_weight = $('.weight',tr).val();
-		var weight=parseFloat(invoice_weight)*parseFloat(invoice_quantity);
+		//var weight=parseFloat(invoice_weight)*parseFloat(invoice_quantity);
+	    var weight=accMul(parseFloat(invoice_weight),parseFloat(invoice_quantity));
 	    var totalWeight=isNaN(weight)?0:weight;
 		$('.totalWeight',tr).html(totalWeight);
 		// alert($(this).val());
