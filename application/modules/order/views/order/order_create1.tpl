@@ -603,26 +603,47 @@ function rule_check_num(data){
 
 //公司
 $('.checkchar').live('keyup',function(){
-	err_tip(this,/^[a-zA-Z0-9\s]{1,36}$/,'不允许出现非英文允许英文数字混合,长度最多36字符');
+	if($("#product_code").val()=="TNT"){
+		err_tip(this,/^[a-zA-Z0-9\s]{1,50}$/,'不允许出现非英文允许英文数字混合,长度最多50字符');
+	}else{
+		err_tip(this,/^[a-zA-Z0-9\s]{1,36}$/,'不允许出现非英文允许英文数字混合,长度最多36字符');
+	}
+	
+})
+
+$('.checkchar1').live('keyup',function(){
+		err_tip(this,/^[a-zA-Z\s]{1,36}$/,'不允许出现非英文，长度最多36字符');
 })
 //收件人
-$('.checkchar1').live('keyup',function(){
-	err_tip(this,/^[a-zA-Z\s]{1,36}$/,'不允许出现非英文，长度最多36字符');
+$('.checkchar_name').live('keyup',function(){
+	if($("#product_code").val()=="TNT"){
+		err_tip(this,/^[a-zA-Z\s]{1,25}$/,'不允许出现非英文，长度最多25字符');
+	}else
+		err_tip(this,/^[a-zA-Z\s]{1,36}$/,'不允许出现非英文，长度最多36字符');
 })
 //城市 
 $('.checkchar3').live('keyup',function(){
-	err_tip(this,/^[a-zA-Z\s]+$/,'不允许出现非英文');
+	if($("#product_code").val()=="TNT"){
+		err_tip(this,/^[\w\W]{0,30}$/,'长度最多30字符');
+	}else
+		err_tip(this,/^[a-zA-Z\s]+$/,'不允许出现非英文');
 })
 
 //地址
 $('.checkchar2').live('keyup',function(){
-	err_tip(this,/^[\w\W]{0,36}$/,'长度最多36字符');
+	if($("#product_code").val()=="TNT"){
+		err_tip(this,/^[\w\W]{0,30}$/,'长度最多30字符');
+	}else
+		err_tip(this,/^[\w\W]{0,36}$/,'长度最多36字符');
 })
 
 // 体积
 $('.order_volume').live('keyup',function(){
-	vol_tip(this,/^\d+(\.\d)?$/,'须为数字,且小数最多为1位');
+		vol_tip(this,/^\d+(\.\d)?$/,'须为数字,且小数最多为1位');
 })
+
+
+
 
 // 电话
 $('.order_phone').live('keyup',function(){
@@ -638,14 +659,22 @@ $('.order_phone').live('keyup',function(){
 
 // 重量
 $('.weight').live('keyup',function(){
-	var reg = /(^0\.[5-9]$)|(^[1-9]\d{0,5}(\.\d)?$)/;
-	err_tip(this,reg,'须为数字,且小数最多为1位,范围为0.5-999999.9');	
+	if($("#product_code").val()=="TNT"){
+		var reg = /(^70$)|(^0\.\d{0,3}$)|(^[1-6]\d?(\.\d{0,3})?$)/;
+		err_tip(this,reg,'须为数字,范围为0.001-70');
+	}else
+		err_tip(this,/(^0\.[5-9]$)|(^[1-9]\d{0,5}(\.\d)?$)/,'须为数字,且小数最多为1位,范围为0.5-999999.9');	
 })
 
 // 数量
 $('.quantity').live('keyup',function(){
-	var reg = /^[1-9][0-9]?$/;
-	err_tip(this,reg,'须为正整数，范围为1-99');
+	if($("#product_code").val()=="TNT"&&$(this).attr("name")=="invoice[invoice_quantity][]"){
+		var reg =/^[1-9][0-9]{0,3}$/;
+		err_tip(this,reg,'须为正整数，范围为1-9999');
+	}else{
+		var reg = /^[1-9][0-9]?$/;
+		err_tip(this,reg,'须为正整数，范围为1-99');
+	}
 })
 	
 	// ==============结束
@@ -739,7 +768,7 @@ $('.quantity').live('keyup',function(){
     			<tr>
     				<td><p>公司名 : </p><input class="checkchar" type="text" value="<{if isset($shipperConsignee)}><{$shipperConsignee.consignee_company}><{/if}>"
 							name='consignee[consignee_company]' id='consignee_company' /></td>
-    				<td><p><i>*</i> 收件人 : </p><input type="text" class="checkchar3" value="<{if isset($shipperConsignee)}><{$shipperConsignee.consignee_name}><{/if}>"
+    				<td><p><i>*</i> 收件人 : </p><input type="text" class="checkchar_name" value="<{if isset($shipperConsignee)}><{$shipperConsignee.consignee_name}><{/if}>"
 							name='consignee[consignee_name]' id='consignee_name' /></td>
     			</tr>
     			<tr>
@@ -749,7 +778,7 @@ $('.quantity').live('keyup',function(){
 							name='consignee[consignee_telephone]' id=consignee_telephone /></td>
     			</tr>
     			<tr>
-    				<td><p><i>*</i>收件人城市 : </p><input type="text" class="checkchar1"  value="<{if isset($shipperConsignee)}><{$shipperConsignee.consignee_city}><{/if}>"
+    				<td><p><i>*</i>收件人城市 : </p><input type="text" class="checkchar3"  value="<{if isset($shipperConsignee)}><{$shipperConsignee.consignee_city}><{/if}>"
 							name='consignee[consignee_city]' id='consignee_city' /></td>
     				<td><p>收件人手机 : </p><input class="order_phone" type="text" value='<{if isset($shipperConsignee)}><{$shipperConsignee.consignee_mobile}><{/if}>'
 							name='consignee[consignee_mobile]' id='consignee_mobile' /></td>

@@ -49,11 +49,11 @@
 					<span class="order_title"><{t}>批量上传<{/t}></span>
 				</a>
 			</li>
-			<li id="abnormal" style="position: relative;" class="mainStatus0">
+			<!--<li id="abnormal" style="position: relative;" class="mainStatus0">
 				<a href="javascript:;" class="statusTag " onclick="leftMenu('get-import-batch','<{t}>上传记录<{/t}>','/order/order/get-import-batch?quick=0')">
 					<span class="order_title"><{t}>上传记录<{/t}></span>
 				</a>
-			</li>
+			</li>-->
 		</ul>
 	</div>
 	<div id="module-table" style='padding: 10px 20px;'>

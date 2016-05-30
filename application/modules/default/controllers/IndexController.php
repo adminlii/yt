@@ -237,6 +237,8 @@ class Default_IndexController extends Ec_Controller_DefaultAction
                         		continue;
 							if($orderinfo["product_code"] == "NZ_CP" || $orderinfo["product_code"] == "NZ_DP" || $orderinfo["product_code"] == "NZ_LZ"){
 								$channelid = 1;  //NZ_CP，NZ_DP，NZ_LZ对应渠道SAICHENG
+							}else if ($orderinfo["product_code"] =="TNT"){
+								$channelid = 73;
 							}else{
 								$channelid = 2;  //G_DHL对应渠道DHL
 							}

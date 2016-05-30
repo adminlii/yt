@@ -302,7 +302,7 @@ function formSubmit(status){
         <div class="contentLeft contentType4 borderR borderB" style="height:138px;">
         	<h3>国家*</h3>
             <input type="text"  value="CN" disabled="disabled" style="background:#cfcfcf; margin-bottom:20px;">
-        	<input type="hidden" name="shipper[shipper_countrycode]" value="CN">
+        	<input type="hidden" name="shipper[shipper_countrycode]" value="<{if isset($shipperCustom)}><{$shipperCustom.shipper_countrycode}><{/if}>">
         	<h3>邮编*</h3>
             <input type="text" name="shipper[shipper_postcode]" value="<{if isset($shipperCustom)}><{$shipperCustom.shipper_postcode}><{/if}>">
         </div>

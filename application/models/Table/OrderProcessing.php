@@ -126,6 +126,12 @@ class Table_OrderProcessing
         if(isset($condition["release_status"]) && $condition["release_status"] != ""){
             $select->where("release_status = ?",$condition["release_status"]);
         }
+        if(isset($condition["trackingnumber_status"]) && $condition["trackingnumber_status"] !== ""){
+            $select->where("trackingnumber_status = ?",$condition["trackingnumber_status"]);
+        }
+        if(isset($condition["tnt_status"]) && $condition["tnt_status"] !== ""){
+            $select->where("tnt_status = ?",$condition["tnt_status"]);
+        }
         /*CONDITION_END*/
         if ('count(*)' == $type) {
             return $this->_table->getAdapter()->fetchOne($select);

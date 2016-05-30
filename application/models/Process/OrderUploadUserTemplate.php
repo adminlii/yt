@@ -311,7 +311,7 @@ class Process_OrderUploadUserTemplate extends Process_OrderUpload
     public function submitBatchTransaction($fileData)
     {
         $return = parent::submitBatchTransaction($fileData);
-        var_dump($return);
+        //var_dump($return);
         // 匹配到的模板
         $return['report'] = $this->_match_report;
         // 匹配到的模板ID

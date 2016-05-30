@@ -189,6 +189,8 @@ class Common_APIChannelDataSet
         $this->orderKey["consigneeStreet2"] = $address["consignee_street3"];
         $this->orderKey["consigneePostalCode"] = $address["consignee_postcode"];
         $this->orderKey["consigneePhone"] = empty($address["consignee_mobile"]) ? $address["consignee_telephone"] : $address["consignee_mobile"];
+        $this->orderKey["consignee_mobile"] = $address["consignee_mobile"];
+        $this->orderKey["consignee_telephone"] = $address["consignee_telephone"];
         $this->orderKey["consigneeEmail"] = $address["consignee_email"];
         $this->orderKey["consigneeCountryCode"] = $address['consignee_countrycode'];
         $this->orderKey["consigneeAddress1"] = $address["consignee_city"];
@@ -389,10 +391,12 @@ class Common_APIChannelDataSet
     	$this->orderKey["consigneeStreet"] = $orderInfo["consignee_street"];
     	$this->orderKey["consigneePostalCode"] = $orderInfo["consignee_postcode"];
     	$this->orderKey["consigneePhone"] = empty($orderInfo["consignee_mobile"]) ? $orderInfo["consignee_telephone"] : $orderInfo["consignee_mobile"];
+    	$this->orderKey["consignee_mobile"] = $orderInfo["consignee_mobile"];
+    	$this->orderKey["consignee_telephone"] = $orderInfo["consignee_telephone"];
     	$this->orderKey["consigneeEmail"] = $orderInfo["consignee_email"];
     	$this->orderKey["consigneeCountryCode"] = $orderInfo['consignee_countrycode'];
-    	$this->orderKey["consigneeAddress1"] = $orderInfo["consignee_city"];
-    	$this->orderKey["consigneeAddress2"] = $orderInfo["consignee_province"];
+    	$this->orderKey["consigneeAddress1"] = $orderInfo["consignee_street2"];
+    	$this->orderKey["consigneeAddress2"] = $orderInfo["consignee_street3"];
     	$this->orderKey["consigneeHouseNo"] = $orderInfo["consignee_doorplate"];
     	$this->orderKey["consigneeDistrict"] = $orderInfo["consignee_district"];
     	

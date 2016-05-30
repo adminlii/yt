@@ -327,7 +327,7 @@ class Process_OrderDhl
         
         // 验证必填项
         
-        if($this->_consignee['consignee_telephone'] !== ''){
+        if($this->_consignee['consignee_telephone']){
         	/* if(preg_match('/^\(\d+\)\d+-\d+$|^\d+\s\d+$/', $this->_consignee['consignee_certificatetype'])){
         		$this->_err[] = Ec::Lang('收件人电话不正确');
         	} */
@@ -1587,8 +1587,10 @@ class Process_OrderDhl
     	} */
     	//$listId['string'] = '61';//TODO
 
-        if($order["product_code"] == "NZ_CP" || $order["product_code"] == "NZ_DP" || $order["product_code"] == "NZ_LZ"){
+    	if($order["product_code"] == "NZ_CP" || $order["product_code"] == "NZ_DP" || $order["product_code"] == "NZ_LZ"){
             $listId['string'] = 1;  //NZ_CP，NZ_DP，NZ_LZ对应渠道SAICHENG
+        }else if($order["product_code"] == "TNT"){
+        	$listId['string'] = 73;
         }else{
             $listId['string'] = 2;  //G_DHL对应渠道DHL
         }
