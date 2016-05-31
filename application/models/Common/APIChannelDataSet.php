@@ -270,6 +270,7 @@ class Common_APIChannelDataSet
 		//订单的收件人
         $total_declare_num = 0;
         //var_dump($invoice);
+        $this->orderInvoiceItemKey = array();
         foreach ($invoice as $key => $val) {
             if($val['invoice_totalcharge_all']>0&&$declaredValue==0){
                $declaredValue   =$val['invoice_totalcharge_all'];
