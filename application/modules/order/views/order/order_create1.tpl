@@ -532,19 +532,22 @@ function getTipTpl(){
 			var val = $(obj).val();
 			var msg =msg;
 			
-			if(val==''){
-				return;
-			}
+			
 			var tip = getTipTpl();
 			if($(obj).prev('.info').size()==0){
-				$(obj).prev().after(tip);
+				$(obj).before(tip);
 			}
 			
 			var tip = $(obj).prev('.info');
+			if(val===''){
+				tip.hide();
+				return;
+			}
 			if(!reg.test(val)){
 				$('.Validform_checktip',tip).text(msg);	
 				var left = $(obj).position().left;
 				var top = $(obj).position().top;
+				console.log(tip);
 				tip.css({'left':(left-12),'top':(top-3)}).show();		
 			}else{
 				tip.hide();
@@ -603,51 +606,74 @@ function rule_check_num(data){
 
 //公司
 $('.checkchar').live('keyup',function(){
-	if($("#product_code").val()=="TNT"){
-		err_tip(this,/^[a-zA-Z0-9\s]{1,50}$/,'不允许出现非英文允许英文数字混合,长度最多50字符');
-	}else{
-		err_tip(this,/^[a-zA-Z0-9\s]{1,36}$/,'不允许出现非英文允许英文数字混合,长度最多36字符');
+    var reg;var msg = '';
+	switch($("#product_code").val()){
+		case "TNT":reg=/^[a-zA-Z0-9\s]{1,50}$/;msg="不允许出现非英文允许英文数字混合,长度最多50字符";break;
+		case "ESB":reg=/^[a-zA-Z0-9\s]{1,200}$/;msg="不允许出现非英文允许英文数字混合,长度最多200字符";break;
+		default:reg=/^[a-zA-Z0-9\s]{1,36}$/;msg = '不允许出现非英文允许英文数字混合,长度最多36字符';break;
 	}
-	
+	err_tip(this,reg,msg);
 })
-
+//州省
 $('.checkchar1').live('keyup',function(){
-		err_tip(this,/^[a-zA-Z\s]{1,36}$/,'不允许出现非英文，长度最多36字符');
+	var reg;var msg = '';
+	switch($("#product_code").val()){
+		case "ESB":reg=/^[a-zA-Z0-9\s]{1,100}$/;msg="不允许出现非英文允许英文数字混合,长度最多100字符";break;
+		default:reg=/^[a-zA-Z\s]{1,36}$/;msg = '不允许出现非英文，长度最多36字符';break;
+	}
+	err_tip(this,reg,msg);
 })
 //收件人
 $('.checkchar_name').live('keyup',function(){
-	if($("#product_code").val()=="TNT"){
-		err_tip(this,/^[a-zA-Z\s]{1,25}$/,'不允许出现非英文，长度最多25字符');
-	}else
-		err_tip(this,/^[a-zA-Z\s]{1,36}$/,'不允许出现非英文，长度最多36字符');
+	var reg;var msg = '';
+	switch($("#product_code").val()){
+		case "TNT":reg=/^[a-zA-Z\s]{1,25}$/;msg="不允许出现非英文，长度最多25字符";break;
+		case "ESB":reg=/^[a-zA-Z\s]{1,50}$/;msg="不允许出现非英文，长度最多50字符";break;
+		default:reg=/^[a-zA-Z\s]{1,36}$/;msg = '不允许出现非英文，长度最多36字符';break;
+	}
+	err_tip(this,reg,msg);
 })
 //城市 
 $('.checkchar3').live('keyup',function(){
-	if($("#product_code").val()=="TNT"){
-		err_tip(this,/^[\w\W]{0,30}$/,'长度最多30字符');
-	}else
-		err_tip(this,/^[a-zA-Z\s]+$/,'不允许出现非英文');
+	var reg;var msg = '';
+	switch($("#product_code").val()){
+		case "TNT":reg=/^[\w\W]{0,30}$/;msg="长度最多30字符";break;
+		case "ESB":reg=/^[\w\W]{0,100}$/;msg="长度最多100字符";break;
+		default:reg=/^[a-zA-Z\s]+$/;msg = '不允许出现非英文';break;
+	}
+	err_tip(this,reg,msg);
 })
 
 //地址
 $('.checkchar2').live('keyup',function(){
-	if($("#product_code").val()=="TNT"){
-		err_tip(this,/^[\w\W]{0,30}$/,'长度最多30字符');
-	}else
-		err_tip(this,/^[\w\W]{0,36}$/,'长度最多36字符');
+	var reg;var msg = '';
+	switch($("#product_code").val()){
+		case "TNT":reg=/^[\w\W]{0,30}$/;msg="长度最多30字符";break;
+		case "ESB":
+			if($(this).attr("id")=="consignee_street"){
+				reg=/^[\w\W]{0,200}$/;msg="长度最多200字符";
+			}else{
+				reg=/^[\w\W]{0,35}$/;msg="长度最多35字符";
+			};
+			break;
+		default:reg=/^[\w\W]{0,36}$/;msg = '长度最多36字符';break;
+	}
+	err_tip(this,reg,msg);
 })
 
 // 体积
 $('.order_volume').live('keyup',function(){
-		vol_tip(this,/^\d+(\.\d)?$/,'须为数字,且小数最多为1位');
+	var reg;var msg = '';
+	switch($("#product_code").val()){
+		case "ESB":
+				reg=/^[1-9]\d*$/;msg="须为大于零整数";
+			break;
+		default:reg=/(^0\.\d$)|(^[1-9]\d*(\.\d)?$)/;msg = '须为大于零数字,且小数最多为1位';break;
+	}
+	vol_tip(this,reg,msg);
 })
-
-
-
-
 // 电话
 $('.order_phone').live('keyup',function(){
-    //err_tip(this,/^\(\d+\)\d+-\d+$|^\d+\s\d+$/,'格式为(xxx)xxx-xxx 或xxx空格xxxxx');
 	err_tip(this,/^(\d){4,25}$/,'格式为4-25位纯数字');
 })
 
@@ -659,22 +685,27 @@ $('.order_phone').live('keyup',function(){
 
 // 重量
 $('.weight').live('keyup',function(){
-	if($("#product_code").val()=="TNT"){
-		var reg = /(^70$)|(^0\.\d{0,3}$)|(^[1-6]\d?(\.\d{0,3})?$)/;
-		err_tip(this,reg,'须为数字,范围为0.001-70');
-	}else
-		err_tip(this,/(^0\.[5-9]$)|(^[1-9]\d{0,5}(\.\d)?$)/,'须为数字,且小数最多为1位,范围为0.5-999999.9');	
+	var reg;var msg = '';
+	switch($("#product_code").val()){
+		case "TNT":reg=/(^70$)|(^0\.\d{0,3}$)|(^[1-6]\d?(\.\d{0,3})?$)/;msg="须为数字,范围为0.001-70";break;
+	    case "ESB":reg=/(^0\.\d{0,3}$)|(^[1-9]\d*(\.\d{0,3})?$)/;msg="须为数字,最多3位小数";break;
+		default:reg=/(^0\.[5-9]$)|(^[1-9]\d{0,5}(\.\d)?$)/;msg = '须为数字,且小数最多为1位,范围为0.5-999999.9';break;
+	}
+	err_tip(this,reg,msg);
 })
 
 // 数量
 $('.quantity').live('keyup',function(){
-	if($("#product_code").val()=="TNT"&&$(this).attr("name")=="invoice[invoice_quantity][]"){
-		var reg =/^[1-9][0-9]{0,3}$/;
-		err_tip(this,reg,'须为正整数，范围为1-9999');
-	}else{
-		var reg = /^[1-9][0-9]?$/;
-		err_tip(this,reg,'须为正整数，范围为1-99');
+	var reg=/^[1-9][0-9]?$/;var msg = '须为正整数，范围为1-99';
+	switch($("#product_code").val()){
+		case "TNT":
+			if($(this).attr("name")=="invoice[invoice_quantity][]"){
+				reg=/^[1-9][0-9]{0,3}$/;msg="须为正整数，范围为1-9999";
+			}
+		break;
+		default:;break;
 	}
+	err_tip(this,reg,msg);
 })
 	
 	// ==============结束
@@ -1014,7 +1045,7 @@ $('.quantity').live('keyup',function(){
     							<li>
     								<span><i>*</i> 发件人国家：</span>
     								<{ec name='E4' default='Y' search='N' class='select1'}>country<{/ec}>
-    								<input type="text" name="E5" value="省/州" onfocus="if (value =='省/州'){value =''}" onblur="if (value ==''){value='省/州'}" class="input_text checkchar3">
+    								<input type="text" name="E5" value="省/州" onfocus="if (value =='省/州'){value =''}" onblur="if (value ==''){value='省/州'}" class="input_text checkchar1">
     								<input type="text" name="E6" value="城市" onfocus="if (value =='城市'){value =''}" onblur="if (value ==''){value='城市'}" class="input_text checkchar3">
     							</li>
     							<li>

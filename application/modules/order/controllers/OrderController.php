@@ -375,12 +375,7 @@ class Order_OrderController extends Ec_Controller_Action
                 'insurance_value_gj' => $order['insurance_value_gj'],
         
             );
-            $volumeArr=array(
-                'length'=>$order['order_length'],
-                'width'=>$order['order_width'],
-                'height'=>$order['order_height'],
-    
-            );
+            
             
             /*$return = array(
              'ask' => 0,
@@ -447,7 +442,16 @@ class Order_OrderController extends Ec_Controller_Action
                     unset($invoiceArr[$k]);
                 }
             }
+            //dhl 中 根据货物计算 包裹信息
+            $invoice_weight	= 0;
+            $invoice_lenght = 0;
+            $invoice_width 	= 0;
+            $invoice_height	= 0;
             foreach ($invoiceArr as $column=>$vc){
+            	$invoice_weight+=$vc["invoice_weight"]*$vc["invoice_quantity"];
+            	$invoice_lenght>$vc["invoice_length"]?"":$invoice_lenght=$vc["invoice_length"];
+            	$invoice_width>$vc["invoice_width"]?"":$invoice_width=$vc["invoice_width"];
+            	$invoice_height>$vc["invoice_height"]?"":$invoice_height=$vc["invoice_height"];
                 if(!$vc['invoice_enname']){
                     $vc['invoice_enname'] = $invoice['invoice_enname'][0];
                     $vc['invoice_cnname'] = $invoice['invoice_cnname'][0];
@@ -458,6 +462,11 @@ class Order_OrderController extends Ec_Controller_Action
                     $invoiceArr[$column]=$vc;
                 }
             }
+            $orderArr['order_length'] = $volumeArr['length'] = intval($invoice_lenght);
+            $orderArr['order_width'] = $volumeArr['width'] = intval($invoice_width);
+            $orderArr['order_height'] = $volumeArr['height'] = intval($invoice_height);
+            $orderArr["order_weight"] = round($invoice_weight,1);
+            
            //var_dump($invoiceArr);die;
            /*  var_dump($invoice);
             foreach($invoice as $column=>$v){
@@ -601,6 +610,254 @@ class Order_OrderController extends Ec_Controller_Action
         $html =  Ec::renderTpl($this->tplDirectory . "order_create_dhl.tpl", 'system-layout-0506');
         $html = preg_replace('/>\s+</','><',$html);
         echo $html;
+    }
+    
+    /**
+     * 手工创建TNT订单
+     */
+    public function createtntAction()
+    {
+    	$order_id = $this->getRequest()->getParam('order_id', '');
+    	$cpy = $this->getRequest()->getParam('cpy', null);
+    	if($this->getRequest()->isPost()){
+    		$orderR = array();
+    		$params = $this->getRequest()->getParams();
+    		//订单头
+    		$order = $this->getParam('order',array());
+    		//收件人,发件人
+    		$consignee = $this->getParam('consignee',array());
+    		//发件人
+    		$shipper = $this->getParam('shipper',array());
+    		//申报信息
+    		$invoice = $this->getParam('invoice',array());
+    		//额外服务
+    		$extraservice = $this->getParam('extraservice',array());
+    		//预报？草稿？
+    		$status = $this->getParam('status','1');
+    
+    		$orderArr = array(
+    				'product_code' => strtoupper($order['product_code']),
+    				'country_code' => strtoupper($order['country_code']),
+    				'refer_hawbcode' => strtoupper($order['refer_hawbcode']),
+    				'order_weight' => $order['order_weight'],
+    				'order_pieces' => $order['order_pieces'],
+    				 
+    				'order_length'=>$order['order_length'],
+    				'order_width'=>$order['order_width'],
+    				'order_height'=>$order['order_height'],
+    				'buyer_id' =>$order['buyer_id'],
+    				'order_id' => $order['order_id'],
+    				'order_create_code'=>'w',
+    				'customer_id'=>Service_User::getCustomerId(),
+    				'creater_id'=>Service_User::getUserId(),
+    				'modify_date'=>date('Y-m-d H:i:s'),
+    				'mail_cargo_type' => $order['mail_cargo_type'],
+    				'tms_id'=>Service_User::getTmsId(),
+    				'customer_channelid'=>Service_User::getChannelid(),
+    				'insurance_value' => trim($order['insurance_value']),
+    				'insurance_value_gj' => $order['insurance_value_gj'],
+    
+    		);
+    
+    
+    		/*$return = array(
+    		 'ask' => 0,
+    				'message' => Ec::Lang('订单操作失败')
+    		);
+    		$return["message"] = $volumeArr['length'];
+    		die(Zend_Json::encode($return));*/
+    
+    		$consigneeArr = array(
+    				'consignee_countrycode' => strtoupper($order['country_code']),
+    				'consignee_company' => $consignee['consignee_company'],
+    				'consignee_province' => $consignee['consignee_province'],
+    				'consignee_name' => $consignee['consignee_name'],
+    				'consignee_city' => $consignee['consignee_city'],
+    				'consignee_telephone' => $consignee['consignee_telephone'],
+    				'consignee_mobile' => $consignee['consignee_mobile'],
+    				'consignee_postcode' => $consignee['consignee_postcode'],
+    				'consignee_email' => $consignee['consignee_email'],
+    				'consignee_street' => $consignee['consignee_street'],
+    				'consignee_street2' => $consignee['consignee_street2'],
+    				'consignee_street3' => $consignee['consignee_street3'],
+    				'consignee_certificatetype' => $consignee['consignee_certificatetype'],
+    				'consignee_certificatecode' => $consignee['consignee_certificatecode'],
+    				'consignee_credentials_period' => $consignee['consignee_credentials_period'],
+    				'consignee_doorplate' => $consignee['consignee_doorplate'],
+    		);
+    
+    		$consignee['shipper_account'] = ! empty($consignee['shipper_account']) ? $consignee['shipper_account'] : '';
+    		//$shipperArr = Service_CsiShipperTrailerAddress::getByField($consignee['shipper_account'], 'shipper_account');
+    		$shipperArr = array(
+    				'shipper_name' => $shipper['shipper_name'],
+    				'shipper_company' => $shipper['shipper_company'],
+    				'shipper_countrycode' => $shipper['shipper_countrycode'],
+    				'shipper_province' => $shipper['shipper_province'],
+    				'shipper_city' => $shipper['shipper_city'],
+    				'shipper_street' => $shipper['shipper_street'],
+    				'shipper_postcode' => $shipper['shipper_postcode'],
+    				'shipper_areacode' => $shipper['shipper_areacode'],
+    				'shipper_telephone' => $shipper['shipper_telephone'],
+    				'shipper_mobile' => $shipper['shipper_mobile'],
+    				'shipper_email' => $shipper['shipper_email'],
+    				'shipper_certificatecode' => $shipper['shipper_certificatecode'],
+    				'shipper_certificatetype' => $shipper['shipper_certificatetype'],
+    				'shipper_fax' => $shipper['shipper_fax'],
+    				'shipper_mallaccount' => $shipper['shipper_mallaccount']
+    		);
+    
+    		$invoiceArr = array();
+    		foreach($invoice as $column=>$v){
+    			foreach($v as $kk=>$vv){
+    				$invoiceArr[$kk][$column] = $vv;
+    			}
+    		}
+    		//去掉都为空的海关信息
+    		foreach ($invoiceArr as $k=>$v){
+    			$flag = false;
+    			foreach ($v as $vv){
+    				if(!empty($vv)){
+    					$flag=true;
+    					break;
+    				}
+    			}
+    			if(!$flag){
+    				unset($invoiceArr[$k]);
+    			}
+    		}
+    		//dhl 中 根据货物计算 包裹信息
+    		$invoice_weight	= 0;
+    		$invoice_lenght = 0;
+    		$invoice_width 	= 0;
+    		$invoice_height	= 0;
+    		foreach ($invoiceArr as $column=>$vc){
+    			$invoice_weight+=$vc["invoice_weight"]*$vc["invoice_quantity"];
+    			$invoice_lenght>$vc["invoice_length"]?"":$invoice_lenght=$vc["invoice_length"];
+    			$invoice_width>$vc["invoice_width"]?"":$invoice_width=$vc["invoice_width"];
+    			$invoice_height>$vc["invoice_height"]?"":$invoice_height=$vc["invoice_height"];
+    			if(!$vc['invoice_enname']){
+    				$vc['invoice_enname'] = $invoice['invoice_enname'][0];
+    				$vc['invoice_cnname'] = $invoice['invoice_cnname'][0];
+    				$vc['invoice_shippertax'] = $invoice['invoice_shippertax'][0];
+    				$vc['invoice_consigneetax'] = $invoice['invoice_consigneetax'][0];
+    				$vc['invoice_totalcharge_all'] = $invoice['invoice_totalcharge_all'][0];
+    				$vc['hs_code'] = $invoice['hs_code'][0];
+    				$invoiceArr[$column]=$vc;
+    			}
+    		}
+    		$orderArr['order_length'] = $volumeArr['length'] = intval($invoice_lenght);
+    		$orderArr['order_width'] = $volumeArr['width'] = intval($invoice_width);
+    		$orderArr['order_height'] = $volumeArr['height'] = intval($invoice_height);
+    		$orderArr["order_weight"] = round($invoice_weight,1);
+    
+    		
+    		// php hack
+    		if(! empty($invoiceArr)){
+    			array_unshift($invoiceArr, array());
+    			unset($invoiceArr[0]);
+    		}
+    
+    		
+    		$process = new Process_OrderDhl();
+    		$process->setVolume($volumeArr);
+    		$process->setOrder($orderArr);
+    		$process->setInvoice($invoiceArr);
+    		$process->setExtraservice($extraservice);
+    		$process->setShipper($shipperArr);
+    		$process->setConsignee($consigneeArr);
+    		//             $process
+    		$return = $process->createOrderTransaction($status);
+    
+    		//             print_r($params);exit;
+    		die(Zend_Json::encode($return));
+    	}
+    
+    	if($order_id){
+    		try {
+    			$order = Service_CsdOrder::getByField($order_id, 'order_id');
+    			if(!$order){
+    				throw new Exception(Ec::Lang('订单不存在或已删除'));
+    			}
+    			if($order['customer_id']!=Service_User::getCustomerId()){
+    				throw new Exception(Ec::Lang('非法操作'));
+    			}
+    			// 历史数据 start
+    			$con = array(
+    					'order_id' => $order_id
+    			);
+    			$invoice = Service_CsdInvoice::getByCondition($con,'*',0,0,'invoice_id asc');
+    
+    			foreach($invoice as $k=>$v){
+    				$v['invoice_unitcharge'] = $v['invoice_quantity']?($v['invoice_totalcharge']/$v['invoice_quantity']):0;
+    				$v['invoice_weight'] = $v['invoice_weight']?($v['invoice_totalWeight']/$v['invoice_quantity']):0;
+    				$invoice[$k] = $v;
+    			}
+    
+    			$atd_extraservice_kind_arr = Common_DataCache::getAtdExtraserviceKindAll();
+    			$extservice = Service_CsdExtraservice::getByCondition($con);
+    			foreach($extservice as $v){
+    				$extra_servicecode = $v['extra_servicecode'];
+    				//保险费 C0
+    				if($atd_extraservice_kind_arr[$extra_servicecode]['extra_service_group']=='C0'){
+    					$order['insurance_value'] = $v['extra_servicevalue'];
+    				}
+    			}
+    			$shipperConsignee = Service_CsdShipperconsignee::getByField($order_id,'order_id');
+    			// 历史数据 end
+    			if($cpy){
+    				unset($order['order_id']);
+    				if($order['order_status']!='E'){
+    					unset($order['shipper_hawbcode']);
+    					unset($order['refer_hawbcode']);
+    					unset($order['server_hawbcode']);
+    				}
+    			}//print_r($order);die;
+    			$this->view->order = $order;
+    			$this->view->invoice = $invoice;
+    			$this->view->shipperConsignee = $shipperConsignee;
+    			$this->view->extservice = $extservice;
+    		} catch (Exception $e) {
+    			header("Content-type: text/html; charset=utf-8");
+    			echo $e->getMessage();exit;
+    		}
+    	}else{
+    		$op = $this->getParam ( 'op', '' );
+    		if ($op == 'fast-create-order') {
+    			$product_code = $this->getParam ( 'product_code', '' );
+    			$country_code = $this->getParam ( 'country_code', '' );
+    			$order = array (
+    					'product_code' => $product_code,
+    					'country_code' => $country_code
+    			);
+    			$this->view->order = $order;
+    		}
+    	}
+    
+    	$countrys = Process_ProductRule::arrivalCountry('TNT');
+    	//var_dump($countrys);
+    	//$countrys = Service_IddCountry::getByCondition(null, '*', 0, 0, '');
+    	$this->view->country = $countrys;
+    
+    	$this->view->productKind = Process_ProductRule::getProductKind();
+    	$con = array('unit_status'=>'ON');
+    	$units = Service_AddDeclareunit::getByCondition($con);
+    	$this->view->units = $units;
+    
+    	//证件类型
+    	$con = array();
+    	$certificates = Service_AtdCertificateType::getByCondition($con);
+    	$this->view->certificates = $certificates;
+    
+    	//邮政包裹申报种类表
+    	$con = array();
+    	$mailCargoTypes = Service_AtdMailCargoType::getByCondition($con);
+    	$this->view->mailCargoTypes = $mailCargoTypes;
+    	//选取默认收件人
+    	$this->view->shipperCustom=$this->getShipper($order_id,1);
+    	//var_dump($this->getShipper($order_id,1));
+    	$html =  Ec::renderTpl($this->tplDirectory . "order_create_tnt.tpl", 'system-layout-0506');
+    	$html = preg_replace('/>\s+</','><',$html);
+    	echo $html;
     }
     
     /**

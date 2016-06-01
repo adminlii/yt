@@ -327,8 +327,9 @@ class Common_APIChannelDataSet
         // 当重量为空时, 默认为0.2kg
         $this->orderKey["weight"] = empty($this->orderData["order_weight"]) ? 0.2 : $this->orderData["order_weight"];
         $this->orderKey["total_declare_num"] = $total_declare_num;
-
-        
+		
+        //客户额外信息
+        $this->customer_ext = Service_UserExtendYb::getByField($this->orderData["customer_id"]);
     }
 
     protected function _paramsSet()
