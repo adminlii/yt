@@ -358,12 +358,12 @@ function formSubmit(status){
         </div>
         <div class="contentLeft contentType4 borderR  borderB">
         	<h3>城市*</h3>
-            <input type="text"  class="checkchar1" value="<{if isset($shipperConsignee)}><{$shipperConsignee.consignee_city}><{/if}>"
+            <input type="text"  class="checkchar3" value="<{if isset($shipperConsignee)}><{$shipperConsignee.consignee_city}><{/if}>"
 							name='consignee[consignee_city]' id='consignee_city' />
         </div>
         <div class="contentLeft contentType4 borderB">
         	<h3>联系人*</h3>
-            <input type="text"  class="checkchar4" value='<{if isset($shipperConsignee)}><{$shipperConsignee.consignee_name}><{/if}>'
+            <input type="text"  class="checkchar5" value='<{if isset($shipperConsignee)}><{$shipperConsignee.consignee_name}><{/if}>'
 							name='consignee[consignee_name]' id='consignee_name' />
         </div>
         <div class="contentLeft contentType4 borderR  borderB">
@@ -478,11 +478,11 @@ function formSubmit(status){
             	<table border="1" cellpadding="0" cellspacing="0">
                 	<tr>
                     	<td style="width:100px;">*中文品名：</td>
-                    	<td style="border-right:none"><input type="text" name='invoice[invoice_enname][]' value='<{$invoice[0].invoice_enname}>'></td>
+                    	<td style="border-right:none"><input type="text" class="" name='invoice[invoice_cnname][]' value='<{$invoice[0].invoice_cnname}>'></td>
                     </tr>
                 	<tr>
                     	<td style="border-bottom:none">*英文品名：</td>
-                    	<td style="border:none"><input type="text" class="" name='invoice[invoice_cnname][]' value='<{$invoice[0].invoice_cnname}>'></td>
+                    	<td style="border:none"><input type="text" class="invoename"  name='invoice[invoice_enname][]' value='<{$invoice[0].invoice_enname}>'></td>
                     </tr>
                 </table>
             </div>

@@ -135,25 +135,44 @@ function rule_check_num(data){
 
 //公司
 $('.checkchar').live('keyup',function(){
-	err_tip(this,/^[a-zA-Z0-9\s]{1,36}$/,'不允许出现非英文允许英文数字混合,长度最多36字符');
+	if($("#product_code").val()=="TNT")
+		err_tip(this,/^[a-zA-Z0-9\s]{1,50}$/,'不允许出现非英文允许英文数字混合,长度最多50字符');
+	else
+		err_tip(this,/^[a-zA-Z0-9\s]{1,36}$/,'不允许出现非英文允许英文数字混合,长度最多36字符');
 })
 //收件人
 $('.checkchar1').live('keyup',function(){
-	err_tip(this,/^[a-zA-Z\s]{1,36}$/,'不允许出现非英文，长度最多36字符');
+	if($("#product_code").val()=="TNT")
+		err_tip(this,/^[a-zA-Z\s]{1,25}$/,'不允许出现非英文，长度最多25字符');
+	else
+		err_tip(this,/^[a-zA-Z\s]{1,36}$/,'不允许出现非英文，长度最多36字符');
 })
 //城市 
 $('.checkchar3').live('keyup',function(){
-	err_tip(this,/^[a-zA-Z\s]+$/,'不允许出现非英文');
+	if($("#product_code").val()=="TNT")
+		err_tip(this,/^[\w\W]{0,30}$/,'长度最多30字符');
+	else
+		err_tip(this,/^[a-zA-Z\s]+$/,'不允许出现非英文');
 })
 
 //地址
 $('.checkchar2').live('keyup',function(){
-	err_tip(this,/^[\w\W]{0,36}$/,'长度最多36字符');
+	if($("#product_code").val()=="TNT")
+		err_tip(this,/^[\w\W]{0,30}$/,'长度最多30字符');
+	else
+		err_tip(this,/^[\w\W]{0,36}$/,'长度最多36字符');
 })
 
 //发件人参考信息：商户订单号
 $('.checkchar4').live('keyup',function(){
 	err_tip(this,/^[\w\W]{0,35}$/,'长度最多35字符');
+})
+//发件人name
+$('.checkchar5').live('keyup',function(){
+	if($("#product_code").val()=="TNT")
+		err_tip(this,/^[a-zA-Z\s]{1,25}$/,'不允许出现非英文，长度最多25字符');
+	else
+		err_tip(this,/^[\w\W]{0,35}$/,'长度最多35字符');
 })
 
 // 体积
@@ -179,14 +198,22 @@ $('.order_phone').live('keyup',function(){
 
 // 重量
 $('.weight').live('keyup',function(){
-	var reg = /(^0\.[5-9]$)|(^[1-9]\d*(\.?\d?)$)/;
-	err_tip1(this,reg,'须为数字,且小数最多为1位,范围为0.5-999999.9');	
+	if($("#product_code").val()=="TNT"){
+		err_tip1(this,/(^0\.[1-9]$)|(^[1-9]+(\.?\d?)$)/,'须为数字,且小数最多为1位,范围为0.1-999999.9');
+	}else{
+		err_tip1(this,/(^0\.[5-9]$)|(^[1-9]\d*(\.?\d?)$)/,'须为数字,且小数最多为1位,范围为0.5-999999.9');
+	}
+		
 })
 
 // 数量
 $('.quantity').live('keyup',function(){
-	var reg = /^[1-9][0-9]?$/;
-	err_tip(this,reg,'须为正整数，范围为1-99');
+	if($("#product_code").val()=="TNT"){
+		err_tip(this,/^[1-9][0-9]{0,3}$/,'须为正整数，范围为1-9999');
+	}else{
+		err_tip(this,/^[1-9][0-9]?$/,'须为正整数，范围为1-99');
+	}
+	
 })
 
 // 海关商品名

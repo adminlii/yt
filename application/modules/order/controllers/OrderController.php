@@ -590,7 +590,14 @@ class Order_OrderController extends Ec_Controller_Action
         //$countrys = Service_IddCountry::getByCondition(null, '*', 0, 0, '');
         $this->view->country = $countrys;
     
-        $this->view->productKind = Process_ProductRule::getProductKind();
+        $product_kind = Process_ProductRule::getProductKind();
+        $aviable_kind = array("TNT","G_DHL");
+        foreach ($product_kind as $pro_kind_k=>$pro_kind_v){
+        	if(!in_array($pro_kind_v["product_code"], $aviable_kind)){
+        		unset($product_kind[$pro_kind_k]);
+        	}
+        }
+        $this->view->productKind =$product_kind;
         $con = array('unit_status'=>'ON');
         $units = Service_AddDeclareunit::getByCondition($con);
         $this->view->units = $units;
@@ -855,7 +862,7 @@ class Order_OrderController extends Ec_Controller_Action
     	//选取默认收件人
     	$this->view->shipperCustom=$this->getShipper($order_id,1);
     	//var_dump($this->getShipper($order_id,1));
-    	$html =  Ec::renderTpl($this->tplDirectory . "order_create_tnt.tpl", 'system-layout-0506');
+    	$html =  Ec::renderTpl($this->tplDirectory . "order_create_tnt1.tpl", 'system-layout-0506');
     	$html = preg_replace('/>\s+</','><',$html);
     	echo $html;
     }
@@ -1318,3 +1325,5 @@ class Order_OrderController extends Ec_Controller_Action
 		}
 	}
 }
+
+

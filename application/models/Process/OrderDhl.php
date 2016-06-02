@@ -302,21 +302,33 @@ class Process_OrderDhl
             if($this->_consignee['consignee_name'] === ''){
                 $this->_err[] = Ec::Lang('收件人姓名不可为空');
             }else{
-            	if(!preg_match('/^[a-zA-Z\s]{1,36}$/', $this->_consignee['consignee_name'])){
+                if($this->_order['product_code'] =='TNT'){
+                    if(!preg_match('/^[a-zA-Z\s]{1,25}$/', $this->_consignee['consignee_name'])){
+                        $this->_err[] = Ec::Lang('收件人姓名不允许出现非英文，长度最多25字符');
+                    }
+                }else if(!preg_match('/^[a-zA-Z\s]{1,36}$/', $this->_consignee['consignee_name'])){
             		$this->_err[] = Ec::Lang('收件人姓名不允许出现非英文，长度最多36字符');
             	}
             }
             if($this->_consignee['consignee_street'] === ''){
                 $this->_err[] = Ec::Lang('收件人地址不可为空');
             }else{
-            	if(!preg_match('/^[\w\W]{0,36}$/', $this->_consignee['consignee_street'])){
+                if($this->_order['product_code'] =='TNT'){
+                    if(!preg_match('/^[\w\W]{0,30}$/', $this->_consignee['consignee_street'])){
+                        $this->_err[] = Ec::Lang('收件人地址长度最多30字符');
+                    }
+                }else if(!preg_match('/^[\w\W]{0,36}$/', $this->_consignee['consignee_street'])){
             		$this->_err[] = Ec::Lang('收件人地址长度最多36字符');
             	}
             }
             if ($this->_consignee['consignee_city'] === ''){
             	$this->_err[] = Ec::Lang('收件人城市不可为空');
             }else{
-            	if(!preg_match('/^[a-zA-Z\s]{1,36}$/', $this->_consignee['consignee_city'])){
+                if($this->_order['product_code'] =='TNT'){
+                    if(!preg_match('/^[a-zA-Z\s]{1,30}$/', $this->_consignee['consignee_city'])){
+                        $this->_err[] = Ec::Lang('收件人城市不允许出现非英文，长度最多30字符');
+                    }
+                }else if(!preg_match('/^[a-zA-Z\s]{1,36}$/', $this->_consignee['consignee_city'])){
             		$this->_err[] = Ec::Lang('收件人城市不允许出现非英文，长度最多36字符');
             	}
             }
@@ -326,7 +338,6 @@ class Process_OrderDhl
         }
         
         // 验证必填项
-        
         if($this->_consignee['consignee_telephone']){
         	/* if(preg_match('/^\(\d+\)\d+-\d+$|^\d+\s\d+$/', $this->_consignee['consignee_certificatetype'])){
         		$this->_err[] = Ec::Lang('收件人电话不正确');
@@ -347,7 +358,45 @@ class Process_OrderDhl
         }else{
            $this->_err[] = Ec::Lang('货物重量不能为空');
         }
-
+        
+        //TNT需要验证外包装的最大长宽高
+        if($this->_order['order_length']){
+            if(! is_numeric($this->_order['order_length'])){
+                $this->_err[] = Ec::Lang('包装长度必须为数字');
+            }else{
+                if($this->_order['product_code'] =='TNT'){
+                    if($this->_order['order_length']>240){
+                        $this->_err[] = Ec::Lang('包装长度必须小于240cm');
+                    }
+                }
+            }
+        }
+        
+        if($this->_order['order_width']){
+            if(! is_numeric($this->_order['order_width'])){
+                $this->_err[] = Ec::Lang('包装长度必须为数字');
+            }else{
+                if($this->_order['product_code'] =='TNT'){
+                    if($this->_order['order_width']>120){
+                        $this->_err[] = Ec::Lang('包装宽度必须小于120cm');
+                    }
+                }
+            }
+        }
+        
+        
+        if($this->_order['order_height']){
+            if(! is_numeric($this->_order['order_height'])){
+                $this->_err[] = Ec::Lang('包装长度必须为数字');
+            }else{
+                if($this->_order['product_code'] =='TNT'){
+                    if($this->_order['order_height']>150){
+                        $this->_err[] = Ec::Lang('包装高度必须小于150cm');
+                    }
+                }
+            }
+        }
+        
         if($this->_order['mail_cargo_type'] !== '') {
 			// TODO DBW
         	$sql = "select * from atd_mail_cargo_type where mail_cargo_code='{$this->_order['mail_cargo_type']}' or mail_cargo_cnname='{$this->_order['mail_cargo_type']}' or mail_cargo_enname='{$this->_order['mail_cargo_type']}'";

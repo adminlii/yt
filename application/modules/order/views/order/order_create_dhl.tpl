@@ -227,8 +227,14 @@ function formSubmit(status){
 	param+='&status='+status;
 	//是否填写了投保
 	var insurance_value= $("input[name='order[insurance_value]']").val();
+	
 	if(insurance_value){
-	param+='&order[insurance_value]='+insurance_value;
+	 if($("#product_code").val()=="TNT"){
+		var insurance_value_gj = $("input[name='order[insurance_value_gj]'").val();
+		param+='&order[insurance_value_gj]='+insurance_value_gj+'&order[insurance_value]='+insurance_value; 
+	 }else{
+	 	param+='&order[insurance_value]='+insurance_value;
+	 }
 	}
 	 loadStart();
 	$.ajax({
@@ -357,12 +363,12 @@ function formSubmit(status){
         </div>
         <div class="contentLeft contentType4 borderR  borderB">
         	<h3>城市*</h3>
-            <input type="text"  class="checkchar1" value="<{if isset($shipperConsignee)}><{$shipperConsignee.consignee_city}><{/if}>"
+            <input type="text"  class="checkchar3" value="<{if isset($shipperConsignee)}><{$shipperConsignee.consignee_city}><{/if}>"
 							name='consignee[consignee_city]' id='consignee_city' />
         </div>
         <div class="contentLeft contentType4 borderB">
         	<h3>联系人*</h3>
-            <input type="text"  class="checkchar4" value='<{if isset($shipperConsignee)}><{$shipperConsignee.consignee_name}><{/if}>'
+            <input type="text"  class="checkchar5" value='<{if isset($shipperConsignee)}><{$shipperConsignee.consignee_name}><{/if}>'
 							name='consignee[consignee_name]' id='consignee_name' />
         </div>
         <div class="contentLeft contentType4 borderR  borderB">
@@ -375,7 +381,7 @@ function formSubmit(status){
             <input type="text" class="order_phone" value='<{if isset($shipperConsignee)}><{$shipperConsignee.consignee_telephone}><{/if}>'
 							name='consignee[consignee_telephone]' id=consignee_telephone />
         </div>
-        <div class="contentLeft contentType3 borderB" style="height:115px;">
+        <div class="contentLeft contentType3 borderB" style="height:144px;">
         </div>
         
     </div>
@@ -477,11 +483,11 @@ function formSubmit(status){
             	<table border="1" cellpadding="0" cellspacing="0">
                 	<tr>
                     	<td style="width:100px;">*中文品名：</td>
-                    	<td style="border-right:none"><input type="text" name='invoice[invoice_enname][]' value='<{$invoice[0].invoice_enname}>'></td>
+                    	<td style="border-right:none"><input type="text" class="" name='invoice[invoice_cnname][]' value='<{$invoice[0].invoice_cnname}>'></td>
                     </tr>
                 	<tr>
                     	<td style="border-bottom:none">*英文品名：</td>
-                    	<td style="border:none"><input type="text" class="" name='invoice[invoice_cnname][]' value='<{$invoice[0].invoice_cnname}>'></td>
+                    	<td style="border:none"><input type="text" class="invoename"  name='invoice[invoice_enname][]' value='<{$invoice[0].invoice_enname}>'></td>
                     </tr>
                 </table>
             </div>
@@ -520,8 +526,19 @@ function formSubmit(status){
             <!--<div class="seven"><div class="check" style="top:-2px; left:112px;"><input name="" type="checkbox" value=""></div><label>制作发票</label><label>是</label></div>-->
         </div>        
     	<div class="title widthRight" style="float:left">8、额外服务选项</div>
-        <div class="contentLeft contentType5 borderB" style="height:66px;">
-            <div class="seven" style="margin:0 0 10px 0"><div class="check" style="top:-2px; left:12px;"><input value="C4" class="level8" name="extraservice[]" type="checkbox" ></div><label>是</label><label>文件保障服务</label><label>附加费29元/票</label></div>
+        <div id="plane2" class="contentLeft contentType5 borderB" style="height:95px;display:none;">
+            <div class="seven" style="margin:0 0 10px 0">
+            <div class="checkgroup" style="position:absolute;left:7px;z-index:9000;width:20px;height:20px;"></div>
+            <div class="check" style="top:-2px; left:12px;"><input value="C5" class="level8 " name="extraservice[]" type="checkbox" ></div><label>是</label><label>文件保障服务</label><label>附加费3元/票</label></div>
+            <div class="seven" style="margin:0 0 10px 0">
+            <div class="checkgroup" style="position:absolute;left:7px;z-index:9000;width:20px;height:20px;"></div>
+            <div class="check" style="top:-2px; left:12px;"><input value="C6" class="level8 " name="extraservice[]" type="checkbox" ></div><label>是</label><label>文件保障服务</label><label>附加费12元/票</label></div>
+            <p style="color:#f00">文件保障说明：3元中速险每票快件最高赔付5000元,12元中速险每票快件最高赔付22000元需要提供“文件保险通知书”（与文件价值无关）。</p>
+        </div>
+        <div id="plane1" class="contentLeft contentType5 borderB" style="height:95px;">
+            <div class="seven" style="margin:0 0 10px 0">
+            <div class="checkgroup" style="position:absolute;left:7px;z-index:9000;width:20px;height:20px;"></div>
+            <div class="check" style="top:-2px; left:12px;"><input value="C4" class="level8" name="extraservice[]" type="checkbox" ></div><label>是</label><label>文件保障服务</label><label>附加费29元/票</label></div>
             <p style="color:#f00">文件保障说明：针对文件快件在运输途中由DHL原因造成的丢失和损坏（不适用于快件延误），每票快件一次性赔付3000元（与文件价值无关）。</p>
         </div>
     	<div class="title widthRight" style="float:left">9、发件人协议</div>
@@ -554,6 +571,13 @@ function formSubmit(status){
 
 </div>
 <script>
+//乘法
+function accMul(arg1, arg2) {
+	    var m = 0, s1 = arg1.toString(), s2 = arg2.toString();
+	    try { m += s1.split(".")[1].length } catch (e) { }
+	    try { m += s2.split(".")[1].length } catch (e) { }
+	    return Number(s1.replace(".", "")) * Number(s2.replace(".", "")) / Math.pow(10, m)
+	}; 
 $(function(){
  $("#orderSubmitBtn").click(function(){
  	if(!$("#allow").attr("checked")){
@@ -570,14 +594,46 @@ $(function(){
  		$(".level7").attr("disabled","true");
  		$(".level7").removeClass("use").addClass("use");;
  		$(".level8").removeAttr("disabled");
+ 		//清掉文件中的内容
+ 		$("input[name='invoice[invoice_shippertax][]']").val('');
+ 		$("input[name='invoice[invoice_consigneetax][]']").val('');
+ 		$("input[name='invoice[invoice_totalcharge_all][]']").val('');
+ 		$("input[name='invoice[hs_code][]']").val('');
+ 		$("input[name='order[insurance_value_gj]']").val('');
+ 		$("input[name='order[insurance_value]']").val('');
+ 		$("input[name='extraservice[]']").attr('checked',false);
  	}else{
  		$(".level8").attr("disabled","true");
  		$(".level7").addClass("use").removeClass("use");;
  		$(".level7").removeAttr("disabled");
+ 		//TNT 保险金额是计算后的
+ 		if($("#product_code").val()=="TNT"){
+ 			$("input[name='order[insurance_value_gj]']").attr("disabled","true").addClass("use");
+ 		}
+ 		//清掉文件保险
+ 		$("input[name='extraservice[]']").attr('checked',false);
  	}
  })	
  //计算保费
- function getInsurance_value(){
+ function getInsurance_value_tnt(){
+ 	var gj = $("input[name='order[insurance_value_gj]']").val();
+ 	var obj = $("input[name='order[insurance_value]']");
+ 	var insurance_val=0;
+ 	if(!gj){
+ 	}else{
+ 		gj = parseFloat(gj);
+ 		if(gj<=0||isNaN(gj)){
+ 		
+ 		}else{
+ 			insurance_val=gj>10000?gj*0.0015:10;
+ 			insurance_val=parseInt(insurance_val*10)/10;
+ 		}
+ 	}
+ 	obj.val(insurance_val);
+ }
+ 
+ //计算保费
+ function getInsurance_value_dhl(){
  	//选中
  	$("#C2").attr("checked","checked");
  	var gj = $("input[name='order[insurance_value_gj]']").val();
@@ -595,13 +651,14 @@ $(function(){
  	}
  	obj.val(insurance_val);
  }
- $("input[name='invoice[invoice_totalcharge_all][]']").keyup(function(){
+ 
+ /*$("input[name='invoice[invoice_totalcharge_all][]']").keyup(function(){
  	var that = $("input[name='order[insurance_value_gj]']");
  	if(that.val()){
  		checkBf();
  	}
  
- });
+ });*/
  $(function(){
  	var tip = getTipTpl();
 	 if( $("input[name='order[insurance_value_gj]']").siblings('.info').size()==0){
@@ -609,8 +666,28 @@ $(function(){
 	 }
  })
  
- function checkBf(){
+ function checkBfTNT(){
     var that = $("input[name='order[insurance_value_gj]']");
+ 	var now_value = parseFloat(that.val());
+ 	var invoice_totalcharge_all = parseFloat($("input[name='invoice[invoice_totalcharge_all][]']").val());
+ 	if(!invoice_totalcharge_all){
+ 		$("input[name='order[insurance_value]']").val('');
+ 		that.val('');
+ 		return false;
+ 	}
+ 	
+ 	var hl = 6.5;
+ 	var max_insurance_value = accMul(invoice_totalcharge_all,hl);
+	var msg = '保险金额不得大于申报价值';
+	var tip = $("input[name='order[insurance_value_gj]']").siblings('.info');
+ 	tip.hide("fast",function(){$(this).css("display","none")});
+ 	that.val(max_insurance_value);
+ 	getInsurance_value_tnt();
+ 
+ }
+ 
+  function checkBfDHL(){
+     var that = $("input[name='order[insurance_value_gj]']");
  	var now_value = parseFloat(that.val());
  	var invoice_totalcharge_all = parseFloat($("input[name='invoice[invoice_totalcharge_all][]']").val());
  	if(!now_value||!invoice_totalcharge_all){
@@ -623,20 +700,67 @@ $(function(){
 	var msg = '保险金额不得大于申报价值';
 	var tip = $("input[name='order[insurance_value_gj]']").siblings('.info');
  	if(now_value>max_insurance_value){
+ 		console.log(1);
  		$('.Validform_checktip',tip).text(msg);
+ 		tip.hide();
 		tip.show("fast",function(){$(this).css("display","block")});
 		$("input[name='order[insurance_value]']").val('');
 		return false;			
  	}else{
  		tip.hide("fast",function(){$(this).css("display","none")});
  	}
- 	getInsurance_value();
+ 	getInsurance_value_dhl();
  
  }
- $("input[name='order[insurance_value_gj]']").keyup(function(){
+ $("input[name='invoice[invoice_totalcharge_all][]']").keyup(function(){
+	 if($("#product_code").val()=="TNT"){
+	 	checkBfTNT();
+	 }else{
+	 	var that = $("input[name='order[insurance_value_gj]']");
+	 	if(that.val()){
+ 		  checkBfDHL();
+ 		}
+	 	
+	 }
+	 return false;
  	//计算最高保费
  	
- 	checkBf();
  });
+ 
+ $("input[name='order[insurance_value_gj]']").keyup(function(){
+ 	if($("#product_code").val()!="G_DHL")
+	 	return false;
+ 	//计算最高保费
+ 	checkBfDHL();
+ });
+ 
+ //单选效果
+ $(".checkgroup").click(function(){
+ 	if(!$("input[name='invoice[invoice_shippertax][]']").hasClass("use"))
+ 	  return false;
+ 	$("input[name='extraservice[]']").attr('checked',false);
+ 	if($(this).attr('checked')){
+ 		$(this).next('.check').find("input").attr('checked',false);
+ 		$(".checkgroup").attr('checked',false);
+ 		$(this).attr('checked',false);
+ 	}else{
+ 		$(this).next('.check').find("input").attr('checked',true);
+ 		$(".checkgroup").attr('checked',false);
+        $(this).attr('checked',true);  	
+ 	}
+ });
+ 
+ //渠道选择
+ $("#product_code").change(function(){
+ 	$("input[name='extraservice[]']").attr('checked',false);
+    var product_code = $(this).val();
+    if(product_code=="TNT"){
+    	$("#plane1").hide();
+    	$("#plane2").show();
+    }else {
+    	$("#plane2").hide();
+    	$("#plane1").show();
+    }
+ })
 });
 </script>

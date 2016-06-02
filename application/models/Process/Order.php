@@ -302,34 +302,37 @@ class Process_Order
             if($this->_consignee['consignee_name'] === ''){
                 $this->_err[] = Ec::Lang('收件人姓名不可为空');
             }else{
-                if($this->_order['product_code'] =='TNT'){
-                    if(!preg_match('/^[a-zA-Z\s]{1,25}$/', $this->_consignee['consignee_name'])){
-                        $this->_err[] = Ec::Lang('收件人姓名不允许出现非英文，长度最多25字符');
-                    }
-                }else if(!preg_match('/^[a-zA-Z\s]{1,36}$/', $this->_consignee['consignee_name'])){
-            		$this->_err[] = Ec::Lang('收件人姓名不允许出现非英文，长度最多36字符');
-            	}
+            	$reg = "/^[a-zA-Z\s]{1,36}$/";$msg = Ec::Lang('收件人姓名不允许出现非英文，长度最多36字符');
+                switch ($this->_order['product_code']){
+                	case 'TNT':$reg = '/^[a-zA-Z\s]{1,25}$/';$msg=Ec::Lang('收件人姓名不允许出现非英文，长度最多25字符');break;
+                	case 'ESB':$reg = '/^[a-zA-Z\s]{1,50}$/';$msg=Ec::Lang('收件人姓名不允许出现非英文，长度最多50字符');break;
+                }
+                if(!preg_match($reg,$this->_consignee['consignee_name'])){
+                	$this->_err[] = $msg;
+                }
             }
             if($this->_consignee['consignee_street'] === ''){
                 $this->_err[] = Ec::Lang('收件人地址不可为空');
             }else{
-                if($this->_order['product_code'] =='TNT'){
-                    if(!preg_match('/^[\w\W]{0,30}$/', $this->_consignee['consignee_street'])){
-                        $this->_err[] = Ec::Lang('收件人地址长度最多30字符');
-                    }
-                }else if(!preg_match('/^[\w\W]{0,36}$/', $this->_consignee['consignee_street'])){
-            		$this->_err[] = Ec::Lang('收件人地址长度最多36字符');
+            	$reg = "/^[\w\W]{0,36}$/";$msg = Ec::Lang('收件人地址长度最多36字符');
+            	switch ($this->_order['product_code']){
+            		case 'TNT':$reg = '/^[\w\W]{0,30}$/';$msg=Ec::Lang('收件人地址长度最多30字符');break;
+            		case 'ESB':$reg = '/^[\w\W]{0,200}$/';$msg=Ec::Lang('收件人地址长度最多200字符');break;
+            	}
+            	if(!preg_match($reg,$this->_consignee['consignee_street'])){
+            		$this->_err[] = $msg;
             	}
             }
             if ($this->_consignee['consignee_city'] === ''){
             	$this->_err[] = Ec::Lang('收件人城市不可为空');
             }else{
-                if($this->_order['product_code'] =='TNT'){
-                    if(!preg_match('/^[a-zA-Z\s]{1,30}$/', $this->_consignee['consignee_city'])){
-                        $this->_err[] = Ec::Lang('收件人城市不允许出现非英文，长度最多30字符');
-                    }
-                }else if(!preg_match('/^[a-zA-Z\s]{1,36}$/', $this->_consignee['consignee_city'])){
-            		$this->_err[] = Ec::Lang('收件人城市不允许出现非英文，长度最多36字符');
+            	$reg = "/^[a-zA-Z\s]{1,36}$/";$msg = Ec::Lang('收件人城市不允许出现非英文，长度最多36字符');
+            	switch ($this->_order['product_code']){
+            		case 'TNT':$reg = '/^[a-zA-Z\s]{1,30}$/';Ec::Lang('收件人城市不允许出现非英文，长度最多30字符');break;
+            		case 'ESB':$reg = '/^[a-zA-Z\s]{1,100}$/';Ec::Lang('收件人城市不允许出现非英文，长度最多100字符');break;
+            	}
+            	if(!preg_match($reg,$this->_consignee['consignee_city'])){
+            		$this->_err[] = $msg;
             	}
             }
             if(empty($this->_consignee['consignee_postcode'])){
@@ -365,6 +368,10 @@ class Process_Order
                     if($this->_order['order_weight']>70){
                         $this->_err[] = Ec::Lang('货物重量必须小于70kg');
                     }
+                }else if($this->_order['product_code'] =='ESB'){
+                    if(!preg_match("/(^0\.\d{0,3}$)|(^[1-9]\d*(\.\d{0,3})?$)/",$this->_order['order_weight'])){
+                        $this->_err[] = Ec::Lang('货物重量须为数字,最多3位小数');
+                    }
                 }
             	/* if(!preg_match("/(^0\.[5-9]$)|(^[1-9]+(\.?\d?)$)/",$this->_order['order_weight'])){
             		$this->_err[] = Ec::Lang('货物重量须为数字,且小数最多为1位,范围为0.5-999999.9');
@@ -383,30 +390,42 @@ class Process_Order
                     if($this->_order['order_length']>240){
                         $this->_err[] = Ec::Lang('包装长度必须小于240cm');
                     }
+                }else if($this->_order['product_code'] =='ESB'){
+                    if(!preg_match("/^[1-9]\d*(\.0+)?$/",$this->_order['order_length'])){
+                        $this->_err[] = Ec::Lang('包装长度必须是大于0整数');
+                    }
                 }
             }
         }
         
         if($this->_order['order_width']){
             if(! is_numeric($this->_order['order_width'])){
-                $this->_err[] = Ec::Lang('包装长度必须为数字');
+                $this->_err[] = Ec::Lang('包装宽度必须为数字');
             }else{
                 if($this->_order['product_code'] =='TNT'){
                     if($this->_order['order_width']>120){
                         $this->_err[] = Ec::Lang('包装宽度必须小于120cm');
                     }
-                }
+                }else if($this->_order['product_code'] =='ESB'){
+                	if(!preg_match("/^[1-9]\d*(\.0+)?$/",$this->_order['order_width'])){
+                        $this->_err[] = Ec::Lang('包装宽度必须是大于0整数');
+                    }
+                } 
             }
         }
         
         
         if($this->_order['order_height']){
             if(! is_numeric($this->_order['order_height'])){
-                $this->_err[] = Ec::Lang('包装长度必须为数字');
+                $this->_err[] = Ec::Lang('包装高度必须为数字');
             }else{
                 if($this->_order['product_code'] =='TNT'){
                     if($this->_order['order_height']>150){
                         $this->_err[] = Ec::Lang('包装高度必须小于150cm');
+                    }
+                }else if($this->_order['product_code'] =='ESB'){
+                	if(!preg_match("/^[1-9]\d*(\.0+)?$/",$this->_order['order_height'])){
+                        $this->_err[] = Ec::Lang('包装高度必须是大于0整数');
                     }
                 }
             }
@@ -495,6 +514,12 @@ class Process_Order
                 	//                     print_r($invoice);exit;
                 	if(! is_numeric($invoice['invoice_weight'])){
                 		//$this->_err[] = "(" . Ec::Lang('申报信息') . $k . ")" . Ec::Lang('申报重量必须为数字');
+                	}
+                }
+                
+                if(!$invoice['invoice_note']){
+                	if($this->_order['product_code'] =='ESB'){
+                		$this->_err[] = "(" . Ec::Lang('申报信息') . $k . ")" . Ec::Lang('当选择ESB时配货信息不可为空');
                 	}
                 }
             }
