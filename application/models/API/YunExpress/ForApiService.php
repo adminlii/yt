@@ -94,6 +94,7 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
     	$data["Width"] = $this->orderKey["width"];
     	$data["Height"] = $this->orderKey["height"];
     	$data["type"]   = $this->orderKey["type"];
+    	$data["isOrdangerousgoods"] = $this->orderKey["dangerousgoods"];
     	// 收件人
     	$data["ShippingCountryCode"] = $this->orderKey['consigneeCountryCode'];
     	

@@ -381,7 +381,7 @@ function formSubmit(status){
             <input type="text" class="order_phone" value='<{if isset($shipperConsignee)}><{$shipperConsignee.consignee_telephone}><{/if}>'
 							name='consignee[consignee_telephone]' id=consignee_telephone />
         </div>
-        <div class="contentLeft contentType3 borderB" style="height:144px;">
+        <div class="contentLeft contentType3 borderB" style="height:154px;">
         </div>
         
     </div>
@@ -477,8 +477,9 @@ function formSubmit(status){
             </div>
         </div>
     	<div class="title widthRight" style="float:left">6、交运物品详细说明<!--<input type="button" style="margin-left:210px;" value="添加到内容列表" class="btn1"><input type="button" value="内容列表">--></div>
-        <div class="contentLeft contentType5 borderB" style="height:108px;">
-        	<h3 style="margin-bottom:10px;">提供内容和数量*</h3>
+        <div class="contentLeft contentType5 borderB" style="height:118px;">
+        	<h3 style="margin-bottom:10px;float: left;">提供内容和数量*</h3>
+        	<div style="float: left;margin-left: 135px;"><input type="checkbox" name="order[dangerousgoods]" value="1" >是否含有危险品</div>
             <div class="table">
             	<table border="1" cellpadding="0" cellspacing="0">
                 	<tr>

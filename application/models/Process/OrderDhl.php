@@ -839,6 +839,7 @@ class Process_OrderDhl
             'width'=>$this->_order['order_width']?$this->_order['order_width']:10,
             'height'=>$this->_order['order_height']?$this->_order['order_height']:10,
             'insurance_value_gj'=>$this->_order['insurance_value_gj'],
+            'dangerousgoods'=>$this->_order['dangerousgoods'],
             //'customer_channelid'=>$this->_order['customer_channelid']?$this->_order['customer_channelid']:Service_User::getChannelid(),
         );
         

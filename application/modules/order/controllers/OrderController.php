@@ -362,6 +362,7 @@ class Order_OrderController extends Ec_Controller_Action
                 'order_length'=>$order['order_length'],
                 'order_width'=>$order['order_width'],
                 'order_height'=>$order['order_height'],
+            	'dangerousgoods'=>empty($order['dangerousgoods'])?0:1,
                 'buyer_id' =>$order['buyer_id'],
                 'order_id' => $order['order_id'],
                 'order_create_code'=>'w',

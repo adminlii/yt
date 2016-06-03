@@ -237,6 +237,7 @@ class Common_APIChannelDataSet
         $this->orderKey["length"] = $this->orderData['length'];
         $this->orderKey["height"] = $this->orderData['height'];
         $this->orderKey["width"] = $this->orderData['width'];
+        $this->orderKey["dangerousgoods"] = $this->orderData['dangerousgoods'];
         //保险价值
         $this->orderKey["insurance_value_gj"] = $this->orderData['insurance_value_gj'];
         //系统信息
