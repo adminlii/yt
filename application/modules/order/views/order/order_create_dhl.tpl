@@ -497,11 +497,11 @@ function formSubmit(status){
         	<h3 style="margin-bottom:10px;">附上形式发票或商业发票的原版和2份复印件。</h3>
         </div>        
         <div class="contentLeft contentType6 borderR borderB " style="height:89px;">
-        	<h3>发件人增值税/商品服务税号</h3>
+        	<h3>发件人增值税号/企业海关十位编码</h3>
             <input type="text" disabled class="level7 use" name='invoice[invoice_shippertax][]' value='<{$invoice[0].invoice_shippertax}>'>
         </div>
         <div class="contentLeft contentType7 borderB" style="height:89px;">
-        	<h3>收件人增值税/商品服务税号</h3>
+        	<h3>收件人增值税号/企业海关十位编码</h3>
             <input type="text" disabled class="level7 use" name='invoice[invoice_consigneetax][]' value='<{$invoice[0].invoice_consigneetax}>'>
         </div>
         <div class="contentLeft contentType6 borderR borderB">
@@ -510,7 +510,7 @@ function formSubmit(status){
         	 <span>USD</span>	
         </div>
         <div class="contentLeft contentType7 borderB">
-        	<h3>协调商品代码（如果需要）</h3>
+        	<h3>HS CODE（如果需要）</h3>
             <input type="text" disabled class="level7 use" name='invoice[hs_code][]' value='<{$invoice[0].hs_code}>'>
         </div>
         <div class="contentLeft  contentType5 borderB" style="height:72px;">
