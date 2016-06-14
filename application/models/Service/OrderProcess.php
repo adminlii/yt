@@ -58,7 +58,7 @@ class Service_OrderProcess {
                 //'<input type="button" class="importInvoiceBtn baseBtn" op="importInvoice" value="' . Ec::Lang('上传申报信息') . '">',
                 	//'<input type="button" class="importWeightBtn baseBtn" op="importWeight" value="' . Ec::Lang('上传更新重量') . '">',
                     '<input type="button" class="printBtn baseBtn " op="print" value="' . Ec::Lang('打印') . '">',
-                   // '<input type="button" class="printInvoiceBtn baseBtn" op="printInvoice" value="' . Ec::Lang('打印形式发票') . '">',
+                    '<input type="button" class="printInvoiceBtn baseBtn" op="printInvoice" value="' . Ec::Lang('打印形式发票') . '">',
                     '<input type="button" class="printAsnBtn baseBtn" op="printAsn" value="' . Ec::Lang('打印交货清单') . '">',
                     '<input type="button" class="exportBtn baseBtn " op="export" value="' . Ec::Lang('导出') . '">'
                 ),

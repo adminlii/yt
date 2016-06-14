@@ -93,7 +93,13 @@ class Process_OrderDhl
         }
         $this->_invoice = $invoice;
     }
-
+	
+    public function setLabel($labelArr)
+    {
+    	$this->_label = $labelArr;
+    }
+    
+    
     public function setExtraservice($service)
     {	$service = is_null($service)?array():$service;
     	$this->_my_service = $service;
@@ -264,7 +270,7 @@ class Process_OrderDhl
             $this->_err[] = Ec::Lang('发件人信息不可为空');
         }else{
             if($this->_shipper['shipper_countrycode'] === ''){
-                // $this->_err[] = Ec::Lang('发件人国家不可为空');
+                 $this->_err[] = Ec::Lang('发件人国家不可为空');
             }else{
                  //$country = Service_IddCountry::getByField($this->_shipper['shipper_countrycode'], 'country_code');
                 $country = $this->_getCountry($this->_shipper['shipper_countrycode']);
@@ -277,7 +283,7 @@ class Process_OrderDhl
             if($this->_shipper['shipper_name'] === ''){
                  $this->_err[] = Ec::Lang('发件人姓名不可为空');
             }
-            if($this->_shipper['shipper_street'] === ''){
+            if(!$this->_shipper['shipper_street']){
                  $this->_err[] = Ec::Lang('发件人地址不可为空');
             }
         }
@@ -576,6 +582,34 @@ class Process_OrderDhl
         	$this->_consignee = $addressCheckRs['consignee'];
         	$this->_volume=$addressCheckRs['volume'];
         }
+        
+        //验证发票制作
+        if($this->_order['invoice_print']){
+        	if(empty($this->_label)){
+        		$this->_err[]="商品信息必须填写";
+        	}
+        	foreach ($this->_label as $labelk => $label ){
+        		if(!$label['invoice_note'])
+        			$this->_err[] = "(" . Ec::Lang('发票信息') . $labelk . ")" . Ec::Lang('完整描述不可为空');
+        		if(!$label['invoice_quantity'])
+        			$this->_err[] = "(" . Ec::Lang('发票信息') . $labelk . ")" . Ec::Lang('数量不可为空');
+        		else{
+        			if(! is_numeric($label['invoice_quantity'])){
+        				$this->_err[] = $this->_err[] = "(" . Ec::Lang('发票信息') . $labelk . ")" . Ec::Lang('数量必须为数字');
+        			}
+        		}
+        		if(!$label['invoice_unitcharge']){
+        			$this->_err[] = "(" . Ec::Lang('发票信息') . $labelk . ")" . Ec::Lang('单价不可为空');
+        		}else{
+	    			//                     print_r($invoice);exit;
+	    			if(! is_numeric($label['invoice_unitcharge'])){
+	    				$this->_err[] = $this->_err[] = "(" . Ec::Lang('发票信息') . $labelk . ")" . Ec::Lang('单价必须为数字');
+	    			}
+	    		}
+        		
+        	}
+        }
+        
 	}
 
     private function _validateElements()
@@ -863,9 +897,15 @@ class Process_OrderDhl
         $order['order_status'] = 'D';
         $this->_order['order_status'] = $status;
         //echo __LINE__;
-        //var_dump($order);die;
         
-        
+        if($this->_order['invoice_print']){
+        	$order['makeinvoicedate'] = $this->_order['makeinvoicedate']?$this->_order['makeinvoicedate']:'';
+        	$order['export_type'] = $this->_order['export_type']?$this->_order['export_type']:'';
+        	$order['trade_terms'] = $this->_order['trade_terms']?$this->_order['trade_terms']:'';
+        	$order['invoicenum'] = $this->_order['invoicenum']?$this->_order['invoicenum']:'';
+        	$order['pay_type'] = $this->_order['pay_type']?$this->_order['pay_type']:'';
+        	$order['fpnote'] = $this->_order['fpnote']?$this->_order['fpnote']:'';
+        }
         
         $order = Common_Common::arrayNullToEmptyString($order);
        
@@ -909,7 +949,7 @@ class Process_OrderDhl
         // 数据保存 start
         //echo "<pre>";print_r($this->_invoice);die;
         if(!empty($this->_invoice)){
-            foreach($this->_invoice as $row){
+            foreach($this->_invoice as $invoicek =>$row){
                 // print_r($row);
                 $ivs = array(
                     'order_id' => $this->_order_id,
@@ -917,7 +957,7 @@ class Process_OrderDhl
                     'invoice_cnname' => $row['invoice_cnname'],
                     'unit_code' => empty($row['unit_code']) ? 'PCE' : $row['unit_code'],
                     'invoice_quantity' => $row['invoice_quantity'],
-                    'invoice_totalcharge' => $row['invoice_totalcharge'],
+                	'invoice_totalcharge' => $row['invoice_totalcharge'],
                 	//新增
                 	'invoice_weight' => $row['invoice_weight'],
                 	'invoice_totalWeight' => $row['invoice_totalWeight'],
@@ -933,8 +973,25 @@ class Process_OrderDhl
                     'invoice_shippertax'    =>  empty($row['invoice_shippertax'])?'':$row['invoice_shippertax'],
                     'invoice_consigneetax'    =>  empty($row['invoice_consigneetax'])?'':$row['invoice_consigneetax'],
                     'invoice_totalcharge_all'    =>  empty($row['invoice_totalcharge_all'])?0:$row['invoice_totalcharge_all'],
-                    
                 );
+                //发票里面的字段可以覆盖这里
+                if($this->_label[$invoicek]&&$this->_order['invoice_print']){
+                	 if($this->_label[$invoicek]['invoice_note']){
+                	 	$ivs['invoice_note']=$this->_label[$invoicek]['invoice_note'];
+                	 }
+                	 if($this->_label[$invoicek]['invoice_quantity']){
+                	 	$ivs['invoice_quantity']=$this->_label[$invoicek]['invoice_quantity'];
+                	 }
+                	 if($this->_label[$invoicek]['invoice_shipcode']){
+                	 	$ivs['invoice_shipcode']=$this->_label[$invoicek]['invoice_shipcode'];
+                	 }
+                	 if($this->_label[$invoicek]['invoice_proplace']){
+                	 	$ivs['invoice_proplace']=$this->_label[$invoicek]['invoice_proplace'];
+                	 }
+                	 if($this->_label[$invoicek]['invoice_unitcharge']){
+                	 	$ivs['invoice_totalcharge']=$this->_label[$invoicek]['invoice_unitcharge']*$this->_label[$invoicek]['invoice_quantity'];
+                	 }
+                }
                 $ivs = Common_Common::arrayNullToEmptyString($ivs);
                 //print_r($ivs);die;
                 //$sql="insert into csd_invoice (invoice_weight,invoice_totalWeight) values('2','6')";
@@ -959,6 +1016,8 @@ class Process_OrderDhl
             'shipper_fax' => $this->_shipper['shipper_fax'],
             'shipper_mallaccount' => $this->_shipper['shipper_mallaccount']
         );
+        //替换地址||=》" "
+        $shipper['shipper_street']= str_replace("||", " ", $shipper['shipper_street']);
         $consignee = array(
             'consignee_name' => $this->_consignee['consignee_name'],
             'consignee_company' => $this->_consignee['consignee_company'],

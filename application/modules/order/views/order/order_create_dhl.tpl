@@ -111,6 +111,15 @@ input[type="text"]{width:94%; border:1px solid #000; height:30px; line-height:30
 .use{
 background:#cfcfcf;
 }
+.check_li{
+	margin: 3px 5px;
+    height: 20px;
+    line-height: 20px;
+}
+
+.check_li:hover{
+	background:#ee9611;text-decoration:none;
+}
 </style>
 </head>
 <script>
@@ -236,6 +245,12 @@ function formSubmit(status){
 	 	param+='&order[insurance_value]='+insurance_value;
 	 }
 	}
+	//拼接发件人地址
+	var shipperstree = "";
+	$("#shipperstree").val()?shipperstree+=$("#shipperstree").val():'';
+	$("#shipperstree1").val()?shipperstree+="||"+$("#shipperstree1").val():'';
+	$("#shipperstree2").val()?shipperstree+="||"+$("#shipperstree2").val():'';
+	param+='&shipper[shipper_street]='+shipperstree;
 	 loadStart();
 	$.ajax({
 		type: "POST",
@@ -249,6 +264,10 @@ function formSubmit(status){
 				html+="<br/>系统单号:"+json.order.shipper_hawbcode;
                 $('#shipper_hawbcode').val(json.order.shipper_hawbcode);                
 				successTip(html,json.order);
+				 //如果勾选了发票弹窗
+    			
+				if($("#makeinvoice").attr("checked")&&json.ask==1)
+				window.open("/order/invoice-print/invoice-label1/?orderId="+json.order.order_id);
 			}else{
 				 if(json.err){
 					 html+="<ul style='padding:0 25px;list-style-type:decimal;'>";
@@ -266,6 +285,7 @@ function formSubmit(status){
 </script>
 <script type="text/javascript">
 <{include file='order/js/order/order_create_dhl.js'}>
+<{include file='order/js/order/dhl_postcode_view.js'}>
 </script>
 <body>
 <div class="wrapBox">
@@ -290,7 +310,7 @@ function formSubmit(status){
                 <option></option>
             </select>-->
         </div>
-    	<div class="title widthLeft">2、发件人<!--<input type="button" value="添加到地址簿" class="btn1"><input type="button" value="发件人地址簿">--></div>
+    	<div class="title widthLeft">2、发件人<input id="shipperaddaddress" type="button" value="添加到地址簿" class="btn1"><input id="shipperaddrs" type="button" value="发件人地址簿"></div>
         <input type="hidden" name="consignee[shipper_account]" value="<{if isset($shipperCustom)}><{$shipperCustom.shipper_account}><{/if}>">
         <div class="contentLeft contentType4 borderR borderB">
         	<h3>联系人姓名*</h3>
@@ -308,24 +328,33 @@ function formSubmit(status){
         <div class="contentLeft contentType4 borderR borderB" style="height:138px;">
         	<h3>国家*</h3>
             <input type="text"  value="CN" disabled="disabled" style="background:#cfcfcf; margin-bottom:20px;">
-        	<input type="hidden" name="shipper[shipper_countrycode]" value="<{if isset($shipperCustom)}><{$shipperCustom.shipper_countrycode}><{/if}>">
+        	<!--<input type="hidden" name="shipper[shipper_countrycode]" value="<{if isset($shipperCustom)}><{$shipperCustom.shipper_countrycode}><{/if}>">-->
+        	<input type="hidden" name="shipper[shipper_countrycode]" value="CN">
         	<h3>邮编*</h3>
             <input type="text" name="shipper[shipper_postcode]" value="<{if isset($shipperCustom)}><{$shipperCustom.shipper_postcode}><{/if}>">
         </div>
         <div class="contentLeft contentType4 borderB" style="height:138px;">
         	<h3>地址*</h3>
-            <input type="text" name="shipper[shipper_street]" class="checkchar2" style="margin:0px 0 6px" value="<{if isset($shipperCustom)}><{$shipperCustom.shipper_street}><{/if}>">
-            
+            <input type="text" id="shipperstree" placeholder="房间号/楼层/楼座/大厦或小区" class="checkchar2" style="margin:0px 0 6px" value="">
+            <input type="text" id="shipperstree1" placeholder="街道/行政区或工业区" class="checkchar2" style="margin:0px 0 6px" value="">
+            <input type="text" id="shipperstree2" class="checkchar2" style="margin:0px 0 6px" value="">
+            <!--<input type="hidden" name="shipper[shipper_street]" class="checkchar2" style="margin:0px 0 6px" value="<{if isset($shipperCustom)}><{$shipperCustom.shipper_street}><{/if}>">-->
         </div>
         <div class="contentLeft contentType4 borderR">
         	<h3>城市*</h3>
             <input type="text" name="shipper[shipper_city]" class="checkchar2" value="<{if isset($shipperCustom)}><{$shipperCustom.shipper_city}><{/if}>">
+        	<div id="checkpostcodediv" style="position: absolute;width: 200px;height: 200px;background: #cfcfcf;z-index: 11100;left: 236px;top: 379px;overflow: scroll;display:none;">
+			<ul  class="checkul" id="checkpostcode" _type="postcode"></ul> 
+			</div>
+			<div id="checkcitydiv" style="position: absolute;width: 200px;height: 200px;background: #cfcfcf;z-index: 11100;left: 236px;top: 454px;overflow: scroll;display:none;">
+						<ul  class="checkul" id="checkcity" _type="city_ename"></ul> 
+			</div>
         </div>
         <div class="contentLeft contentType4">
         	<h3>电话号码*</h3>
             <input type="text" name="shipper[shipper_telephone]"  class="order_phone" value="<{if isset($shipperCustom)}><{$shipperCustom.shipper_telephone}><{/if}>">
         </div>
-    	<div class="title widthLeft" style="float:left">3、收件人<!--<input type="button" value="添加到地址簿" class="btn1"><input type="button" value="收件人地址簿">--></div>
+    	<div class="title widthLeft" style="float:left">3、收件人<input id="consigneeaddaddress" type="button" value="添加到地址簿" class="btn1"><input id="consigneeaddrs" type="button" value="收件人地址簿"></div>
         <div class="contentLeft contentType3 borderB">
         	<h3>公司名称*</h3>
             <input type="text" class="checkchar" value="<{if isset($shipperConsignee)}><{$shipperConsignee.consignee_company}><{/if}>"
@@ -381,7 +410,7 @@ function formSubmit(status){
             <input type="text" class="order_phone" value='<{if isset($shipperConsignee)}><{$shipperConsignee.consignee_telephone}><{/if}>'
 							name='consignee[consignee_telephone]' id=consignee_telephone />
         </div>
-        <div class="contentLeft contentType3 borderB" style="height:154px;">
+        <div id="boxend" class="contentLeft contentType3 borderB" style="height:154px;">
         </div>
         
     </div>
@@ -524,7 +553,61 @@ function formSubmit(status){
 			<label>保费</label>
 			<input type="text" disabled  class="use invoice_unitcharge" value="" name="order[insurance_value]" disabled style="width:100px;">
 			</div>
-            <!--<div class="seven"><div class="check" style="top:-2px; left:112px;"><input name="" type="checkbox" value=""></div><label>制作发票</label><label>是</label></div>-->
+            <div class="seven"><div class="check" style="top:-2px; left:112px;"><input id="makeinvoice" name="order[invoice_print]" type="checkbox" value="1"></div><label>制作发票</label><label>是</label></div>
+        
+        </div>
+        <div id="invoicetab">
+        <div class="contentLeft contentType4 borderR borderB" style="height:170px;width:246px;">
+        <h3>日期</h3>
+        <input type="text" class="datepicker  invoicelable" value="" name="order[makeinvoicedate]" id="makeinvoicedate">
+        <h3>出口类型</h3>
+        <select class="input_select" name="order[export_type]" default="" id="" style="width: 400px; max-width: 400px;">
+        	<option value="Permanent">Permanent(永久）</option>
+        	<option value="Temporary">Temporary（临时）</option>
+        	<option value="Repair/Return">Repair/Return(返修货）</option>
+        </select>
+        <h3>贸易条款</h3>
+        <select class="input_select" name="order[trade_terms]" default="" id="" style="width: 400px; max-width: 400px;">
+        	<option value="DAP-Delivered at Place">DAP-Delivered at Place</option>
+        	<option value="EXW-Ex Works">EXW-Ex Works</option>
+        	<option value="FCA-Free Carrier">FCA-Free Carrier</option>
+        	<option value="CPT-Carried Paid To">CPT-Carried Paid To</option>
+        	<option value="CIP-Carriage and insurance Paid">CIP-Carriage and insurance Paid</option>
+        	<option value="DAT--Delivered at Terminal">DAT--Delivered at Terminal</option>
+        	<option value="DDP-Delivered Duty Paid">DDP-Delivered Duty Paid</option>
+        </select>
+        </div>
+		<div class="contentLeft contentType4 borderB" style="height:170px;width:243px;">
+		<h3>发票号码</h3>
+		<input type="text" class="invoicelable" style="margin:0px 0 6px" value="" name="order[invoicenum]" id="invoicenum">
+		
+		<h3>付款方式</h3>
+		<input type="text" class="invoicelable" style="margin:0px 0 6px" value="" name="order[pay_type]" id="pay_type">
+		<h3>注释</h3>
+		<input type="text" class="invoicelable" style="margin:0px 0 6px" value="" name="order[fpnote]" id="fpnote">
+		</div>
+		<div class="contentLeft contentType5 borderB" style="height:126px;">
+		<h3>所有金额的货币单位与申报价值一致</h3>
+		<div class="table">
+		<table border="1" cellpadding="0" cellspacing="0"><tbody>
+		<tr><td>完整描述*</td><td>数量*</td><td>商品代码</td><td>单价*</td><td style="border-right:none">产地</td></tr>
+		<tr>
+			<td style="border-bottom:none"><input type="text" class="invoicelable" name="invoice1[invoice_note][]" value=""></td>
+			<td style="border-bottom:none"><input type="text" class="invoicelable quantity" name="invoice1[invoice_quantity][]" value=""></td>
+			<td style="border-bottom:none"><input type="text" class="invoicelable" name="invoice1[invoice_shipcode][]" value=""></td>
+			<td style="border-bottom:none"><input type="text" class="invoicelable invoice_unitcharge" name="invoice1[invoice_unitcharge][]" value=""></td>
+			<td style="border-bottom:none; border-right:none"><input type="text" class="invoicelable" name="invoice1[invoice_proplace][]" value=""></td>
+		</tr>
+		<tr>
+			<td style="border-bottom:none"><input type="text" class="invoicelable" name="invoice1[invoice_note][]" value=""></td>
+			<td style="border-bottom:none"><input type="text" class="invoicelable quantity" name="invoice1[invoice_quantity][]" value=""></td>
+			<td style="border-bottom:none"><input type="text" class="invoicelable" name="invoice1[invoice_shipcode][]" value=""></td>
+			<td style="border-bottom:none"><input type="text" class="invoicelable invoice_unitcharge" name="invoice1[invoice_unitcharge][]" value=""></td>
+			<td style="border-bottom:none; border-right:none"><input type="text" class="invoicelable" name="invoice1[invoice_proplace][]" value=""></td>
+		</tr>
+			<!--
+        <tr><td style="border-bottom:none"></td><td style="border-bottom:none"></td><td style="border-bottom:none"></td><td style="border-bottom:none"></td><td style="border:none"></td></tr>
+                    --></tbody></table><!--<p>包裹总数量：<span>1</span>总重量：<span id="order_weight_ps">0</span>公斤</p>--><input type="hidden" class="input_text weight" value="" name="order[order_weight]" id="order_weight"></div></div>
         </div>        
     	<div class="title widthRight" style="float:left">8、额外服务选项</div>
         <div id="plane2" class="contentLeft contentType5 borderB" style="height:95px;display:none;">
@@ -661,6 +744,8 @@ $(function(){
  
  });*/
  $(function(){
+ 	
+ $(".datepicker").datepicker({ dateFormat: "yy-mm-dd"});
  	var tip = getTipTpl();
 	 if( $("input[name='order[insurance_value_gj]']").siblings('.info').size()==0){
 		 $("input[name='order[insurance_value_gj]']").parent().prepend(tip);
@@ -714,6 +799,8 @@ $(function(){
  
  }
  $("input[name='invoice[invoice_totalcharge_all][]']").keyup(function(){
+	var reg = /^\d+(\.\d{1,2})?$/;
+	err_tip(this,reg,'须为数字,且小数最多为2位');
 	 if($("#product_code").val()=="TNT"){
 	 	checkBfTNT();
 	 }else{
@@ -762,6 +849,172 @@ $(function(){
     	$("#plane2").hide();
     	$("#plane1").show();
     }
+ })
+//dhl 邮编选择
+ $(document).on('click','.check_li',function(){
+ 	switch($(this).parent().attr("_type")){
+ 		case "postcode":
+ 		$("input[name='shipper[shipper_city]']").val($(this).attr("citycode"));
+ 			$("input[name='shipper[shipper_postcode]']").val($(this).attr("postcode"));
+ 			$("input[name='shipper[shipper_name]").val($(this).attr("account"));
+ 			$("#checkpostcodediv").hide();
+ 		;break;
+ 		case "city_ename":
+ 			$("input[name='shipper[shipper_city]']").val($(this).attr("citycode"));
+ 			$("input[name='shipper[shipper_postcode]']").val($(this).attr("postcode"));
+ 			$("input[name='shipper[shipper_name]").val($(this).attr("account"));
+ 			$("#checkcitydiv").hide();
+ 		;break;
+ 	}
+ });
+ $("input[name='shipper[shipper_postcode]']").focus(function(){
+ 	if($("#product_code").val()!="G_DHL")
+	 	return false;
+ 	var val = $(this).val();
+  	var listr=getlistposecode(val,"postcode");
+  	$("#checkpostcode").empty().append(listr);
+ 	$("#checkpostcodediv").show();
+ }).blur(function(){
+ 	if($("#product_code").val()!="G_DHL")
+	 	return false;
+ 	setTimeout('$("#checkpostcodediv").hide()',200);
+ }).keyup(function(){
+ 	if($("#product_code").val()!="G_DHL")
+	 	return false;
+  	var val = $(this).val();
+  	var listr=getlistposecode(val,"postcode");
+  	$("#checkpostcode").empty().append(listr);
+ });
+ 
+  $("input[name='shipper[shipper_city]']").focus(function(){
+  	if($("#product_code").val()!="G_DHL")
+	 	return false;
+ 	var val = $(this).val();
+  	var listr=getlistposecode(val.toUpperCase(),"city_ename");
+  	$("#checkcity").empty().append(listr);
+ 	$("#checkcitydiv").show();
+ }).blur(function(){
+ 	if($("#product_code").val()!="G_DHL")
+	 	return false;
+ 	setTimeout('$("#checkcitydiv").hide()',200);
+ }).keyup(function(){
+ 	if($("#product_code").val()!="G_DHL")
+	 	return false;
+  	var val = $(this).val();
+  	var listr=getlistposecode(val.toUpperCase(),"city_ename");
+  	$("#checkcity").empty().append(listr);
+ });
+ 
+ function getlistposecode(val,type){
+ 	var listr= "";
+ 	var data = getpostcadeData(""+val,type,1);	
+	for(var i in data){
+		listr+="<li account='"+data[i]["dhlcount"]+"' postcode='"+data[i]["postcode"]+"' citycode='"+data[i]["city"]+"' class='check_li'>"+data[i]["city_cname"]+":"+data[i]["postcode"]+"</li>";
+	}
+	console.log(data);
+	return listr;
+ }
+ 
+ //初始化
+ //var listr= getlistposecode("","");
+ //$("#checkpostcode").empty().append(listr);
+ 
+ //弹窗
+ $("#shipperaddrs").click(function(){
+ 	var url = "/order/order/shipper-adress?quick=77";
+	var params = "dialogWidth=800px;dialogHeight=400px";
+	
+	var returnResult = window.showModalDialog(url, '',params);
+	//数据绑定
+	$("input[name='shipper[shipper_name]']").val(returnResult.shipper_name);
+	$("input[name='shipper[shipper_company]']").val(returnResult.shipper_company);
+	streeArr = returnResult.shipper_street.split("||");
+	$("#shipperstree").val(streeArr[0]?streeArr[0]:'');
+	$("#shipperstree1").val(streeArr[1]?streeArr[1]:'');
+	$("#shipperstree2").val(streeArr[2]?streeArr[2]:'');
+	$("input[name='shipper[shipper_city]']").val(returnResult.shipper_city);
+	$("input[name='shipper[shipper_postcode]']").val(returnResult.shipper_postcode);
+	$("input[name='shipper[shipper_telephone]']").val(returnResult.shipper_telephone);
+ });
+ 
+  //弹窗
+ $("#consigneeaddrs").click(function(){
+ 	var url = "/order/order/consignee-adress?quick=77";
+	var params = "dialogWidth=800px;dialogHeight=400px";
+	
+	var returnResult = window.showModalDialog(url, '',params);
+	console.log(returnResult);
+	//数据绑定
+	$("#consignee_company").val(returnResult.consignee_company);
+	$("#country_code").val(returnResult.consignee_countrycode.toLocaleUpperCase());
+	$("#consignee_province").val(returnResult.consignee_province);
+	streeArr = returnResult.consignee_street.split("||");
+	$("#consignee_street").val(streeArr[0]?streeArr[0]:'');
+	$("#consignee_street2").val(streeArr[1]?streeArr[1]:'');
+	$("#consignee_street3").val(streeArr[2]?streeArr[2]:'');
+	$("#consignee_city").val(returnResult.consignee_city);
+	$("#consignee_name").val(returnResult.consignee_name);
+	$("#consignee_postcode").val(returnResult.consignee_postcode);
+	$("#consignee_telephone").val(returnResult.consignee_telephone);
+ });
+ //添加发件人地址
+ $("#shipperaddaddress").click(function(){
+    params={};
+    params.E2=$("input[name='shipper[shipper_name]']").val();
+	params.E3=$("input[name='shipper[shipper_company]']").val();
+	var stree = "";
+	$("#shipperstree").val()?stree+=$("#shipperstree").val():'';
+	$("#shipperstree1").val()?stree+="||"+$("#shipperstree1").val():'';
+	$("#shipperstree2").val()?stree+="||"+$("#shipperstree2").val():'';
+	params.E7=stree;
+	params.E6=$("input[name='shipper[shipper_city]']").val();
+	params.E8=$("input[name='shipper[shipper_postcode]']").val();
+	params.E10=$("input[name='shipper[shipper_telephone]']").val();
+	params.E4 = "CN";
+	params.E5 = "";
+ 	$.post("/order/order/shipper-adress-edit",params,function(data){
+					if(data.state){
+						alert("添加成功");
+					}else{
+						alert(data.errorMessage);
+					}
+				},"json");
+ });
+ //添加收件人地址
+ $("#consigneeaddaddress").click(function(){
+    params={};
+    params.E2=$("#consignee_name").val();
+	params.E3=$("#consignee_company").val();
+	params.E7=$("#consignee_street").val();
+	params.E21=$("#consignee_street2").val();
+	params.E22=$("#consignee_street3").val();
+	params.E6=$("#consignee_city").val();
+	params.E8=$("#consignee_postcode").val();
+	params.E10=$("#consignee_telephone").val();
+	params.E4 =$("#country_code").val();
+	params.E5 = $("#consignee_province").val();
+ 	$.post("/order/order/consignee-adress-edit",params,function(data){
+					if(data.state){
+						alert("添加成功");
+					}else{
+						alert(data.errorMessage);
+					}
+				},"json");
+ });
+ //选择制作发票
+ $("#invoicetab").hide();
+ $("#makeinvoice").change(function(){
+ 	$(".invoicelable").val('');
+    if($(this).attr("checked")){
+    	$("#invoicetab").show();
+    	$("#boxend").css("height","462px");
+    }else{
+    	$("#invoicetab").hide();
+    	$("#boxend").css("height","154px");
+    }
+ });
+ $(".btn2").click(function(){
+ 	//$("input[type!='hidden']").val("");
  })
 });
 </script>

@@ -7,6 +7,43 @@
 </head>
 <body>
 	<{foreach from=$orderArr name=o item=o}>
+	 <{if $o.order.product_code eq "G_DHL"}>
+	 <style>
+*{margin:0; border:0; padding:0; font-family:"微软雅黑","宋体"; font-size:12px;}
+.bt{border:2px solid black;}
+.bt1{border-top:2px solid black;border-right:2px solid black;}
+.bt2{border-left:2px solid black;}
+.bt3{border-bottom:2px solid black;}
+.bt4{border-right:2px solid black;}
+.div1{width:500px;height:200px;float:left;}
+.div2{width:500px;height:200px;float:left;}
+.div3{width:500px;height:260px;float:left;}
+.div4{height:352px;width:1002px}
+.div5{height:50px;}
+.clear{clear:both;width:0px;height:0px;}
+#warp{margin:auto;width:1006px;}
+p{height:20px;line-height:20px;}
+.p1{height:30px;line-height:30px;}
+.comment{height:48px;}
+.invoice{height:30px;text-align:center;}
+.total{margin-left:675px;width:325px;height:40px;}
+.span1{line-height: 30px;height: 30px;display: inline-block;width:498px}
+</style>
+<{assign var="count" value=2}>
+<{section name=loop loop=$count}>
+<if>
+ <{if $smarty.section.loop.index eq 0 }>
+ <{include file='order/views/invoice-label/dhl-label.tpl'}>
+ <h1 style="page-break-after: always; clear: both;background:red;"></h1>
+ <{else}>
+ <{include file='order/views/invoice-label/dhl-label1.tpl'}>
+ <{if !$smarty.foreach.o.last}> 
+	<h1 style="page-break-after: always; clear: both;background:red;"></h1>
+ <{/if}>
+ <{/if}> 
+<{/section}> 
+		 
+	 <{else}>
 	<div class="content">
 		<div style="float: right;">
 			<!-- 如果是fedex产品打印fedex的形式发票格式 -->
@@ -113,6 +150,7 @@
 	</div>
 	<{if !$smarty.foreach.o.last}> 
 	<h1 style="page-break-after: always; clear: both;background:red;"></h1>
+ 	<{/if}>
  	<{/if}>
 	<{/foreach}>
 

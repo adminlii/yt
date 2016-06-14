@@ -91,7 +91,7 @@ class Order_OrderController extends Ec_Controller_Action
             
                 $logArr[$k] = $v;
             }
-            //         print_r($con);exit;
+            //print_r($con);exit;
             $this->view->logArr = $logArr;
             echo Ec::renderTpl($this->tplDirectory . "order_detail.tpl", 'layout');
         }catch (Exception $e){
@@ -347,6 +347,7 @@ class Order_OrderController extends Ec_Controller_Action
             $shipper = $this->getParam('shipper',array());
             //申报信息
             $invoice = $this->getParam('invoice',array());
+            $invoice1 = $this->getParam('invoice1',array());
             //额外服务
             $extraservice = $this->getParam('extraservice',array());
             //预报？草稿？
@@ -374,7 +375,13 @@ class Order_OrderController extends Ec_Controller_Action
                 'customer_channelid'=>Service_User::getChannelid(),
                 'insurance_value' => trim($order['insurance_value']),
                 'insurance_value_gj' => $order['insurance_value_gj'],
-        
+            	'invoice_print'=>empty($order['invoice_print'])?0:1,
+            	'makeinvoicedate'=> $order['makeinvoicedate'],
+            	'export_type'=> $order['export_type'],
+            	'trade_terms'=> $order['trade_terms'],
+            	'invoicenum'=> $order['invoicenum'],
+            	'pay_type'=> $order['pay_type'],
+            	'fpnote'=> $order['fpnote'],
             );
             
             
@@ -509,12 +516,36 @@ class Order_OrderController extends Ec_Controller_Action
                 }
                 !$isNotNullOfInvoice&&$invoiceArr=array();
             } */
-            
+            //标签打印 add
+            $labelArr = array();
+            foreach($invoice1 as $column=>$v){
+            	foreach($v as $kk=>$vv){
+            		$labelArr[$kk][$column] = $vv;
+            	}
+            }
+            //去掉都为空的海关信息
+            foreach ($labelArr as $k=>$v){
+            	$flag = false;
+            	foreach ($v as $vv){
+            		if(!empty($vv)){
+            			$flag=true;
+            			break;
+            		}
+            	}
+            	if(!$flag){
+            		unset($labelArr[$k]);
+            	}
+            }
+            if(! empty($labelArr)){
+            	array_unshift($labelArr, array());
+            	unset($labelArr[0]);
+            }
             //echo 1111;die;
             $process = new Process_OrderDhl();
             $process->setVolume($volumeArr);
             $process->setOrder($orderArr);
             $process->setInvoice($invoiceArr);
+            $process->setLabel($labelArr);
             $process->setExtraservice($extraservice);
             $process->setShipper($shipperArr);
             $process->setConsignee($consigneeArr);
@@ -638,6 +669,7 @@ class Order_OrderController extends Ec_Controller_Action
     		$shipper = $this->getParam('shipper',array());
     		//申报信息
     		$invoice = $this->getParam('invoice',array());
+    		$invoice1 = $this->getParam('invoice1',array());
     		//额外服务
     		$extraservice = $this->getParam('extraservice',array());
     		//预报？草稿？
@@ -664,7 +696,13 @@ class Order_OrderController extends Ec_Controller_Action
     				'customer_channelid'=>Service_User::getChannelid(),
     				'insurance_value' => trim($order['insurance_value']),
     				'insurance_value_gj' => $order['insurance_value_gj'],
-    
+    				'invoice_print'=>empty($order['invoice_print'])?0:1,
+    				'makeinvoicedate'=> $order['makeinvoicedate'],
+    				'export_type'=> $order['export_type'],
+    				'trade_terms'=> $order['trade_terms'],
+    				'invoicenum'=> $order['invoicenum'],
+    				'pay_type'=> $order['pay_type'],
+    				'fpnote'=> $order['fpnote'],
     		);
     
     
@@ -764,12 +802,36 @@ class Order_OrderController extends Ec_Controller_Action
     			array_unshift($invoiceArr, array());
     			unset($invoiceArr[0]);
     		}
-    
     		
+    		//标签打印 add
+    		$labelArr = array();
+    		foreach($invoice1 as $column=>$v){
+    			foreach($v as $kk=>$vv){
+    				$labelArr[$kk][$column] = $vv;
+    			}
+    		}
+    		//去掉都为空的海关信息
+    		foreach ($labelArr as $k=>$v){
+    			$flag = false;
+    			foreach ($v as $vv){
+    				if(!empty($vv)){
+    					$flag=true;
+    					break;
+    				}
+    			}
+    			if(!$flag){
+    				unset($labelArr[$k]);
+    			}
+    		}
+    		if(! empty($labelArr)){
+    			array_unshift($labelArr, array());
+    			unset($labelArr[0]);
+    		}
     		$process = new Process_OrderDhl();
     		$process->setVolume($volumeArr);
     		$process->setOrder($orderArr);
     		$process->setInvoice($invoiceArr);
+    		$process->setLabel($labelArr);
     		$process->setExtraservice($extraservice);
     		$process->setShipper($shipperArr);
     		$process->setConsignee($consigneeArr);
@@ -863,7 +925,7 @@ class Order_OrderController extends Ec_Controller_Action
     	//选取默认收件人
     	$this->view->shipperCustom=$this->getShipper($order_id,1);
     	//var_dump($this->getShipper($order_id,1));
-    	$html =  Ec::renderTpl($this->tplDirectory . "order_create_tnt1.tpl", 'system-layout-0506');
+    	$html =  Ec::renderTpl($this->tplDirectory . "order_create_tnt.tpl", 'system-layout-0506');
     	$html = preg_replace('/>\s+</','><',$html);
     	echo $html;
     }
@@ -1325,6 +1387,276 @@ class Order_OrderController extends Ec_Controller_Action
 			die(Zend_Json::encode($return));
 		}
 	}
+	
+	public function shipperAdressAction(){
+		$CsiShipperTrailerAddress = new Service_CsiShipperTrailerAddress();
+	 	$condition['customer_id'] = Service_User::getCustomerId();
+    	$condition['customer_channelid'] = Service_User::getChannelid();
+    	$showFields=array(
+    			'shipper_account',
+    			'shipper_name',
+    			'shipper_company',
+    			'shipper_countrycode',
+    			'shipper_province',
+    			'shipper_city',
+    			'shipper_street',
+    			'shipper_postcode',
+    			'shipper_telephone',
+    			'shipper_mobile',
+    			'shipper_email',
+    			'shipper_certificatetype',
+    			'shipper_certificatecode',
+    			'shipper_fax',
+    			'shipper_mallaccount',
+    			'is_default',
+    	);
+    	$rows = $CsiShipperTrailerAddress->getByCondition($condition,'*', 0, 1, array('shipper_account asc'));
+    	$this->view->rows = $rows;
+    	echo $this->view->render($this->tplDirectory . "shipper_address.tpl");
+	}
+	
+	public function shipperAdressDelAction(){
+		$result = array(
+				"state" => 0,
+				"message" => "Fail."
+		);
+		if ($this->_request->isPost()) {
+			$CsiShipperTrailerAddress = new Service_CsiShipperTrailerAddress();
+			$paramId = $this->_request->getPost('paramId');
+			if (!empty($paramId)) {
+				if ($CsiShipperTrailerAddress->delete($paramId)) {
+					$result['state'] = 1;
+					$result['message'] = 'Success.';
+				}
+			}
+		}
+		die(Zend_Json::encode($result));
+	}
+	
+	public function shipperAdressEditAction(){
+		if ($this->_request->isPost()) {
+			$return = array(
+					'state' => 0,
+					'message' => '',
+					'errorMessage'=>array('Fail.')
+			);
+			$params = $this->_request->getParams();
+			$row = array(
+					'shipper_account'=>'',
+					'shipper_name'=>'',
+					'shipper_company'=>'',
+					'shipper_countrycode'=>'',
+					'shipper_province'=>'',
+					'shipper_city'=>'',
+					'shipper_street'=>'',
+					'shipper_postcode'=>'',
+					'shipper_telephone'=>'',
+					'is_default'=>'0',
+			);
+			$CsiShipperTrailerAddress = new Service_CsiShipperTrailerAddress();
+			$row = $CsiShipperTrailerAddress->getMatchEditFields($params,$row);
+			$paramId = $row['shipper_account'];
+			if (!empty($row['shipper_account'])) {
+				unset($row['shipper_account']);
+			}
+			foreach ($row as $key => $value) {
+				$row[$key] = ($value != '')?trim($value):$value;
+			}
+			
+			$errorArr = $CsiShipperTrailerAddress->validator($row);
+		
+			if (!empty($errorArr)) {
+				$return = array(
+						'state' => 0,
+						'message'=>'',
+						'errorMessage' => $errorArr
+				);
+				die(Zend_Json::encode($return));
+			}
+			$row = Common_Common::arrayNullToEmptyString($row);
+			$format = 'Y-m-d H:i:s';
+			$row['modify_date_sys'] = date($format);
+			$row['customer_id'] = Service_User::getCustomerId();
+			$row['customer_channelid'] = Service_User::getChannelid();
+			if (!empty($paramId)) {
+				$row['is_modify'] = '1';
+				$result = $CsiShipperTrailerAddress->update($row, $paramId);
+				$shipper_account = $paramId;
+			} else {
+				$row['create_date_sys'] = date($format);
+				$result = $CsiShipperTrailerAddress->add($row);
+				$shipper_account = $result;
+			}
+		
+			if($row['is_default']){
+				Service_CsiShipperTrailerAddress::update(array('is_default'=>'0'), Service_User::getCustomerId(), 'customer_id');
+				Service_CsiShipperTrailerAddress::update(array('is_default'=>'1'), $shipper_account, 'shipper_account');
+			}
+		
+			if ($result) {
+				$return['state'] = 1;
+				$return['message'] = array('Success.');
+			}
+			die(Zend_Json::encode($return));
+		
+		}
+		
+	}
+	
+	public function consigneeAdressAction(){
+		$CsiConsigneeTrailerAddress = new Service_CsiConsigneeTrailerAddress();
+		$condition['customer_id'] = Service_User::getCustomerId();
+		$condition['customer_channelid'] = Service_User::getChannelid();
+		$showFields=array(
+				'consignee_account',
+				'consignee_name',
+				'consignee_company',
+				'consignee_countrycode',
+				'consignee_province',
+				'consignee_city',
+				'consignee_street',
+				'consignee_street1',
+				'consignee_street2',
+				'consignee_postcode',
+				'consignee_telephone',
+				'consignee_mobile',
+				'consignee_email',
+				'consignee_certificatetype',
+				'consignee_certificatecode',
+				'consignee_fax',
+				'consignee_mallaccount',
+				'is_default',
+		);
+		$rows = $CsiConsigneeTrailerAddress->getByCondition($condition,'*', 0, 1, array('consignee_account asc'));
+		foreach ($rows as $k=>$v){
+			$result_country = Service_IddCountry::getByField($v['consignee_countrycode'],'country_code');
+			$rows[$k]['country_cnname']=$result_country['country_cnname'];
+		}
+		
+		$this->view->rows = $rows;
+		//print_r($rows);
+		echo $this->view->render($this->tplDirectory . "consignee_address.tpl");
+	}
+	
+	public function consigneeAdressEditAction(){
+		if ($this->_request->isPost()) {
+			$return = array(
+					'state' => 0,
+					'message' => '',
+					'errorMessage'=>array('Fail.')
+			);
+			$params = $this->_request->getParams();
+			$row = array(
+					'consignee_account'=>'',
+					'consignee_name'=>'',
+					'consignee_company'=>'',
+					'consignee_countrycode'=>'',
+					'consignee_province'=>'',
+					'consignee_city'=>'',
+					'consignee_street'=>'',
+					'consignee_street1'=>'',
+					'consignee_street2'=>'',
+					'consignee_postcode'=>'',
+					'consignee_telephone'=>'',
+					'is_default'=>'0',
+			);
+			$CsiConsigneeTrailerAddress = new Service_CsiConsigneeTrailerAddress();
+
+			$row = $CsiConsigneeTrailerAddress->getMatchEditFields($params,$row);
+			$paramId = $row['consignee_account'];
+			if (!empty($row['consignee_account'])) {
+				unset($row['consignee_account']);
+			}
+			foreach ($row as $key => $value) {
+				$row[$key] = ($value != '')?trim($value):$value;
+			}
+			$errorArr = $CsiConsigneeTrailerAddress->validator($row);
+			if (!empty($errorArr)) {
+				$return = array(
+						'state' => 0,
+						'message'=>'',
+						'errorMessage' => $errorArr
+				);
+				die(Zend_Json::encode($return));
+			}
+			$row = Common_Common::arrayNullToEmptyString($row);
+			$format = 'Y-m-d H:i:s';
+			$row['modify_date_sys'] = date($format);
+			$row['customer_id'] = Service_User::getCustomerId();
+			$row['customer_channelid'] = Service_User::getChannelid();
+			if (!empty($paramId)) {
+				$row['is_modify'] = '1';
+				$result = $CsiConsigneeTrailerAddress->update($row, $paramId);
+				$consignee_account = $paramId;
+			} else {
+				$row['create_date_sys'] = date($format);
+				$result = $CsiConsigneeTrailerAddress->add($row);
+				$consignee_account = $result;
+			}
+	
+			if($row['is_default']){
+				Service_CsiConsigneeTrailerAddress::update(array('is_default'=>'0'), Service_User::getCustomerId(), 'customer_id');
+				Service_CsiConsigneeTrailerAddress::update(array('is_default'=>'1'), $consignee_account, 'consignee_account');
+			}
+	
+			if ($result) {
+				$return['state'] = 1;
+				$return['message'] = array('Success.');
+			}
+			die(Zend_Json::encode($return));
+	
+		}
+	
+	}
+	
+	public function consigneeAdressDelAction(){
+		$result = array(
+				"state" => 0,
+				"message" => "Fail."
+		);
+		if ($this->_request->isPost()) {
+			$CsiConsigneeTrailerAddress = new Service_CsiConsigneeTrailerAddress();
+			$paramId = $this->_request->getPost('paramId');
+			if (!empty($paramId)) {
+				$db = Common_Common::getAdapter();
+				$db->beginTransaction();
+				$delflag=1;
+				foreach ($paramId as $k=>$v){
+					if (!$CsiConsigneeTrailerAddress->delete($v)) {
+						$delflag=0;
+						break;
+					}
+				}
+				if($delflag){
+					$db->commit();
+					$result['state'] = 1;
+					$result['message'] = 'Success.';
+				}else
+					$db->rollback();
+			}	
+		}
+		die(Zend_Json::encode($result));
+	}
+	
+	//批量导入收件人
+	public function consigneeAdressUploadAction(){
+		$consignee_addreeupload = new Process_ConsigneeAddressUpload();
+		$uploadData = $consignee_addreeupload->upload($_FILES["connectFile"]);
+		if(! empty($uploadData)){
+              array_unshift($uploadData, array());
+              unset($uploadData[0]);
+        }
+		$consignee_addreeupload->_dataProcess($uploadData);
+		$errs = $consignee_addreeupload->getErr();
+		if(empty($consignee_addreeupload->getErr())){
+			$this->_redirect('/order/order/consignee-adress');
+		}else{
+			$this->view->html = $errs;
+			echo $this->view->render($this->tplDirectory . "error_uploadconadress.tpl");
+		}
+		
+	}
+	
 }
 
 

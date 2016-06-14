@@ -94,9 +94,9 @@ class Service_CsiShipperTrailerAddress extends Common_Service
     {
         $validateArr = $error = array();
         $validateArr[] = array("name" =>EC::Lang('发件人名称'), "value" =>$val["shipper_name"], "regex" => array("require",));
-        $validateArr[] = array("name" =>EC::Lang('公司名'), "value" =>$val["shipper_company"], "regex" => array("require",));
+        //$validateArr[] = array("name" =>EC::Lang('公司名'), "value" =>$val["shipper_company"], "regex" => array("require",));
         $validateArr[] = array("name" =>EC::Lang('国家'), "value" =>$val["shipper_countrycode"], "regex" => array("require",));
-        $validateArr[] = array("name" =>EC::Lang('省/州'), "value" =>$val["shipper_province"], "regex" => array("require",));
+        //$validateArr[] = array("name" =>EC::Lang('省/州'), "value" =>$val["shipper_province"], "regex" => array("require",));
         $validateArr[] = array("name" =>EC::Lang('城市'), "value" =>$val["shipper_city"], "regex" => array("require",));
         $validateArr[] = array("name" =>EC::Lang('联系地址'), "value" =>$val["shipper_street"], "regex" => array("require",));
         $validateArr[] = array("name" =>EC::Lang('邮编'), "value" =>$val["shipper_postcode"], "regex" => array("require",));

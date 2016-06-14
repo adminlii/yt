@@ -64,6 +64,7 @@ function err_tip(obj,reg,msg){
 			var val = $(obj).val();
 			
 			var tip = getTipTpl();
+			
 			if($(obj).siblings('.info').size()==0){
 				$(obj).parent().prepend(tip);
 			}else{
@@ -150,7 +151,7 @@ $('.checkchar1').live('keyup',function(){
 //城市 
 $('.checkchar3').live('keyup',function(){
 	if($("#product_code").val()=="TNT")
-		err_tip(this,/^[\w\W]{0,30}$/,'长度最多30字符');
+		err_tip(this,/^[a-zA-Z\s]{0,30}$/,'长度最多30字符');
 	else
 		err_tip(this,/^[a-zA-Z\s]+$/,'不允许出现非英文');
 })
@@ -158,9 +159,9 @@ $('.checkchar3').live('keyup',function(){
 //地址
 $('.checkchar2').live('keyup',function(){
 	if($("#product_code").val()=="TNT")
-		err_tip(this,/^[\w\W]{0,30}$/,'长度最多30字符');
+		err_tip(this,/^[0-9a-zA-Z\s]{0,30}$/,'长度最多30字符');
 	else
-		err_tip(this,/^[\w\W]{0,36}$/,'长度最多36字符');
+		err_tip(this,/^[0-9a-zA-Z\s]{0,36}$/,'长度最多36字符');
 })
 
 //发件人参考信息：商户订单号
@@ -172,7 +173,7 @@ $('.checkchar5').live('keyup',function(){
 	if($("#product_code").val()=="TNT")
 		err_tip(this,/^[a-zA-Z\s]{1,25}$/,'不允许出现非英文，长度最多25字符');
 	else
-		err_tip(this,/^[\w\W]{0,35}$/,'长度最多35字符');
+		err_tip(this,/^[a-zA-Z\s]{1,36}$/,'长度最多36字符');
 })
 
 // 体积
