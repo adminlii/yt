@@ -36,7 +36,7 @@ function getprivinceBypostcade(pid){
 	return data;
 }
 
-function getpostcadeData(select,type,extend){
+function _getpostcadeData(select,type,extend){
 	var data = [];
 	for(var i in postcade_view){
 		if(postcade_view[i][type].match(select)){
@@ -54,4 +54,71 @@ function getpostcadeData(select,type,extend){
 	
 	return data;
 		
+}
+
+var _postcade_view = postcade_view;
+//为了减少循环 只有当筛选条件国家为中国的时候
+for(var i in _postcade_view){
+	var provice = getprivinceBypostcade(_postcade_view[i]['pid']);
+	if(provice["id"]){
+		for(var j in provice){
+			_postcade_view[i][j]=provice[j];
+		}
+	}
+}
+function getpostcadeData(select,that,obj,obj1,isshow){
+	if(!select.cd){
+		that.blur();
+		alert('没有选择国家');
+		return false;
+	}
+	if(select.pc||select.cn){
+		$.post("/order/order/get-postcode-list",select,function(data){
+			var data ;
+			if(data.state){
+				//
+				if(select.cd=='CN'){
+					for(var i in data.data){
+						data.data[i]['city'] = data.data[i]['cityename'];
+						
+						for(var j in _postcade_view){
+							if(data.data[i]['cityename']==_postcade_view[j]['city_ename']){
+								//data.data[i]['city'] 	= _postcade_view[j]['city'];
+								//data.data[i]['province_name']= _postcade_view[j]['province_name'];
+								data.data[i]['dhlcount'] = _postcade_view[j]['dhlcount'];
+								break;
+							}
+						}
+						
+					}
+				}
+				
+			}else{
+				
+			}
+			//
+			var listr= "";
+			for(var i in data.data){
+				var dhlcount = data.data[i]["dhlcount"]?data.data[i]["dhlcount"]:'';
+				var city = data.data[i]["city"]?data.data[i]["city"]:data.data[i]["cityename"];
+				if(city){
+					var index = city.indexOf(",");
+					if(index>=0){
+						city =  city.substr(0,index);
+					}
+				}
+				var provinceename = data.data[i]["provinceename"]?data.data[i]["provinceename"]:'';
+				listr+="<li provinceename='"+provinceename+"' account='"+dhlcount+"' postcode='"+data.data[i]["postcode"]+"' citycode='"+city+"' class='check_li'>"+data.data[i]["cityename"]+":"+data.data[i]["postcode"]+"</li>";
+			}
+			obj.empty().append(listr);
+			if(isshow){
+				obj1.show();
+			}
+		},"json");	
+	}else{
+		obj.empty().append('');
+		if(isshow){
+			obj1.show();
+		}
+	}
 }

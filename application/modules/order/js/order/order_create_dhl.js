@@ -151,7 +151,7 @@ $('.checkchar1').live('keyup',function(){
 //城市 
 $('.checkchar3').live('keyup',function(){
 	if($("#product_code").val()=="TNT")
-		err_tip(this,/^[a-zA-Z\s]{0,30}$/,'长度最多30字符');
+		err_tip(this,/^[a-zA-Z\s]{0,30}$/,'不允许出现非英文,长度最多30字符');
 	else
 		err_tip(this,/^[a-zA-Z\s]+$/,'不允许出现非英文');
 })
@@ -173,7 +173,7 @@ $('.checkchar5').live('keyup',function(){
 	if($("#product_code").val()=="TNT")
 		err_tip(this,/^[a-zA-Z\s]{1,25}$/,'不允许出现非英文，长度最多25字符');
 	else
-		err_tip(this,/^[a-zA-Z\s]{1,36}$/,'长度最多36字符');
+		err_tip(this,/^[a-zA-Z\s]{1,36}$/,'不允许出现非英文，长度最多36字符');
 })
 
 // 体积
@@ -223,5 +223,14 @@ $('.invoename').live('keyup',function(){
 	err_tip(this,reg,'须为英文');
 })
 // ==============结束
-
+function checkjsonequire(obj1,obj2){ 
+	if($.isEmptyObject(obj1)||$.isEmptyObject(obj2))
+		return false;
+	for(var i in obj1){
+			if(obj1[i]!=obj2[i])
+				return false;
+		
+	}
+	return true;
+}
 

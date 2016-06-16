@@ -644,7 +644,7 @@ class Order_OrderController extends Ec_Controller_Action
         $mailCargoTypes = Service_AtdMailCargoType::getByCondition($con);
         $this->view->mailCargoTypes = $mailCargoTypes;
         //选取默认收件人
-        $this->view->shipperCustom=$this->getShipper($order_id,1);
+        //$this->view->shipperCustom=$this->getShipper($order_id,1);
         //var_dump($this->getShipper($order_id,1));
         $html =  Ec::renderTpl($this->tplDirectory . "order_create_dhl.tpl", 'system-layout-0506');
         $html = preg_replace('/>\s+</','><',$html);
@@ -1656,7 +1656,30 @@ class Order_OrderController extends Ec_Controller_Action
 		}
 		
 	}
-	
+	//邮编记录查询
+	public function getPostcodeListAction(){
+		$result = array(
+				"state" => 0,
+				"message" => "Fail."
+		);
+		if ($this->_request->isPost()) {
+			$condition = array();
+			$condition['countrycode'] = !empty($this->_request->getPost('cd'))?$this->_request->getPost('cd'):'';
+			$condition['cityename'] = !empty($this->_request->getPost('cn'))?$this->_request->getPost('cn'):'';;
+			$condition['postcode'] = !empty($this->_request->getPost('pc'))?$this->_request->getPost('pc'):'';;
+			$condition['status'] = 1;
+			$csiPostcodeRule	=	new Service_CsiPostcodeRule();
+			if (!empty($condition)) {
+				$res = $csiPostcodeRule->getByCondition($condition);
+				if(!empty($res)){
+					$result['state']   = 1;
+					$result['data']    = $res;
+					$result['message'] = 'Success.';
+				}
+			}
+		}
+		die(Zend_Json::encode($result));
+	}
 }
 
 

@@ -112,7 +112,8 @@ input[type="text"]{width:94%; border:1px solid #000; height:30px; line-height:30
 background:#cfcfcf;
 }
 .check_li{
-	margin: 3px 5px;
+	margin-left: 3px ;
+	margin-top: 5px ;
     height: 20px;
     line-height: 20px;
 }
@@ -182,6 +183,8 @@ function successTip(tip, order) {
 	        },
 	        open:function(){
 	        	$('.ui-dialog-titlebar-close',$(this).parent()).remove();
+	        
+	        	
 	        }
 	    });
 	}else{
@@ -222,6 +225,7 @@ function successTip(tip, order) {
 	        	$('.ui-dialog-titlebar-close',$(this).parent()).remove();
 	        }
 	    });
+	    
 	}
     
 }
@@ -343,12 +347,19 @@ function formSubmit(status){
         <div class="contentLeft contentType4 borderR">
         	<h3>城市*</h3>
             <input type="text" name="shipper[shipper_city]" class="checkchar2" value="<{if isset($shipperCustom)}><{$shipperCustom.shipper_city}><{/if}>">
-        	<div id="checkpostcodediv" style="position: absolute;width: 200px;height: 200px;background: #cfcfcf;z-index: 11100;left: 236px;top: 379px;overflow: scroll;display:none;">
+        	<div id="checkpostcodediv" style="position: absolute;min-width: 200px;height: 200px;background: #cfcfcf;z-index: 11100;top: 379px;overflow: scroll;display:none;">
 			<ul  class="checkul" id="checkpostcode" _type="postcode"></ul> 
 			</div>
-			<div id="checkcitydiv" style="position: absolute;width: 200px;height: 200px;background: #cfcfcf;z-index: 11100;left: 236px;top: 454px;overflow: scroll;display:none;">
+			<div id="checkcitydiv" style="position: absolute;min-width: 200px;height: 200px;background: #cfcfcf;z-index: 11100;top: 454px;overflow: scroll;display:none;">
 						<ul  class="checkul" id="checkcity" _type="city_ename"></ul> 
 			</div>
+			<div id="checkpostcodediv1" style="position: absolute;min-width: 200px;height: 200px;background: #cfcfcf;z-index: 11100;top: 819px;overflow: scroll;display:none;">
+					<ul  class="checkul" id="checkpostcode1" _type="postcode1"></ul> 
+			</div>
+			<div id="checkcitydiv1" style="position: absolute;min-width: 200px;height: 200px;background: #cfcfcf;z-index: 11100;top: 754px;overflow: scroll;display:none;">
+					<ul  class="checkul" id="checkcity1" _type="city_ename1"></ul> 
+			</div>
+			
         </div>
         <div class="contentLeft contentType4">
         	<h3>电话号码*</h3>
@@ -553,7 +564,7 @@ function formSubmit(status){
 			<label>保费</label>
 			<input type="text" disabled  class="use invoice_unitcharge" value="" name="order[insurance_value]" disabled style="width:100px;">
 			</div>
-            <div class="seven"><div class="check" style="top:-2px; left:112px;"><input id="makeinvoice" name="order[invoice_print]" type="checkbox" value="1"></div><label>制作发票</label><label>是</label></div>
+            <div class="seven"><div class="check" style="top:-2px; left:112px;"><input class="level7" id="makeinvoice" name="order[invoice_print]" type="checkbox" disabled value="1"></div><label>制作发票</label><label>是</label></div>
         
         </div>
         <div id="invoicetab">
@@ -686,6 +697,12 @@ $(function(){
  		$("input[name='order[insurance_value_gj]']").val('');
  		$("input[name='order[insurance_value]']").val('');
  		$("input[name='extraservice[]']").attr('checked',false);
+ 		$("#makeinvoice").attr('checked',false);
+ 		//收拢发票
+ 		$("#invoicetab").hide();
+ 		$("#invoicetab input").val('');
+ 		$("#invoicetab .info").hide();
+    	$("#boxend").css("height","154px");
  	}else{
  		$(".level8").attr("disabled","true");
  		$(".level7").addClass("use").removeClass("use");;
@@ -696,6 +713,7 @@ $(function(){
  		}
  		//清掉文件保险
  		$("input[name='extraservice[]']").attr('checked',false);
+ 		$("#makeinvoice").attr('checked',false);
  	}
  })	
  //计算保费
@@ -786,7 +804,6 @@ $(function(){
 	var msg = '保险金额不得大于申报价值';
 	var tip = $("input[name='order[insurance_value_gj]']").siblings('.info');
  	if(now_value>max_insurance_value){
- 		console.log(1);
  		$('.Validform_checktip',tip).text(msg);
  		tip.hide();
 		tip.show("fast",function(){$(this).css("display","block")});
@@ -854,70 +871,156 @@ $(function(){
  $(document).on('click','.check_li',function(){
  	switch($(this).parent().attr("_type")){
  		case "postcode":
- 		$("input[name='shipper[shipper_city]']").val($(this).attr("citycode"));
- 			$("input[name='shipper[shipper_postcode]']").val($(this).attr("postcode"));
- 			$("input[name='shipper[shipper_name]").val($(this).attr("account"));
+ 			$("input[name='shipper[shipper_city]']").val($(this).attr("citycode")?$(this).attr("citycode"):'');
+ 			$("input[name='shipper[shipper_postcode]']").val($(this).attr("postcode")?$(this).attr("postcode"):'');
+ 			$(this).attr("account")?$("input[name='shipper[shipper_name]").val($(this).attr("account")):'';
  			$("#checkpostcodediv").hide();
  		;break;
  		case "city_ename":
- 			$("input[name='shipper[shipper_city]']").val($(this).attr("citycode"));
- 			$("input[name='shipper[shipper_postcode]']").val($(this).attr("postcode"));
- 			$("input[name='shipper[shipper_name]").val($(this).attr("account"));
+ 			$("input[name='shipper[shipper_city]']").val($(this).attr("citycode")?$(this).attr("citycode"):'');
+ 			$("input[name='shipper[shipper_postcode]']").val($(this).attr("postcode")?$(this).attr("postcode"):'');
+ 			$(this).attr("account")?$("input[name='shipper[shipper_name]").val($(this).attr("account")):'';
  			$("#checkcitydiv").hide();
+ 		;break;
+ 		case "postcode1":
+ 			$("#consignee_city").val($(this).attr("citycode")?$(this).attr("citycode"):'');
+ 			$("#consignee_postcode").val($(this).attr("postcode")?$(this).attr("postcode"):'');
+ 			//$("input[name='shipper[shipper_name]").val($(this).attr("account")?$(this).attr("account"):'');
+ 			$("#consignee_province").val($(this).attr("provinceename")?$(this).attr("provinceename"):'');
+ 			$("#checkpostcodediv1").hide();
+ 		;break;
+ 		case "city_ename1":
+ 			$("#consignee_city").val($(this).attr("citycode")?$(this).attr("citycode"):'');
+ 			$("#consignee_postcode").val($(this).attr("postcode")?$(this).attr("postcode"):'');
+ 			//$("input[name='shipper[shipper_name]").val($(this).attr("account")?$(this).attr("account"):'');
+ 			$("#consignee_province").val($(this).attr("provinceename")?$(this).attr("provinceename"):'');
+ 			$("#checkcitydiv1").hide();
  		;break;
  	}
  });
+ //记录keyup时间的时间如果keyup时间太短则终止上次延迟执行的事件
+  window.lastKeyUp = {};
+  window.lastKeyUp.lasttime_1 = {time:0,timer:null}; //上次执行时间初始化
+  
  $("input[name='shipper[shipper_postcode]']").focus(function(){
- 	if($("#product_code").val()!="G_DHL")
-	 	return false;
- 	var val = $(this).val();
-  	var listr=getlistposecode(val,"postcode");
-  	$("#checkpostcode").empty().append(listr);
- 	$("#checkpostcodediv").show();
+ 	
+ 	//if($("#product_code").val()!="G_DHL")
+	 //	return false;
+	$("#checkpostcodediv").show();
+ 		return false;
+ 	var select = {};
+ 	select.cd = $("input[name='shipper[shipper_countrycode]']").val();
+ 	select.pc = $(this).val().toUpperCase();
+ 	
+ 	getpostcadeData(select,$(this),$("#checkpostcode"),$("#checkpostcodediv"),1);
  }).blur(function(){
- 	if($("#product_code").val()!="G_DHL")
-	 	return false;
+ 	//if($("#product_code").val()!="G_DHL")
+	 	//return false;
  	setTimeout('$("#checkpostcodediv").hide()',200);
  }).keyup(function(){
  	if($("#product_code").val()!="G_DHL")
 	 	return false;
-  	var val = $(this).val();
-  	var listr=getlistposecode(val,"postcode");
-  	$("#checkpostcode").empty().append(listr);
+	var select = {};
+ 	select.cd = $("input[name='shipper[shipper_countrycode]']").val();
+ 	select.pc = $(this).val().toUpperCase();
+ 	var nowtime = new Date().getTime();
+ 	var timer = setTimeout(function(){getpostcadeData(select,$(this),$("#checkpostcode"),$("#checkpostcodediv"),0)},200); 	
+  	if(nowtime-window.lastKeyUp.lasttime_1.time<200){
+  		clearTimeout(window.lastKeyUp.lasttime_1.timer);
+  	}	
+ 	window.lastKeyUp.lasttime_1.time = nowtime;
+  	window.lastKeyUp.lasttime_1.timer=timer;
  });
  
   $("input[name='shipper[shipper_city]']").focus(function(){
-  	if($("#product_code").val()!="G_DHL")
-	 	return false;
- 	var val = $(this).val();
-  	var listr=getlistposecode(val.toUpperCase(),"city_ename");
-  	$("#checkcity").empty().append(listr);
- 	$("#checkcitydiv").show();
+  	
+  	//if($("#product_code").val()!="G_DHL")
+	 	//return false;
+	$("#checkcitydiv").show();
+  	return false; 	
+	 	var select = {};
+ 	select.cd = $("input[name='shipper[shipper_countrycode]']").val();
+ 	select.cn = $(this).val().toUpperCase();
+ 	
+ 	getpostcadeData(select,$(this),$("#checkcity"),$("#checkcitydiv"),1);
  }).blur(function(){
- 	if($("#product_code").val()!="G_DHL")
-	 	return false;
+ 	//if($("#product_code").val()!="G_DHL")
+	 //	return false;
  	setTimeout('$("#checkcitydiv").hide()',200);
  }).keyup(function(){
- 	if($("#product_code").val()!="G_DHL")
-	 	return false;
-  	var val = $(this).val();
-  	var listr=getlistposecode(val.toUpperCase(),"city_ename");
-  	$("#checkcity").empty().append(listr);
+ 	//if($("#product_code").val()!="G_DHL")
+	 	//return false;
+  	var select = {};
+ 	select.cd = $("input[name='shipper[shipper_countrycode]']").val();
+ 	select.cn = $(this).val().toUpperCase();
+ 	var nowtime = new Date().getTime();
+ 	var timer = setTimeout(function(){getpostcadeData(select,$(this),$("#checkcity"),$("#checkpostcodediv"),0)},200); 	
+  	if(nowtime-window.lastKeyUp.lasttime_1.time<200){
+  		clearTimeout(window.lastKeyUp.lasttime_1.timer);
+  	}	
+ 	window.lastKeyUp.lasttime_1.time = nowtime;
+  	window.lastKeyUp.lasttime_1.timer=timer;
  });
  
- function getlistposecode(val,type){
- 	var listr= "";
- 	var data = getpostcadeData(""+val,type,1);	
-	for(var i in data){
-		listr+="<li account='"+data[i]["dhlcount"]+"' postcode='"+data[i]["postcode"]+"' citycode='"+data[i]["city"]+"' class='check_li'>"+data[i]["city_cname"]+":"+data[i]["postcode"]+"</li>";
-	}
-	console.log(data);
-	return listr;
- }
+ $("input[name='consignee[consignee_postcode]").focus(function(){
+ 	
+ 	//if($("#product_code").val()!="G_DHL")
+	 	//return false;
+	//$("#checkpostcodediv1").show();
+ 		//return false;
+ 	var select = {};
+ 	select.cd = $("#country_code").val();
+ 	select.pc = $(this).val().toUpperCase();
+ 	
+ 	getpostcadeData(select,$(this),$("#checkpostcode1"),$("#checkpostcodediv1"),1);
+ }).blur(function(){
+ 	//if($("#product_code").val()!="G_DHL")
+	 	//return false;
+ 	setTimeout('$("#checkpostcodediv1").hide()',200);
+ }).keyup(function(){
+ 	//if($("#product_code").val()!="G_DHL")
+	 //	return false;
+	var select = {};
+ 	select.cd = $("#country_code").val();
+ 	select.pc = $(this).val().toUpperCase();
+ 	var nowtime = new Date().getTime();
+ 	var timer = setTimeout(function(){getpostcadeData(select,$(this),$("#checkpostcode1"),$("#checkpostcodediv1"),0)},200); 	
+  	if(nowtime-window.lastKeyUp.lasttime_1.time<200){
+  		clearTimeout(window.lastKeyUp.lasttime_1.timer);
+  	}	
+ 	window.lastKeyUp.lasttime_1.time = nowtime;
+  	window.lastKeyUp.lasttime_1.timer=timer;
+ });
  
- //初始化
- //var listr= getlistposecode("","");
- //$("#checkpostcode").empty().append(listr);
+  $("input[name='consignee[consignee_city]']").focus(function(){
+  	
+  	//if($("#product_code").val()!="G_DHL")
+	 	//return false;
+	//$("#checkcitydiv1").show();
+  	//return false; 	
+	 	var select = {};
+ 	select.cd = $("#country_code").val();
+ 	select.cn = $(this).val().toUpperCase();
+ 	
+ 	getpostcadeData(select,$(this),$("#checkcity1"),$("#checkcitydiv1"),1);
+ }).blur(function(){
+ 	//if($("#product_code").val()!="G_DHL")
+	 	//return false;
+ 	setTimeout('$("#checkcitydiv1").hide()',200);
+ }).keyup(function(){
+ 	//if($("#product_code").val()!="G_DHL")
+	 	//return false;
+  	var select = {};
+ 	select.cd = $("#country_code").val();
+ 	select.cn = $(this).val().toUpperCase();
+ 	var nowtime = new Date().getTime();
+ 	var timer = setTimeout(function(){getpostcadeData(select,$(this),$("#checkcity1"),$("#checkpostcodediv1"),0)},200); 	
+  	if(nowtime-window.lastKeyUp.lasttime_1.time<200){
+  		clearTimeout(window.lastKeyUp.lasttime_1.timer);
+  	}	
+ 	window.lastKeyUp.lasttime_1.time = nowtime;
+  	window.lastKeyUp.lasttime_1.timer=timer;
+ });
  
  //弹窗
  $("#shipperaddrs").click(function(){
@@ -943,7 +1046,6 @@ $(function(){
 	var params = "dialogWidth=800px;dialogHeight=400px";
 	
 	var returnResult = window.showModalDialog(url, '',params);
-	console.log(returnResult);
 	//数据绑定
 	$("#consignee_company").val(returnResult.consignee_company);
 	$("#country_code").val(returnResult.consignee_countrycode.toLocaleUpperCase());
@@ -958,6 +1060,8 @@ $(function(){
 	$("#consignee_telephone").val(returnResult.consignee_telephone);
  });
  //添加发件人地址
+ //记录上次请求的添加数据
+ window.lastparam = null;
  $("#shipperaddaddress").click(function(){
     params={};
     params.E2=$("input[name='shipper[shipper_name]']").val();
@@ -972,11 +1076,20 @@ $(function(){
 	params.E10=$("input[name='shipper[shipper_telephone]']").val();
 	params.E4 = "CN";
 	params.E5 = "";
+	//如果和上次请求的一致
+	if(checkjsonequire(lastparam,params)){
+		alert("和上次提交的内容一致,请勿提交");
+		return false;
+	}
  	$.post("/order/order/shipper-adress-edit",params,function(data){
 					if(data.state){
 						alert("添加成功");
+						window.lastparam=params;
 					}else{
 						alert(data.errorMessage);
+						if(checkjsonequire(lastparam,params)){
+							window.lastparam=null;
+						}
 					}
 				},"json");
  });
@@ -993,11 +1106,19 @@ $(function(){
 	params.E10=$("#consignee_telephone").val();
 	params.E4 =$("#country_code").val();
 	params.E5 = $("#consignee_province").val();
+	if(checkjsonequire(lastparam,params)){
+		alert("和上次提交的内容一致,请勿提交");
+		return false;
+	}
  	$.post("/order/order/consignee-adress-edit",params,function(data){
 					if(data.state){
 						alert("添加成功");
+						window.lastparam=params;
 					}else{
 						alert(data.errorMessage);
+						if(checkjsonequire(lastparam,params)){
+							window.lastparam=null;
+						}
 					}
 				},"json");
  });
