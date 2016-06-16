@@ -1,2 +1,0 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="http://www.example.org/Ec/"><SOAP-ENV:Body><ns1:callServiceResponse><response>{"ask":"Success","message":"Success","order_code":"100002-140722-0011","err":[]}</response></ns1:callServiceResponse></SOAP-ENV:Body></SOAP-ENV:Envelope>

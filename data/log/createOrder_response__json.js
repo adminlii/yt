@@ -1,1 +1,0 @@
-var response={"ask":"Success","message":"Success","order_code":"100002-140722-0011","err":[]};
