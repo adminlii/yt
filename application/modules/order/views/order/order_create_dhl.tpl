@@ -121,6 +121,16 @@ background:#cfcfcf;
 .check_li:hover{
 	background:#ee9611;text-decoration:none;
 }
+.li_extentd{
+	margin-left: 3px ;
+	margin-top: 5px ;
+    height: 20px;
+    line-height: 20px;
+}
+
+.li_extentd:hover{
+	background:#ee9611;text-decoration:none;
+}
 </style>
 </head>
 <script>
@@ -906,8 +916,8 @@ $(function(){
  	
  	//if($("#product_code").val()!="G_DHL")
 	 //	return false;
-	$("#checkpostcodediv").show();
- 		return false;
+	//$("#checkpostcodediv").show();
+ 		//return false;
  	var select = {};
  	select.cd = $("input[name='shipper[shipper_countrycode]']").val();
  	select.pc = $(this).val().toUpperCase();
@@ -936,8 +946,8 @@ $(function(){
   	
   	//if($("#product_code").val()!="G_DHL")
 	 	//return false;
-	$("#checkcitydiv").show();
-  	return false; 	
+	//$("#checkcitydiv").show();
+  	//return false; 	
 	 	var select = {};
  	select.cd = $("input[name='shipper[shipper_countrycode]']").val();
  	select.cn = $(this).val().toUpperCase();

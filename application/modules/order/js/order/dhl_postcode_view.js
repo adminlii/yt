@@ -74,7 +74,6 @@ function getpostcadeData(select,that,obj,obj1,isshow){
 	}
 	if(select.pc||select.cn){
 		$.post("/order/order/get-postcode-list",select,function(data){
-			var data ;
 			if(data.state){
 				//
 				if(select.cd=='CN'){
@@ -109,6 +108,11 @@ function getpostcadeData(select,that,obj,obj1,isshow){
 				}
 				var provinceename = data.data[i]["provinceename"]?data.data[i]["provinceename"]:'';
 				listr+="<li provinceename='"+provinceename+"' account='"+dhlcount+"' postcode='"+data.data[i]["postcode"]+"' citycode='"+city+"' class='check_li'>"+data.data[i]["cityename"]+":"+data.data[i]["postcode"]+"</li>";
+				
+			}
+			//如果有下页的话
+			if(data.nextpage>1){
+				listr+="<li class='li_extentd' onclick = \"getMorePostCode(this,'"+data.select.cd+"','"+data.select.cn+"','"+data.select.pc+"',"+data.nextpage+")\">更多</li>"
 			}
 			obj.empty().append(listr);
 			if(isshow){
@@ -121,4 +125,58 @@ function getpostcadeData(select,that,obj,obj1,isshow){
 			obj1.show();
 		}
 	}
+}
+
+function getMorePostCode(that,cd,cn,pc,p){
+	var select = {};
+	select.cd = cd ;
+	select.cn = cn;
+	select.pc= pc;
+	select.p =p;
+	$.post("/order/order/get-postcode-list",select,function(data){
+		if(data.state){
+			//
+			if(select.cd=='CN'){
+				for(var i in data.data){
+					data.data[i]['city'] = data.data[i]['cityename'];
+					
+					for(var j in _postcade_view){
+						if(data.data[i]['cityename']==_postcade_view[j]['city_ename']){
+							//data.data[i]['city'] 	= _postcade_view[j]['city'];
+							//data.data[i]['province_name']= _postcade_view[j]['province_name'];
+							data.data[i]['dhlcount'] = _postcade_view[j]['dhlcount'];
+							break;
+						}
+					}
+					
+				}
+			}
+			
+		}else{
+			
+		}
+		//
+		var listr= "";
+		for(var i in data.data){
+			var dhlcount = data.data[i]["dhlcount"]?data.data[i]["dhlcount"]:'';
+			var city = data.data[i]["city"]?data.data[i]["city"]:data.data[i]["cityename"];
+			if(city){
+				var index = city.indexOf(",");
+				if(index>=0){
+					city =  city.substr(0,index);
+				}
+			}
+			var provinceename = data.data[i]["provinceename"]?data.data[i]["provinceename"]:'';
+			listr+="<li provinceename='"+provinceename+"' account='"+dhlcount+"' postcode='"+data.data[i]["postcode"]+"' citycode='"+city+"' class='check_li'>"+data.data[i]["cityename"]+":"+data.data[i]["postcode"]+"</li>";
+			
+		}
+		//如果有下页的话
+		if(data.nextpage>1){
+			listr+="<li class='li_extentd' onclick = \"getMorePostCode(this,'"+data.select.cd+"','"+data.select.cn+"','"+data.select.pc+"',"+data.nextpage+")\">更多</li>"
+		}
+		var parent = $(that).parent();
+		$(that).remove();
+		parent.append(listr);
+		parent.parent().show();
+	},"json");
 }

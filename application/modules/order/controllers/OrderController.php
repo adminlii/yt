@@ -1670,12 +1670,27 @@ class Order_OrderController extends Ec_Controller_Action
 			$condition['status'] = 1;
 			$csiPostcodeRule	=	new Service_CsiPostcodeRule();
 			if (!empty($condition)) {
-				$res = $csiPostcodeRule->getByCondition($condition);
-				if(!empty($res)){
-					$result['state']   = 1;
-					$result['data']    = $res;
-					$result['message'] = 'Success.';
+				//获取总数
+				$pagesize = 50;
+				$page = empty($this->_request->getPost('p'))?1:intval($this->_request->getPost('p'));
+				$count = $csiPostcodeRule->getByCondition($condition,'count(*)');
+				$allpage = ceil($count/$pagesize);
+				if($page>$allpage){
+					$result['state']   = 2;
+					$result['nextpage'] = -1;
+				}else{
+					$res = $csiPostcodeRule->getByCondition($condition,array('id','cityename','postcode','provinceename'),$pagesize,$page);
+					if(!empty($res)){
+						$result['state']   = 1;
+						$result['data']    = $res;
+						$result['message'] = 'Success.';
+						$result['nextpage'] = $page==$allpage?-1:++$page;
+						$result['totalpage'] = $allpage;
+						//搜索条件
+						$result['select'] = array('cd'=>$condition['countrycode'],'cn'=>$condition['cityename'],'pc'=>$condition['postcode']);
+					}
 				}
+				
 			}
 		}
 		die(Zend_Json::encode($result));
