@@ -885,12 +885,14 @@ $(function(){
  			$("input[name='shipper[shipper_postcode]']").val($(this).attr("postcode")?$(this).attr("postcode"):'');
  			$(this).attr("account")?$("input[name='shipper[shipper_name]").val($(this).attr("account")):'';
  			$("#checkpostcodediv").hide();
+ 			$("#checkpostcode").empty();
  		;break;
  		case "city_ename":
  			$("input[name='shipper[shipper_city]']").val($(this).attr("citycode")?$(this).attr("citycode"):'');
  			$("input[name='shipper[shipper_postcode]']").val($(this).attr("postcode")?$(this).attr("postcode"):'');
  			$(this).attr("account")?$("input[name='shipper[shipper_name]").val($(this).attr("account")):'';
  			$("#checkcitydiv").hide();
+ 			$("#checkcity").empty();
  		;break;
  		case "postcode1":
  			$("#consignee_city").val($(this).attr("citycode")?$(this).attr("citycode"):'');
@@ -898,6 +900,7 @@ $(function(){
  			//$("input[name='shipper[shipper_name]").val($(this).attr("account")?$(this).attr("account"):'');
  			$("#consignee_province").val($(this).attr("provinceename")?$(this).attr("provinceename"):'');
  			$("#checkpostcodediv1").hide();
+ 			$("#checkpostcode1").empty();
  		;break;
  		case "city_ename1":
  			$("#consignee_city").val($(this).attr("citycode")?$(this).attr("citycode"):'');
@@ -905,6 +908,7 @@ $(function(){
  			//$("input[name='shipper[shipper_name]").val($(this).attr("account")?$(this).attr("account"):'');
  			$("#consignee_province").val($(this).attr("provinceename")?$(this).attr("provinceename"):'');
  			$("#checkcitydiv1").hide();
+ 			$("#checkcity1").empty();
  		;break;
  	}
  });
@@ -916,8 +920,8 @@ $(function(){
  	
  	//if($("#product_code").val()!="G_DHL")
 	 //	return false;
-	//$("#checkpostcodediv").show();
- 		//return false;
+	$("#checkpostcodediv").show();
+ 		return false;
  	var select = {};
  	select.cd = $("input[name='shipper[shipper_countrycode]']").val();
  	select.pc = $(this).val().toUpperCase();
@@ -946,8 +950,8 @@ $(function(){
   	
   	//if($("#product_code").val()!="G_DHL")
 	 	//return false;
-	//$("#checkcitydiv").show();
-  	//return false; 	
+	$("#checkcitydiv").show();
+  	return false; 	
 	 	var select = {};
  	select.cd = $("input[name='shipper[shipper_countrycode]']").val();
  	select.cn = $(this).val().toUpperCase();
@@ -976,8 +980,8 @@ $(function(){
  	
  	//if($("#product_code").val()!="G_DHL")
 	 	//return false;
-	//$("#checkpostcodediv1").show();
- 		//return false;
+	$("#checkpostcodediv1").show();
+ 		return false;
  	var select = {};
  	select.cd = $("#country_code").val();
  	select.pc = $(this).val().toUpperCase();
@@ -1006,8 +1010,8 @@ $(function(){
   	
   	//if($("#product_code").val()!="G_DHL")
 	 	//return false;
-	//$("#checkcitydiv1").show();
-  	//return false; 	
+	$("#checkcitydiv1").show();
+  	return false; 	
 	 	var select = {};
  	select.cd = $("#country_code").val();
  	select.cn = $(this).val().toUpperCase();

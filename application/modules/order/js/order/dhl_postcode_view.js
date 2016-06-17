@@ -177,6 +177,23 @@ function getMorePostCode(that,cd,cn,pc,p){
 		var parent = $(that).parent();
 		$(that).remove();
 		parent.append(listr);
-		parent.parent().show();
+		setTimeout(function(){
+			switch(parent.attr("_type")){
+	 		case "postcode":
+	 			console.log(111);
+	 			$("input[name='shipper[shipper_postcode]']")[0].focus();	
+	 		;break;
+	 		case "city_ename":
+	 			$("input[name='shipper[shipper_city]']")[0].focus();
+	 		;break;
+	 		case "postcode1":
+	 			$("#consignee_postcode")[0].focus();
+	 		;break;
+	 		case "city_ename1":
+	 			$("#consignee_city")[0].focus();
+	 		;break;
+			}
+			//parent.parent().show()
+		},200);
 	},"json");
 }
