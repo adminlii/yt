@@ -432,6 +432,15 @@ function formSubmit(status){
 							name='consignee[consignee_telephone]' id=consignee_telephone />
         </div>
         <div id="boxend" class="contentLeft contentType3 borderB" style="height:154px;">
+        	<div class="contentLeft contentType1" id="untreaddiv" style="display:none">
+	        	无法送达
+	        	<select class="select1 select" name="order[untread]" id="untread">
+	        	<option value="0" >-请选择-</option>
+	        	<option value="1" >退回</option>
+	        	<option value="2" >丢弃</option>
+	        	</select>
+        	</div>
+        
         </div>
         
     </div>
@@ -557,8 +566,10 @@ function formSubmit(status){
         </div>
         <div class="contentLeft contentType6 borderR borderB">
         	<h3>通关的申报价值（用于商业/形式发票）</h3>
-             <input type="text" style="width:203px;" disabled class="level7 use invoice_unitcharge" name='invoice[invoice_totalcharge_all][]' value='<{$invoice[0].invoice_totalcharge_all}>'>
-        	 <span>USD</span>	
+             <input type="text" style="width:159px;" disabled class="level7 use invoice_unitcharge" name='invoice[invoice_totalcharge_all][]' value='<{$invoice[0].invoice_totalcharge_all}>'>
+        	 <!--<span>USD</span>-->
+        	 <select name="invoice[invoice_currencycode][]" id="currencetype">
+        	 </select>	
         </div>
         <div class="contentLeft contentType7 borderB">
         	<h3>HS CODE（如果需要）</h3>
@@ -789,8 +800,8 @@ $(function(){
  		that.val('');
  		return false;
  	}
- 	
- 	var hl = 6.5;
+ 	var currency = $("#currencetype").val()?$("#currencetype").val():"USD";
+ 	var hl = huilv[currency];
  	var max_insurance_value = accMul(invoice_totalcharge_all,hl);
 	var msg = '保险金额不得大于申报价值';
 	var tip = $("input[name='order[insurance_value_gj]']").siblings('.info');
@@ -808,8 +819,8 @@ $(function(){
  		$("input[name='order[insurance_value]']").val('');
  		return false;
  	}
- 	
- 	var hl = 6.5;
+ 	var currency = $("#currencetype").val()?$("#currencetype").val():"USD";
+ 	var hl = huilv[currency];
  	var max_insurance_value = invoice_totalcharge_all*hl;
 	var msg = '保险金额不得大于申报价值';
 	var tip = $("input[name='order[insurance_value_gj]']").siblings('.info');
@@ -872,42 +883,58 @@ $(function(){
     if(product_code=="TNT"){
     	$("#plane1").hide();
     	$("#plane2").show();
+    	$("#untread").val('0');
+    	$("#untreaddiv").show();
     }else {
     	$("#plane2").hide();
     	$("#plane1").show();
+    	$("#untreaddiv").hide();
     }
  })
 //dhl 邮编选择
  $(document).on('click','.check_li',function(){
  	switch($(this).parent().attr("_type")){
  		case "postcode":
- 			$("input[name='shipper[shipper_city]']").val($(this).attr("citycode")?$(this).attr("citycode"):'');
+ 			$("input[name='shipper[shipper_city]']").val($(this).attr("city")?$(this).attr("city"):'');
  			$("input[name='shipper[shipper_postcode]']").val($(this).attr("postcode")?$(this).attr("postcode"):'');
- 			$(this).attr("account")?$("input[name='shipper[shipper_name]").val($(this).attr("account")):'';
+ 			//$(this).attr("account")?$("input[name='shipper[shipper_name]").val($(this).attr("account")):'';
+ 			$("#refer_hawbcode").val($(this).attr("citycode")?$(this).attr("citycode"):'');
  			$("#checkpostcodediv").hide();
  			$("#checkpostcode").empty();
+ 			$("#checkcity").empty();
+ 			$("#checkpostcode1").empty();
+ 			$("#checkcity1").empty();
  		;break;
  		case "city_ename":
- 			$("input[name='shipper[shipper_city]']").val($(this).attr("citycode")?$(this).attr("citycode"):'');
+ 			$("input[name='shipper[shipper_city]']").val($(this).attr("city")?$(this).attr("city"):'');
  			$("input[name='shipper[shipper_postcode]']").val($(this).attr("postcode")?$(this).attr("postcode"):'');
- 			$(this).attr("account")?$("input[name='shipper[shipper_name]").val($(this).attr("account")):'';
+ 			//$(this).attr("account")?$("input[name='shipper[shipper_name]").val($(this).attr("account")):'';
+ 			$("#refer_hawbcode").val($(this).attr("citycode")?$(this).attr("citycode"):'');
  			$("#checkcitydiv").hide();
+ 			$("#checkpostcode").empty();
  			$("#checkcity").empty();
+ 			$("#checkpostcode1").empty();
+ 			$("#checkcity1").empty();
  		;break;
  		case "postcode1":
- 			$("#consignee_city").val($(this).attr("citycode")?$(this).attr("citycode"):'');
+ 			$("#consignee_city").val($(this).attr("city")?$(this).attr("city"):'');
  			$("#consignee_postcode").val($(this).attr("postcode")?$(this).attr("postcode"):'');
- 			//$("input[name='shipper[shipper_name]").val($(this).attr("account")?$(this).attr("account"):'');
  			$("#consignee_province").val($(this).attr("provinceename")?$(this).attr("provinceename"):'');
  			$("#checkpostcodediv1").hide();
+ 			$("#checkpostcode").empty();
+ 			$("#checkcity").empty();
  			$("#checkpostcode1").empty();
+ 			$("#checkcity1").empty();
  		;break;
  		case "city_ename1":
- 			$("#consignee_city").val($(this).attr("citycode")?$(this).attr("citycode"):'');
+ 			$("#consignee_city").val($(this).attr("city")?$(this).attr("city"):'');
  			$("#consignee_postcode").val($(this).attr("postcode")?$(this).attr("postcode"):'');
  			//$("input[name='shipper[shipper_name]").val($(this).attr("account")?$(this).attr("account"):'');
  			$("#consignee_province").val($(this).attr("provinceename")?$(this).attr("provinceename"):'');
  			$("#checkcitydiv1").hide();
+ 			$("#checkpostcode").empty();
+ 			$("#checkcity").empty();
+ 			$("#checkpostcode1").empty();
  			$("#checkcity1").empty();
  		;break;
  	}
@@ -1151,5 +1178,21 @@ $(function(){
  $(".btn2").click(function(){
  	//$("input[type!='hidden']").val("");
  })
+ 
+ //初始化汇率
+ var huilv = {};
+ $.post("/order/order/get-currency-list",{},function(data){
+					if(data.state){
+						huilv = data.data;
+						//生成汇率选择框
+						var html = '';
+						for(var i in data.data){
+							html+="<option value="+i+">"+i+"</option>";
+						}
+						$("#currencetype").append(html);
+					}else{
+						
+					}
+				},"json");
 });
 </script>

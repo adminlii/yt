@@ -883,4 +883,47 @@ class Common_Common
     	}
     	return $return;
     }
+    
+    //汇率接口
+    public static function getHuilv(){
+	    $returnArr= array();
+	    $returnArr['USD']=6.5;//添加上美元的汇率
+		$returnArr['CNY']=1;//添加上中国的汇率
+		
+		try{
+			do{	
+				$url = "http://data.bank.hexun.com/other/cms/fxjhjson.ashx?callback=PereMoreData";
+				$content = file_get_contents($url);
+				$reg = '/PereMoreData\((.*?)\)/is';
+				preg_match_all($reg,$content,$m);
+				if($m[1]){
+					//print_r($m[1][0]);
+					//将单引号转双引号
+					$json_str = str_replace("'",'"',$m[1][0]);
+					$json_str = str_replace("currency",'"currency"',$json_str);
+					$json_str = str_replace("refePrice",'"refePrice"',$json_str);
+					$json_str = str_replace("code",'"code"',$json_str);
+					$json_str = preg_replace('/"currency":".*?",/','',$json_str);
+					$decodeArr = json_decode($json_str,true);
+					if(!is_array($decodeArr)){
+						break;
+					}
+					
+					$currencyArr = array("USD","HKD","JPY","MOP","PHP","SGD","KRW","THB","EUR","DKK","GBP","DEM","FRF","ITL","ESP","ATS","FIM","NOK","SEK","CHF","CAD","AUD","NZD");
+					foreach($currencyArr as $cv){	
+						foreach($decodeArr as $v){
+							if($cv==trim($v['code'])){
+								$returnArr[$cv]=$v['refePrice']/100;
+								break;
+							}
+						}
+					}
+				}
+			}while(0);
+			
+		}catch(Exception $e){
+			
+		}
+    	return $returnArr;
+    }
 }

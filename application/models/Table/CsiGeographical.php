@@ -1,11 +1,11 @@
 <?php
-class Table_CsiPostcodeRule
+class Table_CsiGeographical
 {
     protected $_table = null;
 
     public function __construct()
     {
-        $this->_table = new DbTable_CsiPostcodeRule();
+        $this->_table = new DbTable_CsiGeographical();
     }
 
     public function getAdapter()
@@ -15,7 +15,7 @@ class Table_CsiPostcodeRule
 
     public static function getInstance()
     {
-        return new Table_CsiPostcodeRule();
+        return new Table_CsiGeographical();
     }
 
     /**
@@ -90,25 +90,10 @@ class Table_CsiPostcodeRule
         $select->where("1 =?", 1);
         /*CONDITION_START*/
         
-    	if(isset($condition["countrycode"]) && $condition["countrycode"] != ""){
-        	$select->where("countrycode = ?",$condition["countrycode"]);
+        if(isset($condition["positionpname"]) && $condition["positionpname"] != ""){
+        	$select->where("positionpname like ?",$condition["positionpname"].'%');
         }
         
-        if(isset($condition["cityename"]) && $condition["cityename"] != ""){
-        	$select->where("cityename like ?",$condition["cityename"].'%');
-        }
-        
-        if(isset($condition["postcode"]) && $condition["postcode"] != ""){
-        	$select->where("postcode like ?",$condition["postcode"].'%');
-        }
-        
-        if(isset($condition["citycode"]) && $condition["citycode"] != ""){
-        	$select->where("citycode = ?",$condition["citycode"]);
-        }
-        
-        if(isset($condition["status"]) && $condition["status"] != ""){
-            $select->where("status = ?",$condition["status"]);
-        }
         /*CONDITION_END*/
 //         echo $select->__toString();exit;
         if ('count(*)' == $type) {

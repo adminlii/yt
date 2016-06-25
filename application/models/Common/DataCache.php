@@ -485,4 +485,21 @@ class Common_DataCache
     	}
     	return $result;
     }
+    
+    /**
+     * 汇率的转换
+     */
+    public static function getHuilv($operation = 0){
+    	$cacheName = 'my_huilv';
+    	$cache = Ec::cache('my_huilv');
+    	if ($operation == 1) {
+    		$cache->remove($cacheName);
+    	}
+    	if (!$result = $cache->load($cacheName)) {
+    		$result=Common_Common::getHuilv();
+    		$cache->setLifetime(72 * 3600);
+    		$cache->save($result, $cacheName);
+    	}
+    	return $result;
+    }
 }

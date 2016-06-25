@@ -174,21 +174,24 @@ class Process_OrderDhl
                 'refer_hawbcode' => $this->_order['refer_hawbcode']
             );
 //             print_r($con);die;
-            $shipper_hawbcode_arr = Service_CsdOrder::getByCondition($con);
-            if($shipper_hawbcode_arr){
-                $shipper_hawbcode_exist = false;
-                foreach($shipper_hawbcode_arr as $v){
-                    if($this->_order_id != $v['order_id']){
-                        $shipper_hawbcode_exist = true;
-                    }
-                }
-                
-                if($shipper_hawbcode_exist){
-                    $this->_err[] = Ec::Lang('参考单号已存在') . "[{$this->_order['refer_hawbcode']}]";
-                    $this->_apiErr[] = "ORDER_REFER_ISEXISTS";
-                }
-                
-            }
+            
+			if(false){
+	            $shipper_hawbcode_arr = Service_CsdOrder::getByCondition($con);
+	            if($shipper_hawbcode_arr){
+	                $shipper_hawbcode_exist = false;
+	                foreach($shipper_hawbcode_arr as $v){
+	                    if($this->_order_id != $v['order_id']){
+	                        $shipper_hawbcode_exist = true;
+	                    }
+	                }
+	                
+	                if($shipper_hawbcode_exist){
+	                    $this->_err[] = Ec::Lang('参考单号已存在') . "[{$this->_order['refer_hawbcode']}]";
+	                    $this->_apiErr[] = "ORDER_REFER_ISEXISTS";
+	                }
+	                
+	            }
+			}
         } else {
         	// 读取配置判断客户单号是否可以为空
             $config = Common_Company::getDBConfig();
@@ -875,6 +878,7 @@ class Process_OrderDhl
             'insurance_value_gj'=>$this->_order['insurance_value_gj'],
             'dangerousgoods'=>$this->_order['dangerousgoods'],
             //'customer_channelid'=>$this->_order['customer_channelid']?$this->_order['customer_channelid']:Service_User::getChannelid(),
+        	'untread'=>$this->_order['untread'],
         );
         
         $order['order_weight'] =  empty($order['order_weight'])?0:$order['order_weight'];

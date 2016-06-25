@@ -284,10 +284,14 @@ class API_Common_ServiceExpressCreateOrder
     	Common_Common::myEcho('所有订单同步操作完成.....');
     }
     
-    //物流通知
+    /**
+     * @desc 通知EMS
+     * @param array $conditionArr
+     * @param int $loop
+     */
     public function notifyOrderToService($formalCode,$order_config, $init=true,$loop = 0)
     {
-        Common_Common::myEcho('开始订单通知！');
+        Common_Common::myEcho('开始通知订单！');
         Common_Common::myEcho('通知中。。。。。。');
         $date = date('Y-m-d H:i:s');
     
@@ -296,33 +300,32 @@ class API_Common_ServiceExpressCreateOrder
         */
         $pageSize = 20;
         $page = 1;
-        //order_status in ('P','V','C') and a.notify_ems_rs=0 and a.server_hawbcode is not null
-        $sql_count = "select count(*) as count from csd_order where ";
-        $sql       = "select order_id,shipper_hawbcode from csd_order where  ";
-        $where = "order_status in ('P','V','C') and notify_ems_rs=0 and server_hawbcode is not null";
+        $condition = array(
+            "trackingnumber_status"=>1,
+            "formal_code" => $formalCode,
+            "ems_status"=>0
+        );
     
         //指定渠道
         if (empty($formalCode)) {
             Common_Common::myEcho('未指定运输方式直接返回');
             return;
         }
-        //Service_CsdOrder::getByCondition($condition, "count(*)");
-        $count = Common_Common::fetchRow($sql_count.$where);
-        $count = $count?$count["count"]:0;
+    
+        $count = Service_OrderProcessing::getByCondition($condition, "count(*)");
         $totalPage = ceil($count / $pageSize);
         //指定页数
         $totalPage = $loop == '0' ? $totalPage : ($loop > $totalPage ? $totalPage : $loop);
         //减少执行时间
         if ($count == 0) {
-            Ec::showError("此次请求，无需要通知订单！" . $date, 'express_notify_orders_excute');
-            Common_Common::myEcho('本次没有需要通知的订单.....over....');
+            Ec::showError("此次请求，无需要同步订单！" . $date, 'express_notify_ems_excute');
+            Common_Common::myEcho('本次没有需要同步的订单.....over....');
             return;
         }
-
+    
         /*
          * 2、获取订单对应的物流服务商
          */
-    
         $objCommon = new API_Common_ServiceCommonClass();
         $channel = $objCommon->getServiceChannelByFormalCode($formalCode);
         if (empty($channel)) {
@@ -340,50 +343,159 @@ class API_Common_ServiceExpressCreateOrder
         } else {
             throw new Exception("无法获取到[{$class}]对应的数据映射文件类");
         }
+    
         //调整超时
         $theTime = $runTime = time();
-        //按页通知订单
+        //按页同步订单
         for ($i = 1; $i <= $totalPage; $i++) {
-            $query_sql = $sql.$where." order by rand() limit ".($i-1)*$totalPage.','.$pageSize;
-            $synchronousOrder =  Common_Common::fetchAll($query_sql);
+            $synchronousOrder = Service_OrderProcessing::getByCondition(
+                $condition,
+                array("order_processing.order_id","order_processing.ops_id", "order_processing.ops_syncing_status","order_processing.shipper_hawbcode", "order_processing.ops_type"),
+                $pageSize,
+                $page,
+                "RAND()");
     
             foreach ($synchronousOrder as $key => $val) {
                 Common_Common::myEcho(print_r($val,true));
                 try {
+                    //获取物流产品20160428,之前是取的产品对应的渠道
+                   	$scdOrder = Service_CsdOrder::getByField($val["order_id"], 'order_id');
+					$channel['server_product_code'] = $scdOrder['product_code'];
+    
                     //设置参数 API代码、订单号
                     $obj->setParam($channel['as_code'], $val['shipper_hawbcode'], $channel['server_channelid'], $channel['server_product_code'],$order_config,$init);
                     $result = $obj->notifyOrderToService();
-                    	
-                    // 更新通知结果
-                    $ops_status = 1;
                     $ops_note = "";
-                    //if($result['ack'] == '0') {
-                    if($result['ack'] == '0') {
-                        // 如果通知订单失败，更新订单状态改为"D"草稿
-                       /*  $update_order = array("notify_ems_rs" => 1);
-                        Service_CsdOrder::update($update_order, $val["order_id"]);
-    
-                        $ops_status = "20";
-                        $ops_note = $result['error']; */
+                    // 更新同步结果
+                    if($result['ack']!=1){
+                    	// 如果同步订单失败，更新订单状态改为"D"草稿
+                    	$update_order = array("order_status" => "D");
+                    	Service_CsdOrder::update($update_order, $val["order_id"]);
+                    	$ops_note = $result['error'];
                     }
-    
                     /*
-                     * 4、处理通知结果
-                     */
-                    $update_order = array("notify_ems_rs" => 1);
-                    Service_CsdOrder::update($update_order, $val["order_id"]);
-    
+                     * 4、处理同步结果
+                    */
+                    $order_process = array('ems_status' => 1,'ops_note' => $ops_note);
+                    Service_OrderProcessing::update($order_process, $val['ops_id']);
+                    
                     Common_Common::myEcho($val['shipper_hawbcode'] . '处理完成...');
                 } catch (Exception $e) {
                     Common_Common::myEcho($val['shipper_hawbcode'] . '处理异常...'.$e->getMessage());
-                    Ec::showError("通知未知异常，订单号：" . $val["shipper_hawbcode"] . "异常信息：" . $e->getMessage(), 'express_create_orders_excute');
+                    Ec::showError("同步未知异常，订单号：" . $val["shipper_hawbcode"] . "异常信息：" . $e->getMessage(), 'express_notify_tnt');
                 }
                 $runTime=time();
             }
         }
     
-        Common_Common::myEcho('所有订单通知操作完成.....');
+        Common_Common::myEcho('所有订单同步操作完成.....');
     }
     
+    /**
+     * @desc 通知TNT服务器
+     * @param array $conditionArr
+     * @param int $loop
+     */
+    public function notifyOrderToTNT($formalCode,$order_config, $init=true,$loop = 0)
+    {
+        Common_Common::myEcho('开始通知订单！');
+        Common_Common::myEcho('通知中。。。。。。');
+        $date = date('Y-m-d H:i:s');
+    
+        /*
+         * 1、获取所有需要通知到服务商的订单
+        */
+        $pageSize = 20;
+        $page = 1;
+        $condition = array(
+            "trackingnumber_status"=>1,
+            "formal_code" => $formalCode,
+            "tnt_status"=>0
+        );
+    
+        //指定渠道
+        if (empty($formalCode)) {
+            Common_Common::myEcho('未指定运输方式直接返回');
+            return;
+        }
+    
+        $count = Service_OrderProcessing::getByCondition($condition, "count(*)");
+        $totalPage = ceil($count / $pageSize);
+    
+    
+        //指定页数
+        $totalPage = $loop == '0' ? $totalPage : ($loop > $totalPage ? $totalPage : $loop);
+        //减少执行时间
+        if ($count == 0) {
+            Ec::showError("此次请求，无需要同步订单！" . $date, 'express_notify_tnt_excute');
+            Common_Common::myEcho('本次没有需要同步的订单.....over....');
+            return;
+        }
+    
+        /*
+         * 2、获取订单对应的物流服务商
+         */
+        $objCommon = new API_Common_ServiceCommonClass();
+        $channel = $objCommon->getServiceChannelByFormalCode($formalCode);
+        if (empty($channel)) {
+            throw new Exception("无法获取到 [{$formalCode}] 对应的API服务");
+        }
+    
+        //所有渠道都走API_YunExpress_ForApiService
+        $channel['as_code'] = "YUNEXPRESS";
+        $class = $objCommon->getForApiServiceClass($channel['as_code']);
+        if (empty($class)) {
+            throw new Exception("无法获取到[{$formalCode}]对应的数据映射类");
+        }
+        if (class_exists($class)) {
+            $obj = new $class();
+        } else {
+            throw new Exception("无法获取到[{$class}]对应的数据映射文件类");
+        }
+    
+        //调整超时
+        $theTime = $runTime = time();
+        //按页同步订单
+        for ($i = 1; $i <= $totalPage; $i++) {
+            $synchronousOrder = Service_OrderProcessing::getByCondition(
+                $condition,
+                array("order_processing.order_id","order_processing.ops_id", "order_processing.ops_syncing_status","order_processing.shipper_hawbcode", "order_processing.ops_type"),
+                $pageSize,
+                $page,
+                "RAND()");
+    
+            foreach ($synchronousOrder as $key => $val) {
+                Common_Common::myEcho(print_r($val,true));
+                try {
+                    //获取物流产品20160428,之前是取的产品对应的渠道
+                    //$scdOrder = Service_CsdOrder::getByField($val["order_id"], 'order_id');
+                    $channel['server_product_code'] = "TNT";
+    
+                    //设置参数 API代码、订单号
+                    $obj->setParam($channel['as_code'], $val['shipper_hawbcode'], $channel['server_channelid'], $channel['server_product_code'],$order_config,$init);
+                    $result = $obj->sendXmlToTntService();
+                    	
+                    // 更新同步结果
+                    if($result['ack']==1){
+                        /*
+                         * 4、处理同步结果
+                         */
+                        $order_process = array('tnt_status' => 1);
+                        Service_OrderProcessing::update($order_process, $val['ops_id']);
+            
+                        Common_Common::myEcho($val['shipper_hawbcode'] . '处理完成...');
+                    }else{
+                        Common_Common::myEcho($val['shipper_hawbcode'] . '处理失败...原因:'.$result['error']);
+                    }
+                } catch (Exception $e) {
+                    Common_Common::myEcho($val['shipper_hawbcode'] . '处理异常...'.$e->getMessage());
+                    Ec::showError("同步未知异常，订单号：" . $val["shipper_hawbcode"] . "异常信息：" . $e->getMessage(), 'express_notify_tnt');
+                }
+                $runTime=time();
+            }
+        }
+    
+        Common_Common::myEcho('所有订单同步操作完成.....');
+    }
     
 }

@@ -382,6 +382,7 @@ class Order_OrderController extends Ec_Controller_Action
             	'invoicenum'=> $order['invoicenum'],
             	'pay_type'=> $order['pay_type'],
             	'fpnote'=> $order['fpnote'],
+            	'untread'=>empty($order['untread'])?0:intval($order['untread']),
             );
             
             
@@ -460,15 +461,18 @@ class Order_OrderController extends Ec_Controller_Action
             	$invoice_lenght>$vc["invoice_length"]?"":$invoice_lenght=$vc["invoice_length"];
             	$invoice_width>$vc["invoice_width"]?"":$invoice_width=$vc["invoice_width"];
             	$invoice_height>$vc["invoice_height"]?"":$invoice_height=$vc["invoice_height"];
+            	$invoiceArr[$column]=$vc;
                 if(!$vc['invoice_enname']){
                     $vc['invoice_enname'] = $invoice['invoice_enname'][0];
                     $vc['invoice_cnname'] = $invoice['invoice_cnname'][0];
+                    $vc['invoice_currencycode'] = $invoice['invoice_currencycode'][0];
                     $vc['invoice_shippertax'] = $invoice['invoice_shippertax'][0];
                     $vc['invoice_consigneetax'] = $invoice['invoice_consigneetax'][0];
                     $vc['invoice_totalcharge_all'] = $invoice['invoice_totalcharge_all'][0];
                     $vc['hs_code'] = $invoice['hs_code'][0];
                     $invoiceArr[$column]=$vc;
                 }
+                
             }
             $orderArr['order_length'] = $volumeArr['length'] = intval($invoice_lenght);
             $orderArr['order_width'] = $volumeArr['width'] = intval($invoice_width);
@@ -540,7 +544,24 @@ class Order_OrderController extends Ec_Controller_Action
             	array_unshift($labelArr, array());
             	unset($labelArr[0]);
             }
-            //echo 1111;die;
+            //DHL 添加了规则，refer用来存取城市代码
+            $condtion_sp['cityname'] = $shipper['shipper_city'];
+            $condtion_sp['status'] =   1;
+            $condtion_sp['productcode'] =   $orderArr["product_code"];
+            $server_csi_prs=new Service_CsiProductRuleShipper();
+            $rs_cisprs = $server_csi_prs->getByCondition($condtion_sp);
+            if($rs_cisprs[0]){
+            	//如果是DHL不认的替换掉邮编和城市
+            	if($rs_cisprs[0]['cityrname']&&$condtion_sp['productcode']=='G_DHL'){
+            		if($shipperArr['shipper_street']){
+            			$shipperArr['shipper_street'].=" ".$shipperArr['shipper_city'];
+            		}
+            		$shipperArr['shipper_city']=$rs_cisprs[0]['cityrname'];
+            		$shipperArr['shipper_postcode']=$rs_cisprs[0]['postcode'];
+            	}
+            	//ref里面设定上citycode
+            	$orderArr['refer_hawbcode'] = $rs_cisprs[0]['citycode'];
+            }
             $process = new Process_OrderDhl();
             $process->setVolume($volumeArr);
             $process->setOrder($orderArr);
@@ -1663,6 +1684,7 @@ class Order_OrderController extends Ec_Controller_Action
 				"message" => "Fail."
 		);
 		if ($this->_request->isPost()) {
+			$productcode = !empty($this->_request->getPost('dc'))?$this->_request->getPost('dc'):'';
 			$condition = array();
 			$condition['countrycode'] = !empty($this->_request->getPost('cd'))?$this->_request->getPost('cd'):'';
 			$condition['cityename'] = !empty($this->_request->getPost('cn'))?$this->_request->getPost('cn'):'';;
@@ -1680,7 +1702,26 @@ class Order_OrderController extends Ec_Controller_Action
 					$result['nextpage'] = -1;
 				}else{
 					$res = $csiPostcodeRule->getByCondition($condition,array('id','cityename','postcode','provinceename'),$pagesize,$page);
+					//如果是中国的话，DHL渠道会带上校验规则
 					if(!empty($res)){
+						if($condition['countrycode']=="CN"){
+							//$condtion_sp['cityname'] = $condition['cityename'];
+							$condtion_sp['status'] =   1;
+							$condtion_sp['productcode'] =   $productcode;
+							$server_csi_prs=new Service_CsiProductRuleShipper();
+							$rs_cisprs = $server_csi_prs->getByCondition($condtion_sp);
+						    if($rs_cisprs){
+						    	foreach ($res as $k=>$v){
+						    		foreach ($rs_cisprs as $vv){
+						    			if($v['cityename']==$vv['cityname']){
+						    				$res[$k]['dhlcount'] = $vv['countnum'];
+						    				$res[$k]['citycode'] = $vv['citycode'];
+						    				continue;
+						    			}
+						    		} 
+						    	}
+						    }
+						}
 						$result['state']   = 1;
 						$result['data']    = $res;
 						$result['message'] = 'Success.';
@@ -1693,6 +1734,18 @@ class Order_OrderController extends Ec_Controller_Action
 				
 			}
 		}
+		die(Zend_Json::encode($result));
+	}
+	
+	//汇率查询
+	public function getCurrencyListAction(){
+		$result = array(
+				"state" => 0,
+				"message" => "Fail."
+		);
+		$res = Common_DataCache::getHuilv();
+		$result['state']=1;
+		$result['data']    = $res;
 		die(Zend_Json::encode($result));
 	}
 }

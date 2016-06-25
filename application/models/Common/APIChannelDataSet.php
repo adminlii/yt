@@ -206,7 +206,8 @@ class Common_APIChannelDataSet
         $this->orderKey["orderSequence"] = $this->orderData["order_id"]; //订单序列号 order_id
         $this->orderKey["orderNo"] = $this->orderData["shipper_hawbcode"]; //WMS订单号 order_code
         $this->orderKey["referenceID"] = ''; //WMS订单号 order_code
-
+        $this->orderKey["refer_hawbcode"] = empty($this->orderData["refer_hawbcode"])?"":$this->orderData["refer_hawbcode"]; //WMS订单号 order_code
+        		
         //服务信息
         $this->orderKey["channelCodeServer"] = $this->serverProductCode; //API服务代码 如:USPS\UPS
         $this->orderKey["channelCode"] = $this->serviceCode;// TODO 确定字段
@@ -238,6 +239,7 @@ class Common_APIChannelDataSet
         $this->orderKey["height"] = $this->orderData['height'];
         $this->orderKey["width"] = $this->orderData['width'];
         $this->orderKey["dangerousgoods"] = $this->orderData['dangerousgoods'];
+        $this->orderKey["untread"] = $this->orderData['untread'];
         //保险价值
         $this->orderKey["insurance_value_gj"] = $this->orderData['insurance_value_gj'];
         //系统信息

@@ -162,7 +162,27 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
         //注册编号
         $data["RegisterNumber"] = empty($this->customer_ext["registernumber"])?"":$this->customer_ext["registernumber"];
         $data["AgencyCode"]		= empty($this->customer_ext["agencycode"])?"":$this->customer_ext["agencycode"];
+        //citycode
+        if($data["ChannelCode"]=="G_DHL"||$data["ChannelCode"]=="TNT"){
+        	//上传REF和绑定的账号
+        	//$data["reference"] 		 = $this->orderKey["refer_hawbcode"];
+        	$condtion_sp['citycode'] = $this->orderKey["refer_hawbcode"];
+        	$condtion_sp['status']   =   1;
+        	$condtion_sp['productcode'] =   $data["ChannelCode"];
+        	$server_csi_prs=new Service_CsiProductRuleShipper();
+        	$rs_cisprs = $server_csi_prs->getByCondition($condtion_sp);
+        	if($rs_cisprs[0]){
+        		//设定上发件人账号
+        		$data['accuntnum'] = $rs_cisprs[0]['countnum'];
+        		$data["reference"] = $rs_cisprs[0]['citycode'];
+        	}
+        }
+        if($data["ChannelCode"]=="TNT"){
+        	//是否废弃包裹
+        	$data['untread'] = $this->orderKey["untread"];
+        }
         $params = array('CustomerCode'=> $this->_user, 'packageMessage' => array($data));  
+
         $sysResult = $this->createAndPreAlertOrderService($params);
   
     	Ec::showError("**************start*************\r\n"
@@ -775,287 +795,212 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
     }
     
     
-    //add
+    //通知中邮接口
     public function  notifyOrderToService(){
-        //所有创建订单业务方法统一返回格式：调用状态、跟踪号、EC订单号、错误信息、错误代码
-        //errorCode 001 系统异常、内部消化 ,002 业务异常，需要操作员处理
-        $callResult = array("ack"=>0,"orderCode"=>$this->orderCode,"trackingNumber"=>"","error"=>"","errorCode"=>"");
-        $callResult["orderCode"] = $this->orderCode; 
-        try {
-            /*
-             * 1、验证订单是否可用
-             */
-            //调用服务接口，同步审核订单
-            $result = $this->excuteOrderToNotify1();
-            if(!$result["ack"]){
-                /*$callResult["error"] = $result["message"]."";
-                 $callResult["errorCode"] = "001";*/
-                $callResult["error"] = $result["data"]['ResultCode'];
-                $callResult["errorCode"] = $result["data"]['ResultDesc'];
-                return $callResult;
-            }
-             
-            if($result["ack"]){
-                $result_temp = $result["data"]['Item'][0];
-        
-                if(strtoupper(trim($result_temp["Result"])) == "1001"){
-                    $callResult["ack"] = 1;
-                }else {
-        
-                    $errorMessage = "";
-                    foreach ($result_temp["ErrorPacketOrderList"] as $eKey=>$eVal){
-                        $errorMessage .= $eVal["Message"];
-                    }
-                    	
-                    $callResult["error"] = $errorMessage;
-                }
-            }
-             
-        } catch (Exception $e) {
-            $callResult["error"] = "同步未知异常，订单号：".$this->orderCode."异常信息：".$e->getMessage();
-        }
-        
-        return $callResult;
+      $callResult = array("ack"=>0,"orderCode"=>$this->orderCode,"error"=>"","errorCode"=>"");
+ 	  try {
+ 	 	$res = $this->excuteOrderToNotify();
+ 	 	$res = Common_Common::xml_to_array($res);
+ 	 	if($res['status']=='success'){
+ 	 		$callResult["ack"] = 1;
+ 	 	}else{
+ 	 		$callResult["ack"] = -1;
+ 	 		$callResult["errorCode"] = $res['code'];
+ 	 		$callResult["error"] = $res['description'];
+ 	 	}
+ 	} catch (Exception $e) {
+ 	    $callResult["error"] = "同步未知异常，订单号：".$this->orderCode."异常信息：".$e->getMessage();
+ 	}
+ 		return $callResult;
     }
     public function excuteOrderToNotify(){
     
         /*
-         * 构造订单信息
-        	*/
-        $xml = "
-<orders>
-  <pretype>DHL</pretype>
-  <orgcode></orgcode>
-  <custcode>00000</custcode>
-  <postInfos>
-    <order>
-      <mailnum>3879109216</mailnum>
-      <rcvarea>5</rcvarea>
-      <prptycode>3</prptycode>
-      <prodcode>12344</prodcode>
-      <clctname>zhangsan</clctname>
-      <clctcode>123456</clctcode>
-      <actualweight>1</actualweight>
-      <length>1</length>
-      <width>1</width>
-      <height>1</height>
-      <volweight>10</volweight>
-      <billingweight>10</billingweight>
-      <bjmoney>122</bjmoney>
-      <bxmoney>100</bxmoney>
-      <loanmoney></loanmoney>
-      <minordernum>1</minordernum>
-      <mpostalnum>3879109216</mpostalnum>
-      <ordernum>YT161501200033</ordernum>
-      <forecastshut>0</forecastshut>
-      <internals>1</internals>
-      <portoffice>12345</portoffice>
-      <sendcountry>CN</sendcountry>
-      <mainminorder>2</mainminorder>
-      <mainbilling>1</mainbilling>
-      <transport>2</transport>
-      <ordersources>1223</ordersources>
-      <identityplate>5555</identityplate>
-      <itemnames>内件1，内件2</itemnames>
-      <sender>
-        <name>张三</name>
-        <postcode>123456</postcode>
-        <phone>12345678</phone>
-        <mobile>12345678901</mobile>
-        <country>CN</country>
-        <provcode>320000</provcode>
-        <citycode>320100</citycode>
-        <countycode>320110</countycode>
-        <company>武汉ems</company>
-        <street>中南街道</street>
-      </sender>
-      <receiver>
-        <name>zhouyu</name>
-        <postcode>2060</postcode>
-        <phone>13510133241</phone>
-        <mobile>13510133241</mobile>
-        <country>AU</country>
-        <provcode></provcode>
-        <citycode>Orbit Travel Co</citycode>
-        <countycode></countycode>
-        <company>shan</company>
-        <street>Travel World House</street>
-      </receiver>
-      <items>
-        <item>
-          <cnname>内件1</cnname>
-          <count>2</count>
-          <weight>1.22</weight>
-          <currency>1</currency>
-          <cost>1.22</cost>
-          <intemcom>内件1</intemcom>
-          <origin>CN</origin>
-          <trade>1</trade>
-          <enname>ename</enname>
-          <HS></HS>
-          <intemsize></intemsize>
-          <sellurl></sellurl>
-        </item>
-        <item>
-          <cnname>内件1</cnname>
-          <count>2</count>
-          <weight>1.22</weight>
-          <currency>1</currency>
-          <cost>1.22</cost>
-          <intemcom>木头</intemcom>
-          <origin>CN</origin>
-          <trade>1</trade>
-          <enname>ename</enname>
-          <HS>hs123</HS>
-          <intemsize></intemsize>
-          <sellurl></sellurl>
-        </item>
-      </items>
-    </order>
-  </postInfos>
-</orders>      
-";    
-        $url="http://shipping.ems.com.cn/partner/api/public/p/orderSpecial";
-        $params['str'] = $xml;
-        $sysResult = $this->sendDataToservice($url,$params);
+         * 构造订单信息xml
+       	 */
+      	$xmlarray= array();
+      	//寄件人信息
+      	$sender = array();
+      	$sender['name'] = $this->shipperKey["shipperName"];
+      	$sender['postcode'] = $this->shipperKey["shipperPostCode"];
+      	$sender['phone'] = $this->shipperKey["shipperPhone"];
+      	$sender['mobile'] = $this->shipperKey["shipperPhone"];
+      	$sender['country'] = $this->shipperKey["shipperCountryCode"];
+      	$sender['provcode'] = "";
+      	$sender['citycode'] = $this->shipperKey["shipperCity"];
+      	//获取区域代码
+      	$codeArr = $this->getQycode($sender['citycode']);
+      	if(is_array($codeArr)&&count($codeArr)==2){
+      		$sender['provcode'] = $codeArr['provincecode'];
+      		$sender['citycode'] = $codeArr['citycode'];
+      	}
+      	$sender['countycode'] = '';
+      	$sender['company'] = $this->shipperKey["shipperCompanyName"];
+      	$sender['street'] = $this->shipperKey["shipperStreet"];
+      	//收件人信息
+      	$receiver = array();
+      	$receiver['name'] =  $this->orderKey['consigneeName'];
+      	$receiver['postcode'] = $this->orderKey['consigneePostalCode'];
+      	$receiver['phone'] = empty($this->orderKey['consignee_telephone']) ? $this->orderKey['consignee_mobile'] : $this->orderKey['consignee_telephone'];
+      	$receiver['mobile'] = empty($this->orderKey['consignee_mobile']) ? $this->orderKey['consignee_telephone'] : $this->orderKey['consignee_mobile'];
+      	$receiver['country'] =  $this->orderKey['consigneeCountryCode'];
+      	$receiver['prov'] = $this->orderKey["consigneeStateOrProvince"];
+      	$receiver['city'] = $this->orderKey['consigneeCity'];
+      	$receiver['county'] = $this->orderKey['consigneeCountryCode'];
+      	$receiver['company'] = $this->orderKey["consigneeCompanyName"];
+      	$receiver['street'] =  $this->orderKey["consigneeStreet"];
+      	if(!empty($this->orderKey["consigneeStreet1"]))
+      		$receiver['street_extra_1'] = $this->orderKey["consigneeStreet1"];
+      	if(!empty($this->orderKey["consigneeStreet2"]))
+      	$receiver['street_extra_2'] = $this->orderKey["consigneeStreet2"];
+      	//商品信息
+      	$items = array();
+      	//内件品名
+      	$itemnames = '';
+      	foreach($this->orderInvoiceItemKey as $oKey=>$row){
+      		$item = array();
+      		$cnname = (!empty($row['titleCn']) ? $row['titleCn'] : $row['titleEn']);
+      		$enname = (!empty($row['titleEn']) ? $row['titleEn'] : $row['titleCn']);
+      		if($itemnames&&$enname!=$itemnames){
+      			$itemnames.=','.$enname;
+      		}else if(!$itemnames){
+      			$itemnames.=$enname;
+      		}
+      		$item['cnname'] = $cnname;
+      		$item['count'] = $row["quantity"];
+      		$item['weight'] = intval($row["weight"]*$row["quantity"]*1000)/1000;
+      		$item['currency'] = $row["currencyCode"];
+      		$item['cost'] = intval($row['value']*$row["quantity"]*100)/100;
+      		$item['intemcom'] = 'Harmless ingredients';
+      		$item['origin'] = "CN";
+      		$item['trade'] = $this->orderKey['type']==3?1:3;
+      		$item['enname'] = $enname;
+      		$item['HS'] = $row["hsCode"];
+      		$item['intemsize'] = '';
+      		$item['sellurl'] = '';
+      		$items["item_".$oKey]=$item;
+      	}
+      	//第3级
+      	$array_three=array();
+      	$array_three['pretype'] = 60;
+      	$array_three['mailnum'] = $this->orderData['server_hawbcode'];
+      	$array_three['rcvarea'] = 5;
+      	$array_three['prptycode'] = $this->orderKey['type']==3?1:3;
+      	//$array_three['prodcode'] = '';
+      	switch ($this->serverProductCode){
+      		case "TNT":$array_three['prodcode'] = $this->orderKey['type']==3?5120101991:5320101991 ;break;
+      		case "G_DHL":$array_three['prodcode'] = $this->orderKey['type']==3?5120501991:5320501991 ;break;
+      		case "ESB":$array_three['prodcode'] =5320402991 ;break;
+      		default:$array_three['prodcode'] =5320401991 ;break;
+      	}
+      	
+      	$array_three['clctname'] = '';
+      	$array_three['clctcode'] = '';
+      	$array_three['actualweight'] = $this->orderKey["weight"]*1000;
+      	$array_three['length'] = intval($this->orderKey["length"]*10)/10;
+      	$array_three['width'] = intval($this->orderKey["width"]*10)/10;
+      	$array_three['height'] = intval($this->orderKey["height"]*10)/10;
+      	$array_three['volweight'] =  $array_three['actualweight'];
+      	$array_three['billingweight'] = $array_three['actualweight'];
+      	$array_three['bjmoney'] = 0;
+      	
+      	$array_three['bxmoney'] = intval($this->orderKey["insurance_value_gj"]*100)/100;
+      	$array_three['loanmoney'] = 0;
+      	$array_three['minordernum'] = 0;
+      	$array_three['mpostalnum'] = $this->orderData['server_hawbcode'];
+      	$array_three['ordernum'] = $this->orderCode;
+      	$array_three['forecastshut'] = 0;
+      	$array_three['internals'] = 1;
+      	$array_three['portoffice'] = '';
+      	$array_three['sendcountry'] = 'CN';
+      	$array_three['mainminorder'] = 1;
+      	//$array_three['mainbilling'] = 1;
+      	$array_three['transport'] = 2;
+      	$array_three['ordersources'] = '';
+      	$array_three['identityplate'] = '';
+      	$array_three['itemnames'] = $itemnames;      	
+      	$array_three['sender'] = $sender;
+      	$array_three['receiver'] = $receiver;
+      	$array_three['items'] = $items;
+      	//第2级
+      	$array_two = array();
+      	$array_two['order'] = $array_three;
+      	//第1级
+      	$array_one = array();
+      	$array_one['pretype'] = 60;
+      	$array_one['orgcode'] = ''; 
+      	$array_one['custcode'] = ''; //大客户id
+      	$array_one['postInfos'] = $array_two;
+      	//根root
+      	$xmlarray['orders'] = $array_one;
+      	$xml = xml_encode($xmlarray['orders'],'orders','item');
+      	$xml=preg_replace('/item_(\d)+/i','item', $xml);  
+        $url="http://shipping2.ems.com.cn/partner/api/public/p/orderSpecial";
+        $data = $xml;
+        $header = array("authenticate:pdfTest_dhfjh98983948jdf78475fj65375fjdhfj","version:international_eub_us_1.1");
+        $result = $this->curl_send($url,$data,$header,"post");
         Ec::showError("**************start*************\r\n"
-            . print_r($params, true)
-            . "\r\n" . print_r($sysResult, true)
+            . print_r($data, true)
+            . "\r\n" . print_r($result, true)
             . "**************end*************\r\n",
-            'YunExpress_API/Notify_response_info'.date("Ymd"));
-        return $sysResult;
+            'YunExpress_API/Notify_ems_response_info'.date("Ymd"));
+        return $result;
     }
     
-    public function excuteOrderToNotify1(){
-    
-        /*
-         * 构造订单信息
-         */
-        $xml = '<!--?xml version="1.0" encoding="UTF-8"?-->
-<orders xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <order>
-        <orderid>SO1231231</orderid>
-        <operationtype>0</operationtype>
-        <producttype>0</producttype>
-        <customercode>deve360</customercode>
-        <vipcode>00000000000001</vipcode>
-        <clcttype>1</clcttype>
-        <pod>false</pod>
-        <untread>Abandoned</untread>
-        <volweight>123</volweight>
-        <startdate>2015-04-01T00:00:01</startdate>
-        <enddate>2015-04-01T00:00:01</enddate>
-        <printcode>01</printcode>
-        <sender>
-            <name>Wang Lin</name>
-            <postcode>100055</postcode>
-            <phone>2131231</phone>
-            <mobile>1123333333313</mobile>
-            <country>CN</country>
-            <province>441402</province>
-            <city>441402</city>
-            <county>441402</county>
-            <company>Teamsun</company>
-            <street>Lotus Street</street>
-            <email>mail@team.com</email>
-        </sender>
-        <receiver>
-            <name>Tom.k</name>
-            <postcode>10005</postcode>
-            <phone>1111111</phone>
-            <mobile>212-222-0111</mobile>
-            <country>UNITED STATES OF AMERICA</country>
-            <province>LA</province>
-            <city>San Francisco</city>
-            <county>St.</county>
-            <company></company>
-            <street>Lotus Street</street>
-            <email></email>
-        </receiver>
-        <collect>
-            <name>王大琳</name>
-            <postcode>100067</postcode>
-            <phone>123456-908-098</phone>
-            <mobile>1233333333333</mobile>
-            <country>CN</country>
-            <province>441402</province>
-            <city>441402</city>
-            <county>441402</county>
-            <company></company>
-            <street>莲花池东路126号</street>
-            <email>bin@team.com</email>
-        </collect>
-        <items>
-            <item>
-                <cnname>盒子</cnname>
-                <enname>box</enname>
-                <count>1</count>
-                <unit></unit>
-                <weight>0.1</weight>
-                <delcarevalue>1</delcarevalue>
-                <origin>CN</origin>
-                <description></description>
-            </item>
-            <item>
-                <cnname>电脑</cnname>
-                <enname>computer</enname>
-                <count>2</count>
-                <unit>unit</unit>
-                <weight>0.23</weight>
-                <delcarevalue>1</delcarevalue>
-                <origin>CN</origin>
-                <description>Computer Machine</description>
-            </item>
-        </items>
-        <remark></remark>
-    </order>
-</orders>
-';
-        //$url="http://www.ems.com.cn/partner/api/public/p/order/";
-        $url="http://yt2.net/admin/tool/test2/";
-        $params = $xml;
-        $sysResult = $this->sendDataToservice($url,$params);
-        Ec::showError("**************start*************\r\n"
-            . print_r($params, true)
-            . "\r\n" . print_r($sysResult, true)
-            . "**************end*************\r\n",
-            'YunExpress_API/Notify_response_info'.date("Ymd"));
-        return $sysResult;
+    //中邮收寄 获取省和市是区域代码
+    public function getQycode($positionename){
+    	$return_arr = array();
+    	do{
+    		try{
+    			//在本地的对照库中找到地址，然后取出市 和 省
+    			$condition['positionpname'] = strtoupper($positionename);
+    			$res = Service_CsiGeographical::getByCondition($condition);
+    			if($res[0]&&is_array($res[0])){
+    				$citycname =  $res[0]['citycname'];
+    				$provincecname = $res[0]['provincecname'];
+    				//获取省区域代码
+    				$url = 'http://shipping2.ems.com.cn/partner/api/public/p/area/cn/province/list';
+    				$header = array("authenticate:pdfTest_dhfjh98983948jdf78475fj65375fjdhfj","version:international_eub_us_1.1");
+    				$res = $this->curl_send($url,'',$header);
+    				if(is_array($res)){
+    					break;
+    				}
+    				$proinceArr =$this->decode_xml_zy($res);
+    				if(!$proinceArr[$provincecname]){
+    					break;
+    				}
+    				$return_arr['provincecode'] = $proinceArr[$provincecname];
+    				//然后再去调取该省下面的市
+    				$url = 'http://shipping2.ems.com.cn/partner/api/public/p/area/cn/city/list/'.$return_arr['provincecode'];
+    				$res = $this->curl_send($url,'',$header);
+    				if(is_array($res)){
+    					break;
+    				}
+    				$proinceArr =$this->decode_xml_zy($res);
+    				if(!$proinceArr[$citycname]){
+    					break;
+    				}
+    				$return_arr['citycode'] = $proinceArr[$citycname];
+    			}
+    		}catch (Exception $e){
+    		
+    		}
+    	}while (0);  
+    	
+    	return $return_arr;
     }
     
-    //发起请求
-    protected function sendDataToservice($url,$params,$method="POST"){
-        $result = array("ack"=>0,"message"=>"","data"=>"");
-        try {
-            $tuCurl = curl_init();
-            curl_setopt($tuCurl, CURLOPT_URL, $url);
-            //curl_setopt($tuCurl, CURLOPT_SSL_VERIFYPEER, 0);
-            //curl_setopt($tuCurl, CURLOPT_CUSTOMREQUEST, $method);
-            //curl_setopt($tuCurl, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($tuCurl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);
-            echo $params;	
-            if($method == 'POST') {
-                curl_setopt($tuCurl, CURLOPT_POST, 1);
-                curl_setopt($tuCurl, CURLOPT_POSTFIELDS, $params);
-            }
-            $header = array(
-                "Content-Type: text/xml; charset=utf-8", "Content-length: ".strlen($params)
-            );
-            $header[]="version: international_eub_us_1.1";
-            $header[]="authenticate: pdfTest_dhfjh98983948jdf78475fj65375fjdhfj";
-            //curl_setopt($tuCurl, CURLOPT_HTTPHEADER, $header);
-            $data = curl_exec($tuCurl);
-            var_dump($data);
-            var_dump(curl_error($tuCurl));die;
-            $data = Common_Common::objectToArray(json_decode($data));
-            $result["ack"] = 1;
-            $result["data"] = $data;
-        } catch (Exception  $e) {
-            $result["message"] = $e->getMessage();
-        }  
+    //解析中邮区域代码xml
+    private function decode_xml_zy($res){
+    	$proinceArr = array();
+    	$xml = new DOMDocument();
+    	$xml->loadXML($res);
+    	$areaDom = $xml->getElementsByTagName("area");
+    	foreach($areaDom as $area){
+    		$proinceArr[$area->nodeValue]=$area->attributes->item(0)->nodeValue;
+    	}
+    	return $proinceArr;
     }
-    
-    //生成xml
     
     //跟踪物流
     public function gettrack_pross($param,$dataformat=false){

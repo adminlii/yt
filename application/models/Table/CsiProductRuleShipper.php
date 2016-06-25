@@ -100,6 +100,9 @@ class Table_CsiProductRuleShipper
         if(isset($condition["status"]) && $condition["status"] != ""){
             $select->where("status = ?",$condition["status"]);
         }
+        if(isset($condition["citycode"]) && $condition["citycode"] != ""){
+        	$select->where("citycode = ?",$condition["citycode"]);
+        }
         /*CONDITION_END*/
 //         echo $select->__toString();exit;
         if ('count(*)' == $type) {

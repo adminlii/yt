@@ -132,6 +132,9 @@ class Table_OrderProcessing
         if(isset($condition["tnt_status"]) && $condition["tnt_status"] !== ""){
             $select->where("tnt_status = ?",$condition["tnt_status"]);
         }
+        if(isset($condition["ems_status"]) && $condition["ems_status"] !== ""){
+        	$select->where("ems_status = ?",$condition["ems_status"]);
+        }
         /*CONDITION_END*/
         if ('count(*)' == $type) {
             return $this->_table->getAdapter()->fetchOne($select);
