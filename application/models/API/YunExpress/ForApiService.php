@@ -952,6 +952,11 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
     	$return_arr = array();
     	do{
     		try{
+    			//如果出现xxx,xxx的取第一个
+    			$_positionename = strpos($positionename,",");
+    			if($_positionename!==false){
+    				$positionename=substr($positionename,0,$_positionename);
+    			}
     			//在本地的对照库中找到地址，然后取出市 和 省
     			$condition['positionpname'] = strtoupper($positionename);
     			$res = Service_CsiGeographical::getByCondition($condition);
