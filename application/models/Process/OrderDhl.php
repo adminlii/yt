@@ -1021,7 +1021,7 @@ class Process_OrderDhl
             'shipper_mallaccount' => $this->_shipper['shipper_mallaccount']
         );
         //替换地址||=》" "
-        $shipper['shipper_street']= str_replace("||", " ", $shipper['shipper_street']);
+        //$shipper['shipper_street']= str_replace("||", " ", $shipper['shipper_street']);
         $consignee = array(
             'consignee_name' => $this->_consignee['consignee_name'],
             'consignee_company' => $this->_consignee['consignee_company'],

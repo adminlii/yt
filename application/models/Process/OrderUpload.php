@@ -499,6 +499,7 @@ class Process_OrderUpload extends Process_Order
              //$map['销售地址' . $i] = 'AAA_invoice_url_' . $i;
              $map['数量' . $i] = 'AAA_invoice_quantity_' . $i;
              $map['海关编码' . $i] = 'AAA_hs_code_' . $i;
+             $map['配货信息' . $i] = 'AAA_invoice_note_' . $i;
              //$map['配货备注' . $i] = 'AAA_invoice_note_' . $i;
          }
         /*
