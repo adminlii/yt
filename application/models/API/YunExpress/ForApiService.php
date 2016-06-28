@@ -957,6 +957,7 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
     			if($_positionename!==false){
     				$positionename=substr($positionename,0,$_positionename);
     			}
+    			$positionename = preg_replace('/\s/','',$positionename);
     			//在本地的对照库中找到地址，然后取出市 和 省
     			$condition['positionpname'] = strtoupper($positionename);
     			$res = Service_CsiGeographical::getByCondition($condition);

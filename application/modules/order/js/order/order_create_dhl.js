@@ -159,9 +159,9 @@ $('.checkchar3').live('keyup',function(){
 //地址
 $('.checkchar2').live('keyup',function(){
 	if($("#product_code").val()=="TNT")
-		err_tip(this,/^[0-9a-zA-Z\s]{0,30}$/,'长度最多30字符');
+		err_tip(this,/^[0-9a-zA-Z,\s]{0,30}$/,'长度最多30字符');
 	else
-		err_tip(this,/^[0-9a-zA-Z\s]{0,36}$/,'长度最多36字符');
+		err_tip(this,/^[0-9a-zA-Z,\s]{0,36}$/,'长度最多36字符');
 })
 
 //发件人参考信息：商户订单号

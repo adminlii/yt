@@ -19,12 +19,12 @@ function getpostcadeData(select,that,obj,obj1,isshow){
 			for(var i in data.data){
 				var dhlcount = data.data[i]["dhlcount"]?data.data[i]["dhlcount"]:'';
 				var city = data.data[i]["cityename"];
-				if(city){
+				/*if(city){
 					var index = city.indexOf(",");
 					if(index>=0){
 						city =  city.substr(0,index);
 					}
-				}
+				}*/
 				var citycode = data.data[i]["citycode"]?data.data[i]["citycode"]:'';
 				var provinceename = data.data[i]["provinceename"]?data.data[i]["provinceename"]:'';
 				listr+="<li provinceename='"+provinceename+"' account='"+dhlcount+"' postcode='"+data.data[i]["postcode"]+"' city='"+city+"' citycode='"+citycode+"' class='check_li'>"+data.data[i]["cityename"]+":"+data.data[i]["postcode"]+"</li>";

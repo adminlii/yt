@@ -517,11 +517,11 @@ class Process_Order
                 	}
                 }
                 
-                if(!$invoice['invoice_note']){
+               /*  if(!$invoice['invoice_note']){
                 	if($this->_order['product_code'] =='ESB'){
                 		$this->_err[] = "(" . Ec::Lang('申报信息') . $k . ")" . Ec::Lang('当选择ESB时配货信息不可为空');
                 	}
-                }
+                } */
             }
         }
 
@@ -1369,15 +1369,21 @@ class Process_Order
                     throw new Exception(Ec::Lang('产品不存在') . "[{$order['product_code']}]");
                 }
                 //充值订单进程
-                $row_order_process = array(
-                    "ops_status"=>0,
-                    "ops_syncing_status"=>0,
-                    "ops_note"=>"",
-                    "label_status"=>0,
-                    "trackingnumber_status"=>0,
-                    "release_status"=>0,
-                );
-                Service_OrderProcessing::update($row_order_process,$order["shipper_hawbcode"],"shipper_hawbcode");
+                $condition_ordPro = array();
+                $condition_ordPro['shipper_hawbcode'] = $order["shipper_hawbcode"];
+                
+                $res_ordpro = Service_OrderProcessing::getByCondition($condition_ordPro);
+                if($res_ordpro['trackingnumber_status']==0){
+                	$row_order_process = array(
+                			"ops_status"=>0,
+                			"ops_syncing_status"=>0,
+                			"ops_note"=>"",
+                			"label_status"=>0,
+                			"trackingnumber_status"=>0,
+                			"release_status"=>0,
+                	);
+                	Service_OrderProcessing::update($row_order_process,$order["shipper_hawbcode"],"shipper_hawbcode");
+                }
                 break;
             case 'pause': // 暂存
                           // $updateRow['order_status'] = 'Q';

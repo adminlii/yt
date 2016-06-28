@@ -500,6 +500,7 @@ class Process_OrderUpload extends Process_Order
              $map['数量' . $i] = 'AAA_invoice_quantity_' . $i;
              $map['海关编码' . $i] = 'AAA_hs_code_' . $i;
              $map['配货信息' . $i] = 'AAA_invoice_note_' . $i;
+             $map['SKU' . $i] = 'AAA_sku_' . $i;
              //$map['配货备注' . $i] = 'AAA_invoice_note_' . $i;
          }
         /*
@@ -1081,6 +1082,8 @@ class Process_OrderUpload extends Process_Order
       
                     //计算保险金额
                     if($v['extraservice1']=='是'){
+                    	$huilvres = Common_DataCache::getHuilv();
+                    	//huobi
                         $hv  = 6.5;
                         if($v['insurance_value_gj']){
                             $max_insurance = $invoice[1]['invoice_totalcharge_all']*$hv;
