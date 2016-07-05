@@ -389,7 +389,9 @@ class Process_OrderUpload extends Process_Order
             '发件人国家' => 'shipper_countrycode',
             //'省/州' =>   'shipper_province',
             '发件人城市' => 'shipper_city',
-            '发件人地址' => 'shipper_street',
+            '发件人地址1' => 'shipper_street1',
+        	'发件人地址2' => 'shipper_street2',
+        	'发件人地址3' => 'shipper_street3',
             '发件人电话' => 'shipper_telephone',
             '发件人邮编' => 'shipper_postcode',
             //'发件人传真' => 'shipper_fax',
@@ -411,16 +413,23 @@ class Process_OrderUpload extends Process_Order
             '收件人传真' => 'consignee_fax',
             '英文品名'=>'AAA_invoice_enname_1',
             '中文品名'=>'AAA_invoice_cnname_1',
-            '发件人增值税/商品服务税号'=>'AAA_invoice_shippertax_1',
-            '收件人增值税/商品服务税号'=>'AAA_invoice_consigneetax_1',
+            '发件人增值税号/企业海关十位编码'=>'AAA_invoice_shippertax_1',
+            '收件人增值税号/企业海关十位编码'=>'AAA_invoice_consigneetax_1',
             '通关的申报价值'=>'AAA_invoice_totalcharge_all_1',
-            '协调商品代码'=>'AAA_hs_code_1',
+            'HSCODE'=>'AAA_hs_code_1',
             '快件保险（是，否）'=>'extraservice1',
             '保险价值' => 'insurance_value_gj',
             '额外服务选项（是，否）'=>'extraservice2',
+        	'制作发票(是,否)'=>'invoice_print',
+        	'日期'=>'makeinvoicedate',
+        	'出口类型'=>'export_type',
+        	'贸易条款'=>'trade_terms',
+        	'发票号码'=>'invoicenum',
+        	'付款方式'=>'pay_type',	
+        	'注释'=>'fpnote',							
         );
         for($i = 1;$i <= 100;$i ++){
-            $map['配货信息' . $i] = 'AAA_invoice_note_' . $i;
+            //$map['配货信息' . $i] = 'AAA_invoice_note_' . $i;
             //$map['单价' . $i.'(usd)'] = 'AAA_invoice_unitcharge_' . $i;
             $map['重量' . $i] = 'AAA_invoice_weight_' . $i;
             //$map['销售地址' . $i] = 'AAA_invoice_url_' . $i;
@@ -430,6 +439,10 @@ class Process_OrderUpload extends Process_Order
             $map['件数' . $i] = 'AAA_invoice_quantity_' . $i;
             //$map['海关编码' . $i] = 'AAA_hs_code_' . $i;
             //$map['配货备注' . $i] = 'AAA_invoice_note_' . $i;
+            $map['完整描述' . $i] = 'BBB_invoice_note_' . $i;
+            $map['商品代码' . $i] = 'BBB_invoice_shipcode_' . $i;
+            $map['单价'.$i.'（usd）'] = 'BBB_invoice_unitcharge_' . $i;
+            $map['产地' . $i] = 'BBB_invoice_proplace_' . $i;
         }
         /*
          从标准模板中获取映射关系
@@ -919,7 +932,7 @@ class Process_OrderUpload extends Process_Order
                 'order_length'=>$v['order_length'],
                 'order_width'=>$v['order_width'],
                 'order_height'=>$v['order_height'],
-    
+            	'dangerousgoods'=>empty($v['dangerousgoods'])?0:1,
                 'buyer_id' =>$v['buyer_id'],
                 'order_id' => $v['order_id'],
                 'order_create_code'=>'w',
@@ -931,18 +944,15 @@ class Process_OrderUpload extends Process_Order
                 'customer_channelid'=>Service_User::getChannelid(),
                 'insurance_value' => trim($v['insurance_value1']),
                 'insurance_value_gj' => $v['insurance_value_gj'],
+            	'invoice_print'=>empty($v['invoice_print'])?0:1,
+            	'makeinvoicedate'=> $v['makeinvoicedate'],
+            	'export_type'=> $v['export_type'],
+            	'trade_terms'=> $v['trade_terms'],
+            	'invoicenum'=> $v['invoicenum'],
+            	'pay_type'=> $v['pay_type'],
+            	'fpnote'=> $v['fpnote'],
+            	'untread'=>empty($v['untread'])?0:intval($v['untread']),
             );
-            /* if(empty($order['shipper_hawbcode'])){
-             $this->_errArr[] = Ec::Lang('客户单号不可为空');
-            } */
-    
-           /*  if(empty($order['product_code'])){
-                $this->_errArr[] = Ec::Lang('运输方式不可为空');
-            }
-    
-            if(empty($order['country_code'])){
-                $this->_errArr[] = Ec::Lang('目的国家不可为空');
-            } */
     
             $volume=array(
                 'length'=>$v['length'],
@@ -974,18 +984,13 @@ class Process_OrderUpload extends Process_Order
                 'consignee_certificatetype'=>'',
                 'consignee_certificatecode'=>'',
             );
-            //print_r($consignee);exit;
-    
-           /*  if(empty($consignee['consignee_name'])){
-                $this->_errArr[] = Ec::Lang('收件人姓名不可为空');
-            }
-             
-            if(empty($consignee['consignee_street'])){
-                $this->_errArr[] = Ec::Lang('收件人地址不可为空');
-            } */
             //验证国家是否存在,通过标准国家二字码与客户自定义国家映射
             $v['shipper_countrycode'] = $this->_checkCountryExist($v['shipper_countrycode']);  //修改从excel读取到的原始数据
             $fileData[$k][$map_flip['shipper_countrycode']] = $v['shipper_countrycode'];
+            //拼接收件人地址
+            $shipperStree = $v['shipper_street1'];
+            $shipperStree.=empty($v['shipper_street2'])?'':'||'.$v['shipper_street2'];
+            $shipperStree.=empty($v['shipper_street3'])?'':'||'.$v['shipper_street3'];
             $shipper = array(
                 // 'shipper_account' => $v['shipper_account'],
                 'shipper_name' => $v['shipper_name'],
@@ -993,7 +998,7 @@ class Process_OrderUpload extends Process_Order
                 'shipper_countrycode' => $v['shipper_countrycode'],
                 'shipper_province' => $v['shipper_province'],
                 'shipper_city' => $v['shipper_city'],
-                'shipper_street' => $v['shipper_street'],
+                'shipper_street' => $shipperStree,
                 'shipper_postcode' => $v['shipper_postcode'],
                 'shipper_areacode' => $v['shipper_areacode'],
                 'shipper_telephone' => $v['shipper_telephone'],
@@ -1017,7 +1022,7 @@ class Process_OrderUpload extends Process_Order
             }
     
             $invoice = array();
-    
+            $labelArr = array();
             foreach($v as $kk => $vv){
                 if(preg_match('/^AAA_/', $kk) && preg_match('/_[0-9]+$/', $kk)){
                     if(trim($vv) == ''){
@@ -1029,6 +1034,18 @@ class Process_OrderUpload extends Process_Order
                         $invoice[$m[1]][$kkk] = $vv;
                         // print_r($m);exit;
                     }
+                }
+                
+                if(preg_match('/^BBB_/', $kk) && preg_match('/_[0-9]+$/', $kk)){
+                	if(trim($vv) == ''){
+                		continue;
+                	}
+                	$kk = preg_replace('/^BBB_/', '', $kk);
+                	if(preg_match('/_([0-9]+)$/', $kk, $m)){
+                		$kkk = preg_replace('/'.$m[0].'$/', '', $kk);
+                		$labelArr[$m[1]][$kkk] = $vv;
+                		// print_r($m);exit;
+                	}
                 }
             }
             //去掉都为空的海关信息
@@ -1045,7 +1062,15 @@ class Process_OrderUpload extends Process_Order
                 }
             }
             //print_r($invoice);die;
+            $invoice_weight	= 0;
+            $invoice_lenght = 0;
+            $invoice_width 	= 0;
+            $invoice_height	= 0;
             foreach ($invoice as $column=>$vc){
+            	$invoice_weight+=$vc["invoice_weight"]*$vc["invoice_quantity"];
+            	$invoice_lenght>$vc["invoice_length"]?"":$invoice_lenght=$vc["invoice_length"];
+            	$invoice_width>$vc["invoice_width"]?"":$invoice_width=$vc["invoice_width"];
+            	$invoice_height>$vc["invoice_height"]?"":$invoice_height=$vc["invoice_height"];
                 if(!$vc['invoice_enname']){
                     $vc['invoice_enname'] = $invoice[1]['invoice_enname'];
                     $vc['invoice_cnname'] = $invoice[1]['invoice_cnname'];
@@ -1056,26 +1081,35 @@ class Process_OrderUpload extends Process_Order
                     $invoice[$column]=$vc;
                 }
             }
-            //print_r($invoice);die;
-            /* foreach($invoice as $kk=>$vv){
-                if(empty($vv['invoice_enname'])){
-                    $this->_errArr[] = Ec::Lang('海关报关品名不可为空',$kk);
-                }
-                if(empty($vv['invoice_unitcharge'])){
-                    //$this->_errArr[] = Ec::Lang('申报单价不可为空',$kk);
-                }
-                if(empty($vv['invoice_quantity'])){
-                    $this->_errArr[] = Ec::Lang('申报品数量不可为空',$kk);
-                }
-            } */
+            
+            $order['order_length'] = $volume['length'] = intval($invoice_lenght);
+            $order['order_width'] = $volume['width'] = intval($invoice_width);
+            $order['order_height'] = $volume['height'] = intval($invoice_height);
+            $order["order_weight"] = round($invoice_weight,1);
+            
+            foreach ($labelArr as $k_1_1=>$v1_1){
+            	$flag = false;
+            	foreach ($v1_1 as $vvv){
+            		if(!empty($vvv)){
+            			$flag=true;
+            			break;
+            		}
+            	}
+            	if(!$flag){
+            		unset($labelArr[$k_1_1]);
+            	}else{
+            		$labelArr[$k_1_1]['invoice_quantity'] =  $invoice[$k_1_1]['invoice_quantity'];
+            	}
+            }
             $service=array();
             
             if(!empty($invoice)){
                 if($v['mail_cargo_type']==3){
                     //是否勾选文件保险
-                    if($v['extraservice2']=='是'){
-                        $service[] = 'C4';
-                        
+                    switch ($v['extraservice2']){
+                    	case 'DHL文件29元保障服务':$service[] = 'C4';;break;
+                    	case 'TNT文件3元保障服务':$service[] = 'C5';break;
+                    	case 'TNT文件12元保障服务':$service[] = 'C6';break;
                     }
                     
                 }else if($v['mail_cargo_type']==4){
@@ -1084,29 +1118,54 @@ class Process_OrderUpload extends Process_Order
                     if($v['extraservice1']=='是'){
                     	$huilvres = Common_DataCache::getHuilv();
                     	//huobi
-                        $hv  = 6.5;
-                        if($v['insurance_value_gj']){
-                            $max_insurance = $invoice[1]['invoice_totalcharge_all']*$hv;
-                            $now_insurance = $v['insurance_value_gj'];
-                            if($max_insurance<$now_insurance){
-                                $this->_errArr[] = Ec::Lang('保险金额不得大于申报价值',$kk);
-                            }else{
-                                $service[] = 'C2';
-                                $order['insurance_value'] = intval(($now_insurance*0.01>100?$now_insurance*0.01:100)*10)/10;
-                            }
-                                
+                        $hv  = $huilvres['USD'];
+                        if($order["product_code"]=="G_DHL"){
+                        	if($v['insurance_value_gj']){
+                        		$max_insurance = $invoice[1]['invoice_totalcharge_all']*$hv;
+                        		$now_insurance = $v['insurance_value_gj'];
+                        		if($max_insurance<$now_insurance){
+                        			$this->_errArr[] = Ec::Lang('保险金额不得大于申报价值',$kk);
+                        		}else{
+                        			$service[] = 'C2';
+                        			$order['insurance_value'] = intval(($now_insurance*0.01>100?$now_insurance*0.01:100)*10)/10;
+                        		}
+                        	}
+                        }else{
+                        	$max_insurance = $invoice[1]['invoice_totalcharge_all']*$hv;
+                        	$order['insurance_value_gj'] = $max_insurance;
+                        	$service[] = 'C2';
+                        	$order['insurance_value'] = intval(($max_insurance>10000?$max_insurance*0.0015:10)*10)/10;
                         }
+                        
                         
                     }
                 }
             }
-   
+            //DHL 添加了规则，refer用来存取城市代码
+            $condtion_sp['cityname'] = $shipper['shipper_city'];
+            $condtion_sp['status'] =   1;
+            $condtion_sp['productcode'] =   $order["product_code"];
+            $server_csi_prs=new Service_CsiProductRuleShipper();
+            $rs_cisprs = $server_csi_prs->getByCondition($condtion_sp);
+            if($rs_cisprs[0]){
+            	//如果是DHL不认的替换掉邮编和城市
+            	if($rs_cisprs[0]['cityrname']&&$condtion_sp['productcode']=='G_DHL'){
+            		if($shipper['shipper_street']){
+            			$shipper['shipper_street'].=" ".$shipper['shipper_city'];
+            		}
+            		$shipper['shipper_city']=$rs_cisprs[0]['cityrname'];
+            		$shipper['shipper_postcode']=$rs_cisprs[0]['postcode'];
+            	}
+            	//ref里面设定上citycode
+            	$order['refer_hawbcode'] = $rs_cisprs[0]['citycode'];
+            }
             $data['order'] = $order;
             $data['consignee'] = $consignee;
             $data['shipper'] = $shipper;
             $data['invoice'] = $invoice;
             $data['service'] = $service;
             $data['volume']  =$volume;
+            $data['label']  =$labelArr;
             $dataArr[$k] = $data;
         }
         foreach($dataArr as $k=>$data){
@@ -1118,10 +1177,10 @@ class Process_OrderUpload extends Process_Order
                 $invoiceArr = $data['invoice'];
                 $extraservice = $data['service'];
                 $volumeArr = $data['volume'];
-    
+                $labelArr  = $data['label'];
                 $process->setVolume($volumeArr);
                 $process->setOrder($orderArr);
-               
+                $process->setLabel($labelArr);
                 $process->setInvoice($invoiceArr);
                 $process->setExtraservice($extraservice);
                 $process->setShipper($shipperArr);

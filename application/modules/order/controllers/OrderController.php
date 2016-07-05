@@ -304,8 +304,14 @@ class Order_OrderController extends Ec_Controller_Action
 
 		$countrys = Service_IddCountry::getByCondition(null, '*', 0, 0, '');
         $this->view->country = $countrys;
-
-        $this->view->productKind = Process_ProductRule::getProductKind();
+        $product_kind = Process_ProductRule::getProductKind();
+        $aviable_kind = array("TNT","G_DHL");
+        foreach ($product_kind as $pro_kind_k=>$pro_kind_v){
+        	if(in_array($pro_kind_v["product_code"], $aviable_kind)){
+        		unset($product_kind[$pro_kind_k]);
+        	}
+        }
+        $this->view->productKind = $product_kind;
 
         // print_r($productKind);
         $con = array('unit_status'=>'ON');
@@ -329,6 +335,60 @@ class Order_OrderController extends Ec_Controller_Action
         echo $html;
     }
 
+    
+    public function createfbaAction()
+    {
+    	if($this->getRequest()->isPost()){
+    		$params = $this->getRequest()->getParams();
+    		//订单头
+    		$order = $this->getParam('order',array());
+    		//收件人,发件人
+    		$consignee = $this->getParam('consignee',array());
+    		//预报？草稿？
+    		$status = $this->getParam('status','F');
+    		$orderArr = array(
+    			'product_code'=> 	$order['product_code'],
+    			'refer_hawbcode'=> 	$order['refer_hawbcode'],
+    			'boxnum'=> 	$order['boxnum'],
+    			'customer_id'=>Service_User::getCustomerId(),
+    			'creater_id'=>Service_User::getUserId(),
+    			'modify_date'=>date('Y-m-d H:i:s'),
+    			'customer_channelid'=>Service_User::getChannelid(),
+    			'invoicelistrel'=>$order['invoicelistrel'],
+    			'invoicerel'=>$order['invoicerel'],		
+    		);
+    
+    		$consigneeArr = array(
+    			'consignee_countrycode'=> $consignee['consignee_countrycode'],
+    			'storage'=> $consignee['storage'],
+    			'consignee_province'=> $consignee['consignee_province'],
+    			'consignee_postcode'=> $consignee['consignee_postcode'],
+    			'consignee_city'=> $consignee['consignee_city'],
+    			'consignee_street'=> $consignee['consignee_street'],
+    		);
+    		//$invoiceArr =array();
+    		$shipperArr = Service_CsiShipperTrailerAddress::getByField($consignee['shipper_account'], 'shipper_account');
+    		$process = new Process_Orderfba();
+    		$process->setOrder($orderArr);
+    		$process->setShipper($shipperArr);
+    		$process->setConsignee($consigneeArr);
+    		$return = $process->createOrderTransaction($status);
+    		die(Zend_Json::encode($return));
+    	}
+    	
+    	$countrys = Service_IddCountry::getByCondition(null, '*', 0, 0, '');
+    	$this->view->country = $countrys;
+    	$storageStore = Service_StorageStore::getByCondition(null, '*', 0, 0, '');
+    	$this->view->storageStore = $storageStore;
+    	//$this->view->productKind = Process_ProductRule::getProductKind();
+    	//$con = array('unit_status'=>'ON');
+    	//选取默认收件人
+    	$this->view->shipperCustom=$this->getShipper($order_id);
+    	$html =  Ec::renderTpl($this->tplDirectory . "order_createfba.tpl",'system-layout-0506');
+    	$html = preg_replace('/>\s+</','><',$html);
+    	echo $html;
+    }
+    
     /**
      * 手工创建DHL订单
      */
@@ -479,47 +539,12 @@ class Order_OrderController extends Ec_Controller_Action
             $orderArr['order_height'] = $volumeArr['height'] = intval($invoice_height);
             $orderArr["order_weight"] = round($invoice_weight,1);
             
-           //var_dump($invoiceArr);die;
-           /*  var_dump($invoice);
-            foreach($invoice as $column=>$v){
-                foreach($v as $kk=>$vv){
-                    if(empty($vv)){
-                        unset($invoiceArr[$kk]);
-                        continue;
-                    }
-                    $invoiceArr[$kk][$column] = $vv;
-                    
-                }
-            }
-            foreach ($invoiceArr as $column=>&$v){
-                if(!$v['invoice_enname']){
-                    $v['invoice_enname'] = $invoice['invoice_enname'][0];
-                    $v['invoice_cnname'] = $invoice['invoice_cnname'][0];
-                    $v['invoice_shippertax'] = $invoice['invoice_shippertax'][0];
-                    $v['invoice_consigneetax'] = $invoice['invoice_consigneetax'][0];
-                    $v['invoice_totalcharge_all'] = $invoice['invoice_totalcharge_all'][0];
-                    $v['sku'] = $invoice['sku'][0];
-                }
-            } */
-            // php hack
             if(! empty($invoiceArr)){
                 array_unshift($invoiceArr, array());
                 unset($invoiceArr[0]);
             }
             
-           /*  //如果类型是文件，则可以允许海关物品无关联
-            if($order['mail_cargo_type']==3){
-                $isNotNullOfInvoice=false;
-                foreach ($invoiceArr as $v){
-                    foreach ($v as $k=>$vv){
-                        if(!empty($vv)&&$k!='unit_code'){
-                            $isNotNullOfInvoice = true;
-                            break;
-                        } 
-                    }
-                }
-                !$isNotNullOfInvoice&&$invoiceArr=array();
-            } */
+          
             //标签打印 add
             $labelArr = array();
             foreach($invoice1 as $column=>$v){
@@ -678,7 +703,6 @@ class Order_OrderController extends Ec_Controller_Action
     public function createtntAction()
     {
     	$order_id = $this->getRequest()->getParam('order_id', '');
-    	$cpy = $this->getRequest()->getParam('cpy', null);
     	if($this->getRequest()->isPost()){
     		$orderR = array();
     		$params = $this->getRequest()->getParams();
@@ -688,11 +712,6 @@ class Order_OrderController extends Ec_Controller_Action
     		$consignee = $this->getParam('consignee',array());
     		//发件人
     		$shipper = $this->getParam('shipper',array());
-    		//申报信息
-    		$invoice = $this->getParam('invoice',array());
-    		$invoice1 = $this->getParam('invoice1',array());
-    		//额外服务
-    		$extraservice = $this->getParam('extraservice',array());
     		//预报？草稿？
     		$status = $this->getParam('status','1');
     
@@ -1063,8 +1082,16 @@ class Order_OrderController extends Ec_Controller_Action
             $param = $this->_request->getParams();
             $orderIdArr = $this->_request->getParam('order_id', array());
             $op = $this->_request->getParam('op', '');
-            $process = new Process_Order();
-            $return = $process->verifyOrderBatchTransaction($orderIdArr, $op);
+            //FBA的操作池
+            $fba_arr = array('exportfba','printfba');
+            if(in_array($op, $fba_arr)){
+            	$process = new Process_Orderfba();
+            	$return = $process->verifyOrderBatchTransaction($orderIdArr, $op);
+            }else{
+            	$process = new Process_Order();
+            	$return = $process->verifyOrderBatchTransaction($orderIdArr, $op);
+            }
+            
             // print_r($return);exit;
             die(json_encode($return));
         }
@@ -1748,6 +1775,142 @@ class Order_OrderController extends Ec_Controller_Action
 		$result['data']    = $res;
 		die(Zend_Json::encode($result));
 	}
+	
+	//邮编记录查询
+	public function getStorageAction(){
+		$result = array(
+				"state" => 0,
+				"message" => "Fail."
+		);
+		if ($this->_request->isPost()) {
+			$condition = array();
+			$condition['storage'] = !empty($this->_request->getPost('storage'))?$this->_request->getPost('storage'):'';
+			if(!$condition['storage']){
+				$result["state"] =-1;
+				$result["message"] ="没有数据提交";
+			}
+			$storageStore	=	new Service_StorageStore();
+			$rs = $storageStore->getByCondition($condition,'*',0,1);
+			if(!empty($rs)){
+				$result["state"] =1;
+				$result["data"] =$rs[0];
+			}
+		}
+		die(Zend_Json::encode($result));
+	}
+	
+	
+	/**
+	 * 导出订单
+	 */
+	public function exportfbaAction(){
+		$type = $this->getParam('type',2);
+		if($type == 2){
+			$order_id_arr = $this->getParam('orderId', array());
+			$process = new Process_OrderfbaUpload();
+			$process->baseExportProcess($order_id_arr);
+		}else if($type == 1){
+			//导出附件的功能
+			header("Content-type:text/html;charset=utf-8");
+			//导出附件
+			$savepath	=	'../public/fba/save';
+			$order_id = $this->getParam('orderid','');
+			if(empty($order_id))
+				exit;
+			//获取详细信息
+			$order_info = Service_CsdOrderfba::getByField($order_id);
+			if(empty($order_info)){
+				echo '未找到订单数据';die;
+			}
+			$filesavepath = '../public/fba/';
+			$zipdown	= new Common_FileToZip($savepath);
+			$filelist	=	array();
+			
+			if($order_info['invoicefile']&&file_exists($filesavepath.'invoice/'.$order_info['invoicefile']))
+				$filelist[]	=	$filesavepath.'invoice/'.$order_info['invoicefile'];
+			if($order_info['packlistfile']&&file_exists($filesavepath.'invoicelist/'.$order_info['packlistfile']))
+				$filelist[]	=	$filesavepath.'invoicelist/'.$order_info['packlistfile'];
+			$zipdown->toZip($filelist,true);
+		}
+	}
+	/**
+	 * 打印FBA标签
+	 */
+	public function printfbaAction(){
+		try{
+			set_time_limit(0);
+			$order_id_arr = $this->getParam('orderId', array());
+			if(empty($order_id_arr) || !is_array($order_id_arr)){
+				throw new Exception(Ec::Lang('没有需要打印的订单'));
+			}
+			//创建文件
+			$savepath = APPLICATION_PATH.'/../public/fba/print/';
+			do{
+				$filename = date('YmdHis').'_'.rand(1, 10000);
+			}while(file_exists($savepath.$filename.'.pdf'));
+			$htmlFileName = "http://".$_SERVER['HTTP_HOST'].'/default/index/printfba1?orderId='.join(',', $order_id_arr);
+			$pdfFileName  = $savepath.$filename.'.pdf';
+			//shell调用xml
+			if(!file_exists($pdfFileName)){
+				shell_exec("wkhtmltopdf {$htmlFileName} {$pdfFileName}");
+				//exec('/usr/local/wkhtmltox/bin/./wkhtmltopdf  {$htmlFileName} {$pdfFileName}');
+			}
+			//创建失败
+			if(!file_exists($pdfFileName)){
+				exit("创建pdf失败");
+			}else{
+				$this->redirect("/fba/print/{$filename}.pdf");
+			}
+		}catch(Exception $e){
+			header("Content-type: text/html; charset=utf-8");
+			echo $e->getMessage();
+			exit();
+		}
+	}
+	
+//邮编记录查询
+	public function uploadFileAction(){
+		$result = array(
+				"state" => 0,
+				"message" => "Fail."
+		);
+		try {
+			if ($this->_request->isPost()) {
+				$orderUploadfba  = 	new Process_OrderfbaUpload;
+				//保留发票
+				$saveDir = APPLICATION_PATH.'/../public/fba/';
+				//分批上传
+				if(isset($_FILES['invoice'])){
+					$savepath = $saveDir.'invoice/';
+					$upload_invoice_rs = $orderUploadfba->upload($_FILES['invoice'], $savepath,array('xls','xlsx'));
+				}else if(isset($_FILES['invoicelist'])){
+					$savepath = $saveDir.'invoicelist/';
+					$upload_invoice_rs = $orderUploadfba->upload($_FILES['invoicelist'], $savepath,array('xls','xlsx'));
+				}
+				$path = $upload_invoice_rs['path'];
+				if(!file_exists($savepath.$path)){
+					$result['state'] = -1;
+					$result['message'] = '文件保存失败';
+				}else{
+					$result['state'] = 1;
+					$result['data'] = $path;
+				}
+			}
+		} catch (Exception $e) {
+			$result['state'] = -13;
+			$result['message'] = $e->getMessage();
+		}
+		
+		die(Zend_Json::encode($result));
+	}
+	
+	public function testAction()
+	{
+		echo Ec::renderTpl($this->tplDirectory . "test.tpl", 'layout-upload');
+		$html = preg_replace('/>\s+</','><',$html);
+		echo $html;
+	}
+	
 }
 
 

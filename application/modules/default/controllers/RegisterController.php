@@ -34,6 +34,7 @@ public function indexAction()
                     'user_add_time' => date('Y-m-d H:i:s'),
                     'user_last_login' => date('Y-m-d H:i:s'),
                     'user_update_time' => date('Y-m-d H:i:s'),
+                	'tms_id'=>1,	
                     'user_password_update_time' => date('Y-m-d H:i:s'),
                 	'user_sources'=>$this->getParam('user_sources', ''),
                 	'platform_token'=>$this->getParam('platform_token', '')
@@ -138,21 +139,21 @@ public function indexAction()
     	/*
     	 * 1、发送通知邮件给维护人员
     	*/
-     	$content = '客户注册：<br>'
+     	/* $content = '客户注册：<br>'
      	.'公司名：' . $row['company_name'] .'<br>'
      	.'登录名：' . $row['user_code'] .'<br>'
      	.'邮箱：' . $row['user_email'] .'<br>'
      	.'手机：' . $row['user_mobile_phone'] .'<br>'
-     	.'电话：' . $row['user_phone'];
+     	.'电话：' . $row['user_phone']; */
 
     	$config = Zend_Registry::get('config');
      	$notice = $config->mails->config->register->notice;
-     	$paramsPersonnel = array(
+     	/* $paramsPersonnel = array(
      			'bodyType' => 'html',
      			'email' => array($notice),
      			'subject' => 'OMS 注册客户: '.$row['user_code'],
      			'body' => $content
-     	);
+     	); */
     	
     	$url = $this->getRequest()->getHttpHost();
     	$url = 'http://' . $url;
@@ -179,7 +180,7 @@ public function indexAction()
         /*
          * 3、发送通知邮件给客服
          */
-     	 Common_Email::sendMail($paramsPersonnel);
+     	 //Common_Email::sendMail($paramsPersonnel);
     	return $bol;
     
     }
@@ -205,15 +206,32 @@ public function indexAction()
                 if ($userRow[0]['email_verify'] == '0') {
                     //激活成功，并修邮箱验证状态
                     $userUpdata = array(
-//     				'user_status'=>1,
+     					'user_status'=>1,
                         'email_verify' => 1,
                     );
                     Service_User::update($userUpdata, $userRow[0]['user_id'], 'user_id');
+                	//插入csi_customer
+                    $csiCustomer_row = array(
+                    	"customer_id"=>$userRow[0]["customer_id"],
+                    	"customer_code"=>$userRow[0]["user_code"],
+                    	"customer_shortname"=>$userRow[0]["user_name"],
+                    		"customer_allname"=>$userRow[0]["customer_code"],
+                    		"customerstatus_code"=>"C",
+                    		"customerlevel_code"=>"L1",
+                    		"customertype_code"=>"GS",
+                    		"customersource_code"=>"C",
+                    		"settlementtypes_code"=>"P",
+                    		"customer_createdate"=>date("Y-m-d H:i:s"),
+                    		"tms_id"=>1,
+                    		"owe_intercept"=>"N",
+                    			
+                    );
+                	Service_CsiCustomer::add($csiCustomer_row);
                 }
                 //$this->view->errMsg = "邮箱验证成功，请等待客服与您联系开通账户.";
                 //推送客户信息至WMS
-                $obj = new Common_ThirdPartWmsAPI();
-                $obj->updateCompany($userRow[0]['company_code']);
+                //$obj = new Common_ThirdPartWmsAPI();
+                //$obj->updateCompany($userRow[0]['company_code']);
 
                 $this->view->successUserCode = $conUser['user_code'];
             }
@@ -270,4 +288,6 @@ public function indexAction()
         
         die(Zend_Json::encode($return));
     }
+    
+    
 }

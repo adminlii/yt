@@ -371,11 +371,18 @@ class Process_Order
                 }else if($this->_order['product_code'] =='ESB'){
                     if(!preg_match("/(^0\.\d{0,3}$)|(^[1-9]\d*(\.\d{0,3})?$)/",$this->_order['order_weight'])){
                         $this->_err[] = Ec::Lang('货物重量须为数字,最多3位小数');
+                    }else if($this->_order['order_weight']>2){
+                    	$this->_err[] = Ec::Lang('货物重量必须小于2kg');
                     }
+                }else{
+                	if($this->_order['order_weight']>=1000000){
+                		$this->_err[] = Ec::Lang('货物重量必须小于1000000KG');
+                	}
                 }
             	/* if(!preg_match("/(^0\.[5-9]$)|(^[1-9]+(\.?\d?)$)/",$this->_order['order_weight'])){
             		$this->_err[] = Ec::Lang('货物重量须为数字,且小数最多为1位,范围为0.5-999999.9');
             	} */
+                
             }
         }else{
            $this->_err[] = Ec::Lang('货物重量不能为空');
@@ -393,7 +400,13 @@ class Process_Order
                 }else if($this->_order['product_code'] =='ESB'){
                     if(!preg_match("/^[1-9]\d*(\.0+)?$/",$this->_order['order_length'])){
                         $this->_err[] = Ec::Lang('包装长度必须是大于0整数');
+                    }else if($this->_order['order_length']>60){
+                        $this->_err[] = Ec::Lang('包装长度必须小于60cm');
                     }
+                }else{
+                	if($this->_order['order_length']>=10000){
+                		$this->_err[] = Ec::Lang('包装长度必须小于10000cm');
+                	}
                 }
             }
         }
@@ -409,7 +422,13 @@ class Process_Order
                 }else if($this->_order['product_code'] =='ESB'){
                 	if(!preg_match("/^[1-9]\d*(\.0+)?$/",$this->_order['order_width'])){
                         $this->_err[] = Ec::Lang('包装宽度必须是大于0整数');
+                    }else  if($this->_order['order_width']>40){
+                        $this->_err[] = Ec::Lang('包装宽度必须小于40cm');
                     }
+                }else{
+                	if($this->_order['order_width']>=10000){
+                		$this->_err[] = Ec::Lang('包装宽度必须小于10000cm');
+                	}
                 } 
             }
         }
@@ -426,8 +445,14 @@ class Process_Order
                 }else if($this->_order['product_code'] =='ESB'){
                 	if(!preg_match("/^[1-9]\d*(\.0+)?$/",$this->_order['order_height'])){
                         $this->_err[] = Ec::Lang('包装高度必须是大于0整数');
+                    }else if($this->_order['order_height']>40){
+                    	$this->_err[] = Ec::Lang('包装高度必须小于40cm');
                     }
-                }
+                }else{
+                	if($this->_order['order_height']>=10000){
+                		$this->_err[] = Ec::Lang('包装高度必须小于10000cm');
+                	}
+                } 
             }
         }
         
@@ -517,11 +542,11 @@ class Process_Order
                 	}
                 }
                 
-               /*  if(!$invoice['invoice_note']){
-                	if($this->_order['product_code'] =='ESB'){
-                		$this->_err[] = "(" . Ec::Lang('申报信息') . $k . ")" . Ec::Lang('当选择ESB时配货信息不可为空');
+                if(!$invoice['invoice_note']){
+                	if(preg_match('/^NZ.*$/',$this->_order['product_code'])){
+                		$this->_err[] = "(" . Ec::Lang('SKU') . $k . ")" . Ec::Lang('当选择赛城专线时SKU不可为空');
                 	}
-                } */
+                }
             }
         }
 

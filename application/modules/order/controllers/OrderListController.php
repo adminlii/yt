@@ -90,147 +90,154 @@ class Order_OrderListController extends Ec_Controller_Action
             }
             
             $orderBy = $this->_request->getParam('orderBy','create_date desc');
-            // 1.草稿 D
-            // 2.已预报 P
-            // 3.已入仓 V
-            // 4.已发货 C
-            // 5.暂存件 Q
-            // 0.已废弃 E
-//             switch($condition['order_status']){
-//                 case 'D':
-//                     //$orderBy = 'create_date desc';
-//                     break;
-//                 case 'P':
-//                     //$orderBy = 'create_date desc';
-//                     break;
-//                 case 'V':
-                    
-//                     break;
-//                 case 'C':
-                    
-//                     break;
-//                 case 'Q':
-                    
-//                     break;
-//                 case 'E':
-                    
-//                     break;
-                    
-//                 default:
-                    
-//             }
             
             // 当查询全部订单时，不取废弃订单
             if(empty($condition['order_status'])) {
             	$condition['order_status_unequals'] = 'E';
             }
+			//FBA列表
+			if($condition['order_status']!="F"){
+				$count = Service_CsdOrder::getByCondition($condition, 'count(*)');
+				$return['total'] = $count;
+				if($count){
+					 
+					$orderCreateCodeArr = Common_Type::orderCreateCode('auto');
+				
+					// 获取所有产品数据
+					$productKind = Service_CsiProductkind::getAll();
+					$productKindArr = array();
+					foreach($productKind as $k => $row) {
+						$productKindArr[$row['product_code']] = $row;
+					}
+				
+					// 所有额外服务
+					$extraserviceKind = Common_DataCache::getAtdExtraserviceKindAll();
+				
+					$rows = Service_CsdOrder::getByCondition($condition, "*", $pageSize, $page, $orderBy);
+					foreach($rows as $k => $v){
+						if(empty($v['checkin_date'])||strtotime($v['checkin_date'])<strtotime('2000-01-01')){
+							$v['checkin_date'] = '0000-00-00 00:00:00';
+						}
+						if($v['checkin_date']=='0000-00-00 00:00:00'){
+							$v['checkin_date'] = '';
+						}
+				
+						if($v['print_date']=='0000-00-00 00:00:00'||strtotime($v['print_date'])<strtotime('2000-01-01')){
+							$v['print_date'] = '';
+						}
+						//打印标记
+						$v['print_sign'] = 'N';
+						if($v['print_date']){
+							$v['print_sign'] = 'Y';
+						}
+						$v['country_code'] = strtoupper($v['country_code']);
+						$v['country_name'] = isset($countrys[$v['country_code']])?$countrys[$v['country_code']]['country_cnname']:$v['country_code'];
+				
+						//$v['order_create_code'] = isset($orderCreateCodeArr[$v['order_create_code']])?$orderCreateCodeArr[$v['order_create_code']]:'';
+						$v['order_status_title'] = isset($statusArr[$v['order_status']])?$statusArr[$v['order_status']]['name']:$v['order_status'];
+						//                     $shipper_consignee = Service_CsdShipperconsignee::getByField($v['order_id'],'order_id');
+						//                     $v['shipper_consignee'] = $shipper_consignee;
+						//来源标记
+						$v['order_create_code'] = strtoupper($v['order_create_code']);
+				
+						// 产品
+						$product = $productKindArr[$v['product_code']];
+						//                     $product = Service_CsiProductkind::getByField($v['product_code'],'product_code');
+						//                     $v['product_code'] = $product?$v['product_code'].'['.$product['product_cnname'].']':$v['product_code'];
+						$v['product_code'] = $product?$product['product_cnname']:$v['product_code'];
+				
+						// 保险报关标志
+						$InsuranceSign = 'N';
+						$CustomerSign = 'N';
+						$csd_extraservice = Service_CsdExtraservice::getByCondition(array('order_id' => $v['order_id']));
+						if(!empty($csd_extraservice)) {
+							foreach($csd_extraservice as $extraservice) {
+								if(isset($extraserviceKind[$extraservice['extra_servicecode']])) {
+									continue;
+								}
+				
+								$extraserviceKindRow = $extraserviceKind[$extraservice['extra_servicecode']];
+								// 保险
+								if($extraserviceKindRow['extra_service_group'] == 'C0') {
+									$InsuranceSign = 'Y';
+									break;
+								}
+								// 报关标记
+								if($extraserviceKindRow['extra_service_group'] == 'A0') {
+									$InsuranceSign = 'Y';
+									break;
+								}
+							}
+						}
+						// 保险标记
+						$v['InsuranceSign'] = $InsuranceSign;
+						// 报关标记
+						$v['CustomerSign'] = $CustomerSign;
+						//扣件标记
+						$v['hold_sign'] = strtoupper($v['hold_sign']);
+						//偏远标记
+						$v['oda_sign'] = strtoupper($v['oda_sign']);
+				
+						//取出错误信息
+						/*$orderWrongMsg = Service_OrderProcessing::getByField($v['order_id'], 'order_id');
+						 $v["orderWrongMsg"] = $orderWrongMsg["ops_note"];*/
+						$condition = array(
+								"order_id" => $v['order_id'],
+						);
+						$orderWrongMsg = Service_OrderProcessing::getByCondition(
+								$condition,
+								array("order_processing.ops_note", "order_processing.ops_status"),
+								20,
+								1,
+								array('order_processing.order_id'));
+						foreach($orderWrongMsg as $wk => $wv){
+							$v["orderWrongMsg"] = $wv['ops_note'];
+						}
+				
+				
+						$rows[$k] = $v;
+					}
+				}
+			}else{
+				$count = Service_CsdOrderfba::getByCondition($condition, 'count(*)');
+				$return['total'] = $count;
+				if($count){
+					// 获取所有产品数据
+					$productKind = Service_CsiProductkind::getAll();
+					$productKindArr = array();
+					foreach($productKind as $k => $row) {
+						$productKindArr[$row['product_code']] = $row;
+					}
+					$rows = Service_CsdOrderfba::getByCondition($condition, "*", $pageSize, $page, $orderBy);
+					foreach($rows as $k => $v){
+					
+						if($v['print_date']=='0000-00-00 00:00:00'||strtotime($v['print_date'])<strtotime('2000-01-01')){
+							$v['print_date'] = '';
+						}
+						//打印标记
+						$v['print_sign'] = 'N';
+						if($v['print_date']){
+							$v['print_sign'] = 'Y';
+						}
+						$v['country_code'] = strtoupper($v['country_code']);
+						$v['country_name'] = isset($countrys[$v['country_code']])?$countrys[$v['country_code']]['country_cnname']:$v['country_code'];
+					
+						$v['order_status_title'] = isset($statusArr[$v['order_status']])?$statusArr[$v['order_status']]['name']:$v['order_status'];
+						//来源标记
+						$v['order_create_code'] = 'W';
+						// 产品
+						$v['product_code'] = "FBA";
+						$v['country_name'] = isset($countrys[$v['consignee_countrycode']])?$countrys[$v['consignee_countrycode']]['country_cnname']:$v['consignee_countrycode'];
+						
+						$rows[$k] = $v;
+					}
+				}		
+			}
             
-//             print_r($condition);exit;
-            $count = Service_CsdOrder::getByCondition($condition, 'count(*)');
-            $return['total'] = $count;
-            if($count){
-            	
-                $orderCreateCodeArr = Common_Type::orderCreateCode('auto');
-                
-                // 获取所有产品数据
-                $productKind = Service_CsiProductkind::getAll();
-                $productKindArr = array();
-                foreach($productKind as $k => $row) {
-                	$productKindArr[$row['product_code']] = $row;
-                }
-                
-                // 所有额外服务
-                $extraserviceKind = Common_DataCache::getAtdExtraserviceKindAll();
-                
-                $rows = Service_CsdOrder::getByCondition($condition, "*", $pageSize, $page, $orderBy);
-                foreach($rows as $k => $v){
-                    if(empty($v['checkin_date'])||strtotime($v['checkin_date'])<strtotime('2000-01-01')){
-                        $v['checkin_date'] = '0000-00-00 00:00:00';
-                    }
-                    if($v['checkin_date']=='0000-00-00 00:00:00'){
-                        $v['checkin_date'] = '';
-                    }
-                    
-                    if($v['print_date']=='0000-00-00 00:00:00'||strtotime($v['print_date'])<strtotime('2000-01-01')){
-                        $v['print_date'] = '';
-                    }
-                    //打印标记
-                    $v['print_sign'] = 'N';
-                    if($v['print_date']){
-                        $v['print_sign'] = 'Y';
-                    }
-                    $v['country_code'] = strtoupper($v['country_code']);
-                    $v['country_name'] = isset($countrys[$v['country_code']])?$countrys[$v['country_code']]['country_cnname']:$v['country_code'];
-                    
-                    //$v['order_create_code'] = isset($orderCreateCodeArr[$v['order_create_code']])?$orderCreateCodeArr[$v['order_create_code']]:'';
-                    $v['order_status_title'] = isset($statusArr[$v['order_status']])?$statusArr[$v['order_status']]['name']:$v['order_status'];
-//                     $shipper_consignee = Service_CsdShipperconsignee::getByField($v['order_id'],'order_id');
-//                     $v['shipper_consignee'] = $shipper_consignee;
-                    //来源标记
-                    $v['order_create_code'] = strtoupper($v['order_create_code']);
-                    
-                    // 产品
-                    $product = $productKindArr[$v['product_code']];
-//                     $product = Service_CsiProductkind::getByField($v['product_code'],'product_code');
-//                     $v['product_code'] = $product?$v['product_code'].'['.$product['product_cnname'].']':$v['product_code'];
-                    $v['product_code'] = $product?$product['product_cnname']:$v['product_code'];                    
-                    
-                    // 保险报关标志
-                    $InsuranceSign = 'N';
-                    $CustomerSign = 'N';
-                    $csd_extraservice = Service_CsdExtraservice::getByCondition(array('order_id' => $v['order_id']));
-                    if(!empty($csd_extraservice)) {
-                    	foreach($csd_extraservice as $extraservice) {
-                    		if(isset($extraserviceKind[$extraservice['extra_servicecode']])) {
-								continue;                    			
-                    		}
-                    		
-                    		$extraserviceKindRow = $extraserviceKind[$extraservice['extra_servicecode']];
-                    		// 保险
-                    		if($extraserviceKindRow['extra_service_group'] == 'C0') {
-                    			$InsuranceSign = 'Y';
-                    			break;
-                    		}
-                    		// 报关标记  
-                    		if($extraserviceKindRow['extra_service_group'] == 'A0') {
-                    			$InsuranceSign = 'Y';
-                    			break;
-                    		}
-                    	}
-                    }
-                    // 保险标记
-                    $v['InsuranceSign'] = $InsuranceSign;
-                    // 报关标记
-                    $v['CustomerSign'] = $CustomerSign;
-                    //扣件标记
-                    $v['hold_sign'] = strtoupper($v['hold_sign']);
-                    //偏远标记
-                    $v['oda_sign'] = strtoupper($v['oda_sign']);
-
-                    //取出错误信息
-                    /*$orderWrongMsg = Service_OrderProcessing::getByField($v['order_id'], 'order_id');
-                    $v["orderWrongMsg"] = $orderWrongMsg["ops_note"];*/
-                    $condition = array(
-                        "order_id" => $v['order_id'],
-                    );
-                    $orderWrongMsg = Service_OrderProcessing::getByCondition(
-                        $condition,
-                        array("order_processing.ops_note", "order_processing.ops_status"),
-                        20,
-                        1,
-                        array('order_processing.order_id'));
-                    foreach($orderWrongMsg as $wk => $wv){
-                        $v["orderWrongMsg"] = $wv['ops_note'];
-                    }
-
-
-                    $rows[$k] = $v;
-                }
 //                 print_r($rows);exit;
                 $return['data'] = $rows;
                 $return['state'] = 1;
                 $return['message'] = "";
-            }
             // 是否重新统计
             $reTongji = new Zend_Session_Namespace('reTongji');
             
@@ -288,6 +295,9 @@ class Order_OrderListController extends Ec_Controller_Action
         $condition['customer_channelid'] = Service_User::getChannelid();
 
         $tongji = Service_CsdOrder::getByCondition($condition, 'order_status,count(*) count', 0, 0, '', 'order_status');
+        //加上FBA的统计
+        $fba    = Service_CsdOrderfba::getByCondition($condition, 'order_status,count(*) count', 0, 0, '', 'order_status');
+        $tongji=array_merge($tongji,$fba);
         //
         $reTongji = new Zend_Session_Namespace('reTongji');
         $reTongji->reTongji = 0;

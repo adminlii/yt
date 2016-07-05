@@ -53,7 +53,9 @@ defined('APPLICATION_PATH')
 // Define application environment
 defined('APPLICATION_ENV')
     || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
-
+//定义数据过滤方法    
+defined('FILTER_METHOD')
+    || define('FILTER_METHOD','addslashes,htmlspecialchars');
 // Ensure library/ is on include_path
 set_include_path(implode(PATH_SEPARATOR, array(
     realpath(APPLICATION_PATH . '/../libs'),
@@ -65,6 +67,7 @@ set_include_path(implode(PATH_SEPARATOR, array(
 	APPLICATION_PATH,
     get_include_path(),
 )));
+require_once APPLICATION_PATH . '/../libs/MyPdf.php';
 require_once 'function_common.php'; 
 /** Zend_Application */
 require_once 'Zend/Application.php';

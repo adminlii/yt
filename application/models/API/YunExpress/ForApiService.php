@@ -160,8 +160,8 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
         //保险价值
         $data['insurance_value_gj']   =  empty($this->orderKey["insurance_value_gj"])?0:$this->orderKey["insurance_value_gj"];
         //注册编号
-        $data["RegisterNumber"] = empty($this->customer_ext["registernumber"])?"":$this->customer_ext["registernumber"];
-        $data["AgencyCode"]		= empty($this->customer_ext["agencycode"])?"":$this->customer_ext["agencycode"];
+        //$data["RegisterNumber"] = empty($this->customer_ext["registernumber"])?"":$this->customer_ext["registernumber"];
+        //$data["AgencyCode"]		= empty($this->customer_ext["agencycode"])?"":$this->customer_ext["agencycode"];
         //citycode
         if($data["ChannelCode"]=="G_DHL"||$data["ChannelCode"]=="TNT"){
         	//上传REF和绑定的账号
@@ -904,7 +904,8 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
       	$array_three['billingweight'] = $array_three['actualweight'];
       	$array_three['bjmoney'] = 0;
       	
-      	$array_three['bxmoney'] = intval($this->orderKey["insurance_value_gj"]*100)/100;
+      	//$array_three['bxmoney'] = intval($this->orderKey["insurance_value_gj"]*100)/100;
+      	$array_three['bxmoney'] = intval($this->orderKey["insurance_value_gj"]);
       	$array_three['loanmoney'] = 0;
       	$array_three['minordernum'] = 0;
       	$array_three['mpostalnum'] = $this->orderData['server_hawbcode'];

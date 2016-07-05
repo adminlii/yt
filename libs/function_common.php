@@ -227,3 +227,25 @@ function data_to_xml($data, $item='item', $id='id') {
 	}
 	return $xml;
 }
+
+function filter_input_m($data,$filter_method = false){
+	$filter_method = $filter_method===false?FILTER_METHOD:$filter_method;
+	//如果过滤方法列表为空直接跳出
+	if(empty($filter_method))
+		return $data;
+	if(is_array($data)&&!empty($data)){
+		foreach ($data as $k=>$v){
+			$data[$k] = filter_input_m($v,$filter_method);
+		}
+	}else if(is_string($data)){
+		$filter_methodArr = strpos($filter_method, ',')===false?$filter_method:explode(',',$filter_method);
+		if(!empty($filter_methodArr)){
+			foreach ($filter_methodArr as $fmav){
+				if(function_exists($fmav)){
+					$data = call_user_func($fmav, $data);
+				}
+			}
+		}
+	}
+	return $data;
+}

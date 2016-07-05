@@ -114,7 +114,13 @@ class Service_OrderProcess {
                     '<input type="button" class="discard2draftBtn baseBtn opBtn" op="discard2draft" value="' . Ec::Lang('转草稿') . '">',
                 ),
             ) */
-            
+        	'F' => array(
+        			'name' => 'FBA(订单)',
+        			'actions' => array(
+        					'<input type="button" class=" baseBtn opBtn" op="printfba" value="打印标签">',
+        					'<input type="button" class=" baseBtn opBtn" op="exportfba" value="导出订单">',
+        			),
+        	) 
         );
         
         return $statusArr;

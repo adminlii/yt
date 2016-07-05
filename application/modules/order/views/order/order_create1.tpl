@@ -1024,7 +1024,7 @@ $('.quantity').live('keyup',function(){
     	</div>
 
 		</form>
-		<form id="submiterForm">
+		<form id="submiterForm" onsubmit="return false;">
 		<div class="WindowBox">
     				<div class="bgshaow closebtn"></div>
     				<div class="NewBody">
@@ -1032,7 +1032,6 @@ $('.quantity').live('keyup',function(){
     						<h3><a href="javascript:;" class="closebtn"></a> 新增发件人</h3>
     					</div>
     					<div class="NewMain">
-    						<form>
     						<ul>
     							<li>
     								<span><i>*</i> 公司名：</span>
@@ -1068,7 +1067,6 @@ $('.quantity').live('keyup',function(){
     							<input type="hidden" name="E0" value="" class="input_text">
     								<input type="submit" class="btns1" id="orderSubmitBtn" value="提交" />
     							</div>
-    						</form>
     					</div>
     				</div>
     			</div>
@@ -1126,6 +1124,7 @@ $('.quantity').live('keyup',function(){
                     }                    
 			    }else{
 			       alertTip(json.message);
+			       
 			    }
 		   }
 	});
@@ -1144,11 +1143,12 @@ $('.quantity').live('keyup',function(){
 		    	loadEnd();
 		    	switch (json.state) {
 		            case 1:
-			            
+		            	window.location.reload();
+		                break;
 		            case 2:
-			            parent.getSubmiter();
-		                parent.alertTip(json.message);
-		                parent.$('.dialogIframe').dialog('close');
+			            //parent.getSubmiter();
+		                //parent.alertTip(json.message);
+		                //parent.$('.dialogIframe').dialog('close');
 		                break;
 		            default:
 		                var html = '';

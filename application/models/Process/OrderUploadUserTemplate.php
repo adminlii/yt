@@ -260,14 +260,14 @@ class Process_OrderUploadUserTemplate extends Process_OrderUpload
             // excel原始信息
             $this->_excel_data = $fileData;
             
-            // print_r($fileData);exit;
+            //print_r($fileData);exit;
             if(empty($fileData)){
                 throw new Exception(Ec::Lang('文件中必须包含有内容'));
             }
             $clone = $fileData;
             
             $this->_excel_column = array_keys(array_shift($clone));
-            if(in_array('发件人参考信息', $this->_excel_column)){
+            if(in_array('制作发票(是,否)', $this->_excel_column)){
                 $this->_dataProcessDhl($fileData);
                 
             }else

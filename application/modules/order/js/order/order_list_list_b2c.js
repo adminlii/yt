@@ -19,19 +19,37 @@ EZ.getListData = function(json) {
 		html += '<td class=""><input type="checkbox" class="checkItem" name="orderId[]" ref_id="'+val.shipper_hawbcode+'" value="' + val.order_id + '"/></td>';
 
 		html += '<td class="">';
-		html += '运单号：<a url="/order/order/detail?order_id='+val.order_id+'" ref_id="'+val.order_id+'" class="orderDetail" href="javascript:;">'+val.shipper_hawbcode+'</a>';
-		html += '<br/>跟踪单号：'+val.server_hawbcode;
-		html += '<br/>运输方式：'+val.server_hawbcode;
+		
+		
+		if(val.order_status=='F'){
+			html += '运单号：<a url="/order/order/detail?order_id='+val.order_id+'" ref_id="'+val.order_id+'" class="" href="javascript:;">'+val.shipper_hawbcode+'</a>';
+			html += '<br/>箱数：'+val.boxnum;
+		}else{
+			html += '运单号：<a url="/order/order/detail?order_id='+val.order_id+'" ref_id="'+val.order_id+'" class="orderDetail" href="javascript:;">'+val.shipper_hawbcode+'</a>';
+			html += '<br/>跟踪单号：'+val.server_hawbcode;
+		}
+		//html += '<br/>运输方式：'+val.server_hawbcode;
 		html += '<br/>客户单号：'+(val.refer_hawbcode ? val.refer_hawbcode : '');
 		html += '<br/>运输方式：'+val.product_code;
 		html += '</td>';
 		html += '<td class="ec-center">';
-		html += '收件人：'+val.consignee_name;
-		html += '<br/>国家：'+val.country_name;
+		if(val.order_status=='F'){
+			html += '仓库：'+val.storage;
+			html += '<br/>国家：'+val.country_name;
+		}else{
+			html += '收件人：'+val.consignee_name;
+			html += '<br/>国家：'+val.country_name;
+			
+		}
 		html += '</td>';
 		html += '<td class="ec-center">';
 		html += '创建时间：'+val.create_date;
-		html += '<br/>入仓时间：'+val.checkin_date;
+		if(val.order_status=='F'){
+			
+		}else{
+
+			html += '<br/>入仓时间：'+val.checkin_date;
+		}
 		html += '</td>';
 		html += '<td class="ec-center">';
 		html += '订单状态：'+val.order_status_title;
@@ -90,11 +108,15 @@ EZ.getListData = function(json) {
 
 		/**操作 开始**/
 		html += '<td class="ec-center" valign="top">';
-		html += '<a href="javascript:;" class="cpyBtn" ref_id="'+val.order_id+'"  url="/order/order/create?order_id='+val.order_id+'&cpy=1" ><{t}>cpy<{/t}></a>';
-		if(val.order_status=='D'||val.order_status=='Q'){
-			html += '&nbsp;&nbsp;<a href="javascript:;" class="orderEdit" ref_id="'+val.order_id+'" url="/order/order/create?order_id='+val.order_id+'" ><{t}>edit<{/t}></a>';        	
+		if(val.order_status=='F'){
+			//html += '<a href="javascript:;" class="exportfbafj" ref_id="'+val.order_id+'"  url="/order/order/exportfba" >导出附件</a>';
+			html += '<a  ref_id="'+val.order_id+'"  href="/order/order/exportfba?orderid='+val.order_id+'&type=1" >导出附件</a>';
+		}else{
+			html += '<a href="javascript:;" class="cpyBtn" ref_id="'+val.order_id+'"  url="/order/order/create?order_id='+val.order_id+'&cpy=1" ><{t}>cpy<{/t}></a>';
+			if(val.order_status=='D'||val.order_status=='Q'){
+				html += '&nbsp;&nbsp;<a href="javascript:;" class="orderEdit" ref_id="'+val.order_id+'" url="/order/order/create?order_id='+val.order_id+'" ><{t}>edit<{/t}></a>';        	
+			}
 		}
-
 		html += '</td>';
 		/**操作 结束**/
 		html += "</tr>";
@@ -254,6 +276,22 @@ function opProcess(){
 						});					
 
 						break;
+					case 'exportfba':
+						jConfirm('<{t}>are_you_sure<{/t}>', opTitle+'<{t}>订单<{/t}>', function(r) {
+							if(r){
+								$('#listForm').attr('action','/order/order/exportfba/').attr('target','_blank').submit();
+							}
+						});					
+
+						break;
+					case 'printfba':
+						jConfirm('<{t}>are_you_sure<{/t}>', opTitle+'<{t}>订单<{/t}>', function(r) {
+							if(r){
+								$('#listForm').attr('action','/order/order/printfba/').attr('target','_blank').submit();
+							}
+						});					
+
+						break;	
 					case 'print':
 						printDialog();
 
