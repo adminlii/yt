@@ -376,6 +376,9 @@ class API_Common_ServiceExpressCreateOrder
                     /*
                      * 4、处理同步结果
                     */
+                    if(!empty($ops_note)){
+                    	$ops_note = "订单验证错误，错误为：收寄系统验证失败";
+                    }
                     $order_process = array('ems_status' => 1,'ops_note' => $ops_note);
                     Service_OrderProcessing::update($order_process, $val['ops_id']);
                     

@@ -944,7 +944,7 @@ class Process_OrderUpload extends Process_Order
                 'customer_channelid'=>Service_User::getChannelid(),
                 'insurance_value' => trim($v['insurance_value1']),
                 'insurance_value_gj' => $v['insurance_value_gj'],
-            	'invoice_print'=>empty($v['invoice_print'])?0:1,
+            	'invoice_print'=>$v['invoice_print']=='否'?0:1,
             	'makeinvoicedate'=> $v['makeinvoicedate'],
             	'export_type'=> $v['export_type'],
             	'trade_terms'=> $v['trade_terms'],

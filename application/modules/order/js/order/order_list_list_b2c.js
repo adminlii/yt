@@ -48,7 +48,7 @@ EZ.getListData = function(json) {
 			
 		}else{
 
-			html += '<br/>入仓时间：'+val.checkin_date;
+			//html += '<br/>入仓时间：'+val.checkin_date;
 		}
 		html += '</td>';
 		html += '<td class="ec-center">';

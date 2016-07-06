@@ -283,8 +283,15 @@ class Process_OrderDhl
                     $this->_shipper['shipper_countrycode'] = $country['country_code'];
                 }
             }
-            if($this->_shipper['shipper_name'] === ''){
+         	if($this->_shipper['shipper_name'] === ''){
                  $this->_err[] = Ec::Lang('发件人姓名不可为空');
+            }else if(!preg_match('/^[a-zA-Z\s]+$/',$this->_shipper['shipper_name'])){
+            		$this->_err[] = "发件人姓名不可为非英文";
+            }
+            if(!empty($this->_shipper['shipper_city'])){
+            	if(!preg_match('/^[a-zA-Z\s]+$/',$this->_shipper['shipper_city'])){
+            		$this->_err[] = "发件人城市不可为非英文";
+            	}
             }
             if(!$this->_shipper['shipper_street']){
                  $this->_err[] = Ec::Lang('发件人地址不可为空');

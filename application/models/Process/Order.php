@@ -276,6 +276,13 @@ class Process_Order
             }
             if($this->_shipper['shipper_name'] === ''){
                 // $this->_err[] = Ec::Lang('发件人姓名不可为空');
+            }else if(!preg_match('/^[a-zA-Z\s]+$/',$this->_shipper['shipper_name'])){
+            		$this->_err[] = "发件人姓名不可为非英文";
+            }
+            if(!empty($this->_shipper['shipper_city'])){
+            	if(!preg_match('/^[a-zA-Z\s]+$/',$this->_shipper['shipper_city'])){
+            		$this->_err[] = "发件人城市不可为非英文";
+            	}
             }
             if($this->_shipper['shipper_street'] === ''){
                 // $this->_err[] = Ec::Lang('发件人地址不可为空');
@@ -543,7 +550,7 @@ class Process_Order
                 }
                 
                 if(!$invoice['invoice_note']){
-                	if(preg_match('/^NZ.*$/',$this->_order['product_code'])){
+                	if(preg_match('/^NZ.*$/',$this->_order['product_code'])&&empty($invoice['sku'])){
                 		$this->_err[] = "(" . Ec::Lang('SKU') . $k . ")" . Ec::Lang('当选择赛城专线时SKU不可为空');
                 	}
                 }
