@@ -89,7 +89,7 @@ class Common_Validator
                         }
                         continue 2;
                     case ($regex == 'english');
-                        if (!preg_match('/^[A-Za-z]+$/', $value)) {
+                        if (!preg_match('/^[A-Za-z\s]+$/', $value)) {
                             $error[] = $name . ' ' . Ec::Lang('validateEnglish');
                             break 2;
                         }

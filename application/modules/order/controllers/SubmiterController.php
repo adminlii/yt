@@ -136,7 +136,28 @@ class Order_SubmiterController extends Ec_Controller_Action
     			$row[$key] = ($value != '')?trim($value):$value;
     		}
     		$errorArr = $this->serviceClass->validator($row);
-    
+    		//加上过滤条件
+    		if(!empty($row['shipper_name'])){
+    			if(!preg_match('/^[a-zA-Z\s]+$/', $row['shipper_name'])) {
+    				$errorArr[]= "发件人姓名不能为非英文	";
+    			}
+    		}
+    		if(!empty($row['shipper_company'])){
+    			if(!preg_match('/^[a-zA-Z\s]+$/', $row['shipper_company'])) {
+    				$errorArr[]= "发件人公司不能为非英文	";
+    			}
+    		}
+    			
+    		if(!empty($row['shipper_province'])){
+    			if(!preg_match('/^[a-zA-Z\s]+$/', $row['shipper_province'])) {
+    				$errorArr[]= "发件人州省不能为非英文	";
+    			}
+    		}
+    		if(!empty($row['shipper_city'])){
+    			if(!preg_match('/^[a-zA-Z\s]+$/', $row['shipper_city'])) {
+    				$errorArr[]= "发件人城市不能为非英文	";
+    			}
+    		}
     		if (!empty($errorArr)) {
     			$return = array(
     					'state' => 0,

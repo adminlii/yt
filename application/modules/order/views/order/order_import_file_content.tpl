@@ -211,7 +211,7 @@ $(function(){
 	<{/if}>
 	<{if $result.ask==1}>
 		<{if $result.ansych==0}>
-			<a href='javascript:;' onclick="leftMenu('order_manage','<{t}>订单管理<{/t}>','/order/order-list/list?quick=39')" style='padding-left:10px;color:#0090e1;font-size:12px;'><{t}>订单管理<{/t}></a>
+			<a href='javascript:;' onclick="leftMenu('order-list','<{t}>订单管理<{/t}>','/order/order-list/list?quick=39')" style='padding-left:10px;color:#0090e1;font-size:12px;'><{t}>订单管理<{/t}></a>
 		<{else}>
 			<a href='javascript:;' onclick="leftMenu('order_import_batch','<{t}>上传记录<{/t}>','/order/order/get-import-batch?quick=0')" style='padding-left:10px;color:#0090e1;font-size:12px;'><{t}>上传记录<{/t}></a>
 		<{/if}>
