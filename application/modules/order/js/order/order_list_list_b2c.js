@@ -114,7 +114,7 @@ EZ.getListData = function(json) {
 		}else{
 			html += '<a href="javascript:;" class="cpyBtn" ref_id="'+val.order_id+'"  url="/order/order/create?order_id='+val.order_id+'&cpy=1" ><{t}>cpy<{/t}></a>';
 			if(val.order_status=='D'||val.order_status=='Q'){
-				html += '&nbsp;&nbsp;<a href="javascript:;" class="orderEdit" ref_id="'+val.order_id+'" url="/order/order/create?order_id='+val.order_id+'" ><{t}>edit<{/t}></a>';        	
+				//html += '&nbsp;&nbsp;<a href="javascript:;" class="orderEdit" ref_id="'+val.order_id+'" url="/order/order/create?order_id='+val.order_id+'" ><{t}>edit<{/t}></a>';        	
 			}
 		}
 		html += '</td>';
