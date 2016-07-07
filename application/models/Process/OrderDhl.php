@@ -220,7 +220,7 @@ class Process_OrderDhl
         	if(empty($this->_order['shipper_hawbcode'])) {
         		// $this->_order['shipper_hawbcode'] = Common_GetNumbers::getCode('CURRENT_ORDER_COUNT', sprintf("%05d", $this->_order['customer_id']), ''); // 订单号
         		$this->_order['shipper_hawbcode'] = Common_GetYuntNumbers::getCode('CURRENT_ORDER_COUNT_'.Service_User::getCustomerCode(), Service_User::getCustomerCode()); // 订单号
-        	} else if(!preg_match('/^YT.{16}$/', $this->_order['shipper_hawbcode'])) {
+        	} else if(!preg_match('/^EMS.{16}$/', $this->_order['shipper_hawbcode'])) {
         		$this->_err[] = Ec::Lang('运单号格式错误');
         	}
         } else {

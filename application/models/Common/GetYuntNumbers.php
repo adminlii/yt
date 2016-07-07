@@ -10,7 +10,7 @@ class GetYuntNumbers
 
     public function __construct($applicationCode = '', $customerCode = '')
     {
-        $this->prefix = 'YT';
+        $this->prefix = 'EMS';
         $this->time = date('y');
         $this->customerCode = $customerCode;
         $this->day = date('z');
