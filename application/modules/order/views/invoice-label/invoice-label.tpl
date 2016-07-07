@@ -9,7 +9,7 @@
 	<{foreach from=$orderArr name=o item=o}>
 	 <{if $o.order.product_code eq "G_DHL"}>
 	 <style>
-*{margin:0; border:0; padding:0; font-family:"微软雅黑","宋体"; font-size:12px;}
+*{margin:0; border:0; padding:0; font-family:"微软雅黑","宋体"; font-size:14px;}
 .bt{border:2px solid black;}
 .bt1{border-top:2px solid black;border-right:2px solid black;}
 .bt2{border-left:2px solid black;}
@@ -21,22 +21,23 @@
 .div4{height:352px;width:1002px}
 .div5{height:50px;}
 .clear{clear:both;width:0px;height:0px;}
-#warp{margin:auto;width:1006px;}
+#warp{margin:auto;width:1006px;page-break-inside:avoid;}
 p{height:20px;line-height:20px;}
 .p1{height:30px;line-height:30px;}
 .comment{height:48px;}
 .invoice{height:30px;text-align:center;}
 .total{margin-left:675px;width:325px;height:40px;}
-.span1{line-height: 30px;height: 30px;display: inline-block;width:498px}
+.span1{line-height: 30px;height: 30px;display: inline-block;width:497px}
+</style>
 </style>
 <{assign var="count" value=2}>
 <{section name=loop loop=$count}>
 <if>
  <{if $smarty.section.loop.index eq 0 }>
- <{include file='order/views/invoice-label/dhl-label.tpl'}>
+ <{include file='order/views/invoice-label/dhl-label-pdf.tpl'}>
  <h1 style="page-break-after: always; clear: both;background:red;"></h1>
  <{else}>
- <{include file='order/views/invoice-label/dhl-label1.tpl'}>
+ <{include file='order/views/invoice-label/dhl-label-pdf1.tpl'}>
  <{if !$smarty.foreach.o.last}> 
 	<h1 style="page-break-after: always; clear: both;background:red;"></h1>
  <{/if}>

@@ -12,7 +12,8 @@ class GetYuntNumbers
     {
         $this->prefix = 'EMS';
         $this->time = date('y');
-        $this->customerCode = $customerCode;
+        //$this->customerCode = $customerCode;
+        $this->customerCode = "";
         $this->day = date('z');
         $this->branchEncoding = 2;
         $this->applicationCode = $applicationCode;
@@ -21,19 +22,23 @@ class GetYuntNumbers
     public function getCode()
     {
         $sequence = $this->getSequence();
+        $this->customerCode = "";
         return strtoupper($this->prefix . $this->time . $this->day . $this->customerCode . $this->branchEncoding . $sequence);
     }
 
     private function getCnt()
     {
-        $condition = array(
+        /* $condition = array(
             'application_code' => $this->applicationCode,
+        ); */
+        $condition = array(
+        		'application_code' => 'CURRENT_ORDER_SYS_COUNT',
         );
         if (empty($this->customerCode)) {
             $this->customerCode = Service_User::getCustomerId();
         }
-        $condition['customer_code'] = $this->customerCode;
-        
+        //$condition['customer_code'] = $this->customerCode;
+        $condition['customer_code'] = 'SYS';
         $application = Service_Application::getByCondition($condition, '*');
         $date = date('Ymd');
         $time = date('Y-m-d H:i:s');
