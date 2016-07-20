@@ -151,6 +151,7 @@ class Default_ApiController extends Zend_Controller_Action
 			$param = $this->_request->getParams();
 			$obj = new API_YunExpress_ForApiService();
 			$scdOrder = Service_CsdOrder::getByField($param["order_id"], 'order_id');
+			$param['server_product_code'] = $scdOrder['product_code'];
 			$debug["line1"] = $param;
 			$debug["line2"] = $scdOrder;
 			$channel['server_product_code'] = $scdOrder['product_code'];
@@ -188,6 +189,7 @@ class Default_ApiController extends Zend_Controller_Action
 			$debug['errmsg'] = $e->getTraceAsString().$e->getMessage();
 		}
 		Ec::showError("**************start*************\r\n"
+				."获取异步通知结果\r\n"
 				. microtime_float()."\r\n"
 				. $result."\r\n"
 				.print_r($debug,true)."\r\n"
@@ -248,6 +250,20 @@ class Default_ApiController extends Zend_Controller_Action
 				// 更新预报数据状态--预报异常
 				$order_process["ops_status"]=20;
 				$order_process["ops_note"]=$result['message'];
+			}else{
+				$order_process['ops_status'] =1;
+				//调用服务
+				$obj = new API_YunExpress_ForApiService();
+				$obj->setParam("YUNEXPRESS", $result["param"]['shipper_hawbcode'], '', $result["param"]['server_product_code'],0);
+				$tbresult = $obj->createAndPreAlertOrderServiceByCode();
+				if($tbresult['ack'] == '0') {
+						// 如果同步订单失败，更新订单状态改为"D"草稿
+						// 更新单号，订单状态改为"D"草稿
+						$_update_order = array("order_status" => "D");
+						Service_CsdOrder::update($_update_order, $result["param"]["order_id"]);
+						$order_process["ops_status"]=20;
+						$order_process["ops_note"]  = $tbresult['error'];
+				}
 			}
 		}
 		Service_OrderProcessing::add($order_process);

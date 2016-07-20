@@ -272,26 +272,39 @@ function formSubmit(status){
 		data: param,
 		dataType:'json',
 		success: function(json){
-			 loadEnd('');
-			var html = json.message;
-			if(json.ask){
-				html+="<br/>系统单号:"+json.order.shipper_hawbcode;
-                $('#shipper_hawbcode').val(json.order.shipper_hawbcode);                
-				successTip(html,json.order);
-				 //如果勾选了发票弹窗
-    			
-				if($("#makeinvoice").attr("checked")&&json.ask==1)
-				window.open("/order/invoice-print/invoice-label1/?orderId="+json.order.order_id);
-			}else{
-				 if(json.err){
-					 html+="<ul style='padding:0 25px;list-style-type:decimal;'>";
-					 $.each(json.err,function(k,v){
-						 html+="<li>"+v+"</li>";
-					 })
-					 html+="</ul>";
-				 }
-				alertTip(html);
-			}
+			window.cgavin = function(){
+				var html = json.message;
+				if(json.ask){
+					html+="<br/>系统单号:"+json.order.shipper_hawbcode;
+	                $('#shipper_hawbcode').val(json.order.shipper_hawbcode);                
+					successTip(html,json.order);
+					 //如果勾选了发票弹窗
+	    			
+					if($("#makeinvoice").attr("checked")&&json.ask==1)
+					window.open("/order/invoice-print/invoice-label1/?orderId="+json.order.order_id);
+				}else{
+					 if(json.err){
+						 html+="<ul style='padding:0 25px;list-style-type:decimal;'>";
+						 $.each(json.err,function(k,v){
+							 html+="<li>"+v+"</li>";
+						 })
+						 html+="</ul>";
+					 }
+					alertTip(html);
+				}
+			} 
+			//验证收发件人信息1
+			$("#dialog-layer-tip p").html("验证收发件人信息");
+			//setTimeout('$("#dialog-layer-tip p").html("验证收发件人信息...");',1000);
+			//验证订单发票信息1
+			setTimeout('$("#dialog-layer-tip p").html("验证订单发票信息...");',1000);
+			//真正通知标签服务器1
+			setTimeout('$("#dialog-layer-tip p").html("正在通知标签服务器...");',2000);
+			window.dgavin = function(){loadEnd('')};
+			
+			setTimeout("dgavin()",3000);
+			setTimeout("cgavin()",4000);
+			
 		}
 	});
 }

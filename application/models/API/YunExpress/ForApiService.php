@@ -219,7 +219,7 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
     	$url = "http://112.126.68.251:8088/v3/api/LabelPrintService/PrintTomsLabel?type=json";
     	$sendParams = json_encode($sendParams);
     	$header =array("Content-Type:application/json; charset=utf-8");
-    	$result = $this->curl_send($url,$sendParams,$header,"post","tmsuser:123456");
+    	$result = $this->curl_send($url,$sendParams,$header,"post","tmsuser:1234567890");
     	return $result;
     }
     
@@ -351,11 +351,15 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
 			// print_r($tuCurl);die;
 			$data = curl_exec($tuCurl);
 			
-			
-			
-    		$data = Common_Common::objectToArray(json_decode($data));
-    		$result["ack"] = 1;
-    		$result["data"] = $data;
+			if(curl_errno($tuCurl) != 0){
+				//$error = '发送CURL时发生错误:'.curl_error($tuCurl).'(code:'.curl_errno($curl).')'.PHP_EOL;
+				throw new Exception ('通知标签服务器失败！！！');
+				curl_close($tuCurl);
+			}else{
+	    		$data = Common_Common::objectToArray(json_decode($data));
+	    		$result["ack"] = 1;
+	    		$result["data"] = $data;
+			}
     	} catch (Exception  $e) {
     		$result["message"] = $e->getMessage();
     	}

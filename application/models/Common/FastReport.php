@@ -117,7 +117,7 @@ class Common_FastReport
         $url = "http://112.126.68.251:8088/v3/api/LabelPrintService/MergeLabelByTrackingNumbers?type=json";
         //$url ="http://192.168.10.48:3001/V3/api/LabelPrintService/MergeLabelByTrackingNumbers?type=json";
         $username = 'tmsUser';
-        $password = '123456';
+        $password = '1234567890';
         $apiToken = base64_encode("{$username}:{$password}");
         try {
             $ch = curl_init();
@@ -147,7 +147,7 @@ class Common_FastReport
             . "\r\n"
             . print_r($data, true)
             . "**************end*************\r\n",
-            'YunExpress_API/Create_response_info'.date("Ymd"));
+            'YunExpress_API/Create_response_getLabelinfo'.date("Ymd"));
 
         return $result;
     }
