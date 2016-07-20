@@ -60,6 +60,11 @@ EZ.getListData = function(json) {
 				html += '<br/><a style="color:red;" href="javascript:void(0)" title="'+wrongMsg+'">'+wrongMsg_show+'</a>';
 			}
 		}
+		if(val.order_status=='P'){
+			if(val.ems_status==0) {
+				html += '<br/><span style="color:red">收寄系统预报中</span>';
+			}
+		}
 		html += '</td>';
 		
 		html += '<td class="ec-center">';

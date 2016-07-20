@@ -1375,7 +1375,7 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
  		//配置文件
  		$product_set = array(
  		  		"ESB"=>array("YunTu","ESB","CN"),
- 				"G_DHL"=>array("ChinaPostDHL","CP","CN"),
+ 				"G_DHL"=>array("ChinaPostDHL","Standard","CN"),
  				"NZ_CP"=>array("Saicheng","CP","CN"),
  				"NZ_DP"=>array("Saicheng","DP","CN"),
  				"NZ_LZ"=>array("Saicheng","LZ","CN"),

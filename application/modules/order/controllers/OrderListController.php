@@ -186,12 +186,14 @@ class Order_OrderListController extends Ec_Controller_Action
 						);
 						$orderWrongMsg = Service_OrderProcessing::getByCondition(
 								$condition,
-								array("order_processing.ops_note", "order_processing.ops_status"),
+								array("order_processing.ops_note", "order_processing.ops_status","order_processing.ems_status"),
 								20,
 								1,
 								array('order_processing.order_id'));
 						foreach($orderWrongMsg as $wk => $wv){
+							
 							$v["orderWrongMsg"] = $wv['ops_note'];
+							$v["ems_status"] = $wv['ems_status'];
 						}
 				
 				
