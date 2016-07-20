@@ -51,7 +51,8 @@ $(function () {
 		//alert(length);
 		if (length < show_count)    //点击时候，如果当前的数字小于递增结束的条件
 		{
-			$("#tab11 tbody tr").clone().appendTo("#dynamicTable tbody");   //在表格后面添加一行
+			$("#dynamicTable tbody").append("<tr>"+$("#tab11 tbody tr").html()+"</tr>");
+			//$("#tab11 tbody tr").().appendTo("#dynamicTable tbody");   //在表格后面添加一行
 			changeIndex();//更新行号
 		}
 	});

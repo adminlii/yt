@@ -279,8 +279,13 @@ $(function() {
 //		var height = parent.windowHeight();
 //        parent.openIframeDialogNew(url,width-100,height-80,'<{t}>order_detail<{/t}>',quickId,paginationCurrentPage,paginationPageSize);
         var cp_order = $(this).attr('order_type')=='return'?'<{t}>cpy_return_order<{/t}>':'<{t}>cpy_order<{/t}>';
-        leftMenu('order/create',cp_order,url);
+        if(url.indexOf("createdhl"))
+        	leftMenu('order/createdhl',cp_order,url);
+        else
+        	leftMenu('order/create',cp_order,url);
 	})
+	
+	
 	
 	/**
 	 * RMA退款类型--自动不金额

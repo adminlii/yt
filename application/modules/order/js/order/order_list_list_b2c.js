@@ -110,9 +110,13 @@ EZ.getListData = function(json) {
 		html += '<td class="ec-center" valign="top">';
 		if(val.order_status=='F'){
 			//html += '<a href="javascript:;" class="exportfbafj" ref_id="'+val.order_id+'"  url="/order/order/exportfba" >导出附件</a>';
+			
 			html += '<a  ref_id="'+val.order_id+'"  href="/order/order/exportfba?orderid='+val.order_id+'&type=1" >导出附件</a>';
 		}else{
-			html += '<a href="javascript:;" class="cpyBtn" ref_id="'+val.order_id+'"  url="/order/order/create?order_id='+val.order_id+'&cpy=1" ><{t}>cpy<{/t}></a>';
+			if(val.product_code=='中速-DHL'){
+				html += '<a href="javascript:;" class="cpyBtn" ref_id="'+val.order_id+'"  url="/order/order/createdhl?order_id='+val.order_id+'&cpy=1" ><{t}>cpy<{/t}></a>';
+			}else
+				html += '<a href="javascript:;" class="cpyBtn" ref_id="'+val.order_id+'"  url="/order/order/create?order_id='+val.order_id+'&cpy=1" ><{t}>cpy<{/t}></a>';
 			if(val.order_status=='D'||val.order_status=='Q'){
 				//html += '&nbsp;&nbsp;<a href="javascript:;" class="orderEdit" ref_id="'+val.order_id+'" url="/order/order/create?order_id='+val.order_id+'" ><{t}>edit<{/t}></a>';        	
 			}

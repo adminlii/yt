@@ -108,6 +108,7 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
     	$data["ShippingCountryEnName"] = $country[$this->orderKey['consigneeCountryCode']];
     	$data["ShippingFirstName"] = $this->orderKey['consigneeName'];
     	$data["ShippingLastName"] = "";
+    	$data["ShippingCompany"] = $this->orderKey["consigneeCompanyName"];
     	$data["ShippingAddress"] = $this->orderKey["consigneeStreet"];
     	$data["ShippingAddress1"] = $this->orderKey["consigneeStreet1"];
     	$data["ShippingAddress2"] = $this->orderKey["consigneeStreet2"];
@@ -199,11 +200,26 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
      * @return multitype:number string NULL array
      */
     public function createAndPreAlertOrderService($data = array()) {
-    	$url = $this->_orderOnline . "/api/Order/PacketOrder";
-		$url = "http://test.hwcservice.com/ChinaPost/Api/Order/PacketOrder";
-    	$result = $this->excuteService($url, json_encode($data), "POST");
+    	//$url = $this->_orderOnline . "/api/Order/PacketOrder";
+		//$url = "http://test.hwcservice.com/ChinaPost/Api/Order/PacketOrder";
+		$url = "http://112.126.68.251:8088/v3/api/Order/PacketOrder";
+		$result = $this->excuteService($url, json_encode($data), "POST");
 		header("Content-type: text/html; charset=utf-8");
     
+    	return $result;
+    }
+    
+    /**
+     * 预报订单
+     * @param unknown_type $data
+     * @return multitype:number string NULL array
+     */
+    public function PreAlertOrderService($sendParams = array()) {
+    	//$url = "http://test.hwcservice.com/ChinaPost/Api/LabelPrintService/PrintTomsLabel?type=json";
+    	$url = "http://112.126.68.251:8088/v3/api/LabelPrintService/PrintTomsLabel?type=json";
+    	$sendParams = json_encode($sendParams);
+    	$header =array("Content-Type:application/json; charset=utf-8");
+    	$result = $this->curl_send($url,$sendParams,$header,"post","tmsuser:123456");
     	return $result;
     }
     
@@ -324,7 +340,7 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
 			curl_setopt($tuCurl, CURLOPT_SSL_VERIFYPEER, 0);
 			curl_setopt($tuCurl, CURLOPT_CUSTOMREQUEST, $method);
 			curl_setopt($tuCurl, CURLOPT_RETURNTRANSFER, 1);
-			
+			//curl_setopt($tuCurl,CURLOPT_TIMEOUT,10);
 			if($method == 'POST') {
 				curl_setopt($tuCurl, CURLOPT_POST, 1);
 				curl_setopt($tuCurl, CURLOPT_POSTFIELDS, $params);
@@ -1191,7 +1207,7 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
     	}while(0);
     	return $return;
     }
-    private function  curl_send($url,$data='',$header=array(),$type='get',$authentication=false){
+    public function  curl_send($url,$data='',$header=array(),$type='get',$authentication=false){
           $curl = curl_init();
           curl_setopt($curl,CURLOPT_URL,$url);
           curl_setopt($curl,CURLOPT_RETURNTRANSFER,1);
@@ -1219,6 +1235,167 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
           }
           curl_close($curl);
           return $result;
+ 	}
+ 	
+ 	//异步通知TMS
+ 	public function sendToTms($uuid=false){
+ 		/*
+ 		 * 构造订单信息
+ 		*/
+ 		$data = array();
+ 		
+ 		//销售产品
+ 		$items = array();
+ 		$data["OrderID"] = $this->orderCode;
+ 		
+ 		//获取渠道运输方式
+ 		$ChannelCode = $this->serverProductCode;
+ 		$ParcelInformation["Weight"] = $this->orderKey["weight"];
+ 		$ParcelInformation["WeightUnit"] =4;
+ 		$ParcelInformation["Length"] = $this->orderKey["length"];
+ 		$ParcelInformation["Width"] = $this->orderKey["width"];
+ 		$ParcelInformation["Height"] = $this->orderKey["height"];
+ 		$ParcelInformation["SizeUnit"]   = 2;
+ 		$ParcelInformation["ExistDangerousGoods"] = $this->orderKey["dangerousgoods"]?true:false;
+ 		$ParcelInformation["ProductInformations"] = null;
+ 		
+ 		$declareInvoice = array();
+ 		//报关产品
+ 		foreach($this->orderInvoiceItemKey as $oKey=>$row){
+ 			$cnname = (!empty($row['titleCn']) ? $row['titleCn'] : $row['titleEn']);
+ 			$enname = (!empty($row['titleEn']) ? $row['titleEn'] : $row['titleCn']);
+ 				
+ 			$declareInvoice_temp = array();
+ 			$declareInvoice_temp["Description"] = $enname.'-'.$cnname;
+ 			$declareInvoice_temp["Value"] = $row['value'];
+ 			$declareInvoice_temp["Quantity"] = $row["quantity"];
+ 			$declareInvoice_temp["Weight"] = $row["weight"];
+ 			$declareInvoice_temp["WeightUnit"] = 4;
+ 			$declareInvoice_temp["HSCode"] = $row["hsCode"];
+ 			$declareInvoice_temp["Sku"] = $row["sku"];
+ 			$declareInvoice_temp["Remark"] = $row["description"];
+ 			$declareInvoice_temp["Currency"] = $row["currencyCode"];
+ 			$declareInvoice_temp["ProductUrl"] = $row["url"];
+ 			$declareInvoice[] = $declareInvoice_temp;
+ 		}
+ 		$ParcelInformation["ProductInformations"] = $declareInvoice;
+ 		$data["ParcelInformation"] = $ParcelInformation;
+ 		
+ 		// 收件人
+ 		//$data["ShippingCountryCode"] = $this->orderKey['consigneeCountryCode'];
+ 		 
+ 		//国家
+ 		$ct=Service_IddCountry::getAll();
+ 		$country=array();
+ 		foreach ($ct as $ck=>$cv){
+ 			$country[$cv['country_code']]=$cv['country_enname'];
+ 		}
+
+ 		$RecipientAddress = array();
+ 		// TODO
+ 		$RecipientAddress["Country"] = $this->orderKey['consigneeCountryCode'];
+ 		$RecipientAddress["FirstName"] = $this->orderKey['consigneeName'];
+ 		$RecipientAddress["LastName"] = "";
+ 		$RecipientAddress["Company"] = $this->orderKey["consigneeCompanyName"];
+ 		$RecipientAddress["StreetAddress"] = $this->orderKey["consigneeStreet"];
+ 		$RecipientAddress["StreetAddress2"] = $this->orderKey["consigneeStreet1"];
+ 		$RecipientAddress["StreetAddress3"] = $this->orderKey["consigneeStreet2"];
+ 		$RecipientAddress["City"] = $this->orderKey['consigneeCity'];
+ 		$RecipientAddress["State"] = $this->orderKey['consigneeStateOrProvince'];
+ 		$RecipientAddress["IsResidential"] = false;
+ 		$RecipientAddress["PhoneNumber"] = $this->orderKey['consigneePhone'];
+ 		$RecipientAddress["ZIPCode"] = $this->orderKey['consigneePostalCode'];
+ 		
+ 		$data['RecipientAddress'] = $RecipientAddress;
+ 		
+ 		/***发件人信息****/
+ 		$ShipperAddress = array();
+ 		$ShipperAddress["FirstName"] = $this->shipperKey["shipperName"];
+ 		$ShipperAddress["LastName"] = "";
+ 		$ShipperAddress["Company"] = $this->shipperKey["shipperCompanyName"];
+ 		if($this->shipperKey["shipperStreet"]){
+ 			$streeArr = explode("||", $this->shipperKey["shipperStreet"]);
+ 			$ShipperAddress["StreetAddress"] = $streeArr[0]?$streeArr[0]:'';
+ 			$ShipperAddress["StreetAddress2"] = $streeArr[1]?$streeArr[1]:'';
+ 			$ShipperAddress["StreetAddress3"] = $streeArr[2]?$streeArr[2]:'';
+ 		}
+ 		$ShipperAddress["State"] = $this->shipperKey["shipperStateOrProvince"];
+ 		$ShipperAddress["City"] = $this->shipperKey["shipperCity"];
+ 		$ShipperAddress["PhoneNumber"] = $this->shipperKey["shipperPhone"];
+ 		$ShipperAddress["ZIPCode"] = $this->shipperKey["shipperPostCode"];
+ 		$ShipperAddress["Country"] = $this->shipperKey["shipperCountryCode"];
+ 		$ShipperAddress["Email"] = null;
+ 		$ShipperAddress = print_r(json_encode($ShipperAddress),true);
+ 		//冗余字段
+ 		$RedundancyField = array();
+ 		$RedundancyField['ShipperAddress'] = $ShipperAddress;
+ 		$RedundancyField['ProductCode'] = $this->orderKey['type']==3?"D":"N";
+ 		
+ 		//保险额外服务
+ 		$extservice = $this->orderExtservice;
+ 		$RedundancyField['InsuredFee']=$extservice[0]['servicevalue']?$extservice[0]['servicevalue']:'';
+ 		//
+ 		$RedundancyField["ShipperEIN"]=$this->orderKey["invoice_shippertax"] ;
+ 		$RedundancyField["RecipientEIN"]=$this->orderKey["invoice_consigneetax"];
+ 		$RedundancyField["CommodityCode"] = $declareInvoice[0]['HSCode']?$declareInvoice[0]['HSCode']:'';
+ 		//总价值
+ 		$RedundancyField['DeclaredValue']    = $this->orderKey["declaredValue"];
+ 		//保险价值
+ 		$RedundancyField['InsuredAmount']   =  empty($this->orderKey["insurance_value_gj"])?0:$this->orderKey["insurance_value_gj"];
+ 		//注册编号
+ 		//$data["RegisterNumber"] = empty($this->customer_ext["registernumber"])?"":$this->customer_ext["registernumber"];
+ 		//$data["AgencyCode"]		= empty($this->customer_ext["agencycode"])?"":$this->customer_ext["agencycode"];
+ 		//citycode
+ 		if($ChannelCode=="G_DHL"||$ChannelCode=="TNT"){
+ 			//上传REF和绑定的账号
+ 			//$data["reference"] 		 = $this->orderKey["refer_hawbcode"];
+ 			$condtion_sp['citycode'] = $this->orderKey["refer_hawbcode"];
+ 			$condtion_sp['status']   =   1;
+ 			$condtion_sp['productcode'] =   $ChannelCode;
+ 			$server_csi_prs=new Service_CsiProductRuleShipper();
+ 			$rs_cisprs = $server_csi_prs->getByCondition($condtion_sp);
+ 			if($rs_cisprs[0]){
+ 				//设定上发件人账号
+ 				$RedundancyField['AccuntNum'] = $rs_cisprs[0]['countnum'];
+ 				$RedundancyField["Reference"] = $rs_cisprs[0]['citycode'];
+ 			}
+ 		}
+ 		if($ChannelCode=="TNT"){
+ 			//是否废弃包裹
+ 			$RedundancyField['Abandon'] = $this->orderKey["untread"];
+ 		}
+ 		//$params = array('CustomerCode'=> $this->_user, 'packageMessage' => array($data));
+ 		$params["Version"] = '0.0.0.3';
+ 		$params["RequestId"] = empty($uuid)?"":$uuid;
+ 		$data["Token"] = '99999999999999999999999999999999';
+ 		//配置文件
+ 		$product_set = array(
+ 		  		"ESB"=>array("YunTu","ESB","CN"),
+ 				"G_DHL"=>array("ChinaPostDHL","CP","CN"),
+ 				"NZ_CP"=>array("Saicheng","CP","CN"),
+ 				"NZ_DP"=>array("Saicheng","DP","CN"),
+ 				"NZ_LZ"=>array("Saicheng","LZ","CN"),
+ 				"TNT"=>array("ChinaPostTNT","Document","CN"),	
+ 		);
+ 		$product_set_rs = $product_set[$ChannelCode];
+ 		$data["ChannelName"] =$product_set_rs[0];
+ 		$data["ServiceTypeCode"] =$product_set_rs[1];
+ 		$data["WarehouseCode"] =$product_set_rs[2];
+ 		$data["LabelMarkText"] =null;
+ 		$data["RedundancyField"] =$RedundancyField;
+ 		
+ 		$params["data"] = $data;
+ 		
+ 		//unset($params["data"]["RedundancyField"]['ShipperAddress']);
+ 		//print_r($params);
+ 		$sysResult = $this->PreAlertOrderService($params);
+ 		
+ 		Ec::showError("**************start*************\r\n"
+ 				. print_r(json_encode($params), true)
+ 				. "\r\n" . print_r($sysResult, true)
+ 				. "**************end*************\r\n",
+ 				'YunExpress_API/Async_Create_response_info'.date("Ymd"));
+ 		return $sysResult;
  	}
  	
  	//推送TNTXML的服务

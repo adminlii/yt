@@ -52,7 +52,10 @@ class Process_Order
     {
         $this->_create_method = $create_method;
     }
-    
+    public function setUuid($uuid)
+    {
+    	$this->_uuid = $uuid;
+    }
     
     public function setVolume($volume)
     {
@@ -822,7 +825,21 @@ class Process_Order
                 $successTip = Ec::Lang('订单提交预报成功');
             }
             $db->commit();
-            
+            // 提交预报
+            if($status == 'P'){
+            	// 订单处理
+            	$this->_verifyRs = $this->_verifyProcess($this->_order_id, 'verify');
+            }
+            //日志记录start
+            $logrow = array();
+            $logrow['requestid'] = $this->_uuid;
+            $logrow['type'] = 1;
+            $logrow['detail'] = '同步创建订单结束';
+            list($usec, $sec) = explode(" ", microtime());
+            $logrow['creattime'] = date("Y-m-d H:i:s|",$sec-3600*8).$usec;
+            $db = Common_Common::getAdapter();
+            $db ->insert('logapi', $logrow);
+            //日志记录end
             $this->_order['order_id'] = $this->_order_id;
             $return['ask'] = 1;
             if($this->_existOrder){
@@ -937,7 +954,7 @@ class Process_Order
             // 新增
             $order['create_date'] = date('Y-m-d H:i:s');
             $order['creater_id'] = $this->_order['creater_id'];
-            
+            $order['order_status'] = "S";//丢到换号中
             $this->_order_id = Service_CsdOrder::add($order);
             $this->_log[] = Ec::Lang('订单新增');
         }else{
@@ -1085,7 +1102,7 @@ class Process_Order
                 throw new Exception(Ec::Lang('信息异常，处理中断'));
             }
             // 订单处理
-            $this->_verifyRs = $this->_verifyProcess($this->_order_id, 'verify');
+            //$this->_verifyRs = $this->_verifyProcess($this->_order_id, 'verify');
         }
     }
 
@@ -1118,7 +1135,8 @@ class Process_Order
                     $allowStatus = array(
                         'D',
                         'Q',
-                        'U'
+                        'U',
+                        'S',
                     );
                     $this->_verify_tip = '此操作只允许对草稿、暂存、问题件状态的订单进行操作，请确认您选择的订单信息是否正确';
                     break;
@@ -1248,8 +1266,8 @@ class Process_Order
         $log_content = array();
         switch(strtolower($op)){
             case 'verify': // 提交预报
-                $updateRow['order_status'] = 'P';
-                $updateRow['post_date'] = date('Y-m-d H:i:s');
+                //$updateRow['order_status'] = 'P';
+                //$updateRow['post_date'] = date('Y-m-d H:i:s');
                 $log_content[] = Ec::Lang('订单提交预报');
                 // 换号验证 start==============================
                 // 涉及到表
@@ -1266,7 +1284,6 @@ class Process_Order
                 // 换号
                 $result = $this->changeNO($order, $product['web_document_rule']);
                
-               
               	/*
               	 * document_change_sign 结果说明
               	 * N: 不用换号
@@ -1275,7 +1292,7 @@ class Process_Order
               	 * A：API换号
               	 */ 
                 // 当为API换号，并且不是及时换号时订单状态改成换号中
-            	if($result['document_change_sign'] == 'A' && $result['type'] == '1') {
+            	/* if($result['document_change_sign'] == 'A' && $result['type'] == '1') {
             		$updateRow['order_status'] = 'S';
             	}
             	
@@ -1288,7 +1305,7 @@ class Process_Order
                 if($order['server_hawbcode']!=$updateRow['server_hawbcode']){
                     $log_content[] = Ec::Lang('服务商换号') . ',' . Ec::Lang('原服务商单号') . ' ' . ($order['server_hawbcode']?$order['server_hawbcode']:Ec::Lang('为空')) . ' ' . Ec::Lang('更改为') . ' ' . $updateRow['server_hawbcode'];
                     $order['server_hawbcode'] = $updateRow['server_hawbcode'];
-                }
+                } */
                 // 换号验证 end==============================
                 
                 // 插入轨迹 start
@@ -1502,7 +1519,8 @@ class Process_Order
             default:
                 throw new Exception(Ec::Lang('不合法的操作'));
         }
-        Service_CsdOrder::update($updateRow, $order_id, 'order_id');
+        if(!empty($updateRow))
+       	 Service_CsdOrder::update($updateRow, $order_id, 'order_id');
         
         // 日志
         $logRow = array(
@@ -1718,34 +1736,6 @@ class Process_Order
     		$return['server_hawbcode'] = $atd_regist_code_available['regist_code'];
     		return $return;
     	}
-    	// 单号池取号==========开始===========
-    	
-    	// API 换号==========开始===========
-    	// 根据销售产品获取物流渠道(限制渠道选择规则必须为一对一模式)
-//     	$date = date('Y-m-d H:i:s');
-//     	$sql = "SELECT
-// 					sc.formal_code
-// 				FROM
-// 					pbr_channel_select pcs
-// 				INNER JOIN csi_servechannel sc ON pcs.server_channelid = sc.server_channelid
-// 				WHERE
-// 					pcs.product_code = '{$order['product_code']}'
-// 				AND '{$date}' BETWEEN pcs.begindate AND pcs.enddate";
-    	
-//     	$db = Common_Common::getAdapterForDb2(); 
-//     	$channcel = $db->fetchRow($sql);
-//     	if(empty($channcel)) {
-//     		throw new Exception(Ec::Lang('该销售产品未指定换号服务商') . "[{$order['product_code']}]");
-//     	}
-// echo "--22--";die;
-
-    	/*$listId = $this->getChannelByProduct($order);
-
-    	 if(empty($listId)) {//TODO
-    		throw new Exception(Ec::Lang('该销售产品未指定换号渠道') . "[{$order['product_code']}]");
-    	} */
-    	//$listId['string'] = '61';//TODO
-
         if($order["product_code"] == "NZ_CP" || $order["product_code"] == "NZ_DP" || $order["product_code"] == "NZ_LZ"){
             $listId['string'] = 1;  //NZ_CP，NZ_DP，NZ_LZ对应渠道SAICHENG
         }else if($order["product_code"] == "TNT"){
@@ -1772,9 +1762,9 @@ class Process_Order
     	$obj = new API_Common_ChangeNOFactory();
     	
     	
-    	$changeNOFactory = new API_Common_ChangeNOFactory();
-    	$result = $changeNOFactory->changeNOByForecast($order['order_id'], $order['server_hawbcode'], $channcel['formal_code'], $listId['string'],$order['shipper_hawbcode']);
-
+    	$changeNOFactory = new API_Common_AsyncChangeNo();
+    	//$result = $changeNOFactory->changeNOByForecast($order['order_id'], $order['server_hawbcode'], $channcel['formal_code'], $listId['string'],$order['shipper_hawbcode']);
+    	$result = $changeNOFactory->changeNOByForecast($order['order_id'], $order['server_hawbcode'], $channcel['formal_code'], $listId['string'],$order['shipper_hawbcode'],$this->_uuid);
     	if(!$result['ack']) {
     		throw new Exception(Ec::Lang('换号失败。') . $result['message']);
     	}

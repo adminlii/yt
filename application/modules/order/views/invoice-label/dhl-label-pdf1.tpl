@@ -48,7 +48,7 @@
 			<div class="bt3  invoice" style="width:45px;float:left;"><p class="p1">QTY</p></div>
 			<div class="clear"></div>
 		</div>
-		<{foreach from=$o.invoice key=ink  name=inv item=inv}>
+		<{foreach from=$o.label key=ink  name=inv item=inv}>
 		<div>
 			<div class="  invoice" style="width:45px;float:left;"><p class="p1"><{$ink+1}></p></div>
 			<div class="  invoice" style="width:406px;float:left;"><p class="p1"><{$inv.invoice_note}></p></div>
@@ -64,7 +64,7 @@
 			<div class="bt3  invoice" style="width:173px;float:left;"><p class="p1">County of Origin</p></div>
 			<div class="clear"></div>
 		</div>
-		<{foreach from=$o.invoice   name=inv1 item=inv1}>
+		<{foreach from=$o.label   name=inv1 item=inv1}>
 		<div>
 			<div class="  invoice" style="width:173px;float:left;"><p  class="p1"><{$inv1.invoice_shipcode}></p></div>
 			<div class="  invoice" style="width:150px;float:left;"><p class="p1"><{$inv1.invoice_unitcharge}></p></div>
@@ -76,8 +76,8 @@
 	<div class="clear"></div>
 	<div class="div4 bt">
 		<div class="total bt2 bt3"><p style="height: 40px;line-height: 40px;">Total Declared Value:<{$total_Value}></p></div>
-		<div class="total bt2 bt3"><p style="height: 40px;line-height: 40px;">Total Pieces:<{$totalPieces}></p></div>
-		<div class="total bt2 bt3"><p style="height: 40px;line-height: 40px;">Total Gross Weight:<span></span></p></div>
+		<div class="total bt2 bt3"><p style="height: 40px;line-height: 40px;">Total Pieces:<{$total_pice}></p></div>
+		<div class="total bt2 bt3"><p style="height: 40px;line-height: 40px;">Total Gross Weight:<{$total_weight}><span></span></p></div>
 		<div>
 			<div>
 			 <div class="div5"><span class="span1">Type of Exprot:<{$o.order.export_type}></span> <span class="span1" style="margin-left: 0px;">Currency Code:<{$o.invoice[0]['invoice_currencycode']}></span></div>

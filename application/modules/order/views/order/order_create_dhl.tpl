@@ -325,19 +325,18 @@ function formSubmit(status){
             </select>-->
         </div>
     	<div class="title widthLeft">2、发件人<input id="shipperaddaddress" type="button" value="添加到地址簿" class="btn1"><input id="shipperaddrs" type="button" value="发件人地址簿"></div>
-        <input type="hidden" name="consignee[shipper_account]" value="<{if isset($shipperCustom)}><{$shipperCustom.shipper_account}><{/if}>">
         <div class="contentLeft contentType4 borderR borderB">
         	<h3>联系人姓名*</h3>
-            <input type="text" name="shipper[shipper_name]" class="checkchar1" value="<{if isset($shipperCustom)}><{$shipperCustom.shipper_name}><{/if}>">
+            <input type="text" name="shipper[shipper_name]" class="checkchar1" value="<{if isset($shipperConsignee["shipper_name"])}><{$shipperConsignee.shipper_name}><{/if}>">
         </div>
         <div class="contentLeft contentType4 borderB">
         	<h3>发件人参考信息</h3>
-            <input type="text" class="checkchar4"  value='<{if isset($order)}><{$order.refer_hawbcode}><{/if}>'
+            <input type="text" disabled class="checkchar4 use" value='<{if isset($order)}><{$order.refer_hawbcode}><{/if}>'
 							name='order[refer_hawbcode]' id='refer_hawbcode' />
         </div>
         <div class="contentLeft contentType3 borderB">
         	<h3>公司名称*</h3>
-            <input type="text" name="shipper[shipper_company]" class="checkchar" value="<{if isset($shipperCustom)}><{$shipperCustom.shipper_company}><{/if}>">
+            <input type="text" name="shipper[shipper_company]" class="checkchar" value="<{if isset($shipperConsignee["shipper_company"])}><{$shipperConsignee.shipper_company}><{/if}>">
         </div>
         <div class="contentLeft contentType4 borderR borderB" style="height:138px;">
         	<h3>国家*</h3>
@@ -345,18 +344,18 @@ function formSubmit(status){
         	<!--<input type="hidden" name="shipper[shipper_countrycode]" value="<{if isset($shipperCustom)}><{$shipperCustom.shipper_countrycode}><{/if}>">-->
         	<input type="hidden" name="shipper[shipper_countrycode]" value="CN">
         	<h3>邮编*</h3>
-            <input type="text" name="shipper[shipper_postcode]" value="<{if isset($shipperCustom)}><{$shipperCustom.shipper_postcode}><{/if}>">
+            <input type="text" name="shipper[shipper_postcode]" value="<{if isset($shipperConsignee["shipper_postcode"])}><{$shipperConsignee.shipper_postcode}><{/if}>">
         </div>
         <div class="contentLeft contentType4 borderB" style="height:138px;">
         	<h3>地址*</h3>
-            <input type="text" id="shipperstree" placeholder="房间号/楼层/楼座/大厦或小区" class="checkchar2" style="margin:0px 0 6px" value="">
-            <input type="text" id="shipperstree1" placeholder="街道/行政区或工业区" class="checkchar2" style="margin:0px 0 6px" value="">
-            <input type="text" id="shipperstree2" class="checkchar2" style="margin:0px 0 6px" value="">
+            <input type="text" id="shipperstree" placeholder="房间号/楼层/楼座/大厦或小区" class="checkchar2" style="margin:0px 0 6px" value="<{if isset($shipperConsignee["shipper_street1"])}><{$shipperConsignee.shipper_street1}><{/if}>">
+            <input type="text" id="shipperstree1" placeholder="街道/行政区或工业区" class="checkchar2" style="margin:0px 0 6px" value="<{if isset($shipperConsignee["shipper_street2"])}><{$shipperConsignee.shipper_street2}><{/if}>">
+            <input type="text" id="shipperstree2" class="checkchar2" style="margin:0px 0 6px" value="<{if isset($shipperConsignee["shipper_street3"])}><{$shipperConsignee.shipper_street3}><{/if}>">
             <!--<input type="hidden" name="shipper[shipper_street]" class="checkchar2" style="margin:0px 0 6px" value="<{if isset($shipperCustom)}><{$shipperCustom.shipper_street}><{/if}>">-->
         </div>
         <div class="contentLeft contentType4 borderR">
         	<h3>城市*</h3>
-            <input type="text" name="shipper[shipper_city]" class="checkchar2" value="<{if isset($shipperCustom)}><{$shipperCustom.shipper_city}><{/if}>">
+            <input type="text" name="shipper[shipper_city]" class="checkchar2" value="<{if isset($shipperConsignee["shipper_city"])}><{$shipperConsignee.shipper_city}><{/if}>">
         	<div id="checkpostcodediv" style="position: absolute;min-width: 200px;height: 200px;background: #cfcfcf;z-index: 11100;top: 379px;overflow: scroll;display:none;">
 			<ul  class="checkul" id="checkpostcode" _type="postcode"></ul> 
 			</div>
@@ -373,7 +372,7 @@ function formSubmit(status){
         </div>
         <div class="contentLeft contentType4">
         	<h3>电话号码*</h3>
-            <input type="text" name="shipper[shipper_telephone]"  class="order_phone" value="<{if isset($shipperCustom)}><{$shipperCustom.shipper_telephone}><{/if}>">
+            <input type="text" name="shipper[shipper_telephone]"  class="order_phone" value="<{if isset($shipperConsignee["shipper_telephone"])}><{$shipperConsignee.shipper_telephone}><{/if}>">
         </div>
     	<div class="title widthLeft" style="float:left">3、收件人<input id="consigneeaddaddress" type="button" value="添加到地址簿" class="btn1"><input id="consigneeaddrs" type="button" value="收件人地址簿"></div>
         <div class="contentLeft contentType3 borderB">
@@ -390,7 +389,8 @@ function formSubmit(status){
 								<option value='' class='ALL'><{t}>-select-<{/t}></option>
 								
 								<{foreach from=$country item=c name=c}>
-								<option value='<{$c.country_code}>' country_id='<{$c.country_id}>' class='<{$c.country_code}>'><{$c.country_code}> [<{$c.country_cnname}>  <{$c.country_enname}>]</option>
+								
+								<option value='<{$c.country_code}>' country_id='<{$c.country_id}>' class='<{$c.country_code}>' <{if $c.country_code eq $order.country_code}>selected<{/if}> ><{$c.country_code}> [<{$c.country_cnname}>  <{$c.country_enname}>]</option>
 								<{/foreach}>
 								 
 						</select>
@@ -431,7 +431,7 @@ function formSubmit(status){
             <input type="text" class="order_phone" value='<{if isset($shipperConsignee)}><{$shipperConsignee.consignee_telephone}><{/if}>'
 							name='consignee[consignee_telephone]' id=consignee_telephone />
         </div>
-        <div id="boxend" class="contentLeft contentType3 borderB" style="height:154px;">
+        <div id="boxend" class="contentLeft contentType3 borderB" style="height:185px;">
         	<div class="contentLeft contentType1" id="untreaddiv" style="display:none">
 	        	无法送达
 	        	<select class="select1 select" name="order[untread]" id="untread">
@@ -448,15 +448,15 @@ function formSubmit(status){
     	<div class="title widthRight">4、内件性质</div>
         <div class="contentRight contentType2">
         	<label>文件</label>
-            <input type="radio"  name="order[mail_cargo_type]" <{if !isset($order.mail_cargo_type)}>checked<{/if}> <{if $order.mail_cargo_type eq 3}>checked<{/if}>  value="3"/>
+            <input type="radio"  name="order[mail_cargo_type]" checked value="3"/>
         	<label>物品</label>
-            <input type="radio" name="order[mail_cargo_type]" <{if $order.mail_cargo_type eq 4}>checked<{/if}> value="4"/>
+            <input type="radio" name="order[mail_cargo_type]"  value="4"/>
         </div>
     	<div class="title widthRight">5、快递详细信息</div>
-        <div class="contentLeft contentType5 borderB" style="height:126px;">
+        <div id="tb1div" class="contentLeft contentType5 borderB" style="height:157px;">
         	<h3>包装类型*</h3>
             <div class="table">
-            	<table border="1" cellpadding="0" cellspacing="0">
+            	<table id="tb1" border="1" cellpadding="0" cellspacing="0">
                 	<tr>
                     	<td>件数*</td>
                     	<td>单件重量*</td>
@@ -530,6 +530,9 @@ function formSubmit(status){
                     -->
                 </table>
                 <!--<p>包裹总数量：<span>1</span>总重量：<span id="order_weight_ps">0</span>公斤</p>-->
+                <p id="addtr" style="text-align: right;color: red;float: right;width: 55px;">>>更多</p>
+                <p id="entr" style="text-align: right;color: red;float: right;width: 55px;">&gt;&gt;确定</p>
+                
                 <input type='hidden' class='input_text weight'
 							value='<{if isset($order)}><{$order.order_weight}><{/if}>'
 							name='order[order_weight]' id='order_weight' />
@@ -581,9 +584,9 @@ function formSubmit(status){
 			<div class="check">
 			<input id="C2" value="C2" class="level7 use" disabled name="extraservice[]" type="checkbox" ></div>
 			<label>是</label><label>保险价值</label>
-			<input type="text" disabled class="level7 use invoice_unitcharge" value="" name="order[insurance_value_gj]" disabled style="width:100px;">
+			<input type="text" disabled class="level7 use invoice_unitcharge" value="" placeholder="RMB" name="order[insurance_value_gj]" disabled style="width:100px;">
 			<label>保费</label>
-			<input type="text" disabled  class="use invoice_unitcharge" value="" name="order[insurance_value]" disabled style="width:100px;">
+			<input type="text" disabled  class="use invoice_unitcharge" value="" placeholder="RMB" name="order[insurance_value]" disabled style="width:100px;">
 			</div>
             <div class="seven"><div class="check" style="top:-2px; left:112px;"><input class="level7" id="makeinvoice" name="order[invoice_print]" type="checkbox" disabled value="1"></div><label>制作发票</label><label>是</label></div>
         
@@ -614,14 +617,17 @@ function formSubmit(status){
 		<input type="text" class="invoicelable" style="margin:0px 0 6px" value="" name="order[invoicenum]" id="invoicenum">
 		
 		<h3>付款方式</h3>
-		<input type="text" class="invoicelable" style="margin:0px 0 6px" value="" name="order[pay_type]" id="pay_type">
+		<select class="input_select" name="order[pay_type]" default="" id="pay_type" style="width: 240px;">
+        	<option value="freight collect">freight collect（到付）</option>
+        	<option value="freight prepaid">freight prepaid（预付）</option>
+        </select>
 		<h3>注释</h3>
 		<input type="text" class="invoicelable" style="margin:0px 0 6px" value="" name="order[fpnote]" id="fpnote">
 		</div>
-		<div class="contentLeft contentType5 borderB" style="height:126px;">
+		<div id="tb2div" class="contentLeft contentType5 borderB" style="height:152px;">
 		<h3>所有金额的货币单位与申报价值一致</h3>
-		<div class="table">
-		<table border="1" cellpadding="0" cellspacing="0"><tbody>
+		<div  class="table">
+		<table id="tb2" border="1" cellpadding="0" cellspacing="0"><tbody>
 		<tr><td>完整描述*</td><td>数量*</td><td>商品代码</td><td>单价*</td><td style="border-right:none">产地</td></tr>
 		<tr>
 			<td style="border-bottom:none"><input type="text" class="invoicelable" name="invoice1[invoice_note][]" value=""></td>
@@ -639,7 +645,11 @@ function formSubmit(status){
 		</tr>
 			<!--
         <tr><td style="border-bottom:none"></td><td style="border-bottom:none"></td><td style="border-bottom:none"></td><td style="border-bottom:none"></td><td style="border:none"></td></tr>
-                    --></tbody></table><!--<p>包裹总数量：<span>1</span>总重量：<span id="order_weight_ps">0</span>公斤</p>--><input type="hidden" class="input_text weight" value="" name="order[order_weight]" id="order_weight"></div></div>
+                    --></tbody></table><!--<p>包裹总数量：<span>1</span>总重量：<span id="order_weight_ps">0</span>公斤</p>--><input type="hidden" class="input_text weight" value="" name="order[order_weight]" id="order_weight">
+                    <p id="addtr1" style="text-align: right;color: red;float: right;width: 55px;">&gt;&gt;更多</p>
+                    <p id="entr1" style="text-align: right;color: red;float: right;width: 55px;">&gt;&gt;确定</p>
+                    </div></div>
+        
         </div>        
     	<div class="title widthRight" style="float:left">8、额外服务选项</div>
         <div id="plane2" class="contentLeft contentType5 borderB" style="height:95px;display:none;">
@@ -723,7 +733,7 @@ $(function(){
  		$("#invoicetab").hide();
  		$("#invoicetab input").val('');
  		$("#invoicetab .info").hide();
-    	$("#boxend").css("height","154px");
+    	$("#boxend").css("height","185px");
  	}else{
  		$(".level8").attr("disabled","true");
  		$(".level7").addClass("use").removeClass("use");;
@@ -1067,7 +1077,7 @@ $(function(){
  $("#shipperaddrs").click(function(){
  	var url = "/order/order/shipper-adress?quick=77";
 	var params = "dialogWidth=800px;dialogHeight=400px";
-	
+	$("#refer_hawbcode").val('');
 	var returnResult = window.showModalDialog(url, '',params);
 	//数据绑定
 	$("input[name='shipper[shipper_name]']").val(returnResult.shipper_name);
@@ -1079,6 +1089,16 @@ $(function(){
 	$("input[name='shipper[shipper_city]']").val(returnResult.shipper_city);
 	$("input[name='shipper[shipper_postcode]']").val(returnResult.shipper_postcode);
 	$("input[name='shipper[shipper_telephone]']").val(returnResult.shipper_telephone);
+ 	//获取citycode
+ 	var _params = {};
+ 	_params.dc = $("#product_code").val();
+ 	_params.cn = returnResult.shipper_city;
+ 	$.post("/order/order/get-post-code-rule",_params,function(data){
+					if(data.state){
+						$("#refer_hawbcode").val(data.data[0]['citycode']?data.data[0]['citycode']:'');
+					}
+				},"json");
+ 
  });
  
   //弹窗
@@ -1169,11 +1189,10 @@ $(function(){
  	$(".invoicelable").val('');
     if($(this).attr("checked")){
     	$("#invoicetab").show();
-    	$("#boxend").css("height","462px");
     }else{
     	$("#invoicetab").hide();
-    	$("#boxend").css("height","154px");
     }
+   unserize();
  });
  $(".btn2").click(function(){
  	//$("input[type!='hidden']").val("");
@@ -1194,5 +1213,72 @@ $(function(){
 						
 					}
 				},"json");
+				
+  //更多
+  $("#addtr").click(function(){
+  	var count  = 5 ;//一次加5行
+  	var html = '';
+  	for(var i =0 ;i<count;i++){
+  		html+="<tr>"+$("#tb1 tbody tr").eq(1).html()+"</tr>";
+  	}
+  	//高度+5*42
+  	$("#tb1div").height($("#tb1div").height()+43*count+"px");
+  	$("#tb1 tbody").append(html);
+    unserize();
+  });
+  $("#addtr1").click(function(){
+  	var count  = 5 ;//一次加5行
+  	var html = '';
+  	for(var i =0 ;i<count;i++){
+  		html+="<tr>"+$("#tb2 tbody tr").eq(1).html()+"</tr>";
+  	}
+  	//高度+5*42
+  	$("#tb2div").height($("#tb2div").height()+43*count+"px");
+  	$("#tb2 tbody").append(html);
+    unserize();
+  });
+
+  $("#entr").click(function(){
+    var delet = 0;
+  	$("#tb1 tbody tr").each(function(index,ele){
+  		if(index>=3){
+  			var content = '';
+	  		$("#tb1 tbody tr:eq("+index+") td input").each(function(i,e){
+	  			content+=$(e).val();
+	  		});
+	  		if(content==''){
+	  			delet++;
+	  			$(ele).attr("isdel",1);
+	  		}
+  		}
+  	});
+  	$("#tb1 tbody tr[isdel=1]").remove();
+  	$("#tb1div").height($("#tb1div").height()-43*delet+"px");
+    unserize();
+  });  
+  
+  $("#entr1").click(function(){
+    var delet = 0;
+  	$("#tb2 tbody tr").each(function(index,ele){
+  		if(index>=3){
+  			var content = '';
+	  		$("#tb2 tbody tr:eq("+index+") td input").each(function(i,e){
+	  			content+=$(e).val();
+	  		});
+	  		if(content==''){
+	  			delet++;
+	  			$(ele).attr("isdel",1);
+	  		}
+  		}
+  	});
+  	$("#tb2 tbody tr[isdel=1]").remove();
+  	$("#tb2div").height($("#tb2div").height()-43*delet+"px");
+    unserize();
+  });  
+  
+  function unserize(){
+   	var height = $(".wrapRight").height()-823;
+    $("#boxend").css("height",height+"px");
+  }				
 });
 </script>

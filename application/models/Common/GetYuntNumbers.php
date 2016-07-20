@@ -15,7 +15,7 @@ class GetYuntNumbers
         //$this->customerCode = $customerCode;
         $this->customerCode = "";
         $this->day = date('z');
-        $this->branchEncoding = 2;
+        $this->branchEncoding = "";
         $this->applicationCode = $applicationCode;
     }
 
@@ -55,7 +55,7 @@ class GetYuntNumbers
             $application = $application[0];
         }
         
-        $this->ruleStr = str_pad(rand(0, 99999), 5, '0', STR_PAD_LEFT);
+        $this->ruleStr = str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
         if (!empty($application['current_number']) && isset($application['current_number'])) {
             $arr = explode('-', $application['current_number']);
             if ($date == $arr[0]) {

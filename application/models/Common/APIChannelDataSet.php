@@ -322,8 +322,10 @@ class Common_APIChannelDataSet
                 "servicecode"=>   $extsv['extra_servicecode'],
                 "servicevalue"=>   $extsv['extra_servicevalue'],
             );
-            if($extsv['extra_servicecode']=='C4'){
-                $this->orderKey["insurance_value_gj"]="29.00";
+            switch ($extsv['extra_servicecode']){
+            	case "C4":$this->orderKey["insurance_value_gj"]="29.00";break;
+            	case "C5":$this->orderKey["insurance_value_gj"]="3.00";break;
+            	case "C6":$this->orderKey["insurance_value_gj"]="12.00";break;
             }
         }
         $this->orderExtservice = $_extservice;

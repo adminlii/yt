@@ -438,7 +438,7 @@ function loadData(page, pageSize) {
         success: function (json) {
             if (!isJson(json)) {
                 paginationTotal = 0;
-                EZ.listDate.EzWmsSetSearchData({msg: 'Returns the data type error.'});
+                EZ.listDate.EzWmsSetSearchData({msg: '未返回数据，服务器异常.'});
                 return;
             }
             paginationTotal = json.total;

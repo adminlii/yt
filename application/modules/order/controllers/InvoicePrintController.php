@@ -26,24 +26,40 @@ class Order_InvoicePrintController extends Ec_Controller_Action {
 						'order_id' => $order_id
 				);
 				$invoice = Service_CsdInvoice::getByCondition($con,'*',0,0,'invoice_id asc');
+				$label = array();
+				$label = Service_CsdInvoiced::getByCondition($con,'*',0,0,'invoice_id asc');
 				
 				$total = 0;
+				//总件数
+				$totalpice = 0;
+				//总重
+				$totalweight = 0;
 				foreach($invoice as $k=>$v){
 					$v['invoice_unitcharge'] = $v['invoice_quantity']?($v['invoice_totalcharge']/$v['invoice_quantity']):0;
 					$invoice[$k] = $v;
 					$total+=$v['invoice_totalcharge'];
+					$totalweight+=$v['invoice_totalWeight'];
+					$totalpice+=$v['invoice_quantity'];
 				}
 				$extservice = Service_CsdExtraservice::getByCondition($con);
 				$shipperConsignee = Service_CsdShipperconsignee::getByField($order_id,'order_id');
 				$shipperConsignee['shipper_country_name'] = $countrys[$shipperConsignee['shipper_countrycode']]?$countrys[$shipperConsignee['shipper_countrycode']]['country_enname']:$shipperConsignee['shipper_countrycode'];
 				$shipperConsignee['consignee_country_name'] = $countrys[$shipperConsignee['consignee_countrycode']]?$countrys[$shipperConsignee['consignee_countrycode']]['country_enname']:$shipperConsignee['consignee_countrycode'];
 				$order['invoice_total'] = $total;
-				$orderData = array('order'=>$order,'invoice'=>$invoice,'shipper_consignee'=>$shipperConsignee);
+				$orderData = array('order'=>$order,'invoice'=>$invoice,'shipper_consignee'=>$shipperConsignee,"label"=>$label);
 				if($orderData['order']['product_code']=='TNT')
 					$orderData['order']['product_code']='G_DHL';
+				if($orderData['order']['product_code']=='G_DHL'){
+					//总价值直接读取
+					$total = empty($orderData['invoice'][0]['invoice_totalcharge_all'])?'':$orderData['invoice'][0]['invoice_totalcharge_all'];
+					
+					
+				}
 				$orderArr[] = $orderData;
 			}
 			$this->view->total_Value=$total;
+			$this->view->total_pice=$totalpice;
+			$this->view->total_weight=$totalweight;
 			$this->view->orderArr = $orderArr;
 			
 		} catch (Exception $e) {
@@ -87,26 +103,33 @@ class Order_InvoicePrintController extends Ec_Controller_Action {
 					'order_id' => $order_id
 			);
 			$invoice = Service_CsdInvoice::getByCondition($con,'*',0,0,'invoice_id asc');
-
+			$label = array();
+			$label = Service_CsdInvoiced::getByCondition($con,'*',0,0,'invoice_id asc');
 			$total = 0;
-			$totalPieces = 0;
+			//总件数
+			$totalpice = 0;
+			//总重
+			$totalweight = 0;
 			foreach($invoice as $k=>$v){
 				$v['invoice_unitcharge'] = $v['invoice_quantity']?($v['invoice_totalcharge']/$v['invoice_quantity']):0;
 				$invoice[$k] = $v;
-				$totalPieces+=$v['invoice_quantity'];
-				$total+=$v['invoice_totalcharge'];
+				//$total+=$v['invoice_totalcharge'];
+				$totalweight+=$v['invoice_totalWeight'];
+				$totalpice+=$v['invoice_quantity'];
 			}
 			$extservice = Service_CsdExtraservice::getByCondition($con);
 			$shipperConsignee = Service_CsdShipperconsignee::getByField($order_id,'order_id');
 			$shipperConsignee['shipper_country_name'] = $countrys[$shipperConsignee['shipper_countrycode']]?$countrys[$shipperConsignee['shipper_countrycode']]['country_enname']:$shipperConsignee['shipper_countrycode'];
 			$shipperConsignee['consignee_country_name'] = $countrys[$shipperConsignee['consignee_countrycode']]?$countrys[$shipperConsignee['consignee_countrycode']]['country_enname']:$shipperConsignee['consignee_countrycode'];
 			$order['invoice_total'] = $total;
-			$orderData = array('order'=>$order,'invoice'=>$invoice,'shipper_consignee'=>$shipperConsignee);
+			$orderData = array('order'=>$order,'invoice'=>$invoice,'shipper_consignee'=>$shipperConsignee,"label"=>$label);
 
 			//为了方便 吧TNT渠道也改成DHL 公用一个打印
 			$orderData['order']['product_code']='G_DHL';
-			$this->view->totalPieces=$totalPieces;
+			$total = empty($orderData['invoice'][0]['invoice_totalcharge_all'])?'':$orderData['invoice'][0]['invoice_totalcharge_all'];
 			$this->view->total_Value=$total;
+			$this->view->total_pice=$totalpice;
+			$this->view->total_weight=$totalweight;
 			$this->view->o = $orderData;
 			//print_r($orderData);	
 		} catch (Exception $e) {
@@ -147,8 +170,8 @@ p{height:20px;line-height:20px;}
 			file_put_contents($htmlFileName, $html);
 		//shell调用xml
 		if(!file_exists($pdfFileName)){
-			//shell_exec("wkhtmltopdf {$htmlFileName} {$pdfFileName}");
-			exec('/usr/local/wkhtmltox/bin/./wkhtmltopdf  {$htmlFileName} {$pdfFileName}');
+			shell_exec("wkhtmltopdf {$htmlFileName} {$pdfFileName}");
+			//exec('/usr/local/wkhtmltox/bin/./wkhtmltopdf  {$htmlFileName} {$pdfFileName}');
 		}
 		//创建失败
 		if(!file_exists($pdfFileName)){

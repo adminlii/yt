@@ -93,10 +93,10 @@ width: 100px;
     				<td><p><i>*</i> 客户单号 : </p><input type="text" name="order[refer_hawbcode]"/></td>
     			</tr>
     			<tr>
-    				<td><p>箱数 : </p><input type="text" name="order[boxnum]"/></td>
+    				<td><p><i>*</i>箱数 : </p><input type="text" name="order[boxnum]"/></td>
     			
 		
-    				<td><p>上传装箱单 : </p><input type="file" id="invoicelist" name="invoicelist"/><button id='upid' type="button">上传</button> </td>
+    				<td><p><i>*</i>上传装箱单 : </p><input type="file" id="invoicelist" name="invoicelist"/><button id='upid' type="button">上传</button> </td>
     				<input type = 'hidden' name = "invoicelistrel" id="invoicelistrel"/>
     			</tr>
                 <tr>

@@ -114,6 +114,8 @@ class Common_FastReport
     public function PrintLabel($params,$method){
         $result = array("ack"=>0,"message"=>"","data"=>"");
         $url = "http://test.hwcservice.com/ChinaPost/api/LabelPrintService/MergeLabelByTrackingNumbers?type=json";
+        $url = "http://112.126.68.251:8088/v3/api/LabelPrintService/MergeLabelByTrackingNumbers?type=json";
+        //$url ="http://192.168.10.48:3001/V3/api/LabelPrintService/MergeLabelByTrackingNumbers?type=json";
         $username = 'tmsUser';
         $password = '123456';
         $apiToken = base64_encode("{$username}:{$password}");

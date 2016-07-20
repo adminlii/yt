@@ -235,9 +235,15 @@ class Order_OrderListController extends Ec_Controller_Action
 			}
             
 //                 print_r($rows);exit;
-                $return['data'] = $rows;
-                $return['state'] = 1;
-                $return['message'] = "";
+				if(empty($rows)){
+					$return['state'] = 0;
+					$return['message'] = "没有找到记录，请调整搜索条件";
+				}else{
+					$return['data'] = $rows;
+					$return['state'] = 1;
+					$return['message'] = "";
+				}
+                
             // 是否重新统计
             $reTongji = new Zend_Session_Namespace('reTongji');
             

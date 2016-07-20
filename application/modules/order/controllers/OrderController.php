@@ -106,9 +106,12 @@ class Order_OrderController extends Ec_Controller_Action
      */
     public function createAction()
     {
+    	$uuid = create_guid();
+    	
         $order_id = $this->getRequest()->getParam('order_id', '');
         $cpy = $this->getRequest()->getParam('cpy', null);
         if($this->getRequest()->isPost()){
+        	
             $orderR = array();
             $params = $this->getRequest()->getParams();
             //订单头
@@ -122,6 +125,17 @@ class Order_OrderController extends Ec_Controller_Action
             //预报？草稿？
             $status = $this->getParam('status','1');
             
+            //日志记录start
+            $logrow = array();
+            $logrow['requestid'] = $uuid;
+             
+            $logrow['type'] = $order['product_code']=="ESB"?1:2;
+            $logrow['detail'] = '创建订单';
+            list($usec, $sec) = explode(" ", microtime());
+            $logrow['creattime'] = date("Y-m-d H:i:s|",$sec-3600*8).$usec;
+            $db = Common_Common::getAdapter();
+            $db ->insert('logapi', $logrow);
+            //日志记录end
             
             $orderArr = array(
                 'product_code' => strtoupper($order['product_code']),
@@ -189,7 +203,7 @@ class Order_OrderController extends Ec_Controller_Action
                     $invoiceArr[$kk1][$column] = $vv;
                 }
             }
-            
+
             /*$return = array(
                 'ask' => 0,
                 'message' => Ec::Lang('订单操作失败')
@@ -203,7 +217,6 @@ class Order_OrderController extends Ec_Controller_Action
                 array_unshift($invoiceArr, array());
                 unset($invoiceArr[0]);
             }
-            
             //如果类型是文件，则可以允许海关物品无关联
            /*  if($order['mail_cargo_type']==3){
                 $isNotNullOfInvoice=false;
@@ -230,7 +243,8 @@ class Order_OrderController extends Ec_Controller_Action
             $process->setInvoice($invoiceArr);
             $process->setExtraservice($extraservice);       
             $process->setShipper($shipperArr);          
-            $process->setConsignee($consigneeArr); 
+            $process->setConsignee($consigneeArr);
+            $process->setUuid($uuid);
 //             $process
             $return = $process->createOrderTransaction($status);
             
@@ -394,6 +408,7 @@ class Order_OrderController extends Ec_Controller_Action
      */
     public function createdhlAction()
     {
+    	$uuid = create_guid();
        $order_id = $this->getRequest()->getParam('order_id', '');
         $cpy = $this->getRequest()->getParam('cpy', null);
         if($this->getRequest()->isPost()){
@@ -412,7 +427,17 @@ class Order_OrderController extends Ec_Controller_Action
             $extraservice = $this->getParam('extraservice',array());
             //预报？草稿？
             $status = $this->getParam('status','1');
-            
+            //日志记录start
+            $logrow = array();
+            $logrow['requestid'] = $uuid;
+             
+            $logrow['type'] = 3;
+            $logrow['detail'] = '创建订单';
+            list($usec, $sec) = explode(" ", microtime());
+            $logrow['creattime'] = date("Y-m-d H:i:s|",$sec-3600*8).$usec;
+            $db = Common_Common::getAdapter();
+            $db ->insert('logapi', $logrow);
+            //日志记录end
             $orderArr = array(
                 'product_code' => strtoupper($order['product_code']),
                 'country_code' => strtoupper($order['country_code']),
@@ -595,6 +620,7 @@ class Order_OrderController extends Ec_Controller_Action
             $process->setExtraservice($extraservice);
             $process->setShipper($shipperArr);
             $process->setConsignee($consigneeArr);
+            $process->setUuid($uuid);
             //             $process
             $return = $process->createOrderTransaction($status);
     
@@ -615,15 +641,15 @@ class Order_OrderController extends Ec_Controller_Action
                 $con = array(
                     'order_id' => $order_id
                 );
-                $invoice = Service_CsdInvoice::getByCondition($con,'*',0,0,'invoice_id asc');
+               /*  $invoice = Service_CsdInvoice::getByCondition($con,'*',0,0,'invoice_id asc');
     
                 foreach($invoice as $k=>$v){
                     $v['invoice_unitcharge'] = $v['invoice_quantity']?($v['invoice_totalcharge']/$v['invoice_quantity']):0;
                     $v['invoice_weight'] = $v['invoice_weight']?($v['invoice_totalWeight']/$v['invoice_quantity']):0;
                     $invoice[$k] = $v;
-                }
+                } */
     
-                $atd_extraservice_kind_arr = Common_DataCache::getAtdExtraserviceKindAll();
+                /* $atd_extraservice_kind_arr = Common_DataCache::getAtdExtraserviceKindAll();
                 $extservice = Service_CsdExtraservice::getByCondition($con);
                 foreach($extservice as $v){
                     $extra_servicecode = $v['extra_servicecode'];
@@ -631,7 +657,7 @@ class Order_OrderController extends Ec_Controller_Action
                     if($atd_extraservice_kind_arr[$extra_servicecode]['extra_service_group']=='C0'){
                         $order['insurance_value'] = $v['extra_servicevalue'];
                     }
-                }
+                } */
                 $shipperConsignee = Service_CsdShipperconsignee::getByField($order_id,'order_id');
                 // 历史数据 end
                 if($cpy){
@@ -643,8 +669,14 @@ class Order_OrderController extends Ec_Controller_Action
                     }
                 }//print_r($order);die;
                 $this->view->order = $order;
-                $this->view->invoice = $invoice;
+                //$this->view->invoice = $invoice;
+                //分割收件人地址
+                $shipperstreeArr = explode("||", $shipperConsignee["shipper_street"]);
+                $shipperConsignee["shipper_street1"]=$shipperstreeArr[0]?$shipperstreeArr[0]:'';
+                $shipperConsignee["shipper_street2"]=$shipperstreeArr[1]?$shipperstreeArr[1]:'';
+                $shipperConsignee["shipper_street3"]=$shipperstreeArr[2]?$shipperstreeArr[2]:'';
                 $this->view->shipperConsignee = $shipperConsignee;
+                //var_dump($shipperConsignee);
                 $this->view->extservice = $extservice;
             } catch (Exception $e) {
                 header("Content-type: text/html; charset=utf-8");
@@ -1925,11 +1957,29 @@ class Order_OrderController extends Ec_Controller_Action
 		die(Zend_Json::encode($result));
 	}
 	
-	public function testAction()
-	{
-		echo Ec::renderTpl($this->tplDirectory . "test.tpl", 'layout-upload');
-		$html = preg_replace('/>\s+</','><',$html);
-		echo $html;
+//邮编记录查询
+	public function getPostCodeRuleAction(){
+		$result = array(
+				"state" => 0,
+				"message" => "Fail."
+		);
+		if ($this->_request->isPost()) {
+			$productcode = !empty($this->_request->getPost('dc'))?$this->_request->getPost('dc'):'';
+			$condition = array();
+			$condition['productcode'] = $productcode;
+			$condition['cityname'] = !empty($this->_request->getPost('cn'))?$this->_request->getPost('cn'):'';;
+			$condition['status'] = 1;
+			if (!empty($condition)) {
+				$server_csi_prs=new Service_CsiProductRuleShipper();
+				$res = $server_csi_prs->getByCondition($condition);
+				if(!empty($res)){
+					$result['state']   = 1;
+					$result['data']    = $res;
+					$result['message'] = 'Success.';
+				}
+			}	
+		}
+		die(Zend_Json::encode($result));
 	}
 	
 }

@@ -52,7 +52,10 @@ class Process_OrderDhl
     {
         $this->_create_method = $create_method;
     }
-    
+    public function setUuid($uuid)
+    {
+    	$this->_uuid = $uuid;
+    }
     
     public function setVolume($volume)
     {
@@ -390,7 +393,7 @@ class Process_OrderDhl
         
         if($this->_order['order_width']){
             if(! is_numeric($this->_order['order_width'])){
-                $this->_err[] = Ec::Lang('包装长度必须为数字');
+                $this->_err[] = Ec::Lang('包装宽度必须为数字');
             }else{
                 if($this->_order['product_code'] =='TNT'){
                     if($this->_order['order_width']>120){
@@ -403,7 +406,7 @@ class Process_OrderDhl
         
         if($this->_order['order_height']){
             if(! is_numeric($this->_order['order_height'])){
-                $this->_err[] = Ec::Lang('包装长度必须为数字');
+                $this->_err[] = Ec::Lang('包装高度必须为数字');
             }else{
                 if($this->_order['product_code'] =='TNT'){
                     if($this->_order['order_height']>150){
@@ -459,7 +462,7 @@ class Process_OrderDhl
         }else{
             $this->_consignee['consignee_certificatecode'] = '';
         }
-       
+       	$_totalpice=0;
         // 验证申报信息
         if(empty($this->_invoice)&&$this->_order['mail_cargo_type']!=3){
             $this->_err[] = Ec::Lang('申报信息不可为空');
@@ -480,6 +483,8 @@ class Process_OrderDhl
                 }else{
                     if(! preg_match('/^[0-9]+$/', $invoice['invoice_quantity']) || intval($invoice['invoice_quantity']) <= 0){
                         $this->_err[] = "(" . Ec::Lang('申报信息') . $k . ")" . Ec::Lang('申报数量必须为大于0的整数');
+                    }else{
+                    	$_totalpice += $invoice['invoice_quantity'];
                     }
                 }
                 if($invoice['invoice_unitcharge'] === ''){
@@ -598,6 +603,9 @@ class Process_OrderDhl
         	if(empty($this->_label)){
         		$this->_err[]="商品信息必须填写";
         	}
+        	//总件数
+        	$totalpice 	= 0;
+        	$totalvalue = 0;
         	foreach ($this->_label as $labelk => $label ){
         		if(!$label['invoice_note'])
         			$this->_err[] = "(" . Ec::Lang('发票信息') . $labelk . ")" . Ec::Lang('完整描述不可为空');
@@ -606,6 +614,8 @@ class Process_OrderDhl
         		else{
         			if(! is_numeric($label['invoice_quantity'])){
         				$this->_err[] = $this->_err[] = "(" . Ec::Lang('发票信息') . $labelk . ")" . Ec::Lang('数量必须为数字');
+        			}else{
+        				$totalpice +=$label['invoice_quantity'];
         			}
         		}
         		if(!$label['invoice_unitcharge']){
@@ -614,9 +624,25 @@ class Process_OrderDhl
 	    			//                     print_r($invoice);exit;
 	    			if(! is_numeric($label['invoice_unitcharge'])){
 	    				$this->_err[] = $this->_err[] = "(" . Ec::Lang('发票信息') . $labelk . ")" . Ec::Lang('单价必须为数字');
+	    			}else{
+	    				if($label['invoice_quantity']){
+	    					$totalvalue += $label['invoice_quantity']*$label['invoice_unitcharge'];
+	    				}
 	    			}
 	    		}
         		
+        	}
+        	
+        	//校验发票信息正确
+        	if(!empty($this->_invoice[1]['invoice_totalcharge_all'])){
+        		//校验总价值
+        		if($totalvalue!=$this->_invoice[1]['invoice_totalcharge_all']){
+        			$this->_err[] = "(" . Ec::Lang('发票信息') .")" . Ec::Lang('总价值和申报价值不一致');
+        		}
+        	}
+        	//校验件数
+        	if($totalpice!=$_totalpice){
+        		//$this->_err[] =  "(" . Ec::Lang('发票信息') .")" . Ec::Lang('总件数不一致');
         	}
         }
         
@@ -801,7 +827,21 @@ class Process_OrderDhl
                 $successTip = Ec::Lang('订单提交预报成功');
             }
             $db->commit();
-            
+            // 提交预报
+            if($status == 'P'){
+            	// 订单处理
+            	$this->_verifyRs = $this->_verifyProcess($this->_order_id, 'verify');
+            }
+            //日志记录start
+            $logrow = array();
+            $logrow['requestid'] = $this->_uuid;
+            $logrow['type'] = 1;
+            $logrow['detail'] = '同步创建订单结束';
+            list($usec, $sec) = explode(" ", microtime());
+            $logrow['creattime'] = date("Y-m-d H:i:s|",$sec-3600*8).$usec;
+            $db = Common_Common::getAdapter();
+            $db ->insert('logapi', $logrow);
+            //日志记录end
             $this->_order['order_id'] = $this->_order_id;
             $return['ask'] = 1;
             if($this->_existOrder){
@@ -924,7 +964,7 @@ class Process_OrderDhl
             // 新增
             $order['create_date'] = date('Y-m-d H:i:s');
             $order['creater_id'] = $this->_order['creater_id'];
-            
+            $order['order_status'] = "S";//丢到换号中
             $this->_order_id = Service_CsdOrder::add($order);
             $this->_log[] = Ec::Lang('订单新增');
         }else{
@@ -985,30 +1025,30 @@ class Process_OrderDhl
                     'invoice_consigneetax'    =>  empty($row['invoice_consigneetax'])?'':$row['invoice_consigneetax'],
                     'invoice_totalcharge_all'    =>  empty($row['invoice_totalcharge_all'])?0:$row['invoice_totalcharge_all'],
                 );
-                //发票里面的字段可以覆盖这里
-                if($this->_label[$invoicek]&&$this->_order['invoice_print']){
-                	 if($this->_label[$invoicek]['invoice_note']){
-                	 	$ivs['invoice_note']=$this->_label[$invoicek]['invoice_note'];
-                	 }
-                	 if($this->_label[$invoicek]['invoice_quantity']){
-                	 	$ivs['invoice_quantity']=$this->_label[$invoicek]['invoice_quantity'];
-                	 }
-                	 if($this->_label[$invoicek]['invoice_shipcode']){
-                	 	$ivs['invoice_shipcode']=$this->_label[$invoicek]['invoice_shipcode'];
-                	 }
-                	 if($this->_label[$invoicek]['invoice_proplace']){
-                	 	$ivs['invoice_proplace']=$this->_label[$invoicek]['invoice_proplace'];
-                	 }
-                	 if($this->_label[$invoicek]['invoice_unitcharge']){
-                	 	$ivs['invoice_totalcharge']=$this->_label[$invoicek]['invoice_unitcharge']*$this->_label[$invoicek]['invoice_quantity'];
-                	 }
-                }
                 $ivs = Common_Common::arrayNullToEmptyString($ivs);
                 //print_r($ivs);die;
                 //$sql="insert into csd_invoice (invoice_weight,invoice_totalWeight) values('2','6')";
                 Service_CsdInvoice::add($ivs);
             }
         }
+        
+        if(!empty($this->_label)&&$this->_order['invoice_print']){
+        	foreach($this->_label as $labelk =>$lrow){
+        		// print_r($row);
+        		$ivs = array(
+        				'order_id' => $this->_order_id,
+        				'invoice_quantity' => $lrow['invoice_quantity'],
+        				'invoice_note' => $lrow['invoice_note'],
+        				'invoice_shipcode' => empty($lrow['invoice_shipcode'])?"":$lrow['invoice_shipcode'],
+        				'invoice_unitcharge' => empty($lrow['invoice_unitcharge'])?"":$lrow['invoice_unitcharge'],
+        				'invoice_proplace' => empty($lrow['invoice_proplace'])?"":$lrow['invoice_proplace'],
+        		);
+        		
+        		$ivs = Common_Common::arrayNullToEmptyString($ivs);
+        		Service_CsdInvoiced::add($ivs);
+        	}
+        }
+        
         $shipper = array(
             'shipper_account' => $this->_shipper['shipper_account'],
             'shipper_name' => $this->_shipper['shipper_name'],
@@ -1091,7 +1131,7 @@ class Process_OrderDhl
                 throw new Exception(Ec::Lang('信息异常，处理中断'));
             }
             // 订单处理
-            $this->_verifyRs = $this->_verifyProcess($this->_order_id, 'verify');
+            //$this->_verifyRs = $this->_verifyProcess($this->_order_id, 'verify');
         }
     }
 
@@ -1124,7 +1164,8 @@ class Process_OrderDhl
                     $allowStatus = array(
                         'D',
                         'Q',
-                        'U'
+                        'U',
+			'S',
                     );
                     $this->_verify_tip = '此操作只允许对草稿、暂存、问题件状态的订单进行操作，请确认您选择的订单信息是否正确';
                     break;
@@ -1246,8 +1287,8 @@ class Process_OrderDhl
         $log_content = array();
         switch(strtolower($op)){
             case 'verify': // 提交预报
-                $updateRow['order_status'] = 'P';
-                $updateRow['post_date'] = date('Y-m-d H:i:s');
+                //$updateRow['order_status'] = 'P';
+                //$updateRow['post_date'] = date('Y-m-d H:i:s');
                 $log_content[] = Ec::Lang('订单提交预报');
                 // 换号验证 start==============================
                 // 涉及到表
@@ -1273,7 +1314,7 @@ class Process_OrderDhl
               	 * A：API换号
               	 */ 
                 // 当为API换号，并且不是及时换号时订单状态改成换号中
-            	if($result['document_change_sign'] == 'A' && $result['type'] == '1') {
+            	/* if($result['document_change_sign'] == 'A' && $result['type'] == '1') {
             		$updateRow['order_status'] = 'S';
             	}
             	
@@ -1286,7 +1327,7 @@ class Process_OrderDhl
                 if($order['server_hawbcode']!=$updateRow['server_hawbcode']){
                     $log_content[] = Ec::Lang('服务商换号') . ',' . Ec::Lang('原服务商单号') . ' ' . ($order['server_hawbcode']?$order['server_hawbcode']:Ec::Lang('为空')) . ' ' . Ec::Lang('更改为') . ' ' . $updateRow['server_hawbcode'];
                     $order['server_hawbcode'] = $updateRow['server_hawbcode'];
-                }
+                } */
                 // 换号验证 end==============================
                 
                 // 插入轨迹 start
@@ -1469,7 +1510,8 @@ class Process_OrderDhl
             default:
                 throw new Exception(Ec::Lang('不合法的操作'));
         }
-        Service_CsdOrder::update($updateRow, $order_id, 'order_id');
+        if(!empty($updateRow))
+       	 Service_CsdOrder::update($updateRow, $order_id, 'order_id');
         
         // 日志
         $logRow = array(
@@ -1685,35 +1727,7 @@ class Process_OrderDhl
     		$return['server_hawbcode'] = $atd_regist_code_available['regist_code'];
     		return $return;
     	}
-    	// 单号池取号==========开始===========
-    	
-    	// API 换号==========开始===========
-    	// 根据销售产品获取物流渠道(限制渠道选择规则必须为一对一模式)
-//     	$date = date('Y-m-d H:i:s');
-//     	$sql = "SELECT
-// 					sc.formal_code
-// 				FROM
-// 					pbr_channel_select pcs
-// 				INNER JOIN csi_servechannel sc ON pcs.server_channelid = sc.server_channelid
-// 				WHERE
-// 					pcs.product_code = '{$order['product_code']}'
-// 				AND '{$date}' BETWEEN pcs.begindate AND pcs.enddate";
-    	
-//     	$db = Common_Common::getAdapterForDb2(); 
-//     	$channcel = $db->fetchRow($sql);
-//     	if(empty($channcel)) {
-//     		throw new Exception(Ec::Lang('该销售产品未指定换号服务商') . "[{$order['product_code']}]");
-//     	}
-// echo "--22--";die;
-
-    	/*$listId = $this->getChannelByProduct($order);
-
-    	 if(empty($listId)) {//TODO
-    		throw new Exception(Ec::Lang('该销售产品未指定换号渠道') . "[{$order['product_code']}]");
-    	} */
-    	//$listId['string'] = '61';//TODO
-
-    	if($order["product_code"] == "NZ_CP" || $order["product_code"] == "NZ_DP" || $order["product_code"] == "NZ_LZ"){
+        if($order["product_code"] == "NZ_CP" || $order["product_code"] == "NZ_DP" || $order["product_code"] == "NZ_LZ"){
             $listId['string'] = 1;  //NZ_CP，NZ_DP，NZ_LZ对应渠道SAICHENG
         }else if($order["product_code"] == "TNT"){
         	$listId['string'] = 73;
@@ -1739,9 +1753,9 @@ class Process_OrderDhl
     	$obj = new API_Common_ChangeNOFactory();
     	
     	
-    	$changeNOFactory = new API_Common_ChangeNOFactory();
-    	$result = $changeNOFactory->changeNOByForecast($order['order_id'], $order['server_hawbcode'], $channcel['formal_code'], $listId['string'],$order['shipper_hawbcode']);
-
+    	$changeNOFactory = new API_Common_AsyncChangeNo();
+    	//$result = $changeNOFactory->changeNOByForecast($order['order_id'], $order['server_hawbcode'], $channcel['formal_code'], $listId['string'],$order['shipper_hawbcode']);
+    	$result = $changeNOFactory->changeNOByForecast($order['order_id'], $order['server_hawbcode'], $channcel['formal_code'], $listId['string'],$order['shipper_hawbcode'],$this->_uuid);
     	if(!$result['ack']) {
     		throw new Exception(Ec::Lang('换号失败。') . $result['message']);
     	}

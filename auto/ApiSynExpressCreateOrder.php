@@ -40,6 +40,7 @@ try {
 			// 				Common_Common::myEcho("执行超出30分钟,强制中断\r\n");
 			// 				break;
 			// 			}
+			
 			$obj = new API_Common_ServiceExpressCreateOrder();
 			$obj->createOrderToService($val['formal_code'], $loop);
 			$runTime = time();
@@ -47,6 +48,7 @@ try {
 	}
 
 } catch (Exception $e) {
+	ping();
 	Common_Common::myEcho('[' . date('Y-m-d H:is') . ']Fail Exception:' . $e->getMessage() . "\r\n");
 }
 Common_Common::myEcho("[" . date('Y-m-d H:is') . "] End run\r\n");

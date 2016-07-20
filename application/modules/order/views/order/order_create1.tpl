@@ -724,11 +724,12 @@ $('.quantity').live('keyup',function(){
     		<li><a href="javascript:void(0)" onclick="leftMenu('order-list','订单管理','/order/order-list/list?quick=39')">订单管理</a></li>
     		<!--<li><a href="">上传记录</a></li>-->
     	</ul>
+    	<form method="POST" action="" onsubmit="return false;" id="orderForm">
     	<div class="layerbody">
     		<div class="layTit">
     			<h3>基本信息</h3>
     		</div>
-    		<form method="POST" action="" onsubmit="return false;" id="orderForm">
+    		
     		<table class="layTable" border="0" cellpadding="0" cellspacing="0">
     			<tr>
     				<td><p><i>*</i> 运输方式 : </p><select class='input_select product_code'
@@ -737,8 +738,8 @@ $('.quantity').live('keyup',function(){
 							id='product_code'>
 								<option value='' class='ALL'><{t}>-select-<{/t}></option>
 								<{foreach from=$productKind item=c name=c}>
-								<option value='<{$c.product_code}>'><{$c.product_code}>
-									[<{$c.product_cnname}> <{$c.product_enname}>]</option>
+								<option value='<{$c.product_code}>'><{$c.product_cnname}>
+									</option>
 								<{/foreach}>
 						</select></td>
     				<td><p><i>*</i> 收件人国家 : </p><select class='input_select country_code'
@@ -760,7 +761,7 @@ $('.quantity').live('keyup',function(){
 							name='order[order_weight]' id='order_weight' /></td>
     			</tr>
     			<tr>
-    				<td><p>外包装件数 : </p><input type="text" class="quantity" value='<{if isset($order)}><{$order.order_pieces}><{else}>1<{/if}>'
+    				<td><p><i>*</i>外包装件数 : </p><input type="text" class="quantity" value='<{if isset($order)}><{$order.order_pieces}><{else}>1<{/if}>'
 							name='order[order_pieces]' id='order_pieces' /></td>
     				<td><p>包裹申报种类: </p>
     				
@@ -776,7 +777,7 @@ $('.quantity').live('keyup',function(){
     			</tr>
     			<tr>
     				<td colspan="2">
-    				<p>体积 : </p>
+    				<p><i>*</i>体积 : </p>
     				<div class="goodvolume">
     				<p><input type="text" class="order_volume"  onfocus="if (value =='长'){value =''}" onblur="if (value ==''){value='长'}" name='order[order_length]' id='order_length'  
 							value='<{if isset($order)}><{$order.length}><{else}>长<{/if}>' /> CM</p>
@@ -877,10 +878,10 @@ $('.quantity').live('keyup',function(){
     				<td><i>*</i> <input type="text" name='invoice[invoice_cnname][]'/></td>
     				<td><i>*</i> <input type="text" class="quantity" name='invoice[invoice_quantity][]'/></td>
     				<td>
-    					<select default="PCE" name="invoice[unit_code][]"
+    					<select  name="invoice[unit_code][]"
 							> <{foreach from=$units name=s
 								item=s key=k}>
-								<option value="<{$s.unit_code}>"><{$s.unit_enname}>(<{$s.unit_cnname}>)</option>
+								<option value="<{$s.unit_code}>" <{if $s.unit_code eq "PCE"}>selected = 'selected'<{/if}> ><{$s.unit_enname}>(<{$s.unit_cnname}>)</option>
 								<{/foreach}>
 						</select>
     				</td>
