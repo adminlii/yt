@@ -625,7 +625,7 @@ class Process_OrderUpload extends Process_Order
      */
     protected function _dataProcess($fileData, $singleCommitFlag = false)
     {
-        $map = $this->getExcelMap();
+    	$map = $this->getExcelMap();
         //键值互换array_flip
         $map_flip = array_flip($map);
        
@@ -875,7 +875,7 @@ class Process_OrderUpload extends Process_Order
                 	}
                 } else {
 	                // 创建订单
-	                $process->createOrder($status);
+	                $process->createOrder($status,true);
                 }
                 $this->_successArr[$k] = $fileData[$k];
             }catch(Exception $ee){   
@@ -1198,7 +1198,7 @@ class Process_OrderUpload extends Process_Order
                     }
                 } else {
                     // 创建订单
-                    $process->createOrder($status);
+                    $process->createOrder($status,true);
                 }
                 $this->_successArr[$k] = $fileData[$k];
             }catch(Exception $ee){

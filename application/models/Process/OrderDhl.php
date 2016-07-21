@@ -860,7 +860,7 @@ class Process_OrderDhl
         return $return;
     }
 
-    public function createOrder($status)
+    public function createOrder($status,$import=FALSE)
     {
         $status = strtoupper($status);
         
@@ -1130,8 +1130,11 @@ class Process_OrderDhl
             if($this->_err){
                 throw new Exception(Ec::Lang('信息异常，处理中断'));
             }
+            if($import){
+            	$this->_verifyRs = $this->_verifyProcess($this->_order_id, 'verify',true);
+            }
             // 订单处理
-            //$this->_verifyRs = $this->_verifyProcess($this->_order_id, 'verify');
+            //
         }
     }
 
@@ -1268,7 +1271,7 @@ class Process_OrderDhl
      * @param unknown_type $op            
      * @throws Exception
      */
-    protected function _verifyProcess($order_id, $op)
+    protected function _verifyProcess($order_id, $op,$import=false)
     {
         $order = Service_CsdOrder::getByField($order_id, 'order_id');
         $updateRow = array(
@@ -1303,7 +1306,10 @@ class Process_OrderDhl
                
 //                 print_r($product);die;
                 // 换号
-                $result = $this->changeNO($order, $product['web_document_rule']);
+                 if($import)
+                	$result = $this->changeNO($order, $product['web_document_rule'],$import);
+               	else
+                	$result = $this->changeNO($order, $product['web_document_rule']);
                
                
               	/*
@@ -1628,7 +1634,7 @@ class Process_OrderDhl
      * 获取服务商单号
      * 1. 获取物流产品对应的
      */ 
-    public function changeNO($order = array(), $web_document_rule = '') {
+    public function changeNO($order = array(), $web_document_rule = '',$import=false) {
     	// 返回结果
     	$return = array(
     					'document_change_sign' => 'N', 
@@ -1752,10 +1758,16 @@ class Process_OrderDhl
     	}
     	$obj = new API_Common_ChangeNOFactory();
     	
+    	if($import){
+    		$changeNOFactory = new API_Common_ChangeNOFactory();
+    		$result = $changeNOFactory->changeNOByForecast($order['order_id'], $order['server_hawbcode'], $channcel['formal_code'], $listId['string'],$order['shipper_hawbcode']);
+    	}else{
+    		$changeNOFactory = new API_Common_AsyncChangeNo();
+    		$result = $changeNOFactory->changeNOByForecast($order['order_id'], $order['server_hawbcode'], $channcel['formal_code'], $listId['string'],$order['shipper_hawbcode'],$this->_uuid);
+    	}
     	
-    	$changeNOFactory = new API_Common_AsyncChangeNo();
-    	//$result = $changeNOFactory->changeNOByForecast($order['order_id'], $order['server_hawbcode'], $channcel['formal_code'], $listId['string'],$order['shipper_hawbcode']);
-    	$result = $changeNOFactory->changeNOByForecast($order['order_id'], $order['server_hawbcode'], $channcel['formal_code'], $listId['string'],$order['shipper_hawbcode'],$this->_uuid);
+    	//
+    	
     	if(!$result['ack']) {
     		throw new Exception(Ec::Lang('换号失败。') . $result['message']);
     	}

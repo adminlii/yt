@@ -279,9 +279,9 @@ $(function() {
 //		var height = parent.windowHeight();
 //        parent.openIframeDialogNew(url,width-100,height-80,'<{t}>order_detail<{/t}>',quickId,paginationCurrentPage,paginationPageSize);
         var cp_order = $(this).attr('order_type')=='return'?'<{t}>cpy_return_order<{/t}>':'<{t}>cpy_order<{/t}>';
-        if(url.indexOf("createdhl"))
+        if(url.indexOf("createdhl")>=0){
         	leftMenu('order/createdhl',cp_order,url);
-        else
+        }else
         	leftMenu('order/create',cp_order,url);
 	})
 	

@@ -1337,15 +1337,18 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
  		
  		//保险额外服务
  		$extservice = $this->orderExtservice;
- 		$RedundancyField['InsuredFee']=$extservice[0]['servicevalue']?$extservice[0]['servicevalue']:'';
- 		//
+ 		if($extservice[0]['servicevalue']){
+ 			$RedundancyField['InsuredFee']= $extservice[0]['servicevalue'];
+ 		}
  		$RedundancyField["ShipperEIN"]=$this->orderKey["invoice_shippertax"] ;
  		$RedundancyField["RecipientEIN"]=$this->orderKey["invoice_consigneetax"];
  		$RedundancyField["CommodityCode"] = $declareInvoice[0]['HSCode']?$declareInvoice[0]['HSCode']:'';
  		//总价值
  		$RedundancyField['DeclaredValue']    = $this->orderKey["declaredValue"];
  		//保险价值
- 		$RedundancyField['InsuredAmount']   =  empty($this->orderKey["insurance_value_gj"])?0:$this->orderKey["insurance_value_gj"];
+ 		if(!empty($this->orderKey["insurance_value_gj"])){
+ 			$RedundancyField['InsuredAmount'] = $this->orderKey["insurance_value_gj"];
+ 		}
  		//注册编号
  		//$data["RegisterNumber"] = empty($this->customer_ext["registernumber"])?"":$this->customer_ext["registernumber"];
  		//$data["AgencyCode"]		= empty($this->customer_ext["agencycode"])?"":$this->customer_ext["agencycode"];
