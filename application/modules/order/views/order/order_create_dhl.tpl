@@ -279,9 +279,9 @@ function formSubmit(status){
 	                $('#shipper_hawbcode').val(json.order.shipper_hawbcode);                
 					successTip(html,json.order);
 					 //如果勾选了发票弹窗
-	    			
+	    			var invoice_type = $("input[name='order[invoice_type]']:checked").val();
 					if($("#makeinvoice").attr("checked")&&json.ask==1)
-					window.open("/order/invoice-print/invoice-label1/?orderId="+json.order.order_id);
+					window.open("/order/invoice-print/invoice-label1/?orderId="+json.order.order_id+"&invoice_type="+invoice_type);
 				}else{
 					 if(json.err){
 						 html+="<ul style='padding:0 25px;list-style-type:decimal;'>";
@@ -551,7 +551,7 @@ function formSubmit(status){
 							name='order[order_weight]' id='order_weight' />
             </div>
         </div>
-    	<div class="title widthRight" style="float:left">6、交运物品详细说明<!--<input type="button" style="margin-left:210px;" value="添加到内容列表" class="btn1"><input type="button" value="内容列表">--></div>
+    	<div class="title widthRight" style="float:left">6、交运物品详细说明<input type="button" style="margin-left:210px;" value="添加到内容列表" id="addContents" class="btn1"><input type="button" id="contentslist" value="内容列表"></div>
         <div class="contentLeft contentType5 borderB" style="height:118px;">
         	<h3 style="margin-bottom:10px;float: left;">提供内容和数量*</h3>
         	<div style="float: left;margin-left: 135px;"><input type="checkbox" name="order[dangerousgoods]" value="1" >是否含有危险品</div>
@@ -606,6 +606,10 @@ function formSubmit(status){
         </div>
         <div id="invoicetab">
         <div class="contentLeft contentType4 borderR borderB" style="height:170px;width:246px;">
+        <div>
+			<input type="radio" name="order[invoice_type]" checked value="1"><label>形式发票</label>
+			<input type="radio" name="order[invoice_type]" value="2" style="margin-left: 52px;"><label>商业发票</label>
+		</div>
         <h3>日期</h3>
         <input type="text" class="datepicker  invoicelable" value="" name="order[makeinvoicedate]" id="makeinvoicedate">
         <h3>出口类型</h3>
@@ -631,7 +635,7 @@ function formSubmit(status){
 		
 		<h3>付款方式</h3>
 		<select class="input_select" name="order[pay_type]" default="" id="pay_type" style="width: 240px;">
-        	<option value="freight collect">freight collect（到付）</option>
+        	<!--<option value="freight collect">freight collect（到付）</option>-->
         	<option value="freight prepaid">freight prepaid（预付）</option>
         </select>
 		<h3>注释</h3>
@@ -647,14 +651,34 @@ function formSubmit(status){
 			<td style="border-bottom:none"><input type="text" class="invoicelable quantity" name="invoice1[invoice_quantity][]" value=""></td>
 			<td style="border-bottom:none"><input type="text" class="invoicelable" name="invoice1[invoice_shipcode][]" value=""></td>
 			<td style="border-bottom:none"><input type="text" class="invoicelable invoice_unitcharge" name="invoice1[invoice_unitcharge][]" value=""></td>
-			<td style="border-bottom:none; border-right:none"><input type="text" class="invoicelable" name="invoice1[invoice_proplace][]" value=""></td>
+			<td style="border-bottom:none; border-right:none">
+			<select class='input_select country_code'
+							name='invoice1[invoice_proplace][]' style='width: 94%;'>
+								
+								
+								<{foreach from=$country item=c name=c}>
+								
+								<option value='<{$c.country_code}>' country_id='<{$c.country_id}>' class='<{$c.country_code}>' <{if $c.country_code eq 'CN'}>selected<{/if}> ><{$c.country_code}> [<{$c.country_cnname}>]</option>
+								<{/foreach}>
+								 
+			</select></td>
 		</tr>
 		<tr>
 			<td style="border-bottom:none"><input type="text" class="invoicelable" name="invoice1[invoice_note][]" value=""></td>
 			<td style="border-bottom:none"><input type="text" class="invoicelable quantity" name="invoice1[invoice_quantity][]" value=""></td>
 			<td style="border-bottom:none"><input type="text" class="invoicelable" name="invoice1[invoice_shipcode][]" value=""></td>
 			<td style="border-bottom:none"><input type="text" class="invoicelable invoice_unitcharge" name="invoice1[invoice_unitcharge][]" value=""></td>
-			<td style="border-bottom:none; border-right:none"><input type="text" class="invoicelable" name="invoice1[invoice_proplace][]" value=""></td>
+			<td style="border-bottom:none; border-right:none">
+			<select class='input_select country_code'
+							name='invoice1[invoice_proplace][]' style='width: 94%;'>
+								
+								
+								<{foreach from=$country item=c name=c}>
+								
+								<option value='<{$c.country_code}>' country_id='<{$c.country_id}>' class='<{$c.country_code}>' <{if $c.country_code eq 'CN'}>selected<{/if}>  ><{$c.country_code}> [<{$c.country_cnname}>]</option>
+								<{/foreach}>
+								 
+			</select></td>
 		</tr>
 			<!--
         <tr><td style="border-bottom:none"></td><td style="border-bottom:none"></td><td style="border-bottom:none"></td><td style="border-bottom:none"></td><td style="border:none"></td></tr>
@@ -1133,6 +1157,22 @@ $(function(){
 	$("#consignee_postcode").val(returnResult.consignee_postcode);
 	$("#consignee_telephone").val(returnResult.consignee_telephone);
  });
+ 
+  //弹窗
+ $("#contentslist").click(function(){
+ 	var url = "/order/order/dhl-contents?quick=78";
+	var params = "dialogWidth=800px;dialogHeight=400px";
+	
+	var returnResult = window.showModalDialog(url, '',params);
+	//数据绑定
+	$("input[name='invoice[invoice_cnname][]']").val(returnResult.cname);
+	$("input[name='invoice[invoice_enname][]']").val(returnResult.ename);
+	if(returnResult.dangerousgoods==1){
+		$("input[name='order[dangerousgoods]']").attr("checked",true);
+	}else{
+		$("input[name='order[dangerousgoods]']").attr("checked",false);
+	}
+ });
  //添加发件人地址
  //记录上次请求的添加数据
  window.lastparam = null;
@@ -1185,6 +1225,30 @@ $(function(){
 		return false;
 	}
  	$.post("/order/order/consignee-adress-edit",params,function(data){
+					if(data.state){
+						alert("添加成功");
+						window.lastparam=params;
+					}else{
+						alert(data.errorMessage);
+						if(checkjsonequire(lastparam,params)){
+							window.lastparam=null;
+						}
+					}
+				},"json");
+ });
+ 
+ //添加常用内容
+ $("#addContents").click(function(){
+    params={};
+    params.cname=$("input[name='invoice[invoice_cnname][]']").val();
+	params.ename=$("input[name='invoice[invoice_enname][]']").val();
+	params.dangerousgoods=$("input[name='order[dangerousgoods]']:checked").val()==1?1:0; 
+	
+	if(checkjsonequire(lastparam,params)){
+		alert("和上次提交的内容一致,请勿提交");
+		return false;
+	}
+ 	$.post("/order/order/dhl-contents-edit",params,function(data){
 					if(data.state){
 						alert("添加成功");
 						window.lastparam=params;

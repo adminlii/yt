@@ -83,6 +83,7 @@ class Order_InvoicePrintController extends Ec_Controller_Action {
 	
 	public function invoiceLabel1Action() {
 		$order_id = $this->getParam('orderId','');
+		$invoice_type = $this->getParam('invoice_type',1);
 		try {
 			if(empty($order_id)){
 				throw new Exception('请传入订单号');
@@ -131,6 +132,7 @@ class Order_InvoicePrintController extends Ec_Controller_Action {
 			$this->view->total_pice=$totalpice;
 			$this->view->total_weight=$totalweight;
 			$this->view->o = $orderData;
+			$this->view->invoicetype = $invoice_type;
 			//print_r($orderData);	
 		} catch (Exception $e) {
 			header("Content-type: text/html; charset=utf-8");
@@ -158,12 +160,14 @@ p{height:20px;line-height:20px;}
 .total{margin-left:675px;width:325px;height:40px;}
 .span1{line-height: 30px;height: 30px;display: inline-block;width:497px}
 </style>
-';			
-		$html = $this->view->render($this->tplDirectory . "dhl-label-pdf.tpl");
-		$html.= $this->view->render($this->tplDirectory . "dhl-label-pdf1.tpl");
+';		
+		if($invoice_type==1)	
+			$html = $this->view->render($this->tplDirectory . "dhl-label-pdf.tpl");
+		else
+			$html= $this->view->render($this->tplDirectory . "dhl-label-pdf1.tpl");
 		$html=$css.$html;
 		//创建文件
-		$FileName = md5($order['shipper_hawbcode']);
+		$FileName = md5($order['shipper_hawbcode'].'type'.$invoice_type);
 		$htmlFileName = APPLICATION_PATH . '/../public/invoice/'.$FileName.'.html';
 		$pdfFileName  = APPLICATION_PATH . '/../public/invoice/'.$FileName.'.pdf';
 		if(!file_exists($htmlFileName))

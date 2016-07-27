@@ -24,12 +24,14 @@ EZ.getListData = function(json) {
 		if(val.order_status=='F'){
 			html += '运单号：<a url="/order/order/detail?order_id='+val.order_id+'" ref_id="'+val.order_id+'" class="" href="javascript:;">'+val.shipper_hawbcode+'</a>';
 			html += '<br/>箱数：'+val.boxnum;
+			html += '<br/>FBA订单号：'+(val.refer_hawbcode ? val.refer_hawbcode : '');
 		}else{
 			html += '运单号：<a url="/order/order/detail?order_id='+val.order_id+'" ref_id="'+val.order_id+'" class="orderDetail" href="javascript:;">'+val.shipper_hawbcode+'</a>';
 			html += '<br/>跟踪单号：'+val.server_hawbcode;
+			html += '<br/>客户单号：'+(val.refer_hawbcode ? val.refer_hawbcode : '');
 		}
 		//html += '<br/>运输方式：'+val.server_hawbcode;
-		html += '<br/>客户单号：'+(val.refer_hawbcode ? val.refer_hawbcode : '');
+		
 		html += '<br/>运输方式：'+val.product_code;
 		html += '</td>';
 		html += '<td class="ec-center">';

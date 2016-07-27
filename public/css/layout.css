@@ -69,7 +69,7 @@ body {
 .layTable td{padding: 15px;border-right:1px solid #d8d8d8;border-bottom: 1px solid #d8d8d8;line-height: 26px; }
 .layTable td p{float: left;width: 120px;text-align: right;padding-right: 5px;color: #666; }
 .layTable td i{color: red;}
-.layTable td input{height: 20px; width: 65%;color: #666; }
+.layTable td input{height: 20px; width: 70%;color: #666; }
 .layTable td .goodvolume p{width: 140px;text-align: left;} 
 .layTable td .goodvolume input{width: 90px;}
 .layTable td .labelss{float: left;padding-right: 20px;}

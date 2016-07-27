@@ -288,7 +288,7 @@ class Order_OrderController extends Ec_Controller_Action
                     unset($order['order_id']);
                     if($order['order_status']!='E'){
                         unset($order['shipper_hawbcode']);
-                        unset($order['refer_hawbcode']);
+                        //unset($order['refer_hawbcode']);
                         unset($order['server_hawbcode']);
                     }
                 }//print_r($order);die;
@@ -392,7 +392,7 @@ class Order_OrderController extends Ec_Controller_Action
     	
     	$countrys = Service_IddCountry::getByCondition(null, '*', 0, 0, '');
     	$this->view->country = $countrys;
-    	$storageStore = Service_StorageStore::getByCondition(null, '*', 0, 0, '');
+    	$storageStore = Service_StorageStore::getByCondition(array("country_arr"=>array("US")), '*', 0, 0, '');
     	$this->view->storageStore = $storageStore;
     	//$this->view->productKind = Process_ProductRule::getProductKind();
     	//$con = array('unit_status'=>'ON');
@@ -1978,6 +1978,106 @@ class Order_OrderController extends Ec_Controller_Action
 					$result['message'] = 'Success.';
 				}
 			}	
+		}
+		die(Zend_Json::encode($result));
+	}
+	
+	//常用内容
+	public function dhlContentsAction(){
+		$CsiDhlContents = new Service_CsiDhlContents();
+		$condition['customer_id'] = Service_User::getCustomerId();
+		$condition['customer_channelid'] = Service_User::getChannelid();
+		$showFields=array(
+				'cname',
+				'ename',
+				'dangerousgoods',
+		);
+		$rows = $CsiDhlContents->getByCondition($condition,'*', 0, 1, array('content_account asc'));
+		
+		$this->view->rows = $rows;
+		//print_r($rows);
+		echo $this->view->render($this->tplDirectory . "dhl_contents.tpl");
+	}
+	
+	public function dhlContentsEditAction(){
+		if ($this->_request->isPost()) {
+			$return = array(
+					'state' => 0,
+					'message' => '',
+					'errorMessage'=>array('Fail.')
+			);
+			$params = $this->_request->getParams();
+			$row = array(
+					'content_account'=>empty($params['content_account'])?"":$params['content_account'],
+					'cname'=>empty($params['cname'])?"":trim($params['cname']),
+					'ename'=>empty($params['ename'])?"":trim($params['ename']),
+					'dangerousgoods'=>empty($params['dangerousgoods'])?0:1,
+			);
+			$CsiDhlContents = new Service_CsiDhlContents();
+	
+			$paramId = $row['content_account'];
+			if (!empty($row['content_account'])) {
+				unset($row['content_account']);
+			}
+			$errorArr = $CsiDhlContents->validator($row);
+			if (!empty($errorArr)) {
+				$return = array(
+						'state' => 0,
+						'message'=>'',
+						'errorMessage' => $errorArr
+				);
+				die(Zend_Json::encode($return));
+			}
+			$row = Common_Common::arrayNullToEmptyString($row);
+			$format = 'Y-m-d H:i:s';
+			$row['modify_date_sys'] = date($format);
+			$row['customer_id'] = Service_User::getCustomerId();
+			$row['customer_channelid'] = Service_User::getChannelid();
+			if (!empty($paramId)) {
+				$row['is_modify'] = '1';
+				$result = $CsiDhlContents->update($row, $paramId);
+				$consignee_account = $paramId;
+			} else {
+				$row['create_date_sys'] = date($format);
+				$result = $CsiDhlContents->add($row);
+				$consignee_account = $result;
+			}
+	
+			if ($result) {
+				$return['state'] = 1;
+				$return['message'] = array('Success.');
+			}
+			die(Zend_Json::encode($return));
+	
+		}
+	
+	}
+	
+	public function dhlContentsDelAction(){
+		$result = array(
+				"state" => 0,
+				"message" => "Fail."
+		);
+		if ($this->_request->isPost()) {
+			$CsiDhlContents = new Service_CsiDhlContents();
+			$paramId = $this->_request->getPost('paramId');
+			if (!empty($paramId)) {
+				$db = Common_Common::getAdapter();
+				$db->beginTransaction();
+				$delflag=1;
+				foreach ($paramId as $k=>$v){
+					if (!$CsiDhlContents->delete($v)) {
+						$delflag=0;
+						break;
+					}
+				}
+				if($delflag){
+					$db->commit();
+					$result['state'] = 1;
+					$result['message'] = 'Success.';
+				}else
+					$db->rollback();
+			}
 		}
 		die(Zend_Json::encode($result));
 	}

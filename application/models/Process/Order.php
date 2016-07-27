@@ -168,7 +168,8 @@ class Process_Order
         	}
         	
             $con = array(
-                'refer_hawbcode' => $this->_order['refer_hawbcode']
+                'refer_hawbcode' => $this->_order['refer_hawbcode'],
+            	'order_status_unequals'=>'D',
             );
 //             print_r($con);die;
             $shipper_hawbcode_arr = Service_CsdOrder::getByCondition($con);
@@ -648,6 +649,7 @@ class Process_Order
 
     private function _validateElements()
     {
+    	return true;
         $web_elements = Process_ProductRule::webRequiredObj($this->_order['product_code'], $this->_order['country_code']);
         $order = array(
             'order_create_code' => strtoupper($this->_order['order_create_code']),

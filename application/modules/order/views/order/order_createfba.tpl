@@ -87,20 +87,22 @@ width: 100px;
     				<td><p><i>*</i> 服务方式 : </p>
                         <select name="order[product_code]" id='product_code'>
                             <option value="">请选择</option>
-                            <option value="FBA">FBA服务</option>>
+                            <!--<option value="FBA">快递服务</option>-->
+                            <option value="FBA1">空加派服务</option>
+                            <!--<option value="FBA2">海运服务</option>-->
                         </select>
                     </td>
-    				<td><p><i>*</i> 客户单号 : </p><input type="text" name="order[refer_hawbcode]"/></td>
+    				<td><p><i>*</i> FBA订单号 : </p><input type="text" name="order[refer_hawbcode]"/></td>
     			</tr>
     			<tr>
-    				<td><p><i>*</i>箱数 : </p><input type="text" name="order[boxnum]"/></td>
+    				<td><p><i>*</i>箱数 : </p><input type="text" name="order[boxnum]" style="width:50%;"/></td>
     			
 		
-    				<td><p><i>*</i>上传装箱单 : </p><input type="file" id="invoicelist" name="invoicelist"/><button id='upid' type="button">上传</button> </td>
+    				<td><p><i>*</i>上传装箱单 : </p><input type="file" id="invoicelist" name="invoicelist" style="width:60%;"/><button id='upid' type="button">上传</button><span style="margin-left: 2%;"><a href="/file/装箱单模板.xls" target="_blank">模板下载</a></span> </td>
     				<input type = 'hidden' name = "invoicelistrel" id="invoicelistrel"/>
     			</tr>
                 <tr>
-                    <td colspan="2"><p>上传发票 : </p><input type="file" id="invoice" name="invoice"/><button type="button" id="upid1">上传</button> </td>
+                    <td colspan="2"><p><i>*</i>上传发票 : </p><input type="file" id="invoice" name="invoice"/><button type="button" id="upid1">上传</button> <span style="margin-left: 2%;"><a href="/file/发票模板.xlsx" target="_blank">模板下载</a></span></td>
                 	<input type = 'hidden' name = "invoicerel" id="invoicerel"/>
                 </tr>
     		</table>
@@ -112,15 +114,7 @@ width: 100px;
     		</div>
     		<table class="layTable" border="0" cellpadding="0" cellspacing="0">
     			<tr>
-    				<td><p>国家 : </p>
-                        <select style="width:150px;" name="consignee[consignee_countrycode]" id="consignee_countrycode">
-                            <option value="">请选择</option>
-                            <{foreach from=$country item=c name=c}>
-								<option value='<{$c.country_code}>'  class='<{$c.country_code}>'><{$c.country_code}> [<{$c.country_cnname}>  <{$c.country_enname}>]</option>
-							<{/foreach}>
-                        </select>
-                    </td>
-    				<td><p>FBA仓库 : </p>
+    			<td><p>FBA仓库 : </p>
                         <select class="searchslect" name="consignee[storage]" style="width: 200px;">
                         	<option value="">请选择</option>
                             <{foreach from=$storageStore item=c name=c}>
@@ -128,6 +122,16 @@ width: 100px;
 							<{/foreach}>
                         </select>
                     </td>
+    				<td><p>国家 : </p>
+                        <select disabled=true style="width:150px;"  id="consignee_countrycode">
+                            <option value="">请选择</option>
+                            <{foreach from=$country item=c name=c}>
+								<option value='<{$c.country_code}>'  class='<{$c.country_code}>'><{$c.country_code}> [<{$c.country_cnname}>  <{$c.country_enname}>]</option>
+							<{/foreach}>
+                        </select>
+                        <input type="hidden" name="consignee[consignee_countrycode]"/>
+                    </td>
+    				
     			</tr>
     			<tr>
     				<td><p>省/州 : </p><input type="text" name="consignee[consignee_province]"/></td>
@@ -324,6 +328,7 @@ $(function(){
 			   dataType: "json",
 			   success: function(json){
 				    if(json.state){
+				      $("input[name='consignee[consignee_countrycode]']").val(json.data.country);
 	                  $("#consignee_countrycode").val(json.data.country);
 	                  $("input[name='consignee[consignee_province]']").val(json.data.state);
 	                  $("input[name='consignee[consignee_city]']").val(json.data.city);
@@ -332,7 +337,6 @@ $(function(){
 				    }
 			   }
 			}); 
-			console.log($(this).val());
 		});
 		
 		$(".btns1").click(function(){

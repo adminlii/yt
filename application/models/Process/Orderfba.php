@@ -153,13 +153,13 @@ class Process_Orderfba
      */
     protected function _validate()
     {
-        // 验证客户单号
+         // 验证客户单号
         if(!empty($this->_order['refer_hawbcode'])){
 //         	if(!preg_match('/^[a-zA-Z0-9\-_]+$/', $this->_order['refer_hawbcode'])){
 //         		$this->_err[] = Ec::Lang('参考单号不合法,只能包含字母数字中横线下划线') . "[{$this->_order['refer_hawbcode']}]";
 //         	}
         	if(strlen($this->_order['refer_hawbcode']) < 1 || strlen($this->_order['refer_hawbcode']) > 50) {
-        		$this->_err[] = Ec::Lang('参考单号不合法,字符长度必须大于1或小于50') . "[{$this->_order['refer_hawbcode']}]";
+        		$this->_err[] = Ec::Lang('FBA订单号不合法,字符长度必须大于1或小于50') . "[{$this->_order['refer_hawbcode']}]";
         	}
         	
             $con = array(
@@ -176,11 +176,13 @@ class Process_Orderfba
                 }
                 
                 if($shipper_hawbcode_exist){
-                    $this->_err[] = Ec::Lang('参考单号已存在') . "[{$this->_order['refer_hawbcode']}]";
+                    $this->_err[] = Ec::Lang('FBA订单号已存在') . "[{$this->_order['refer_hawbcode']}]";
                     $this->_apiErr[] = "ORDER_REFER_ISEXISTS";
                 }
                 
             }
+        }else{
+        	$this->_err[] = Ec::Lang('FBA订单号不能为空');
         } 
         
         // 验证运输方式,
@@ -268,7 +270,9 @@ class Process_Orderfba
         }
 
       
-        
+        if(empty($this->invoicefile)){
+        	$this->_err[] = Ec::Lang('请上传发票');
+        }
         
         
     
@@ -659,7 +663,8 @@ class Process_Orderfba
     public function changeNO() {
     	//从换号池中取出最新的id
     	$db = Common_Common::getAdapter();
-    	$product = $this->_order['product_code'];
+    	//$product = $this->_order['product_code'];
+    	$product = "FBA";
     	$sql = "select * from csi_changeno where product = '{$product}' and status=1";
     
     	$data = $db->fetchRow($sql);
@@ -697,8 +702,8 @@ class Process_Orderfba
     public function changeNOadd() {
     	//从换号池中取出最新的id
     	$db = Common_Common::getAdapter();
-    	$product = $this->_order['product_code'];
-    	
+    	//$product = $this->_order['product_code'];
+    	$product ="FBA";
     	$_sql = "update csi_changeno set no_now=no_now+1 where product='{$product}'";
     	//$where = $db->quoteInto('no_now = no_now+1');
     	$data = $db->query($_sql);

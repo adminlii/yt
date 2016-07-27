@@ -1,11 +1,11 @@
 <?php
-class Table_StorageStore
+class Table_CsiDhlContents
 {
     protected $_table = null;
 
     public function __construct()
     {
-        $this->_table = new DbTable_StorageStore();
+        $this->_table = new DbTable_CsiDhlContents();
     }
 
     public function getAdapter()
@@ -15,7 +15,7 @@ class Table_StorageStore
 
     public static function getInstance()
     {
-        return new Table_StorageStore();
+        return new Table_CsiDhlContents();
     }
 
     /**
@@ -34,7 +34,7 @@ class Table_StorageStore
      * @param string $field
      * @return mixed
      */
-    public function update($row, $value, $field = "storeid")
+    public function update($row, $value, $field = "content_account")
     {
         $where = $this->_table->getAdapter()->quoteInto("{$field}= ?", $value);
         return $this->_table->update($row, $where);
@@ -45,7 +45,7 @@ class Table_StorageStore
      * @param string $field
      * @return mixed
      */
-    public function delete($value, $field = "storeid")
+    public function delete($value, $field = "content_account")
     {
         $where = $this->_table->getAdapter()->quoteInto("{$field}= ?", $value);
         return $this->_table->delete($where);
@@ -57,7 +57,7 @@ class Table_StorageStore
      * @param string $colums
      * @return mixed
      */
-    public function getByField($value, $field = 'storeid', $colums = "*")
+    public function getByField($value, $field = 'content_account', $colums = "*")
     {
         $select = $this->_table->getAdapter()->select();
         $table = $this->_table->info('name');
@@ -90,14 +90,25 @@ class Table_StorageStore
         $select->where("1 =?", 1);
         /*CONDITION_START*/
         
-    	if(isset($condition["storage"]) && $condition["storage"] != ""){
-        	$select->where("storage = ?",$condition["storage"]);
+        if(isset($condition["not_content_account"]) && $condition["not_content_account"] != ""){
+        	$select->where("content_account != ?",$condition["not_content_account"]);
         }
-        
-        if(isset($condition["country_arr"]) && is_array($condition["country_arr"]) && ! empty($condition["country_arr"])){
-        	$select->where("country in (?)", $condition["country_arr"]);
+        if(isset($condition["customer_id"]) && $condition["customer_id"] != ""){
+            $select->where("customer_id = ?",$condition["customer_id"]);
+        }
+        if(isset($condition["customer_channelid"]) && $condition["customer_channelid"] != ""){
+            $select->where("customer_channelid = ?",$condition["customer_channelid"]);
         }
        
+        if(isset($condition["create_date_sys"]) && $condition["create_date_sys"] != ""){
+            $select->where("create_date_sys = ?",$condition["create_date_sys"]);
+        }
+        if(isset($condition["modify_date_sys"]) && $condition["modify_date_sys"] != ""){
+            $select->where("modify_date_sys = ?",$condition["modify_date_sys"]);
+        }
+        if(isset($condition["is_modify"]) && $condition["is_modify"] != ""){
+            $select->where("is_modify = ?",$condition["is_modify"]);
+        }
         /*CONDITION_END*/
 //         echo $select->__toString();exit;
         if ('count(*)' == $type) {
@@ -111,6 +122,7 @@ class Table_StorageStore
                 $select->limit($pageSize, $start);
             }
             $sql = $select->__toString();
+//             echo $sql;exit;
             return $this->_table->getAdapter()->fetchAll($sql);
         }
     }

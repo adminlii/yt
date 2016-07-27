@@ -228,7 +228,12 @@ class Order_OrderListController extends Ec_Controller_Action
 						//来源标记
 						$v['order_create_code'] = 'W';
 						// 产品
-						$v['product_code'] = "FBA";
+						//$v['product_code'] = "FBA";
+						switch ($v['product_code']){
+							case 'FBA':$v['product_code']="快递服务";break;
+							case 'FBA1':$v['product_code']="空加派服务";;break;
+							case 'FBA2':$v['product_code']="海运服务";;break;
+						}
 						$v['country_name'] = isset($countrys[$v['consignee_countrycode']])?$countrys[$v['consignee_countrycode']]['country_cnname']:$v['consignee_countrycode'];
 						
 						$rows[$k] = $v;
