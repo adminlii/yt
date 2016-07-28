@@ -137,6 +137,15 @@ class Order_OrderController extends Ec_Controller_Action
             $db ->insert('logapi', $logrow);
             //日志记录end
             
+            //NZ走的是赛程
+            if($order['country_code']=="NZ"){
+            	if($order['product_code']=="ESBR"){
+            		$order['product_code'] = "NZ_DP";
+            	}else{
+            		$order['product_code'] = "NZ_LZ";
+            	}
+            }
+            
             $orderArr = array(
                 'product_code' => strtoupper($order['product_code']),
                 'country_code' => strtoupper($order['country_code']),
@@ -319,7 +328,7 @@ class Order_OrderController extends Ec_Controller_Action
 		$countrys = Service_IddCountry::getByCondition(null, '*', 0, 0, '');
         $this->view->country = $countrys;
         $product_kind = Process_ProductRule::getProductKind();
-        $aviable_kind = array("TNT","G_DHL");
+        $aviable_kind = array("TNT","G_DHL","NZ_CP","NZ_LZ","NZ_DP");
         foreach ($product_kind as $pro_kind_k=>$pro_kind_v){
         	if(in_array($pro_kind_v["product_code"], $aviable_kind)){
         		unset($product_kind[$pro_kind_k]);

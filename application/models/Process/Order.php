@@ -1747,10 +1747,11 @@ class Process_Order
             $listId['string'] = 1;  //NZ_CP，NZ_DP，NZ_LZ对应渠道SAICHENG
         }else if($order["product_code"] == "TNT"){
         	$listId['string'] = 73;
-        }else if($order["product_code"] == "ESB"){
-        	$listId['string'] = 74;
+        }else if($order["product_code"] == "G_DHL"){
+        	$listId['string'] = 2;  //G_DHL对应渠道DHL
         }else{
-            $listId['string'] = 2;  //G_DHL对应渠道DHL
+        	$listId['string'] = 74;
+            
         }
 
 

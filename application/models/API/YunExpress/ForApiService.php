@@ -877,6 +877,7 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
       	$items = array();
       	//内件品名
       	$itemnames = '';
+      	$_ordernum = 0;
       	foreach($this->orderInvoiceItemKey as $oKey=>$row){
       		$item = array();
       		$cnname = (!empty($row['titleCn']) ? $row['titleCn'] : $row['titleEn']);
@@ -888,6 +889,7 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
       		}
       		$item['cnname'] = $cnname;
       		$item['count'] = $row["quantity"];
+      		$_ordernum+=$item['count'];
       		$item['weight'] = intval($row["weight"]*$row["quantity"]*1000)/1000;
       		$item['currency'] = $row["currencyCode"];
       		$item['cost'] = intval($row['value']*$row["quantity"]*100)/100;
@@ -928,6 +930,9 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
       	$array_three['bxmoney'] = intval($this->orderKey["insurance_value_gj"]);
       	$array_three['loanmoney'] = 0;
       	$array_three['minordernum'] = 0;
+      	if($this->serverProductCode=="G_DHL"){
+      		$array_three['minordernum']=$_ordernum;
+      	}
       	$array_three['mpostalnum'] = $this->orderData['server_hawbcode'];
       	$array_three['ordernum'] = $this->orderCode;
       	$array_three['forecastshut'] = 0;
@@ -1378,6 +1383,7 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
  		//配置文件
  		$product_set = array(
  		  		"ESB"=>array("YunTu","ESB","CN"),
+ 				"ESBR"=>array("YunTu","ESBR","CN"),
  				"G_DHL"=>array("ChinaPostDHL","Standard","CN"),
  				"NZ_CP"=>array("Saicheng","CP","CN"),
  				"NZ_DP"=>array("Saicheng","DP","CN"),
