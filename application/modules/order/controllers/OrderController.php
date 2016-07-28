@@ -581,7 +581,7 @@ class Order_OrderController extends Ec_Controller_Action
             foreach ($labelArr as $k=>$v){
             	$flag = false;
             	foreach ($v as $vv){
-            		if(!empty($vv)){
+            		if(!empty($vv)&&$vv!='CN'){
             			$flag=true;
             			break;
             		}
