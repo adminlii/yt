@@ -521,6 +521,7 @@ class Process_Order
                 // sort($this->_invoice);
             }
             // print_r($this->_invoice);exit;
+            $_invoice_totalValue = 0;
             foreach($this->_invoice as $k => $invoice){ Ec::showError("result:".print_r($this->_invoice,true)."\n", '_Ssssss_' . date('Y-m-d') . "_");
                 if($invoice['invoice_enname'] === ''){
                     $this->_err[] = "(" . Ec::Lang('申报信息') . $k . ")" . Ec::Lang('申报品名不可为空');
@@ -541,6 +542,10 @@ class Process_Order
 //                     print_r($invoice);exit;
                     if(! is_numeric($invoice['invoice_unitcharge'])){
                         $this->_err[] = "(" . Ec::Lang('申报信息') . $k . ")" . Ec::Lang('申报单价必须为数字');
+                    }else{
+                    	if(preg_match('/^[0-9]+$/', $invoice['invoice_quantity']) && intval($invoice['invoice_quantity'])>0){
+                    		$_invoice_totalValue+=$invoice['invoice_quantity']*$invoice['invoice_unitcharge'];
+                    	}
                     }
                 }
                 if($invoice['invoice_weight'] === ''){
@@ -559,7 +564,18 @@ class Process_Order
                 }
             }
         }
-
+		
+        //小包22欧元限制
+        if($_invoice_totalValue>0&&$this->_order['product_code'] =='ESB'){
+        	//转换成人民币
+        	$res = Common_DataCache::getHuilv();
+        	if($res['USD']&&$res['EUR']){
+        		if($res['USD']*$_invoice_totalValue>22*$res['EUR']){
+        			$this->_err[] = Ec::Lang('小包业务限制运送物品价值小于22欧元');
+        		}
+        	}
+        }
+        
         //附加服务验证
         $product_code = $this->_order['product_code'];
         $country_code = $this->_order['country_code'];

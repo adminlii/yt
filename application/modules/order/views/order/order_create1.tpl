@@ -710,17 +710,13 @@ $('.weight').live('keyup',function(){
 // 数量
 $('.quantity').live('keyup',function(){
 	var reg=/^[1-9][0-9]?$/;var msg = '须为正整数，范围为1-99';
-	switch($("#product_code").val()){
-		case "TNT":
-			if($(this).attr("name")=="invoice[invoice_quantity][]"){
-				reg=/^[1-9][0-9]{0,3}$/;msg="须为正整数，范围为1-9999";
-			}
-		break;
-		default:;break;
-	}
 	err_tip(this,reg,msg);
 })
-	
+
+$('input[name="invoice[invoice_enname][]"]').live('keyup',function(){
+	var reg=/^[^\u4e00-\u9fa5]+$/;var msg = '需为非英文';
+	err_tip(this,reg,msg);
+})	
 	// ==============结束
 
 

@@ -398,6 +398,37 @@ $(function(){
 		opProcess();
 	})
 	
+	
+	//删除问题件
+	$(".deleteBtn").live('click',function(){
+		if ($(".checkItem:checked").size() == 0) {
+			alertTip('<{t}>pls_select_orders<{/t}>');
+			return false;
+		}
+		var this_ = $(this);
+		opTitle = $(this).val();
+		jConfirm('<{t}>are_you_sure<{/t}>', opTitle+'<{t}>订单<{/t}>', function(r) {
+			if(r){
+				var refIds = [];
+				$("#listForm .checkItem:checked").each(function(){
+					refIds.push($(this).val());
+				});
+				var param = {'order_id':refIds,'op':op};
+				$.post("/order/order/delete-order",param,
+						   function(data){
+								if(data.state==1){
+									initData(paginationCurrentPage - 1);
+									tongji();
+									alertTip('删除成功',600,500);
+								}else{
+									alertTip('删除失败',600,500);
+								}	
+						   }, "json");
+				
+			}
+		});		
+	})
+	
 	// 
 	$(".editInvoiceBtn").live('click', function() {
 		

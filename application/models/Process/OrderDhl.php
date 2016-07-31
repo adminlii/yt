@@ -325,8 +325,8 @@ class Process_OrderDhl
                     if(!preg_match('/^[a-zA-Z\s]{1,25}$/', $this->_consignee['consignee_name'])){
                         $this->_err[] = Ec::Lang('收件人姓名不允许出现非英文，长度最多25字符');
                     }
-                }else if(!preg_match('/^[a-zA-Z\s]{1,36}$/', $this->_consignee['consignee_name'])){
-            		$this->_err[] = Ec::Lang('收件人姓名不允许出现非英文，长度最多36字符');
+                }else if(!preg_match('/^[a-zA-Z\s]{1,35}$/', $this->_consignee['consignee_name'])){
+            		$this->_err[] = Ec::Lang('收件人姓名不允许出现非英文，长度最多35字符');
             	}
             }
             if($this->_consignee['consignee_street'] === ''){
@@ -336,10 +336,33 @@ class Process_OrderDhl
                     if(!preg_match('/^[\w\W]{0,30}$/', $this->_consignee['consignee_street'])){
                         $this->_err[] = Ec::Lang('收件人地址长度最多30字符');
                     }
-                }else if(!preg_match('/^[\w\W]{0,36}$/', $this->_consignee['consignee_street'])){
-            		$this->_err[] = Ec::Lang('收件人地址长度最多36字符');
+                }else if(!preg_match('/^[\w\W]{0,35}$/', $this->_consignee['consignee_street'])){
+            		$this->_err[] = Ec::Lang('收件人地址长度最多35字符');
             	}
             }
+            
+            
+            if($this->_consignee['consignee_street2'] === ''){
+            	//$this->_err[] = Ec::Lang('收件人地址不可为空');
+            }else{
+            	if($this->_order['product_code'] =='TNT'){
+            		
+            	}else if(!preg_match('/^[\w\W]{0,35}$/', $this->_consignee['consignee_street2'])){
+            		$this->_err[] = Ec::Lang('收件人地址2长度最多35字符');
+            	}
+            }
+            
+        	if($this->_consignee['consignee_street3'] === ''){
+            	//$this->_err[] = Ec::Lang('收件人地址不可为空');
+            }else{
+            	if($this->_order['product_code'] =='TNT'){
+            		
+            	}else if(!preg_match('/^[\w\W]{0,35}$/', $this->_consignee['consignee_street3'])){
+            		$this->_err[] = Ec::Lang('收件人地址3长度最多35字符');
+            	}
+            }
+            
+            
             if ($this->_consignee['consignee_city'] === ''){
             	$this->_err[] = Ec::Lang('收件人城市不可为空');
             }else{
@@ -347,8 +370,8 @@ class Process_OrderDhl
                     if(!preg_match('/^[a-zA-Z\s]{1,30}$/', $this->_consignee['consignee_city'])){
                         $this->_err[] = Ec::Lang('收件人城市不允许出现非英文，长度最多30字符');
                     }
-                }else if(!preg_match('/^[a-zA-Z\s]{1,36}$/', $this->_consignee['consignee_city'])){
-            		$this->_err[] = Ec::Lang('收件人城市不允许出现非英文，长度最多36字符');
+                }else if(!preg_match('/^[a-zA-Z\s]{1,35}$/', $this->_consignee['consignee_city'])){
+            		$this->_err[] = Ec::Lang('收件人城市不允许出现非英文，长度最多35字符');
             	}
             }
             if(empty($this->_consignee['consignee_postcode'])){

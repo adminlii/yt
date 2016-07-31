@@ -2091,6 +2091,37 @@ class Order_OrderController extends Ec_Controller_Action
 		die(Zend_Json::encode($result));
 	}
 	
+	
+	public function deleteOrderAction(){
+		$result = array(
+				"state" => 0,
+				"message" => "Fail."
+		);
+		if ($this->_request->isPost()) {
+			$CsdOrder = new Service_CsdOrder();
+			$order_id = $this->_request->getPost('order_id');
+			if (!empty($order_id)) {
+				$db = Common_Common::getAdapter();
+				$db->beginTransaction();
+				$delflag=1;
+				foreach ($order_id as $k=>$v){
+					if (!$CsdOrder->delete($v)) {
+						$delflag=0;
+						break;
+					}else{
+						//其他表的删除是否有必要
+					}
+				}
+				if($delflag){
+					$db->commit();
+					$result['state'] = 1;
+					$result['message'] = 'Success.';
+				}else
+					$db->rollback();
+			}
+		}
+		die(Zend_Json::encode($result));
+	}
 }
 
 

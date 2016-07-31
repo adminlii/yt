@@ -40,7 +40,8 @@ class Service_OrderProcess {
                         //'<input type="button" class="importInvoiceBtn baseBtn" op="importInvoice" value="' . Ec::Lang('上传申报信息') . '">',  
                        // '<input type="button" class="importWeightBtn baseBtn" op="importWeight" value="' . Ec::Lang('上传更新重量') . '">',  
                         //'<input type="button" class="discardBtn baseBtn opBtn" op="discard" value="' . Ec::Lang('废弃') . '">',
-                        '<input type="button" class="exportBtn baseBtn " op="export" value="' . Ec::Lang('导出') . '">'
+                        '<input type="button" class="exportBtn baseBtn " op="export" value="' . Ec::Lang('导出') . '">',
+                    		'<input type="button" class="deleteBtn baseBtn " op="delete" value="' . Ec::Lang('删除') . '">'
                     )
             ),
             'S' => array(

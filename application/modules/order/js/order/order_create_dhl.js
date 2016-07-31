@@ -136,44 +136,80 @@ function rule_check_num(data){
 
 //公司
 $('.checkchar').live('keyup',function(){
-	if($("#product_code").val()=="TNT")
-		err_tip(this,/^[a-zA-Z0-9\s]{1,50}$/,'不允许出现非英文允许英文数字混合,长度最多50字符');
-	else
-		err_tip(this,/^[a-zA-Z0-9\s]{1,36}$/,'不允许出现非英文允许英文数字混合,长度最多36字符');
+	if($("#product_code").val()=="TNT"){
+		if($(this).val()&&!/^[a-zA-Z0-9\s]{1,50}$/.test($(this).val())){
+			alert('不允许出现非英文允许英文数字混合,长度最多50字符');
+		}
+	}else{
+		if($(this).val()&&!/^[a-zA-Z0-9\s]{1,35}$/.test($(this).val())){
+			alert('不允许出现非英文允许英文数字混合,长度最多35字符');
+		}
+	}
+		//err_tip(this,/^[a-zA-Z0-9\s]{1,50}$/,'不允许出现非英文允许英文数字混合,长度最多50字符');
+		//err_tip(this,/^[a-zA-Z0-9\s]{1,35}$/,'不允许出现非英文允许英文数字混合,长度最多35字符');
 })
-//收件人
+//发件人
 $('.checkchar1').live('keyup',function(){
-	if($("#product_code").val()=="TNT")
-		err_tip(this,/^[a-zA-Z\s]{1,25}$/,'不允许出现非英文，长度最多25字符');
-	else
-		err_tip(this,/^[a-zA-Z\s]{1,36}$/,'不允许出现非英文，长度最多36字符');
+	if($("#product_code").val()=="TNT"){
+		if($(this).val()&&!/^[a-zA-Z\s]{1,25}$/.test($(this).val())){
+			alert('不允许出现非英文，长度最多25字符');
+		}
+	}else{
+		if($(this).val()&&!/^[a-zA-Z\s]{1,35}$/.test($(this).val())){
+			alert('不允许出现非英文，长度最多35字符');
+		}
+	}
+		//err_tip(this,/^[a-zA-Z\s]{1,25}$/,'不允许出现非英文，长度最多25字符');
+	
+		//err_tip(this,/^[a-zA-Z\s]{1,36}$/,'不允许出现非英文，长度最多36字符');
 })
 //城市 
 $('.checkchar3').live('keyup',function(){
-	if($("#product_code").val()=="TNT")
-		err_tip(this,/^[a-zA-Z\s]{0,30}$/,'不允许出现非英文,长度最多30字符');
-	else
-		err_tip(this,/^[a-zA-Z\s]+$/,'不允许出现非英文');
+	if($("#product_code").val()=="TNT"){
+		if($(this).val()&&!/^[a-zA-Z\s]{0,30}$/.test($(this).val())){
+			alert('不允许出现非英文，长度最多30字符');
+		}
+	}else{
+		if($(this).val()&&!/^[a-zA-Z\s]{0,35}$/.test($(this).val())){
+			alert('不允许出现非英文，长度最多35字符');
+		}
+	}
+		//err_tip(this,/^[a-zA-Z\s]{0,30}$/,'不允许出现非英文,长度最多30字符');
+		//err_tip(this,/^[a-zA-Z\s]+$/,'不允许出现非英文');
 })
 
 //地址
 $('.checkchar2').live('keyup',function(){
-	if($("#product_code").val()=="TNT")
-		err_tip(this,/^[0-9a-zA-Z,\s]{0,30}$/,'长度最多30字符');
-	else
-		err_tip(this,/^[0-9a-zA-Z,\s]{0,36}$/,'长度最多36字符');
+	if($("#product_code").val()=="TNT"){
+		if($(this).val()&&!/^[0-9a-zA-Z,\s]{0,30}$/.test($(this).val())){
+			alert('长度最多30字符');
+		}
+	}else{
+		if($(this).val()&&!/^[0-9a-zA-Z,\s]{0,35}$/.test($(this).val())){
+			alert('长度最多35字符');
+		}
+	}
+		//err_tip(this,/^[0-9a-zA-Z,\s]{0,30}$/,'长度最多30字符');
+		//err_tip(this,/^[0-9a-zA-Z,\s]{0,36}$/,'长度最多36字符');
 })
 
 //发件人参考信息：商户订单号
 $('.checkchar4').live('keyup',function(){
 	err_tip(this,/^[\w\W]{0,35}$/,'长度最多35字符');
 })
-//发件人name
+//收件人name
 $('.checkchar5').live('keyup',function(){
-	if($("#product_code").val()=="TNT")
-		err_tip(this,/^[a-zA-Z\s]{1,25}$/,'不允许出现非英文，长度最多25字符');
-	else
-		err_tip(this,/^[a-zA-Z\s]{1,36}$/,'不允许出现非英文，长度最多36字符');
+	if($("#product_code").val()=="TNT"){
+		if($(this).val()&&!/^[a-zA-Z\s]{1,25}$/.test($(this).val())){
+			alert('不允许出现非英文，长度最多25字符');
+		}
+	}else{
+		if($(this).val()&&!/^[a-zA-Z\s]{1,35}$/.test($(this).val())){
+			alert('不允许出现非英文，长度最多35字符');
+		}
+	}
+		//err_tip(this,/^[a-zA-Z\s]{1,25}$/,'不允许出现非英文，长度最多25字符');
+		//err_tip(this,/^[a-zA-Z\s]{1,36}$/,'不允许出现非英文，长度最多36字符');
 })
 
 // 体积

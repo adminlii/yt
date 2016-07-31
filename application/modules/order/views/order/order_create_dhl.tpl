@@ -419,9 +419,9 @@ function formSubmit(status){
 						    <input type='hidden' class='input_text doorplate'
 							value='<{if isset($shipperConsignee)}><{$shipperConsignee.consignee_doorplate}><{/if}>'
 							name='consignee[consignee_doorplate]' id='consignee_doorplate' />
-            <input type="text" style="margin:0px 0 6px" value="<{if isset($shipperConsignee)}><{$shipperConsignee.consignee_street2}><{/if}>"
+            <input type="text" class="checkchar2" style="margin:0px 0 6px" value="<{if isset($shipperConsignee)}><{$shipperConsignee.consignee_street2}><{/if}>"
 							name='consignee[consignee_street2]' id='consignee_street2' />
-            <input type="text" style="margin:0px 0 6px" value="<{if isset($shipperConsignee)}><{$shipperConsignee.consignee_street3}><{/if}>"
+            <input type="text" class="checkchar2" style="margin:0px 0 6px" value="<{if isset($shipperConsignee)}><{$shipperConsignee.consignee_street3}><{/if}>"
 							name='consignee[consignee_street3]' id='consignee_street3' />
         </div>
         <div class="contentLeft contentType4 borderR  borderB">
