@@ -524,7 +524,11 @@ class Process_Order
             $_invoice_totalValue = 0;
             foreach($this->_invoice as $k => $invoice){ Ec::showError("result:".print_r($this->_invoice,true)."\n", '_Ssssss_' . date('Y-m-d') . "_");
                 if($invoice['invoice_enname'] === ''){
-                    $this->_err[] = "(" . Ec::Lang('申报信息') . $k . ")" . Ec::Lang('申报品名不可为空');
+                    $this->_err[] = "(" . Ec::Lang('申报信息') . $k . ")" . Ec::Lang('申报英文品名不可为空');
+                }else{
+                    if(!preg_match('/^[^\x80-\xff]+$/', $invoice['invoice_enname'])){
+                    	$this->_err[] = "(" . Ec::Lang('申报信息') . $k . ")" . Ec::Lang('申报英文品名不可带中文');
+                    }
                 }
                 if($invoice['invoice_cnname'] === ''){
                     //$this->_err[] = "(" . Ec::Lang('申报信息') . $k . ")" . Ec::Lang('中文申报品名不可为空');
