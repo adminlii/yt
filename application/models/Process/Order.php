@@ -374,19 +374,39 @@ class Process_Order
             if(! is_numeric($this->_order['order_weight'])){
                 $this->_err[] = Ec::Lang('货物重量必须为数字');
             }else{
-                if($this->_order['product_code'] =='TNT'){
-                    if($this->_order['order_weight']>70){
-                        $this->_err[] = Ec::Lang('货物重量必须小于70kg');
+            	//赛程小包
+                if($this->_order['product_code'] =='NZ_LZ'){
+                    if($this->_order['order_weight']>3){
+                        $this->_err[] = Ec::Lang('货物重量必须小于3kg');
                     }
                 }else if($this->_order['product_code'] =='ESB'){
                     if(!preg_match("/(^0\.\d{0,3}$)|(^[1-9]\d*(\.\d{0,3})?$)/",$this->_order['order_weight'])){
                         $this->_err[] = Ec::Lang('货物重量须为数字,最多3位小数');
-                    }else if($this->_order['order_weight']>2){
-                    	$this->_err[] = Ec::Lang('货物重量必须小于2kg');
+                    }else{
+                    	if($this->_order['order_weight']>2)
+                    		$this->_err[] = Ec::Lang('货物重量必须小于2kg');
                     }
-                }else{
-                	if($this->_order['order_weight']>=1000000){
-                		$this->_err[] = Ec::Lang('货物重量必须小于1000000KG');
+                }else if($this->_order['product_code'] =='ESBR'){
+                	if(!preg_match("/(^0\.\d{0,3}$)|(^[1-9]\d*(\.\d{0,3})?$)/",$this->_order['order_weight'])){
+                		$this->_err[] = Ec::Lang('货物重量须为数字,最多3位小数');
+                	}else{
+                		if($this->_consignee['consignee_countrycode']){
+                			if( in_array($this->_consignee['consignee_countrycode'], array('GB','AT'))){
+                				if($this->_order['order_weight']>20)
+                					$this->_err[] = Ec::Lang('货物重量必须小于20kg');
+                			}else{
+                				if($this->_order['order_weight']>30)
+                					$this->_err[] = Ec::Lang('货物重量必须小于30kg');
+                			}
+                	
+                	
+                		}
+                		 
+                		 
+                	}
+                }else {
+                	if($this->_order['order_weight']>25){
+                		$this->_err[] = Ec::Lang('货物重量必须小于25KG');
                 	}
                 }
             	/* if(!preg_match("/(^0\.[5-9]$)|(^[1-9]+(\.?\d?)$)/",$this->_order['order_weight'])){

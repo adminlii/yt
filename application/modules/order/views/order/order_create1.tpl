@@ -699,11 +699,13 @@ $('.order_phone').live('keyup',function(){
 // 重量
 $('.weight').live('keyup',function(){
 	var reg;var msg = '';
+	/*
 	switch($("#product_code").val()){
 		case "TNT":reg=/(^70$)|(^0\.\d{0,3}$)|(^[1-6]\d?(\.\d{0,3})?$)/;msg="须为数字,范围为0.001-70";break;
 	    case "ESB":reg=/(^0\.\d{0,3}$)|(^[1-9]\d*(\.\d{0,3})?$)/;msg="须为数字,最多3位小数";break;
 		default:reg=/(^0\.[5-9]$)|(^[1-9]\d{0,5}(\.\d)?$)/;msg = '须为数字,且小数最多为1位,范围为0.5-999999.9';break;
-	}
+	}*/
+	reg=/(^0\.\d{0,3}$)|(^[1-9]\d*(\.\d{0,3})?$)/;msg="须为数字,最多3位小数";
 	err_tip(this,reg,msg);
 })
 
