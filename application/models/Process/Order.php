@@ -391,9 +391,12 @@ class Process_Order
                 		$this->_err[] = Ec::Lang('货物重量须为数字,最多3位小数');
                 	}else{
                 		if($this->_consignee['consignee_countrycode']){
-                			if( in_array($this->_consignee['consignee_countrycode'], array('GB','AT'))){
+                			if( in_array($this->_consignee['consignee_countrycode'], array('AT'))){
                 				if($this->_order['order_weight']>20)
                 					$this->_err[] = Ec::Lang('货物重量必须小于20kg');
+                			}else if($this->_consignee['consignee_countrycode']=='GB'){
+                				if($this->_order['order_weight']>15)
+                					$this->_err[] = Ec::Lang('货物重量必须小于15kg');
                 			}else{
                 				if($this->_order['order_weight']>30)
                 					$this->_err[] = Ec::Lang('货物重量必须小于30kg');
