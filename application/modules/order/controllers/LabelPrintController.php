@@ -67,6 +67,9 @@ class Order_LabelPrintController extends Ec_Controller_Action {
             try{
                 $order = Service_CsdOrder::getByField($order_id, 'shipper_hawbcode');
                 if(! $order){
+                	$order = Service_CsdOrder::getByField($order_id, 'server_hawbcode');
+                }
+            	if(! $order){
                     
                     throw new Exception(Ec::Lang('订单不存在'));
                 }
