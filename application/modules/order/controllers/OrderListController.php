@@ -97,6 +97,14 @@ class Order_OrderListController extends Ec_Controller_Action
             }
 			//FBA列表
 			if($condition['order_status']!="F"){
+				//如果搜索ESB 和ESBR要合并
+				if($condition['product_code']=="ESBR"){
+					$condition['product_code_arr'] =array("ESBR","NZ_LZ");
+					unset($condition['product_code']);
+				}else if($condition['product_code']=="ESB"){
+					$condition['product_code_arr'] =array("ESB","NZ_DP");
+					unset($condition['product_code']);
+				}
 				$count = Service_CsdOrder::getByCondition($condition, 'count(*)');
 				$return['total'] = $count;
 				if($count){
@@ -263,8 +271,13 @@ class Order_OrderListController extends Ec_Controller_Action
         $countryArr = Service_IddCountry::getByCondition(null, '*', 0, 9999, "country_code");
         
         $this->view->countryArr = $countryArr;
-
-        $this->view->productKind = Process_ProductRule::getProductKind();
+		$productKind = Process_ProductRule::getProductKind();
+		foreach ($productKind as $prok => $prov){
+			if(in_array($prov['product_code'], array("NZ_LZ","NZ_DP"))){
+				unset($productKind[$prok]);
+			}
+		}
+        $this->view->productKind = $productKind;
         $this->view->yesOrNO = Common_Status::YesOrNo();
         
         $this->view->jsfile = "order/js/order/order_list_list_b2c.js";

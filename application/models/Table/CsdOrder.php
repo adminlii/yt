@@ -267,6 +267,10 @@ class Table_CsdOrder
         if(isset($condition["product_code"]) && $condition["product_code"] != ""){
             $select->where("product_code = ?", $condition["product_code"]);
         }
+        
+        if(isset($condition["product_code_arr"]) && ! empty($condition["product_code_arr"]) && is_array($condition["product_code_arr"])){
+        	$select->where("product_code in (?) ", $condition["product_code_arr"]);
+        }
         if(isset($condition["refer_hawbcode"]) && $condition["refer_hawbcode"] != ""){
             $select->where("refer_hawbcode = ?", $condition["refer_hawbcode"]);
         }
@@ -360,7 +364,6 @@ class Table_CsdOrder
         if(isset($condition["order_id_in"]) && is_array($condition["order_id_in"]) && count($condition["order_id_in"]) > 0){
         	$select->where("order_id in (?)", $condition["order_id_in"]);
         }
-        
 //         echo $select;
 //         exit();
         /* CONDITION_END */
