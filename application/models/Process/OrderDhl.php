@@ -655,7 +655,6 @@ class Process_OrderDhl
 	    		}
         		
         	}
-        	
         	//校验发票信息正确
         	if(!empty($this->_invoice[1]['invoice_totalcharge_all'])){
         		//校验总价值
@@ -949,6 +948,7 @@ class Process_OrderDhl
             'dangerousgoods'=>$this->_order['dangerousgoods'],
             //'customer_channelid'=>$this->_order['customer_channelid']?$this->_order['customer_channelid']:Service_User::getChannelid(),
         	'untread'=>$this->_order['untread'],
+        	'invoice_type'=>$this->_order['invoice_type'],
         );
         
         $order['order_weight'] =  empty($order['order_weight'])?0:$order['order_weight'];

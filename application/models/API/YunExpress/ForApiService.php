@@ -157,7 +157,7 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
         $data["invoice_shippertax"]=$this->orderKey["invoice_shippertax"] ;
         $data["invoice_consigneetax"]=$this->orderKey["invoice_consigneetax"];
         //总价值
-        $data['declaredValue']    = $this->orderKey["declaredValue"];
+        $data['declaredValue']    = empty($this->orderKey["declaredValue"])?"0.01":$this->orderKey["declaredValue"];
         //保险价值
         $data['insurance_value_gj']   =  empty($this->orderKey["insurance_value_gj"])?0:$this->orderKey["insurance_value_gj"];
         //注册编号
@@ -1349,7 +1349,7 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
  		$RedundancyField["RecipientEIN"]=$this->orderKey["invoice_consigneetax"];
  		$RedundancyField["CommodityCode"] = $declareInvoice[0]['HSCode']?$declareInvoice[0]['HSCode']:'';
  		//总价值
- 		$RedundancyField['DeclaredValue']    = $this->orderKey["declaredValue"];
+ 		$RedundancyField['DeclaredValue']    = empty($this->orderKey["declaredValue"])?"0.01":$this->orderKey["declaredValue"];
  		//保险价值
  		if(!empty($this->orderKey["insurance_value_gj"])){
  			$RedundancyField['InsuredAmount'] = $this->orderKey["insurance_value_gj"];

@@ -76,14 +76,15 @@
 			<a class="  viewRelationBtn" href='javascript:;' style='margin-left:10px;'><{t}>运输方式&目的国家&附加服务关系<{/t}></a>
 			-->
 		</div>
+		<!--
 		<h2 style='margin-bottom: 10px; border-bottom: 1px dashed #CCCCCC;'>
 			2、<{t}>选择发件人资料<{/t}>
 			<span style="font-weight: normal; font-size: 12px; padding: 0 15px;">(如果上传的资料中存在发件人信息，则按上传资料中保存，如果文件中没有，则按勾选的保存)</span>
 			<a href='javascript:;' style='font-weight: normal; font-size: 12px; padding: 0 10px;' onclick='getSubmiter();'><{t}>刷新<{/t}></a>
 		</h2>
-		<div style='line-height: 22px;padding: 10px;' id='submiter_wrap'></div>
+		<div style='line-height: 22px;padding: 10px;' id='submiter_wrap'></div>-->
 		<h2 style='margin-bottom: 10px; border-bottom: 1px dashed #CCCCCC;'>
-			3、<{t}>选择填好的文件上传<{/t}>
+			2、<{t}>选择填好的文件上传<{/t}>
 			<span style="font-weight: normal; font-size: 12px; padding: 0 15px;"><input type="checkbox" name="ansych" id="ansych" value="1"/> 只提交文件(内容超过1000条时勾选)</span>
     	</h2>	    
 		<form enctype="multipart/form-data" method="POST" action="" name="form" id='uploadForm' onsubmit='return false;'>

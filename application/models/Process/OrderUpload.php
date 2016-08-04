@@ -431,7 +431,7 @@ class Process_OrderUpload extends Process_Order
         for($i = 1;$i <= 100;$i ++){
             //$map['配货信息' . $i] = 'AAA_invoice_note_' . $i;
             //$map['单价' . $i.'(usd)'] = 'AAA_invoice_unitcharge_' . $i;
-            $map['重量' . $i] = 'AAA_invoice_weight_' . $i;
+            $map['单件重量' . $i] = 'AAA_invoice_weight_' . $i;
             //$map['销售地址' . $i] = 'AAA_invoice_url_' . $i;
             $map['长度' . $i.'（cm）'] = 'AAA_invoice_length_' . $i;
             $map['宽度' . $i.'（cm）'] = 'AAA_invoice_width_' . $i;
@@ -443,6 +443,7 @@ class Process_OrderUpload extends Process_Order
             $map['商品代码' . $i] = 'BBB_invoice_shipcode_' . $i;
             $map['单价'.$i.'（usd）'] = 'BBB_invoice_unitcharge_' . $i;
             $map['产地' . $i] = 'BBB_invoice_proplace_' . $i;
+            $map['数量' . $i] = 'BBB_invoice_quantity_' . $i;
         }
         /*
          从标准模板中获取映射关系
@@ -463,15 +464,15 @@ class Process_OrderUpload extends Process_Order
          $map = array(
              '客户单号' => 'shipper_hawbcode',
              '服务商单号' => 'server_hawbcode',
-             '运输方式代码' => 'product_code',
-             '收件人国家' => 'country_code',
+             '运输方式' => 'product_code',
+             '收件人国家（国家简称）' => 'country_code',
              '客户订单号' => 'refer_hawbcode',
              //'买家ID' => 'buyer_id',
              //'交易ID' => 'transaction_id',
              //'订单备注' => 'order_info',
              '外包装件数' => 'order_pieces',
              '货物重量' => 'order_weight',
-             '申报类型' => 'mail_cargo_type',
+             '包裹申报种类' => 'mail_cargo_type',
              '外包装长(cm)'=>'order_length',
              '外包装宽(cm)'=>'order_width',
              '外包装高(cm)'=>'order_height',
@@ -647,11 +648,30 @@ class Process_OrderUpload extends Process_Order
             //修改从excel读取到的原始数据  
             $fileData[$k][$map_flip['country_code']] = $v['country_code'];
             switch ($v['mail_cargo_type']){
-                case '礼品';$v['mail_cargo_type']=1;break;
-                case '商品货样';$v['mail_cargo_type']=2;break;
-                case '文件';$v['mail_cargo_type']=3;break;
+                case 'Gift';$v['mail_cargo_type']=1;break;
+                case 'Commercial Sample';$v['mail_cargo_type']=2;break;
+                case 'Document';$v['mail_cargo_type']=3;break;
                 default:$v['mail_cargo_type']=4;break;
             }
+            
+            //运输方式映射
+            if(!empty($v['product_code'])){
+            	if($v['product_code']=="E速宝专递"){
+            		$v['product_code'] = "ESBR";
+            	}else if($v['product_code']=="E速宝小包"){
+            		$v['product_code'] = "ESB";
+            	}
+            }
+            
+            //如果目的国家确定
+            if(!empty($v['country_code'])&&$v['country_code']=="NZ"){
+            	if($v['product_code']=="ESBR"){
+            		$v['product_code'] = "NZ_DP";
+            	}else if($v['product_code']=="ESB"){
+            		$v['product_code'] = "NZ_LZ";
+            	}	
+            }
+            
             $order = array(
                 'product_code' => strtoupper($v['product_code']),
                 'country_code' => strtoupper($v['country_code']),
@@ -841,12 +861,6 @@ class Process_OrderUpload extends Process_Order
             $data['volume']  =$volume;
             $dataArr[$k] = $data;
         }
-//       echo "<pre>"; print_r($dataArr);die;
-//         if($this->_errArr){
-// //             throw new Exception('数据不合法，导入失败');
-//         }
-//         throw new Exception('数据不合法，导入失败');
-        // print_r($dataArr);exit;
         foreach($dataArr as $k=>$data){
             $process = new Process_Order();
             try{
@@ -857,6 +871,11 @@ class Process_OrderUpload extends Process_Order
                 $extraservice = $data['service'];
                 $volumeArr = $data['volume'];
                 
+               /*  print_r($orderArr);
+                print_r($consigneeArr);
+                print_r($shipperArr);
+                print_r($invoiceArr);
+                die; */
                 $process->setVolume($volumeArr);
                 $process->setOrder($orderArr);
                 $process->setInvoice($invoiceArr);
@@ -954,7 +973,11 @@ class Process_OrderUpload extends Process_Order
             	'fpnote'=> $v['fpnote'],
             	'untread'=>empty($v['untread'])?0:intval($v['untread']),
             );
-    
+    		if($v['invoice_print']=="形式发票"){
+    			$order['invoice_type'] = 1;
+    		}else if($v['invoice_print']=="商业发票"){
+    			$order['invoice_type'] = 2;
+    		}
             $volume=array(
                 'length'=>$v['length'],
                 'width'=>$v['width'],
@@ -1099,7 +1122,7 @@ class Process_OrderUpload extends Process_Order
             	if(!$flag){
             		unset($labelArr[$k_1_1]);
             	}else{
-            		$labelArr[$k_1_1]['invoice_quantity'] =  $invoice[$k_1_1]['invoice_quantity'];
+            		//$labelArr[$k_1_1]['invoice_quantity'] =  $invoice[$k_1_1]['invoice_quantity'];
             	}
             }
             $service=array();

@@ -34,10 +34,14 @@ p{height:20px;line-height:20px;}
 <{section name=loop loop=$count}>
 <if>
  <{if $smarty.section.loop.index eq 0 }>
- <{include file='order/views/invoice-label/dhl-label-pdf.tpl'}>
+ 	<{if $o.order.invoice_type eq 1 }>
+ 	<{include file='order/views/invoice-label/dhl-label-pdf.tpl'}>
+  	<{/if}>
  <h1 style="page-break-after: always; clear: both;background:red;"></h1>
  <{else}>
- <{include file='order/views/invoice-label/dhl-label-pdf1.tpl'}>
+ 	<{if $o.order.invoice_type eq 2 }>
+ 	<{include file='order/views/invoice-label/dhl-label-pdf1.tpl'}>
+ 	<{/if}>
  <{if !$smarty.foreach.o.last}> 
 	<h1 style="page-break-after: always; clear: both;background:red;"></h1>
  <{/if}>

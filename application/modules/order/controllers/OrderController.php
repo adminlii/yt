@@ -478,7 +478,12 @@ class Order_OrderController extends Ec_Controller_Action
             	'fpnote'=> $order['fpnote'],
             	'untread'=>empty($order['untread'])?0:intval($order['untread']),
             );
-            
+            //添加一个发票类型
+            if($orderArr["invoice_print"]==1){
+            	$orderArr["invoice_type"]=$order['invoice_print'];
+            }else{
+            	$orderArr["invoice_type"]=0;
+            }
             
             /*$return = array(
              'ask' => 0,
