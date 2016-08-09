@@ -262,3 +262,28 @@ function create_guid() {
 	.'';// "}"
 	return $uuid;
 }
+//换号规则
+function change_no($shipper_no){
+	$_shipper_no = array();
+	$jiaquan     = array(8,6,4,2,3,5,9,7);
+	$sum = 0;
+	//加上第九位验证
+	for($i = 0 ;$i <8;$i++){
+		if($i==7)
+			$isexit = $shipper_no%10;
+		else{
+			$isexit = intval($shipper_no/pow(10,7-$i));
+			$shipper_no =$shipper_no%pow(10,7-$i);
+		}
+		$_shipper_no[] = $isexit;
+		$sum += $isexit*$jiaquan[$i];
+	}
+	$yushu = 11-$sum%11;
+	if($yushu==11){
+		$yushu = 5;
+	}else if($yushu==10){
+		$yushu = 0;
+	}
+	$_shipper_no[] = $yushu;
+	return join('', $_shipper_no);
+}

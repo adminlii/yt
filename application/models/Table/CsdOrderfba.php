@@ -309,9 +309,11 @@ class Table_CsdOrderfba
         if(isset($condition["order_id_in"]) && is_array($condition["order_id_in"]) && count($condition["order_id_in"]) > 0){
         	$select->where("csd_orderfba.order_id in (?)", $condition["order_id_in"]);
         }
-        
-         //echo $select;
-         //exit();
+        if(isset($condition["ems_status"]) && $condition["ems_status"] !== ""){
+        	$select->where("ems_status = ?", $condition["ems_status"]);
+        }
+        // echo $select;
+        // exit();
         /* CONDITION_END */
         if('count(*)' == $type){
             return $this->_table->getAdapter()->fetchOne($select);

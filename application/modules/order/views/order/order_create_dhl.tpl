@@ -706,7 +706,7 @@ function formSubmit(status){
         </div>
     	<div class="title widthRight" style="float:left">9、发件人协议</div>
         <div class="contentLeft contentType5 borderB" style="height:110px;">
-        	<p style="margin-bottom:10px;">除非提供另外的书面协议，我/我们同意下述附件所列运输条款和条件将作为我/我们与中国邮政速递物流有限公司之间的合同条款</p>
+        	<p style="margin-bottom:10px;">除非提供另外的书面协议，我/我们同意下述附件所列运输条款和条件将作为我/我们与中国邮政速递物流有限公司之间的合同条款<a href="/file/dhltk.pdf" target="_blank" style="color:#0000C6;">（条款和条件）</a></p>
             <div class="seven" style="margin:0 0 10px 0"><div class="check" style="top:-2px; left:212px;"><input name="" id="allow" type="checkbox" value=""></div><p style="text-align:center;">我同意</p></div>
         </div>
         

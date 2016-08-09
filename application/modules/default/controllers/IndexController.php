@@ -1010,10 +1010,20 @@ class Default_IndexController extends Ec_Controller_DefaultAction
     			/* if($order['customer_id']!=Service_User::getCustomerId()){
     			 continue;
     			} */
+    			$_countryInfo  = Service_IddCountry::getByField($order['consignee_countrycode']);
+    			$order['country_cnname'] = $_countryInfo['country_cnname'];
+    			$order['country_enname'] = $_countryInfo['country_enname'];
+    			$order['country_three_code'] = $_countryInfo['country_three_code'];
     			$updateRow = array();
     			$updateRow['print_date'] = date('Y-m-d H:i:s');
     			Service_CsdOrderfba::update($updateRow, $order['order_id'], 'order_id');
-    
+    			if($order['boxnum']>0){
+    				for ($i = 0 ;$i<$order['boxnum'];$i++){
+    					$shipper_hawbcode = intval(substr($order["shipper_hawbcode"],2,-3));
+    					$shipper_hawbcode-=$i;
+    					$order['codeArr'][] =  "AS".change_no($shipper_hawbcode)."CN";
+    				}
+    			}
     			$result[] = $order;
     		}
     		$this->view->data = $result;

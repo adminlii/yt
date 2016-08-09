@@ -314,7 +314,7 @@ class Process_Orderfba
             if($status == 'P'){
                 $successTip = Ec::Lang('订单提交预报成功');
             }
-            $this->changeNOadd();
+            
             $db->commit();
             
             $this->_order['order_id'] = $this->_order_id;
@@ -358,6 +358,7 @@ class Process_Orderfba
         }
         //huanhao
         $shipper_hawbcode = $this->changeNO();
+        $this->changeNOadd($this->_order['boxnum']);
         $this->_order['shipper_hawbcode'] = $shipper_hawbcode;
         $order = array(
             'customer_id' => $this->_order['customer_id'],
@@ -669,42 +670,20 @@ class Process_Orderfba
     
     	$data = $db->fetchRow($sql);
     	$shipper_no = $data['no_now'];
-    	if($shipper_no > $data['no_end']){
-    		throw new Exception('换号池已满，无法生成新的订单号');
+    	if($shipper_no < $data['no_start']){
+    		throw new Exception('换号池已空，无法生成新的订单号');
     	}
-    	$_shipper_no = array();
-    	$jiaquan = array(8,6,4,2,3,5,9,7);
-    	$sum = 0;
-    	//加上第九位验证
-    	for($i = 0 ;$i <8;$i++){
-    		 if($i==7)
-    		 	$isexit = $shipper_no%10;
-    		 else{
-    		 	$isexit = intval($shipper_no/pow(10,7-$i));
-    		 	$shipper_no =$shipper_no%pow(10,7-$i);
-    		 }
-    		 $_shipper_no[] = $isexit;
-    		 $sum += $isexit*$jiaquan[$i];
-    	}
-        $yushu = 11-$sum%11;
-        if($yushu==11){
-        	$yushu = 5;
-        }else if($yushu==10){
-        	$yushu = 0;
-        }
-        $_shipper_no[] = $yushu;
-    	
-    	return  'SC'.join('', $_shipper_no);
+    	return  'AS'.change_no($shipper_no).'CN';
     	
     }
     
     //换号池++
-    public function changeNOadd() {
+    public function changeNOadd($num=1) {
     	//从换号池中取出最新的id
     	$db = Common_Common::getAdapter();
     	//$product = $this->_order['product_code'];
     	$product ="FBA";
-    	$_sql = "update csi_changeno set no_now=no_now+1 where product='{$product}'";
+    	$_sql = "update csi_changeno set no_now=no_now-{$num} where product='{$product}'";
     	//$where = $db->quoteInto('no_now = no_now+1');
     	$data = $db->query($_sql);
     }

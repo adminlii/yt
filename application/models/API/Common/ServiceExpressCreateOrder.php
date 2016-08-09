@@ -501,4 +501,75 @@ class API_Common_ServiceExpressCreateOrder
         Common_Common::myEcho('所有订单同步操作完成.....');
     }
     
+    
+    /**
+     * @desc FBA通知EMS
+     * @param array $conditionArr
+     * @param int $loop
+     */
+    public function notifyOrderToServiceFba()
+    {
+    	Common_Common::myEcho('开始通知订单！');
+    	Common_Common::myEcho('通知中。。。。。。');
+    	$date = date('Y-m-d H:i:s');
+    
+    	/*
+    	 * 1、获取所有需要通知到服务商的订单
+    	*/
+    	$pageSize = 20;
+    	$page = 1;
+    	$condition = array(
+    			"ems_status"=>0
+    	);
+    
+    	$count = Service_CsdOrderfba::getByCondition($condition, "count(*)");
+    	$totalPage = ceil($count / $pageSize);
+    	//减少执行时间
+    	if ($count == 0) {
+    		Ec::showError("此次请求，无需要同步订单！" . $date, 'express_fba_notify_ems_excute');
+    		Common_Common::myEcho('本次没有需要同步的订单.....over....');
+    		return;
+    	}
+    
+    
+    	//调整超时
+    	$theTime = $runTime = time();
+    	//按页同步订单
+    	for ($i = 1; $i <= $totalPage; $i++) {
+    		$synchronousOrder = Service_CsdOrderfba::getByCondition(
+    				$condition,
+    				'*',
+    				$pageSize,
+    				$page,
+    				"RAND()");
+    
+    		foreach ($synchronousOrder as $key => $val) {
+    			Common_Common::myEcho(print_r($val,true));
+    			try {
+    				$obj = new API_FBA_ForApiService();
+    				$obj->setParam($val["order_id"]);
+    				$result = $obj->notifyOrderToService();
+    				$ops_note = "";
+    				// 更新同步结果
+    				if($result['ack']!=1){
+    					// 如果同步订单失败，更新订单状态改为"D"草稿
+    					$ops_note = "订单验证错误，错误为：收寄系统验证失败";
+    					$update_order = array("ems_status" => 2,"ops_note"=>$ops_note);
+    				}else{
+    					$update_order = array("ems_status" => 1);
+    				}
+    				Service_CsdOrderfba::update($update_order, $val["order_id"]);
+    
+    				Common_Common::myEcho($val['shipper_hawbcode'] . '处理完成...');
+    			} catch (Exception $e) {
+    				Common_Common::myEcho($val['shipper_hawbcode'] . '处理异常...'.$e->getMessage());
+    				Ec::showError("同步未知异常，订单号：" . $val["shipper_hawbcode"] . "异常信息：" . $e->getMessage(), 'express_notify_tnt');
+    			}
+    			$runTime=time();
+    		}
+    	}
+    
+    	Common_Common::myEcho('所有订单同步操作完成.....');
+    }
+    
 }

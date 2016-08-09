@@ -67,6 +67,15 @@ EZ.getListData = function(json) {
 				html += '<br/><span style="color:red">收寄系统预报中</span>';
 			}
 		}
+		if(val.order_status=='F'){
+			if(val.ems_status==0) {
+				html += '<br/><span style="color:red">收寄系统预报中</span>';
+			}else if(val.ems_status==1){
+				
+			}else{
+				html += '<br/><span style="color:red">订单验证错误，错误为：收寄系统验证失败</span>';
+			}
+		}
 		html += '</td>';
 		
 		html += '<td class="ec-center">';
