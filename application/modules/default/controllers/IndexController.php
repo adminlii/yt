@@ -1055,8 +1055,8 @@ class Default_IndexController extends Ec_Controller_DefaultAction
     		$pdfFileName  = $savepath.$filename.'.pdf';
     		//shell调用xml
     		if(!file_exists($pdfFileName)){
-    			shell_exec("wkhtmltopdf {$htmlFileName} {$pdfFileName}");
-    			//exec('/usr/local/wkhtmltox/bin/./wkhtmltopdf  {$htmlFileName} {$pdfFileName}');
+    			shell_exec("wkhtmltopdf --page-height 150 --page-width 100 --margin-left 1 --margin-right 1 --margin-top 1 --margin-bottom 1 {$htmlFileName} {$pdfFileName}");
+    			//exec('/usr/local/wkhtmltox/bin/./wkhtmltopdf --page-height 150 --page-width 100 --margin-left 1 --margin-right 1 --margin-top 1 --margin-bottom 1 {$htmlFileName} {$pdfFileName}');
     		}
     		//创建失败
     		if(!file_exists($pdfFileName)){

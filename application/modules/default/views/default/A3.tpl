@@ -7,15 +7,15 @@
 <meta name="description" content="">
 <meta name="keywords" content="">
 <style>
-*{padding: 0px;margin: 0px;font-style: normal;list-style-type: none;text-decoration: none;font-family: "微软雅黑";font-size: 14px;border:0 none;line-height: 24px;color: #333; }
-    .warpdiv{width: 720px;height:1000px;page-break-inside:avoid;}
-	table{border-left: 1px solid #333;border-top:1px solid #333;width: 620px;height:720px;}
-    table img{width: 70%;display: block;margin:0 auto;}
+*{padding: 0px;margin: 0px;font-style: normal;list-style-type: none;text-decoration: none;font-family: "微软雅黑";font-size: 28px;border:0 none;line-height: 32px;color: #333; }
+    .warpdiv{width: 660px;height:970px;page-break-inside:avoid;}
+	table{border-left: 1px solid #333;border-top:1px solid #333;width: 660px;height:970px;}
+    table img{width: 90%;display: block;margin:0 auto;}
 	table td{border-right: 1px solid #333;border-bottom: 1px solid #333;padding: 0 15px;}
     table .bold td{font-weight: bold;text-align:center;}
     .codenumr{text-align:center;}
     table li{overflow: hidden;}
-    .shop{float: left;width: 80px;text-align: right;}
+    .shop{float: left;width: 165px;text-align: right;}
     table li .text{overflow: hidden;}
     .txtRt{text-align: right;}
 </style>	
