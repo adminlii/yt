@@ -54,8 +54,12 @@ public function indexAction()
                 if(! preg_match('/^([a-zA-Z0-9_\-]+)$/', $row['user_code'])){
                     throw new Exception('用户名只能由字母，数字，下划线，中划线组成');
                 }
-                if(empty($row['user_password'])||strlen($row['user_password'])<6){
+                /* if(empty($row['user_password'])||strlen($row['user_password'])<6){
                     throw new Exception('密码不能为空且长度必须>=6');
+                } */
+                $regex = "/^(?=.{6,16})(((?=.*[A-Z])(?=.*[a-z]))|((?=.*[A-Z])(?=.*[0-9]))|((?=.*[a-z])(?=.*[0-9]))).*$/";
+                if(empty($row['user_password'])||!preg_match($regex, $row['user_password'], $matches)){
+                	throw new Exception('密码必须为6~16位,同时包含数字字母组合，请检查.');
                 }
                 
                 if(empty($row['user_password_confirm'])){

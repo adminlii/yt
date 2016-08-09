@@ -48,6 +48,17 @@
         	});
         });
 
+		$('#user_password').change(function(){
+        	var user_password=$(this).val();
+        	var this_ = $(this);
+        	var mediumRegex = new RegExp("^(?=.{6,16})(((?=.*[A-Z])(?=.*[a-z]))|((?=.*[A-Z])(?=.*[0-9]))|((?=.*[a-z])(?=.*[0-9]))).*$", "g");
+        	
+        	if(!mediumRegex.test(user_password))
+        		this_.parent().next().html('密码必须为6~16位,同时包含数字字母组合，请检查.');
+            else
+              this_.parent().next().html('');
+        });
+
         $('#user_email').change(function(){
         	var user_email=$(this).val();
         	var this_ = $(this);

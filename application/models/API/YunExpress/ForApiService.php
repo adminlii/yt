@@ -89,7 +89,7 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
     
     	//获取渠道运输方式
     	$data["ChannelCode"] = $this->serverProductCode;
-    	$data["Weight"] = $this->orderKey["weight"];
+    	$data["Weight"] = $this->orderKey["weight"]*1000;
     	$data["Length"] = $this->orderKey["length"];
     	$data["Width"] = $this->orderKey["width"];
     	$data["Height"] = $this->orderKey["height"];
@@ -1259,8 +1259,8 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
  		
  		//获取渠道运输方式
  		$ChannelCode = $this->serverProductCode;
- 		$ParcelInformation["Weight"] = $this->orderKey["weight"];
- 		$ParcelInformation["WeightUnit"] =4;
+ 		$ParcelInformation["Weight"] = $this->orderKey["weight"]*1000;
+ 		$ParcelInformation["WeightUnit"] =3;
  		$ParcelInformation["Length"] = $this->orderKey["length"];
  		$ParcelInformation["Width"] = $this->orderKey["width"];
  		$ParcelInformation["Height"] = $this->orderKey["height"];

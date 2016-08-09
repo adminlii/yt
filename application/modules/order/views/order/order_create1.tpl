@@ -716,7 +716,7 @@ $('.quantity').live('keyup',function(){
 })
 
 $('input[name="invoice[invoice_enname][]"]').live('keyup',function(){
-	var reg=/^[^\u4e00-\u9fa5]+$/;var msg = '需为非英文';
+	var reg=/^[^\u4e00-\u9fa5]+$/;var msg = '需为非中文';
 	err_tip(this,reg,msg);
 })	
 	// ==============结束
