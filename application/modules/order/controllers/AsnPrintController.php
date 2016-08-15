@@ -36,6 +36,14 @@ class Order_AsnPrintController extends Ec_Controller_Action {
 				$service[$sv['extra_service_kind']]=$sv['extra_service_cnname'];
 			}
 			
+			$con = array();
+			$mailCargoTypes = Service_AtdMailCargoType::getByCondition($con);
+			$_mailCargoTypes=array();
+			if(!empty($mailCargoTypes)){
+				foreach ($mailCargoTypes as $v){
+					$_mailCargoTypes[$v['mail_cargo_code']]=$v['mail_cargo_enname'];
+				}
+			}
 			//交货清单
 			$data=array();
 			foreach ($order_id_arr as $k => $v){
@@ -49,20 +57,37 @@ class Order_AsnPrintController extends Ec_Controller_Action {
 					}
 					$mark=trim($mark,',');
 				}
+				
 				$order_sql="SELECT
 							product_code,
 							shipper_hawbcode 预报单号,
 							server_hawbcode 转单号,
 							order_pieces 件数,
 							country_code 目的地,
-							order_weight 重量
+							order_weight 重量,
+							mail_cargo_type 物品类型 
 							FROM csd_order 
 							WHERE order_id='{$v}';";
-				$data[$k]=$this->_db->fetchRow($order_sql);
+				$orderInfo  = Service_CsdOrder::getByCondition(array('order_id'=>$v));
+				$data[$k]=$orderInfo[0];
 				
 				$data[$k]['销售产品']=$pk[$data[$k]['product_code']];
+				switch ($data[$k]['mail_cargo_type']){
+					case '1':
+						$data[$k]['物品类型']=$_mailCargoTypes[1];
+						;break;
+					case '2':
+						$data[$k]['物品类型']=$_mailCargoTypes[2];
+						;break;
+					case '3':
+						$data[$k]['物品类型']=in_array($data[$k]['product_code'], array("G_DHL","TNT"))?'文件':$_mailCargoTypes[3];
+						;break;
+					case '4':
+						$data[$k]['物品类型']=in_array($data[$k]['product_code'], array("G_DHL","TNT"))?'物品':$_mailCargoTypes[4];
+						;break;
+				}
 				$data[$k]['备注']=$mark;
-				$data[$k]['目的地']=$country[$data[$k]['目的地']];
+				$data[$k]['目的地']=$country[$data[$k]['country_code']];
 			}
 			
 			$pageSize = 22;

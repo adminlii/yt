@@ -364,6 +364,9 @@ class Table_CsdOrder
         if(isset($condition["order_id_in"]) && is_array($condition["order_id_in"]) && count($condition["order_id_in"]) > 0){
         	$select->where("order_id in (?)", $condition["order_id_in"]);
         }
+        if(isset($condition["order_id"]) && $condition["order_id"] != ""){
+        	$select->where("csd_order.order_id = ?", $condition["order_id"]);
+        }
 //         echo $select;
 //         exit();
         /* CONDITION_END */
