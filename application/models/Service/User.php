@@ -170,13 +170,16 @@ class Service_User extends Common_Service
             $result['message'] = Ec::Lang('loginMessage');
             return $result;
         }
-
+		
+        
+        
         $model = self::getModelInstance();
         $userArr = $model->getByField($userName, 'user_code');
         if (empty($userArr)) {
             $result['message'] = Ec::Lang('loginMessage');
             return $result;
         }
+        $loginErr = false;
         if($apiLogin){//api登陆 
             if ($userPass!==$userArr['user_password']) {
                 $result['message'] = Ec::Lang('loginMessage');
@@ -185,8 +188,41 @@ class Service_User extends Common_Service
         }else{
             if (!Ec_Password::comparePassword($userPass, $userArr['user_password'])) {
                 $result['message'] = Ec::Lang('loginMessage');
-                return $result;
+                //return $result;
+                $loginErr = true;
             } 
+        }
+        $db = Common_Common::getAdapter();
+        $sql = "SELECT * FROM pre_ucenter_failedlogins WHERE user_code='" . $userName . "'";
+        $loginFailed = $db->fetchRow($sql);
+        if(isset($loginFailed['count'])){
+        	if($loginFailed['count'] > 2){//3次登录错误尝试
+        		if( (time() - $loginFailed['lastupdate']) > 3600){//锁定一个小时
+        			$db->update('pre_ucenter_failedlogins', array(
+        					'count' => 0,'lastupdate' => time(),
+        			), "user_code='" . $userName . "'");
+        		}else{
+        			$result['message'] = "登录失败次数过多，请一个小时后再尝试";
+        			return $result;
+        		}
+        	}
+        }
+        if($loginErr === true){//密码错误才记录用户登录错误次数，避免数据表爆满
+        	$ip = Common_Common::getIP();
+        	$time = time();
+        	if($loginFailed){
+        		$sql = "UPDATE pre_ucenter_failedlogins SET count=count+1, lastupdate='" . $time . "' WHERE user_code='" . $userName . "'";
+        	}else{
+        		$sql = "INSERT INTO pre_ucenter_failedlogins(user_code,ip,count,lastupdate) VALUES('$userName','$ip','1', '$time')";
+        	}
+        	$db->query($sql);
+        	return $result;
+        }else{
+        	if($loginFailed){
+        		$db->update('pre_ucenter_failedlogins', array(
+        				'count' => 0,'lastupdate' => time(),
+        		), "user_code='" . $userName . "'");
+        	}
         }
         
         // TODO DB2
