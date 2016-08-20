@@ -170,7 +170,7 @@ class Process_OrderDhl
 //         		$this->_err[] = Ec::Lang('参考单号不合法,只能包含字母数字中横线下划线') . "[{$this->_order['refer_hawbcode']}]";
 //         	}
         	if(strlen($this->_order['refer_hawbcode']) < 1 || strlen($this->_order['refer_hawbcode']) > 50) {
-        		$this->_err[] = Ec::Lang('参考单号不合法,字符长度必须大于1或小于50') . "[{$this->_order['refer_hawbcode']}]";
+        		$this->_err[] = Ec::Lang('参考单号不合法,字符长度必须大于1或小于等于50') . "[{$this->_order['refer_hawbcode']}]";
         	}
         	
             $con = array(
@@ -408,7 +408,7 @@ class Process_OrderDhl
             }else{
                 if($this->_order['product_code'] =='TNT'){
                     if($this->_order['order_length']>240){
-                        $this->_err[] = Ec::Lang('包装长度必须小于240cm');
+                        $this->_err[] = Ec::Lang('包装长度必须小于等于240cm');
                     }
                 }
             }
@@ -420,7 +420,7 @@ class Process_OrderDhl
             }else{
                 if($this->_order['product_code'] =='TNT'){
                     if($this->_order['order_width']>120){
-                        $this->_err[] = Ec::Lang('包装宽度必须小于120cm');
+                        $this->_err[] = Ec::Lang('包装宽度必须小于等于120cm');
                     }
                 }
             }
@@ -433,7 +433,7 @@ class Process_OrderDhl
             }else{
                 if($this->_order['product_code'] =='TNT'){
                     if($this->_order['order_height']>150){
-                        $this->_err[] = Ec::Lang('包装高度必须小于150cm');
+                        $this->_err[] = Ec::Lang('包装高度必须小于等于150cm');
                     }
                 }
             }
@@ -890,12 +890,12 @@ class Process_OrderDhl
         $this->_validateElements();
         
         if(! empty($this->_err)){
-            throw new Exception(Ec::Lang('订单数据不合法'));
+            throw new Exception(Ec::Lang('订单验证失败'));
         }
         
         $this->_validate();
         if(! empty($this->_err)){
-            throw new Exception(Ec::Lang('订单数据不合法'));
+            throw new Exception(Ec::Lang('订单验证失败'));
         }
        
         //验证地址异步处理的时候验证

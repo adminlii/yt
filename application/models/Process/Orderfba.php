@@ -373,12 +373,12 @@ class Process_Orderfba
         //$this->_validateElements();
         
         if(! empty($this->_err)){
-            throw new Exception(Ec::Lang('订单数据不合法'));
+            throw new Exception(Ec::Lang('订单验证失败'));
         }
         
         $this->_validate();
         if(! empty($this->_err)){
-            throw new Exception(Ec::Lang('订单数据不合法'));
+            throw new Exception(Ec::Lang('订单验证失败'));
         }
        
         //验证地址异步处理的时候验证

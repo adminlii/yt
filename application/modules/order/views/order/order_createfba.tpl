@@ -393,6 +393,9 @@ $(function(){
 			 loadEnd('');
 			var html = json.message;
 			if(json.ask){
+				//清空上传附件
+				$("#invoicelistrel").val('');
+				$("#invoicerel").val('');
 				html+="<br/>系统单号:"+json.order.shipper_hawbcode;
                 $('#shipper_hawbcode').val(json.order.shipper_hawbcode);                
 				successTip(html,json.order);

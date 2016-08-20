@@ -712,7 +712,7 @@ class Order_OrderController extends Ec_Controller_Action
         $this->view->country = $countrys;
     
         $product_kind = Process_ProductRule::getProductKind();
-        $aviable_kind = array("TNT","G_DHL");
+        $aviable_kind = array("G_DHL");
         foreach ($product_kind as $pro_kind_k=>$pro_kind_v){
         	if(!in_array($pro_kind_v["product_code"], $aviable_kind)){
         		unset($product_kind[$pro_kind_k]);

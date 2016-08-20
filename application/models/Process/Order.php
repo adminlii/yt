@@ -164,7 +164,7 @@ class Process_Order
 //         		$this->_err[] = Ec::Lang('参考单号不合法,只能包含字母数字中横线下划线') . "[{$this->_order['refer_hawbcode']}]";
 //         	}
         	if(strlen($this->_order['refer_hawbcode']) < 1 || strlen($this->_order['refer_hawbcode']) > 50) {
-        		$this->_err[] = Ec::Lang('参考单号不合法,字符长度必须大于1或小于50') . "[{$this->_order['refer_hawbcode']}]";
+        		$this->_err[] = Ec::Lang('参考单号不合法,字符长度必须大于1或小于等于50') . "[{$this->_order['refer_hawbcode']}]";
         	}
         	
             $con = array(
@@ -377,14 +377,14 @@ class Process_Order
             	//赛程小包
                 if($this->_order['product_code'] =='NZ_LZ'){
                     if($this->_order['order_weight']>3){
-                        $this->_err[] = Ec::Lang('货物重量必须小于3kg');
+                        $this->_err[] = Ec::Lang('货物重量必须小于等于3kg');
                     }
                 }else if($this->_order['product_code'] =='ESB'){
                     if(!preg_match("/(^0\.\d{0,3}$)|(^[1-9]\d*(\.\d{0,3})?$)/",$this->_order['order_weight'])){
                         $this->_err[] = Ec::Lang('货物重量须为数字,最多3位小数');
                     }else{
                     	if($this->_order['order_weight']>2)
-                    		$this->_err[] = Ec::Lang('货物重量必须小于2kg');
+                    		$this->_err[] = Ec::Lang('货物重量必须小于等于2kg');
                     }
                 }else if($this->_order['product_code'] =='ESBR'){
                 	if(!preg_match("/(^0\.\d{0,3}$)|(^[1-9]\d*(\.\d{0,3})?$)/",$this->_order['order_weight'])){
@@ -393,13 +393,13 @@ class Process_Order
                 		if($this->_consignee['consignee_countrycode']){
                 			if( in_array($this->_consignee['consignee_countrycode'], array('AT'))){
                 				if($this->_order['order_weight']>20)
-                					$this->_err[] = Ec::Lang('货物重量必须小于20kg');
+                					$this->_err[] = Ec::Lang('货物重量必须小于等于20kg');
                 			}else if($this->_consignee['consignee_countrycode']=='GB'){
                 				if($this->_order['order_weight']>15)
-                					$this->_err[] = Ec::Lang('货物重量必须小于15kg');
+                					$this->_err[] = Ec::Lang('货物重量必须小于等于15kg');
                 			}else{
                 				if($this->_order['order_weight']>30)
-                					$this->_err[] = Ec::Lang('货物重量必须小于30kg');
+                					$this->_err[] = Ec::Lang('货物重量必须小于等于30kg');
                 			}
                 	
                 	
@@ -409,7 +409,7 @@ class Process_Order
                 	}
                 }else {
                 	if($this->_order['order_weight']>25){
-                		$this->_err[] = Ec::Lang('货物重量必须小于25KG');
+                		$this->_err[] = Ec::Lang('货物重量必须小于等于25KG');
                 	}
                 }
             	/* if(!preg_match("/(^0\.[5-9]$)|(^[1-9]+(\.?\d?)$)/",$this->_order['order_weight'])){
@@ -428,17 +428,17 @@ class Process_Order
             }else{
                 if($this->_order['product_code'] =='TNT'){
                     if($this->_order['order_length']>240){
-                        $this->_err[] = Ec::Lang('包装长度必须小于240cm');
+                        $this->_err[] = Ec::Lang('包装长度必须小于等于240cm');
                     }
                 }else if($this->_order['product_code'] =='ESB'){
                     if(!preg_match("/^[1-9]\d*(\.0+)?$/",$this->_order['order_length'])){
                         $this->_err[] = Ec::Lang('包装长度必须是大于0整数');
                     }else if($this->_order['order_length']>60){
-                        $this->_err[] = Ec::Lang('包装长度必须小于60cm');
+                        $this->_err[] = Ec::Lang('包装长度必须小于等于60cm');
                     }
                 }else{
                 	if($this->_order['order_length']>=10000){
-                		$this->_err[] = Ec::Lang('包装长度必须小于10000cm');
+                		$this->_err[] = Ec::Lang('包装长度必须小于等于10000cm');
                 	}
                 }
             }
@@ -450,17 +450,17 @@ class Process_Order
             }else{
                 if($this->_order['product_code'] =='TNT'){
                     if($this->_order['order_width']>120){
-                        $this->_err[] = Ec::Lang('包装宽度必须小于120cm');
+                        $this->_err[] = Ec::Lang('包装宽度必须小于等于120cm');
                     }
                 }else if($this->_order['product_code'] =='ESB'){
                 	if(!preg_match("/^[1-9]\d*(\.0+)?$/",$this->_order['order_width'])){
                         $this->_err[] = Ec::Lang('包装宽度必须是大于0整数');
                     }else  if($this->_order['order_width']>40){
-                        $this->_err[] = Ec::Lang('包装宽度必须小于40cm');
+                        $this->_err[] = Ec::Lang('包装宽度必须小于等于40cm');
                     }
                 }else{
                 	if($this->_order['order_width']>=10000){
-                		$this->_err[] = Ec::Lang('包装宽度必须小于10000cm');
+                		$this->_err[] = Ec::Lang('包装宽度必须小于等于10000cm');
                 	}
                 } 
             }
@@ -473,17 +473,17 @@ class Process_Order
             }else{
                 if($this->_order['product_code'] =='TNT'){
                     if($this->_order['order_height']>150){
-                        $this->_err[] = Ec::Lang('包装高度必须小于150cm');
+                        $this->_err[] = Ec::Lang('包装高度必须小于等于150cm');
                     }
                 }else if($this->_order['product_code'] =='ESB'){
                 	if(!preg_match("/^[1-9]\d*(\.0+)?$/",$this->_order['order_height'])){
                         $this->_err[] = Ec::Lang('包装高度必须是大于0整数');
                     }else if($this->_order['order_height']>40){
-                    	$this->_err[] = Ec::Lang('包装高度必须小于40cm');
+                    	$this->_err[] = Ec::Lang('包装高度必须小于等于40cm');
                     }
                 }else{
                 	if($this->_order['order_height']>=10000){
-                		$this->_err[] = Ec::Lang('包装高度必须小于10000cm');
+                		$this->_err[] = Ec::Lang('包装高度必须小于等于10000cm');
                 	}
                 } 
             }
@@ -598,7 +598,7 @@ class Process_Order
         	$res = Common_DataCache::getHuilv();
         	if($res['USD']&&$res['EUR']){
         		if($res['USD']*$_invoice_totalValue>22*$res['EUR']){
-        			$this->_err[] = Ec::Lang('小包业务限制运送物品价值小于22欧元');
+        			$this->_err[] = Ec::Lang('小包业务限制运送物品价值小于等于22欧元');
         		}
         	}
         }
@@ -911,13 +911,13 @@ class Process_Order
         $this->_validateElements();
         
         if(! empty($this->_err)){
-            throw new Exception(Ec::Lang('订单数据不合法'));
+            throw new Exception(Ec::Lang('订单验证失败'));
         }
         
         
         $this->_validate();
         if(! empty($this->_err)){
-            throw new Exception(Ec::Lang('订单数据不合法'));
+            throw new Exception(Ec::Lang('订单验证失败'));
         }
        
         //验证地址异步处理的时候验证
