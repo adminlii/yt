@@ -898,6 +898,21 @@ class Process_OrderDhl
             throw new Exception(Ec::Lang('订单数据不合法'));
         }
        
+        //验证地址异步处理的时候验证
+        if(!$import&&!empty($this->_shipper['shipper_city'])){
+        	$positionename = $this->_shipper['shipper_city'];
+        	$_positionename = strpos($positionename,",");
+        	if($_positionename!==false){
+        		$positionename=substr($positionename,0,$_positionename);
+        	}
+        	$positionename = preg_replace('/\s/','',$positionename);
+        	//在本地的对照库中找到地址，然后取出市 和 省
+        	$graphicalcondition['positionpname'] = strtoupper($positionename);
+        	$res = Service_CsiGeographical::getByCondition($graphicalcondition);
+        	if(empty($res))
+        		throw new Exception(Ec::Lang('请核实是否是中国地区的城市拼音，该地区无法通过中邮收寄接口'));
+        }
+        
         $statusArr = array(
             // 草稿
             'D',
@@ -1756,7 +1771,7 @@ class Process_OrderDhl
     		$return['server_hawbcode'] = $atd_regist_code_available['regist_code'];
     		return $return;
     	}
-        if($order["product_code"] == "NZ_CP" || $order["product_code"] == "NZ_DP" || $order["product_code"] == "NZ_LZ"){
+       /*  if($order["product_code"] == "NZ_CP" || $order["product_code"] == "NZ_DP" || $order["product_code"] == "NZ_LZ"){
             $listId['string'] = 1;  //NZ_CP，NZ_DP，NZ_LZ对应渠道SAICHENG
         }else if($order["product_code"] == "TNT"){
         	$listId['string'] = 73;
@@ -1764,8 +1779,10 @@ class Process_OrderDhl
         	$listId['string'] = 74;
         }else{
             $listId['string'] = 2;  //G_DHL对应渠道DHL
-        }
-
+        } */
+		
+        $rs_produckconfig = Common_Common::getProductAllByCode($order["product_code"]);
+        $listId['string'] = $rs_produckconfig['cid'];
 
     	$channelid = "";
     	if(is_array($listId['string'])) {

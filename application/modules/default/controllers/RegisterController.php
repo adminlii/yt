@@ -165,7 +165,7 @@ public function indexAction()
     	$content_customer = "尊敬的客户：" . $row['user_name'] . " 您好!<br>"
     			. "恭喜您成功注册商业渠道发运系统，请牢记您的登录名：" . $row['user_code'] . "<br>"
     			. "即刻可以验证邮箱，请点击以下链接：<br>"
-    			. $url . '/default/register/activate-email?user_code='. $row['user_code'] . '&activate=' . $row['user_activate_code']
+    			. $url .'shipping/default/register/activate-email?user_code='. $row['user_code'] . '&activate=' . $row['user_activate_code']
     			. "<br><br>打不开链接？复制以上地址在浏览器打开即可。";
     	
     	/*

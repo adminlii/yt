@@ -210,9 +210,11 @@ class Ec_Controller_Plugins_Acl extends Zend_Controller_Plugin_Abstract
 
     public function login()
     {
+    	$reLogin = $this->_request->getModuleName()== 'default'&&$this->_request->getControllerName() == 'index'?0 : 1;
         $this->_request->setModuleName('default');
         $this->_request->setControllerName('index');
         $this->_request->setActionName('login');
+        $this->_request->setParam('reLogin',$reLogin);
     }
 
 }

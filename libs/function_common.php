@@ -287,3 +287,18 @@ function change_no($shipper_no){
 	$_shipper_no[] = $yushu;
 	return join('', $_shipper_no);
 }
+
+function xml_filter(&$value,$k){
+
+	$_value = str_replace("&", "&amp;", $value);
+	$_value = str_replace("<", "&lt;", $_value);
+	$_value = str_replace(">", "&gt;", $_value);
+	$_value = str_replace('"', "&quot;", $_value);
+	$_value = str_replace("'", "&apos;", $_value);
+	$value = $_value;
+}
+
+function xml_filterInArr($arr){
+	array_walk_recursive($arr,'xml_filter');
+	return $arr;
+}

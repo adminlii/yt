@@ -47,7 +47,7 @@
             <td colspan="2">
                 <ul>
                     <li>
-                        <p class="shop">SHOP TO：</p>
+                        <p class="shop">SHIP TO：</p>
                         <div class="text">
                             <p><{$o.storage}></p>
                             <p><{$o.consignee_street}></p>

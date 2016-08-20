@@ -138,12 +138,9 @@ class Order_OrderController extends Ec_Controller_Action
             //日志记录end
             
             //NZ走的是赛程
-            if($order['country_code']=="NZ"){
-            	if($order['product_code']=="ESBR"){
-            		$order['product_code'] = "NZ_DP";
-            	}else{
-            		$order['product_code'] = "NZ_LZ";
-            	}
+            $changeCode = Common_Common::getProductAllByCountryCode($order['country_code'], $order['product_code']);
+            if(!empty($changeCode)){
+            	$order['product_code'] = $changeCode;
             }
             
             $orderArr = array(
@@ -328,9 +325,9 @@ class Order_OrderController extends Ec_Controller_Action
 		$countrys = Service_IddCountry::getByCondition(null, '*', 0, 0, '');
         $this->view->country = $countrys;
         $product_kind = Process_ProductRule::getProductKind();
-        $aviable_kind = array("TNT","G_DHL","NZ_CP","NZ_LZ","NZ_DP");
+        $aviable_kind = array("ESB","ESBR");
         foreach ($product_kind as $pro_kind_k=>$pro_kind_v){
-        	if(in_array($pro_kind_v["product_code"], $aviable_kind)){
+        	if(!in_array($pro_kind_v["product_code"], $aviable_kind)){
         		unset($product_kind[$pro_kind_k]);
         	}
         }
@@ -1480,6 +1477,39 @@ class Order_OrderController extends Ec_Controller_Action
 			
 			die(Zend_Json::encode($return));
 		}
+	}
+	
+	//获得当前shipperAdress
+	public function shipperAdressInfoAction(){
+		$return = array(
+				'ask' => 0,
+				'message' => ''
+		);
+		$CsiShipperTrailerAddress = new Service_CsiShipperTrailerAddress();
+		$condition['customer_id'] = Service_User::getCustomerId();
+		$condition['customer_channelid'] = Service_User::getChannelid();
+		$showFields=array(
+				'shipper_account',
+				'shipper_name',
+				'shipper_company',
+				'shipper_countrycode',
+				'shipper_province',
+				'shipper_city',
+				'shipper_street',
+				'shipper_postcode',
+				'shipper_telephone',
+				'shipper_mobile',
+				'shipper_email',
+				'shipper_certificatetype',
+				'shipper_certificatecode',
+				'shipper_fax',
+				'shipper_mallaccount',
+				'is_default',
+		);
+		$rows = $CsiShipperTrailerAddress->getByCondition($condition,'*', 0, 1, array('shipper_account asc'));
+		$return['ask'] =1;
+		$return['data']=empty($rows)?array():$rows;
+		die(Zend_Json::encode($return));
 	}
 	
 	public function shipperAdressAction(){

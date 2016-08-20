@@ -86,6 +86,7 @@ class Process_Orderfba
     		}
     		//解析装箱单数据
     		if(!empty($file['invoicelistfile'])){
+    			/*
     			$savepath = $saveDir.'invoicelist/';
     			$invoicelistData = $orderUploadfba->readUploadFile($file['invoicelistfile'], $savepath.$file['invoicelistfile'],1);
     			if(!empty($invoicelistData)&&is_array($invoicelistData)){
@@ -109,6 +110,36 @@ class Process_Orderfba
     				$this->invoicelistfile = $file['invoicelistfile'];
     				$this->_invoice = $_invoicelist;
     			}
+    			*/
+    			$_invoicelist = array();
+    			if(!$this->_order['boxnum']){
+    				//随便+1列
+    				$invoice['bagid'] = 1;
+    				$invoice['goodname'] = '对讲机';
+    				$invoice['itemno'] = 'UV-5R';
+    				$invoice['quantity'] = 50;
+    				$invoice['length'] = 31;
+    				$invoice['width'] = 30;
+    				$invoice['height'] = 25;
+    				$invoice['weight'] = 27;
+    				$_invoicelist[] = $invoice;
+    			}else{
+    				for ($index = 0;$index<$this->_order['boxnum'];$index++){
+    					$invoice = array();
+    					//获取箱号
+    					$invoice['bagid'] = $index+1;
+    					$invoice['goodname'] = '对讲机';
+    					$invoice['itemno'] = 'UV-5R';
+    					$invoice['quantity'] = 50;
+    					$invoice['length'] = 31;
+    					$invoice['width'] = 30;
+    					$invoice['height'] = 25;
+    					$invoice['weight'] = 27;
+    					$_invoicelist[] = $invoice;
+    				}
+    			}
+    			$this->invoicelistfile = $file['invoicelistfile'];
+    			$this->_invoice = $_invoicelist;
     		}	
     	} catch (Exception $e) {
     		$this->_err[] = $e->getMessage();
@@ -350,6 +381,21 @@ class Process_Orderfba
             throw new Exception(Ec::Lang('订单数据不合法'));
         }
        
+        //验证地址异步处理的时候验证
+        if(!empty($this->_shipper['shipper_city'])){
+        	$positionename = $this->_shipper['shipper_city'];
+        	$_positionename = strpos($positionename,",");
+        	if($_positionename!==false){
+        		$positionename=substr($positionename,0,$_positionename);
+        	}
+        	$positionename = preg_replace('/\s/','',$positionename);
+        	//在本地的对照库中找到地址，然后取出市 和 省
+        	$graphicalcondition['positionpname'] = strtoupper($positionename);
+        	$res = Service_CsiGeographical::getByCondition($graphicalcondition);
+        	if(empty($res))
+        		throw new Exception(Ec::Lang('请核实是否是中国地区的城市拼音，该地区无法通过中邮收寄接口'));
+        }
+        
         $statusArr = array(
           	"F"
         );

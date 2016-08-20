@@ -959,6 +959,7 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
       	$array_one['postInfos'] = $array_two;
       	//根root
       	$xmlarray['orders'] = $array_one;
+      	$xmlarray = xml_filterInArr($xmlarray);
       	$xml = xml_encode($xmlarray['orders'],'orders','item');
       	$xml=preg_replace('/item_(\d)+/i','item', $xml);  
         $url="http://shipping2.ems.com.cn/partner/api/public/p/orderSpecial";
@@ -1380,20 +1381,10 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
  		$params["Version"] = '0.0.0.3';
  		$params["RequestId"] = empty($uuid)?"":$uuid;
  		$data["Token"] = '99999999999999999999999999999999';
- 		//配置文件
- 		$product_set = array(
- 		  		"ESB"=>array("YunTu","ESB","CN"),
- 				"ESBR"=>array("YunTu","ESBR","CN"),
- 				"G_DHL"=>array("ChinaPostDHL","Standard","CN"),
- 				"NZ_CP"=>array("Saicheng","CP","CN"),
- 				"NZ_DP"=>array("Saicheng","DP","CN"),
- 				"NZ_LZ"=>array("Saicheng","LZ","CN"),
- 				"TNT"=>array("ChinaPostTNT","Document","CN"),	
- 		);
- 		$product_set_rs = $product_set[$ChannelCode];
- 		$data["ChannelName"] =$product_set_rs[0];
- 		$data["ServiceTypeCode"] =$product_set_rs[1];
- 		$data["WarehouseCode"] =$product_set_rs[2];
+ 		$product_set_rs=Common_Common::getProductAllByCode($ChannelCode);
+ 		$data["ChannelName"] =$product_set_rs['ccode'];
+ 		$data["ServiceTypeCode"] =$product_set_rs['name'];
+ 		$data["WarehouseCode"] =$product_set_rs['area'];
  		$data["LabelMarkText"] =null;
  		$data["RedundancyField"] =$RedundancyField;
  		

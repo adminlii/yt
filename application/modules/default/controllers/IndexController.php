@@ -3,7 +3,7 @@ include('DES.php');
 class Default_IndexController extends Ec_Controller_DefaultAction
 {
     public $_loginSuccessUrl = '/';
-    public $_authCode = 1; //是否用验证码
+    public $_authCode = 0; //是否用验证码
     private static $log_name = 'AppForPlatform_Authorized_';
 
     public function preDispatch()
@@ -152,10 +152,16 @@ class Default_IndexController extends Ec_Controller_DefaultAction
     {
         $errMsg = '';
         if ($this->_request->isPost()) {
+        	$reLogin = $this->_request->getParam('reLogin', '0'); //设置重新登录,用于登录超时Ajax提示;
+        	
             $param['userName'] = $this->_request->getParam('userName', '');
             $param['userPass'] = $this->_request->getParam('userPass', '');
             $param['authCode'] = $this->_request->getParam('authCode', '');
             $param['valid'] = $this->_authCode;
+            if ($reLogin == 1) {
+            	$result = array('state' => 0, 'message' => '登录超时,请重新登录', 'reLogin' => 1);
+            	die(Zend_Json::encode($result));
+            }
             $result = Service_User::login($param);
             setcookie('currentPage','',-1,'/');
             if (isset($result['state']) && $result['state'] == '1') {

@@ -664,11 +664,10 @@ class Process_OrderUpload extends Process_Order
             }
             
             //如果目的国家确定
-            if(!empty($v['country_code'])&&$v['country_code']=="NZ"){
-            	if($v['product_code']=="ESBR"){
-            		$v['product_code'] = "NZ_DP";
-            	}else if($v['product_code']=="ESB"){
-            		$v['product_code'] = "NZ_LZ";
+            if(!empty($v['country_code'])&&$v['country_code']){
+            	$changeCode = Common_Common::getProductAllByCountryCode($v['country_code'],$v['country_code']);
+            	if(!empty($changeCode)){
+            		$v['product_code'] = $changeCode;
             	}	
             }
             
@@ -1169,6 +1168,7 @@ class Process_OrderUpload extends Process_Order
             $condtion_sp['cityname'] = $shipper['shipper_city'];
             $condtion_sp['status'] =   1;
             $condtion_sp['productcode'] =   $order["product_code"];
+            
             $server_csi_prs=new Service_CsiProductRuleShipper();
             $rs_cisprs = $server_csi_prs->getByCondition($condtion_sp);
             if($rs_cisprs[0]){
@@ -1192,6 +1192,7 @@ class Process_OrderUpload extends Process_Order
             $data['label']  =$labelArr;
             $dataArr[$k] = $data;
         }
+        //print_r($dataArr);die;
         foreach($dataArr as $k=>$data){
             $process = new Process_OrderDhl();
             try{
@@ -1232,6 +1233,10 @@ class Process_OrderUpload extends Process_Order
                 $this->_errTipArr[$k] = "行{$k}:".implode('; ', $orderErrs);
     
                 $this->_failArr[$k] = $fileData[$k];
+                Ec::showError("**************start*************\r\n"
+                				. print_r($ee->getMessage(),true)."\r\n"
+                						. "**************end*************\r\n",
+                						'UpdateError/info'.date("Ymd"));
             }
         }
         if($this->_errArr){

@@ -926,4 +926,19 @@ class Common_Common
 		}
     	return $returnArr;
     }
+    
+    //获取产品的详细信息
+   	public static function getProductAllByCode($code){
+    	$config = new Zend_Config_Ini(APPLICATION_PATH . '/configs/product.ini', APPLICATION_ENV);
+    	$temp   = $config->ascode->apichannel->toArray();
+    	return isset($temp[$code])?$temp[$code]:false;
+    }
+    
+    //根据国家获取相对于的物流产品(快件录单专用)
+    public static function getProductAllByCountryCode($countrycode,$fromcode){
+    	$config = new Zend_Config_Ini(APPLICATION_PATH . '/configs/product.ini', APPLICATION_ENV);
+    	$temp   = $config->ascode->channel->toArray();
+    	$code = $fromcode.$countrycode;
+    	return isset($temp[$code])?$temp[$code]:false;
+    }
 }

@@ -145,9 +145,9 @@ width: 100px;
     		</table>
     	</div>
 
-    	<div class="layerbody">
+    	<div class="layerbody shipperdiv">
     		<div class="layTit">
-    			<h3>发件人信息 <i>*</i> <a href="">刷新</a></h3>
+    			<h3>发件人信息 <i>*</i> <!--<a href="">刷新</a>--></h3>
     		</div>
     		<div class="TextList">
     			<{foreach from=$shipperCustom name=s item=s key=k}>
@@ -164,13 +164,13 @@ width: 100px;
 					<span><a href="javascript:;" class="open_btn" shipper_account="<{$s.shipper_account}>">修改信息</a></span></label>
 			   </p>
 			<{/foreach}>
-    			<div class="addmore addlast">
-    				<a href="javascript:;" class="open_btn">点击新增</a>
-    			</div>
+    			
     			
     			</div>
 
-
+<div class="addmore addlast">
+    				<a href="javascript:;" class="open_btn">点击新增</a>
+    			</div>
     		</div>
     	</div>
 
@@ -220,7 +220,7 @@ width: 100px;
     						</ul>
     							<div class="sendBtns">
     							<input type="hidden" name="E0" value="" class="input_text">
-    								<input type="submit" class="btns1" id="orderSubmitBtn" value="提交" />
+    								<input type="submit" style="background: #005bac;border:1px solid #01447f;" id="orderSubmitBtn" value="提交" />
     							</div>
     						</form>
     					</div>
@@ -228,7 +228,8 @@ width: 100px;
 <script>
 $(function(){
 	//发件人js
-		$('.open_btn').click(function(){
+		$('.shipperdiv').on('click','.open_btn',function(){
+		
 			//判断是否是新增或者修改
 			var that = $(this);
 			var text = $(this).text();
@@ -249,6 +250,8 @@ $(function(){
 				});
 			}
 			$('.WindowBox').fadeIn(300);
+		
+		
 		});
 		
 		function editShipperAccount(shipper_account){	 
@@ -288,10 +291,41 @@ $(function(){
 		    url: '/order/submiter/edit',
 		    data: params,
 		    success: function (json) {
-		    	loadEnd();
+		    	
 		    	switch (json.state) {
 		            case 1:
-		            	window.location.reload();
+		            	//window.location.reload();
+		            	//继续用ajax
+		            	$.post("/order/order/shipper-adress-info", {},
+							   function(data){
+							   	  loadEnd();
+							   	  $('.NewMain input').each(function(index,element){
+										var name = $(element).attr("name");
+										if(name){
+											switch(name){
+												case 'E5':$(element).val('省/州');break;
+												case 'E6':$(element).val('城市');break;
+												case 'E17':$(element).attr('checked', false);break;
+												default : $(element).val('');break;
+											
+											}
+										}
+									});
+							   	  $(".WindowBox").hide();
+							   	  if(data.ask==1){
+							   	  	var html = '';
+							   	  	for(var i in data.data){
+							   	  		if(data.data[i]['is_default']=='1'){
+							   	  			html += '<p><label><span class="inputsel"><input type="radio" name="consignee[shipper_account]" checked value="'+data.data[i]["shipper_account"]+'"></span>';
+							   	  		}else{
+							   	  			html += '<p><label><span class="inputsel"><input type="radio" name="consignee[shipper_account]" value="'+data.data[i]["shipper_account"]+'"></span>';
+							   	  		}
+							   	  		html += '<span>'+data.data[i]["shipper_company"]+'</span><span>'+data.data[i]["shipper_countrycode"]+'</span><span></span><span>'+data.data[i]["shipper_city"]+'</span><span>'+data.data[i]["shipper_street"]+'</span><span>'+data.data[i]["shipper_name"]+'</span><span>'+data.data[i]["shipper_telephone"]+'</span><span><a href="javascript:;" class="open_btn" shipper_account="'+data.data[i]["shipper_account"]+'">修改信息</a></span></label></p>';
+							   	  	}
+							   	  	
+							   	  	$(".TextList").empty().append(html);
+							   	  }
+							   }, "json");
 		                break;
 		            case 2:
 			            //parent.getSubmiter();
@@ -299,6 +333,7 @@ $(function(){
 		                //parent.$('.dialogIframe').dialog('close');
 		                break;
 		            default:
+		           	 loadEnd();
 		                var html = '';
 		                if (json.errorMessage == null)return;
 		                $.each(json.errorMessage, function (key, val) {

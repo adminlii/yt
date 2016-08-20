@@ -316,6 +316,7 @@ class API_FBA_ForApiService
       	$array_one['postInfos'] = $array_two;
       	//根root
       	$xmlarray['orders'] = $array_one;
+      	$xmlarray = xml_filterInArr($xmlarray);
       	$xml = xml_encode($xmlarray['orders'],'orders','item');
       	$xml=preg_replace('/item_(\d)+/i','item', $xml);
       	//echo $xml;return false;  
@@ -423,7 +424,4 @@ class API_FBA_ForApiService
           curl_close($curl);
           return $result;
  	}
- 	
- 	
- 	
 }
