@@ -158,9 +158,9 @@ class Process_OrderUploadUserTemplate extends Process_OrderUpload
     public function getImportFileData($file)
     {
         $this->_template_type = '';
-        $db = Common_Common::getAdapter();
+        //$db = Common_Common::getAdapter();
         // 自定义模板excel第一列
-        $header = $this->readUploadFileHeader($file);
+        //$header = $this->readUploadFileHeader($file);
         //var_dump($header);
         // //临时表，用后删除
         // $tmp_table = $this->getTmpTable();
@@ -175,10 +175,10 @@ class Process_OrderUploadUserTemplate extends Process_OrderUpload
         // }
         $report_id = 0;
         // 取最新修改过的模板
-        $sql = "select * from csd_customer_report where customer_id='" . Service_User::getCustomerId() . "' or customer_id is null or customer_id ='' or customer_id ='0'  order by customer_id desc, report_modifydate desc;";
-        $reportArr = $db->fetchAll($sql);
+        //$sql = "select * from csd_customer_report where customer_id='" . Service_User::getCustomerId() . "' or customer_id is null or customer_id ='' or customer_id ='0'  order by customer_id desc, report_modifydate desc;";
+        //$reportArr = $db->fetchAll($sql);
         // 遍历自定义模板,比较列序号与列名
-        foreach($reportArr as $report){
+       /*  foreach($reportArr as $report){
             // 按照序号排列
             $sql = "select * from csd_customer_reportcolumn  where  report_id='{$report['report_id']}' order by column_id asc;";
             $reportcolumn = $db->fetchAll($sql);
@@ -204,17 +204,17 @@ class Process_OrderUploadUserTemplate extends Process_OrderUpload
                 break;
             }
              
-        }
+        } */
         if(! $report_id){
             // 取标准模板列
-            $sql = "SELECT sc_no,sc_name FROM `csd_standard_column` order by sc_no asc";
+           /*  $sql = "SELECT sc_no,sc_name FROM `csd_standard_column` order by sc_no asc";
             $reportcolumn = $db->fetchAll($sql);
             $reportcolumnArr = array();
             foreach($reportcolumn as $v){
                 $reportcolumnArr[$v['sc_no']] = $v['sc_name'];
             }
             
-            $diff = array_diff_assoc($header, $reportcolumnArr);
+            $diff = array_diff_assoc($header, $reportcolumnArr); */
 //             print_r($header);
 //             print_r($reportcolumnArr);
 //             print_r($diff);exit;
@@ -263,6 +263,9 @@ class Process_OrderUploadUserTemplate extends Process_OrderUpload
             //print_r($fileData);exit;
             if(empty($fileData)){
                 throw new Exception(Ec::Lang('文件中必须包含有内容'));
+            }
+        	if(count($fileData)>500){
+                throw new Exception(Ec::Lang('当前批量导入仅支持400条数据，请拆分多个文件分批导入'));
             }
             $clone = $fileData;
             

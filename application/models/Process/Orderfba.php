@@ -236,8 +236,9 @@ class Process_Orderfba
         	$this->_err[] = Ec::Lang('箱数不可为空');
         }else{
         	//                     print_r($invoice);exit;
-        	if(! is_numeric($this->_order['boxnum'])){
-        		$this->_err[] = Ec::Lang('箱数必须为整数');
+        	if(!preg_match("/^[1-9]\d*$/",$this->_order['boxnum']))
+        	{
+        		$this->_err[] = Ec::Lang('箱数必须为大于0整数');
         	}
         }
         

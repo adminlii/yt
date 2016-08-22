@@ -1055,6 +1055,7 @@ class Order_OrderController extends Ec_Controller_Action
     {
         $this->view->productKind = Process_ProductRule::getProductKind();
         if($this->getRequest()->isPost()){
+        	
             set_time_limit(0);
             ini_set('memory_limit', '1024M');
             $return = array(
@@ -1071,11 +1072,12 @@ class Order_OrderController extends Ec_Controller_Action
             $ansych = $this->getParam('ansych', '');
 //                 print_r($country_map);exit;
             $file = $_FILES['fileToUpload'];
-            //print_r($file);
             $process = new Process_OrderUploadUserTemplate();
             //设置默认发件人
-            if($shipper_account)
-                $process->setDefaultShipperAccount($shipper_account);
+            if($shipper_account){
+            	
+            }
+                //$process->setDefaultShipperAccount($shipper_account);
             //$process->setCountryMap($country_map);
             
             if($file && $file['tmp_name'] && $file['size'] > 0 && empty($file['error'])) {
@@ -1084,6 +1086,7 @@ class Order_OrderController extends Ec_Controller_Action
             		$result = $process->importByAsynchTransaction($file);
             	} else {
             		// 及时提交并返回结果
+            		//echo microtime_float().'<br>';
                 	$result = $process->importTransaction($file);
             	}
             }else{

@@ -743,8 +743,8 @@ class Process_OrderUpload extends Process_Order
                  $this->_errArr[] = Ec::Lang('收件人地址不可为空');
              }
             //验证国家是否存在,通过标准国家二字码与客户自定义国家映射
-            $v['shipper_countrycode'] = $this->_checkCountryExist($v['shipper_countrycode']);  //修改从excel读取到的原始数据  
-            $fileData[$k][$map_flip['shipper_countrycode']] = $v['shipper_countrycode'];
+            //$v['shipper_countrycode'] = $this->_checkCountryExist($v['shipper_countrycode']);  //修改从excel读取到的原始数据  
+            //$fileData[$k][$map_flip['shipper_countrycode']] = $v['shipper_countrycode'];
             $shipper = array(
                     // 'shipper_account' => $v['shipper_account'],
                     'shipper_name' => $v['shipper_name'],
@@ -764,7 +764,7 @@ class Process_OrderUpload extends Process_Order
                     'shipper_mallaccount' => $v['shipper_mallaccount']
             );
              //print_r($shipper);die;
-            if(empty($shipper['shipper_name'])||empty($shipper['shipper_street'])){//excel中的发件人未填写，取默认发件人
+            /* if(empty($shipper['shipper_name'])||empty($shipper['shipper_street'])){//excel中的发件人未填写，取默认发件人
 //                 print_r($this->_default_shipper_account);exit;
                 if($this->_default_shipper_account){
                     $shipperArr = Service_CsiShipperTrailerAddress::getByField($this->_default_shipper_account, 'shipper_account');
@@ -773,7 +773,7 @@ class Process_OrderUpload extends Process_Order
 //                         print_r($shipper);exit;
                     }                    
                 }
-            }
+            } */
             
             $invoice = array();
             
@@ -860,6 +860,7 @@ class Process_OrderUpload extends Process_Order
             $data['volume']  =$volume;
             $dataArr[$k] = $data;
         }
+        unset($fileDataFormat);
         foreach($dataArr as $k=>$data){
             $process = new Process_Order();
             try{
@@ -933,10 +934,13 @@ class Process_OrderUpload extends Process_Order
         }
         $this->_formatArr = $fileDataFormat;
         $dataArr = array();
+        //echo microtime_float().'<br>';
+        //print_r($fileDataFormat);//die;
+        $huilvres = Common_DataCache::getHuilv();
         foreach($fileDataFormat as $k => $v){
             $data = array();
             //验证国家是否存在,通过标准国家二字码与客户自定义国家映射
-            $v['country_code'] = $this->_checkCountryExist($v['country_code']);
+            //$v['country_code'] = $this->_checkCountryExist($v['country_code']);
             //修改从excel读取到的原始数据
             $fileData[$k][$map_flip['country_code']] = $v['country_code'];
             $v['mail_cargo_type']=$v['mail_cargo_type']=="文件"?3:4;
@@ -1008,8 +1012,8 @@ class Process_OrderUpload extends Process_Order
                 'consignee_certificatecode'=>'',
             );
             //验证国家是否存在,通过标准国家二字码与客户自定义国家映射
-            $v['shipper_countrycode'] = $this->_checkCountryExist($v['shipper_countrycode']);  //修改从excel读取到的原始数据
-            $fileData[$k][$map_flip['shipper_countrycode']] = $v['shipper_countrycode'];
+            //$v['shipper_countrycode'] = $this->_checkCountryExist($v['shipper_countrycode']);  //修改从excel读取到的原始数据
+           // $fileData[$k][$map_flip['shipper_countrycode']] = $v['shipper_countrycode'];
             //拼接收件人地址
             $shipperStree = $v['shipper_street1'];
             $shipperStree.=empty($v['shipper_street2'])?'':'||'.$v['shipper_street2'];
@@ -1033,7 +1037,7 @@ class Process_OrderUpload extends Process_Order
                 'shipper_mallaccount' => $v['shipper_mallaccount']
             );
             //print_r($shipper);die;
-            if(empty($shipper['shipper_name'])||empty($shipper['shipper_street'])){//excel中的发件人未填写，取默认发件人
+            /* if(empty($shipper['shipper_name'])||empty($shipper['shipper_street'])){//excel中的发件人未填写，取默认发件人
                 //                 print_r($this->_default_shipper_account);exit;
                 if($this->_default_shipper_account){
                     $shipperArr = Service_CsiShipperTrailerAddress::getByField($this->_default_shipper_account, 'shipper_account');
@@ -1042,7 +1046,7 @@ class Process_OrderUpload extends Process_Order
                         //                         print_r($shipper);exit;
                     }
                 }
-            }
+            } */
     
             $invoice = array();
             $labelArr = array();
@@ -1139,7 +1143,7 @@ class Process_OrderUpload extends Process_Order
       
                     //计算保险金额
                     if($v['extraservice1']=='是'){
-                    	$huilvres = Common_DataCache::getHuilv();
+                    	
                     	//huobi
                         $hv  = $huilvres['USD'];
                         if($order["product_code"]=="G_DHL"){
@@ -1192,6 +1196,7 @@ class Process_OrderUpload extends Process_Order
             $data['label']  =$labelArr;
             $dataArr[$k] = $data;
         }
+        unset($fileDataFormat);
         //print_r($dataArr);die;
         foreach($dataArr as $k=>$data){
             $process = new Process_OrderDhl();
@@ -1214,6 +1219,8 @@ class Process_OrderUpload extends Process_Order
                 $status = 'P';
     
                 // 当为单个提交时调用事务方法
+                //echo microtime_float().'<br>';
+               // var_dump($singleCommitFlag);die;
                 if($singleCommitFlag) {
                     // 创建订单
                     $return = $process->createOrderTransaction($status);
@@ -1223,6 +1230,8 @@ class Process_OrderUpload extends Process_Order
                 } else {
                     // 创建订单
                     $process->createOrder($status,true);
+
+                    //echo microtime_float().'<br>';die;
                 }
                 $this->_successArr[$k] = $fileData[$k];
             }catch(Exception $ee){
