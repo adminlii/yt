@@ -266,8 +266,8 @@ class Process_Order
         if(empty($this->_shipper)){
             $this->_err[] = Ec::Lang('发件人信息不可为空');
         }else{
-            if($this->_shipper['shipper_countrycode'] === ''){
-                // $this->_err[] = Ec::Lang('发件人国家不可为空');
+            if(empty($this->_shipper['shipper_countrycode'])){
+                $this->_err[] = Ec::Lang('发件人国家不可为空');
             }else{
                  //$country = Service_IddCountry::getByField($this->_shipper['shipper_countrycode'], 'country_code');
                 $country = $this->_getCountry($this->_shipper['shipper_countrycode']);
@@ -278,7 +278,7 @@ class Process_Order
                 }
             }
             if($this->_shipper['shipper_name'] === ''){
-                // $this->_err[] = Ec::Lang('发件人姓名不可为空');
+                 $this->_err[] = Ec::Lang('发件人姓名不可为空');
             }else if(!preg_match('/^[a-zA-Z\s]+$/',$this->_shipper['shipper_name'])){
             		$this->_err[] = "发件人姓名不可为非英文";
             }
@@ -288,7 +288,7 @@ class Process_Order
             	}
             }
             if($this->_shipper['shipper_street'] === ''){
-                // $this->_err[] = Ec::Lang('发件人地址不可为空');
+                $this->_err[] = Ec::Lang('发件人地址不可为空');
             }
         }
         
@@ -554,7 +554,7 @@ class Process_Order
                     }
                 }
                 if($invoice['invoice_cnname'] === ''){
-                    //$this->_err[] = "(" . Ec::Lang('申报信息') . $k . ")" . Ec::Lang('中文申报品名不可为空');
+                    $this->_err[] = "(" . Ec::Lang('申报信息') . $k . ")" . Ec::Lang('中文申报品名不可为空');
                 }
                 if($invoice['invoice_quantity'] === ''){
                     $this->_err[] = "(" . Ec::Lang('申报信息') . $k . ")" . Ec::Lang('申报数量不可为空');
@@ -563,7 +563,7 @@ class Process_Order
                         $this->_err[] = "(" . Ec::Lang('申报信息') . $k . ")" . Ec::Lang('申报数量必须为大于0的整数');
                     }
                 }
-                if($invoice['invoice_unitcharge'] === ''){
+                if(empty($invoice['invoice_unitcharge'])){
                     $this->_err[] = "(" . Ec::Lang('申报信息') . $k . ")" . Ec::Lang('申报单价不可为空');
                 }else{
 //                     print_r($invoice);exit;
@@ -576,17 +576,18 @@ class Process_Order
                     }
                 }
                 if($invoice['invoice_weight'] === ''){
-                	//$this->_err[] = "(" . Ec::Lang('申报信息') . $k . ")" . Ec::Lang('申报重量不可为空');
+                	$this->_err[] = "(" . Ec::Lang('申报信息') . $k . ")" . Ec::Lang('申报重量不可为空');
                 }else{
                 	//                     print_r($invoice);exit;
                 	if(! is_numeric($invoice['invoice_weight'])){
-                		//$this->_err[] = "(" . Ec::Lang('申报信息') . $k . ")" . Ec::Lang('申报重量必须为数字');
+                		$this->_err[] = "(" . Ec::Lang('申报信息') . $k . ")" . Ec::Lang('申报重量必须为数字');
                 	}
                 }
                 
                 if(!$invoice['invoice_note']){
-                	if(preg_match('/^NZ.*$/',$this->_order['product_code'])&&empty($invoice['sku'])){
-                		$this->_err[] = "(" . Ec::Lang('SKU') . $k . ")" . Ec::Lang('当选择赛城专线时SKU不可为空');
+                	$saichengProduct = Common_Common::getProductAllSaicheng(1);
+                	if(in_array($this->_order['product_code'], $saichengProduct)&&empty($invoice['sku'])){
+                		$this->_err[] = Ec::Lang("当前渠道：sku{$k}必填");
                 	}
                 }
             }

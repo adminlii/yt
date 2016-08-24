@@ -99,10 +99,12 @@ class Order_OrderListController extends Ec_Controller_Action
 			if($condition['order_status']!="F"){
 				//如果搜索ESB 和ESBR要合并
 				if($condition['product_code']=="ESBR"){
-					$condition['product_code_arr'] =array("ESBR","NZ_LZ");
+					$saichengProduct = Common_Common::getProductAllSaicheng();
+					$condition['product_code_arr'] =array_merge(array("ESBR"),$saichengProduct['ESBR']);
 					unset($condition['product_code']);
 				}else if($condition['product_code']=="ESB"){
-					$condition['product_code_arr'] =array("ESB","NZ_DP");
+					$saichengProduct = Common_Common::getProductAllSaicheng();
+					$condition['product_code_arr'] =array_merge(array("ESB"),$saichengProduct['ESB']);
 					unset($condition['product_code']);
 				}
 				$count = Service_CsdOrder::getByCondition($condition, 'count(*)');
@@ -273,7 +275,7 @@ class Order_OrderListController extends Ec_Controller_Action
         $this->view->countryArr = $countryArr;
 		$productKind = Process_ProductRule::getProductKind();
 		foreach ($productKind as $prok => $prov){
-			if(in_array($prov['product_code'], array("NZ_LZ","NZ_DP"))){
+			if(!in_array($prov['product_code'], array("ESB","ESBR","G_DHL"))){
 				unset($productKind[$prok]);
 			}
 		}

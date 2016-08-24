@@ -941,4 +941,21 @@ class Common_Common
     	$code = $fromcode.$countrycode;
     	return isset($temp[$code])?$temp[$code]:false;
     }
+    
+    //获取赛程渠道的产品号
+	public static function getProductAllSaicheng($All=false){
+    	$config = new Zend_Config_Ini(APPLICATION_PATH . '/configs/product.ini', APPLICATION_ENV);
+    	$temp   = $config->ascode->channel->toArray();
+    	$return = array();
+    	foreach ($temp as $k =>$v){
+    		if(strpos($k,'ESBR')===false){
+    			$return['ESB'][] = $v;
+    		}else 
+    			$return['ESBR'][] = $v;
+    	}
+    	if($All){
+    		$return = array_merge($return['ESB'],$return['ESBR']);
+    	}
+    	return $return;
+    }
 }

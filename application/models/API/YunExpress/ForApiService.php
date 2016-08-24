@@ -202,7 +202,7 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
     public function createAndPreAlertOrderService($data = array()) {
     	//$url = $this->_orderOnline . "/api/Order/PacketOrder";
 		//$url = "http://test.hwcservice.com/ChinaPost/Api/Order/PacketOrder";
-		$url = "http://112.126.68.251:8088/v3/api/Order/PacketOrder";
+		$url = "http://112.126.68.251:8088/v4/api/Order/PacketOrder";
 		$result = $this->excuteService($url, json_encode($data), "POST");
 		header("Content-type: text/html; charset=utf-8");
     
@@ -216,7 +216,7 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
      */
     public function PreAlertOrderService($sendParams = array()) {
     	//$url = "http://test.hwcservice.com/ChinaPost/Api/LabelPrintService/PrintTomsLabel?type=json";
-    	$url = "http://112.126.68.251:8088/v3/api/LabelPrintService/PrintTomsLabel?type=json";
+    	$url = "http://112.126.68.251:8088/v4/api/LabelPrintService/PrintTomsLabel?type=json";
     	$sendParams = json_encode($sendParams);
     	$header =array("Content-Type:application/json; charset=utf-8");
     	$result = $this->curl_send($url,$sendParams,$header,"post","tmsuser:1234567890");
@@ -1153,7 +1153,7 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
                 //$serve_code = $param['server_hawbcode'];
                 $TrackingNumber = $param["server_code"];
                 $ChannelName	= $param["channel"]; 	
-                $url = "http://test.hwcservice.com/ChinaPost/Api/TrackingService/QueryTrackingStatus?type=json";
+                $url = "http://112.126.68.251:8088/v4/api/TrackingService/QueryTrackingStatus?type=json";
                 $sendParams = array(
                 	"data"=>array("TrackingNumber"=>$TrackingNumber,"ChannelName"=>$ChannelName),
            			"RequestId"=>null,
@@ -1162,7 +1162,7 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
                 );
                 $sendParams = json_encode($sendParams);
                 $header =array("Content-Type:application/json; charset=utf-8");
-                $result = $this->curl_send($url,$sendParams,$header,"post","tmsuser:123456");
+                $result = $this->curl_send($url,$sendParams,$header,"post","tmsuser:1234567890");
                 if(is_array($result)){
                     $return['ack'] = -2;
                     $return["message"]=$result['error'];
@@ -1202,7 +1202,7 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
     				$return['ack'] = -2;
     				$return["message"]=$result['error'];
     				break;
-    			}else if(empty($result)){
+    			}else if(empty($result)||$result=='null'){
     				$return['ack'] = -3;
     				$return["message"]="没有接受到任何信息";
     				break;

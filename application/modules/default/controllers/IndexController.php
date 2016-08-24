@@ -180,6 +180,7 @@ class Default_IndexController extends Ec_Controller_DefaultAction
      */
     public function getTrackDetailAction()
     {
+    	set_time_limit(0);
         $userAuth = new Zend_Session_Namespace('userAuthorization');
         try{
             $errMsg = '';
@@ -210,17 +211,20 @@ class Default_IndexController extends Ec_Controller_DefaultAction
                 // print_r($order_code);exit;
                 if(empty($order_code) || ! is_array($order_code)){
                     throw new Exception(Ec::Lang('至少需要一个单号'));
+                }else if(count($order_code)>20){
+                	throw new Exception(Ec::Lang('最多支持20个单号一起查询'));
                 }else{
                     $rsArr = array();
                     foreach($order_code as $server_hawbcode){
                         $rs = Process_Track::getTrackDetail($server_hawbcode);
+                        
                         //调取信息
                         if($rs['ask']){
+                        	$_server_hawbcode = $rs['data']['server_hawbcode'];
+                        	 
                         	$obj  = 	new API_YunExpress_ForApiService();
                         	//插入头程
-                        	//测试用线上删除
-                        	$server_hawbcode1 = "BZ001452877US";
-                        	$gettrackDetail_rs = $obj->gettrackDetail(2,array("server_code"=>$server_hawbcode1));
+                        	$gettrackDetail_rs = $obj->gettrackDetail(2,array("server_code"=>$_server_hawbcode));
                         	if($gettrackDetail_rs['ack']==1){
                         		$data = Common_Common::xml_to_array($gettrackDetail_rs['data']);
                         		
@@ -238,24 +242,19 @@ class Default_IndexController extends Ec_Controller_DefaultAction
                         	}
                         	//根据订单获取渠道号
                         	//不直接插最简单的order_prossing 找渠道 是因为没有给他设置索引
-                        	$orderinfo = Service_CsdOrder::getByField($server_hawbcode,$rs['code_type']);
-                        	if(empty($orderinfo))
-                        		continue;
-							if($orderinfo["product_code"] == "NZ_CP" || $orderinfo["product_code"] == "NZ_DP" || $orderinfo["product_code"] == "NZ_LZ"){
-								$channelid = 1;  //NZ_CP，NZ_DP，NZ_LZ对应渠道SAICHENG
-							}else if ($orderinfo["product_code"] =="TNT"){
-								$channelid = 73;
+                        	//$orderinfo = Service_CsdOrder::getByField($server_hawbcode,$rs['code_type']);
+                        	/* if(empty($orderinfo))
+                        		continue; */
+							if($rs['code_type']=='FBA'){
+								$_server_hawbcode = $rs['data']['shipper_hawbcode'];
+								$rs['data']['country_code'] = $rs['data']['consignee_countrycode'];
+								$rs['data']['consignee_name'] = $rs['data']['storage'];
+								$channcel = "YunTu";
 							}else{
-								$channelid = 2;  //G_DHL对应渠道DHL
+								$codeType = Common_Common::getProductAllByCode($rs['data']['product_code']);
+								$channcel = $codeType['ccode'];
 							}
-							$sql = "select sc.formal_code from csi_servechannel sc where sc.server_channelid = {$channelid}";
-							$db = Common_Common::getAdapterForDb2();
-							$channcel = $db->fetchRow($sql);
-							$channcel  = $channcel["formal_code"];
-                        	//测试用线上删除
-                        	$server_hawbcode = "61299992140425388429";
-                        	$channcel = "Fedex";
-                        	$gettrackDetail_rs = $obj->gettrackDetail(1,array("server_code"=>$server_hawbcode,"channel"=>$channcel));
+                        	$gettrackDetail_rs = $obj->gettrackDetail(1,array("server_code"=>$_server_hawbcode,"channel"=>$channcel));
                         	if($gettrackDetail_rs['ack']==1){
                         		$data = json_decode($gettrackDetail_rs['data'],1);
                         		//头插入
@@ -265,6 +264,12 @@ class Default_IndexController extends Ec_Controller_DefaultAction
                         			$rs['data']['detail'] = array_merge(array_reverse($tracklist),$rs['data']['detail']);
                         		}
                         	}
+                        }
+                        if(is_array($rs['data']['detail'])&&count($rs['data']['detail'])>0){
+                        	$lastDetail = end($rs['data']['detail']);
+                        	$rs['data']['new_track_date'] = $lastDetail['Datetime'];
+                        	$rs['data']['new_track_location'] = $lastDetail['Location'];
+                        	$rs['data']['new_track_comment'] = $lastDetail['Info'];
                         }
                         $rsArr[] = $rs;
 

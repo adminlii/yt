@@ -37,7 +37,7 @@ $(function(){
 		<tbody>
 			<tr class="table-module-title">
 				<td width="175"><{t}>服务商单号<{/t}></td>
-				<!-- <td width="165"><{t}>客户单号<{/t}></td> -->
+				<td width="165"><{t}>客户单号<{/t}></td>
 				<td><{t}>目的地<{/t}></td>
 				<td><{t}>收件人<{/t}></td>
 				<td width="135"><{t}>发生时间<{/t}></td>
@@ -50,11 +50,11 @@ $(function(){
 			<{if $rsArr}> <{foreach from=$rsArr name=rs_data item=rs_data}> <{if $rs_data.ask}> <{$rs = $rs_data.data}>
 			<tr class="table-module-b1">
 				<td><{$rs.server_hawbcode}></td>
-				<!-- 
+				 
 				<td><{$rs.shipper_hawbcode}></td>
-				 -->
+				 
 				<td><{$rs.country_code}></td>
-				<td><{$rs.signatory_name}></td>
+				<td><{$rs.consignee_name}></td>
 				<td><{$rs.new_track_date}></td>
 				<td><{$rs.new_track_location}></td>
 				<td><{$rs.new_track_comment}></td>

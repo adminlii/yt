@@ -12,49 +12,33 @@ class Process_Track
         $return['code_type']="server_hawbcode";
         try{
             $userId = Service_User::getUserId();
-            $result = Service_TakTrackingbusiness::getByField($server_hawbcode, 'server_hawbcode');
-            if(! $result){
-            	$result = Service_TakTrackingbusiness::getByField($server_hawbcode, 'shipper_hawbcode');
-	            if(! $result){
-	                throw new Exception(Ec::Lang('服务商跟踪号不存在'));
-	            }else{
-	            	$return['code_type']="shipper_hawbcode";
-	            }
-            }
-            if(empty($result["server_hawbcode"])){
+            $result = Service_CsdOrder::getByCondition(array("server_hawbcode"=>$server_hawbcode));
+            if(! $result[0]){
+            	$result = Service_CsdOrder::getByCondition(array("shipper_hawbcode"=>$server_hawbcode));
+            	if(! $result[0]){
+            		
+            		//查询fba
+            		$result = Service_CsdOrderfba::getByCondition(array("shipper_hawbcode"=>$server_hawbcode));
+            		if(!$result[0]){
+            			throw new Exception(Ec::Lang('服务商跟踪号不存在'));
+            		}else{
+            			$return['code_type'] = 'FBA';
+            		}
+            		
+            	}else{
+            		$return['code_type']="shipper_hawbcode";
+            	}
+            }else{
+            	$return['code_type']="server_hawbcode";
+            }   
+            if($return['code_type']=="server_hawbcode"&&empty($result[0]["server_hawbcode"])){
             	throw new Exception(Ec::Lang('服务商跟踪号不存在或未预报成功'));
             }
-            $con_detail = array(
-                'tbs_id' => $result['tbs_id']
-            );
-            if(!$userId){//未登录客户过滤条件
-                $con_detail['show_sign'] = 'Y';
-            }
-            
-            // TODO DB2
-            $db2 = Common_Common::getAdapterForDb2();
-            
-            $result_detail = Service_TakTrackdetails::getByCondition($con_detail, '*', 0, 1, "track_occur_date desc");
-            foreach($result_detail as $k=>$v){
-                $attach = Service_TakTrackattach::getByField($v['trk_id'],'trk_id');
-                $v['track_description'] = $attach['track_description'];
-                $v['track_description_en'] = $attach['track_description_en'];						
-                if($v['track_code']){
-                	$sql = "select * from tak_trackcode where track_code='{$v['track_code']}'";
-//                 	echo $sql;exit;
-					$row = $db2->fetchRow($sql);
-					if($row){
-                		$v['track_description'] = $row['track_cnname'];						
-                		$v['track_description_en'] = $row['track_enname'];						
-					}
-                }
-                $result_detail[$k] = $v;
-            }
-            $result['detail'] = $result_detail;
+            $result[0]['detail'] = array();
             
             $return['ask'] = 1;
             $return['message'] = Ec::Lang('获取跟踪信息完毕');
-            $return['data'] = $result;
+            $return['data'] = $result[0];
         }catch(Exception $e){
             $return['message'] = $e->getMessage();
         }

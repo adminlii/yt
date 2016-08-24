@@ -295,9 +295,20 @@ class Process_OrderDhl
             	if(!preg_match('/^[a-zA-Z\s]+$/',$this->_shipper['shipper_city'])){
             		$this->_err[] = "发件人城市不可为非英文";
             	}
+            }else{
+            	$this->_err[] = Ec::Lang('发件人城市不可为空');
             }
             if(!$this->_shipper['shipper_street']){
                  $this->_err[] = Ec::Lang('发件人地址不可为空');
+            }
+            if(!$this->_shipper['shipper_company']){
+            	$this->_err[] = Ec::Lang('发件人公司不可为空');
+            }
+            if(!$this->_shipper['shipper_telephone']){
+            	$this->_err[] = Ec::Lang('发件人电话不可为空');
+            }
+            if(empty($this->_shipper['shipper_postcode'])){
+            	$this->_err[] = Ec::Lang('发件人邮编不可为空');
             }
         }
         
@@ -376,6 +387,12 @@ class Process_OrderDhl
             }
             if(empty($this->_consignee['consignee_postcode'])){
             	$this->_err[] = Ec::Lang('收件人邮编不可为空');
+            }
+            if(empty($this->_consignee['consignee_postcode'])){
+            	$this->_err[] = Ec::Lang('收件人邮编不可为空');
+            }
+            if(empty($this->_consignee['consignee_company'])){
+            	$this->_err[] = Ec::Lang('收件人公司不可为空');
             }
         }
         
