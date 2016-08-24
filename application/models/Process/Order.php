@@ -371,45 +371,65 @@ class Process_Order
         
         
         if($this->_order['order_weight'] !== ''){
-            if(! is_numeric($this->_order['order_weight'])){
-                $this->_err[] = Ec::Lang('货物重量必须为数字');
+        	if(!preg_match("/(^0\.\d{0,3}$)|(^[1-9]\d*(\.\d{0,3})?$)/",$this->_order['order_weight'])){
+                $this->_err[] = Ec::Lang('货物重量须为数字,最多3位小数');
             }else{
             	//赛程小包
                 if($this->_order['product_code'] =='NZ_LZ'){
                     if($this->_order['order_weight']>3){
                         $this->_err[] = Ec::Lang('货物重量必须小于等于3kg');
                     }
-                }else if($this->_order['product_code'] =='ESB'){
-                    if(!preg_match("/(^0\.\d{0,3}$)|(^[1-9]\d*(\.\d{0,3})?$)/",$this->_order['order_weight'])){
-                        $this->_err[] = Ec::Lang('货物重量须为数字,最多3位小数');
-                    }else{
-                    	if($this->_order['order_weight']>2)
-                    		$this->_err[] = Ec::Lang('货物重量必须小于等于2kg');
-                    }
-                }else if($this->_order['product_code'] =='ESBR'){
-                	if(!preg_match("/(^0\.\d{0,3}$)|(^[1-9]\d*(\.\d{0,3})?$)/",$this->_order['order_weight'])){
-                		$this->_err[] = Ec::Lang('货物重量须为数字,最多3位小数');
-                	}else{
-                		if($this->_consignee['consignee_countrycode']){
-                			if( in_array($this->_consignee['consignee_countrycode'], array('AT'))){
-                				if($this->_order['order_weight']>20)
-                					$this->_err[] = Ec::Lang('货物重量必须小于等于20kg');
-                			}else if($this->_consignee['consignee_countrycode']=='GB'){
-                				if($this->_order['order_weight']>15)
-                					$this->_err[] = Ec::Lang('货物重量必须小于等于15kg');
-                			}else{
-                				if($this->_order['order_weight']>30)
-                					$this->_err[] = Ec::Lang('货物重量必须小于等于30kg');
-                			}
-                	
-                	
-                		}
-                		 
-                		 
+                }else if($this->_order['product_code'] =='AU_LZ'){
+                	if($this->_order['order_weight']>2){
+                		$this->_err[] = Ec::Lang('货物重量必须小于等于2kg');
                 	}
+                }else if($this->_order['product_code'] =='ESB'){
+                    if($this->_order['order_weight']>2)
+                    		$this->_err[] = Ec::Lang('货物重量必须小于等于2kg');
+                }else if($this->_order['product_code'] =='ESBR'){
+                	
+                	if($this->_consignee['consignee_countrycode']){
+                		if($this->_consignee['consignee_countrycode']=='GB'){
+                			if($this->_order['order_weight']>15)
+                				$this->_err[] = Ec::Lang('货物重量必须小于等于15kg');
+                		}else {
+                			if($this->_order['order_weight']>30)
+                				$this->_err[] = Ec::Lang('货物重量必须小于等于30kg');
+                		}
+                	
+                
+                	}
+                }else if($this->_order['product_code'] =='AU_DP'){
+                	if($this->_order['order_weight']>20)
+                		$this->_err[] = Ec::Lang('货物重量必须小于等于20kg');
+                	
+                }else if($this->_order['product_code'] =='NZ_DP'){
+                	if($this->_order['order_weight']>25)
+                		$this->_err[] = Ec::Lang('货物重量必须小于等于25kg');
+                	
+                }else if($this->_order['product_code'] =='MY_DP'){
+                	if($this->_order['order_weight']>50)
+                		$this->_err[] = Ec::Lang('货物重量必须小于等于50kg');
+                	
+                }else if($this->_order['product_code'] =='SG_DP'){
+                	if($this->_order['order_weight']>50)
+                		$this->_err[] = Ec::Lang('货物重量必须小于等于50kg');
+                	
+                }else if($this->_order['product_code'] =='TH_DP'){
+                	if($this->_order['order_weight']>50)
+                		$this->_err[] = Ec::Lang('货物重量必须小于等于50kg');
+                	
+                }else if($this->_order['product_code'] =='VN_DP'){
+                	if($this->_order['order_weight']>50)
+                		$this->_err[] = Ec::Lang('货物重量必须小于等于50kg');
+                	
+                }else if($this->_order['product_code'] =='ID_DP'){
+                	if($this->_order['order_weight']>50)
+                		$this->_err[] = Ec::Lang('货物重量必须小于等于50kg');
+                	
                 }else {
-                	if($this->_order['order_weight']>25){
-                		$this->_err[] = Ec::Lang('货物重量必须小于等于25KG');
+                	if($this->_order['order_weight']>30){
+                		$this->_err[] = Ec::Lang('货物重量必须小于等于30KG');
                 	}
                 }
             	/* if(!preg_match("/(^0\.[5-9]$)|(^[1-9]+(\.?\d?)$)/",$this->_order['order_weight'])){
