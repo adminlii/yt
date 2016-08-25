@@ -223,8 +223,10 @@ class Table_CsdOrderfba
         $select->from($table, $type);
         if($type == 'count(*)'){
             $select->joinInner('csd_shipperconsigneefba', $table . '.order_id = csd_shipperconsigneefba.order_id', null);
+            $select->joinInner('storage_store', 'storage_store.storage = csd_shipperconsigneefba.storage', null);
         }else{
             $select->joinInner('csd_shipperconsigneefba', $table . '.order_id = csd_shipperconsigneefba.order_id', '*');
+            $select->joinInner('storage_store', 'storage_store.storage = csd_shipperconsigneefba.storage','*');
         }
         
         $select->where("1 =?", 1);

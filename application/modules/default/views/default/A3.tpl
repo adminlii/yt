@@ -34,7 +34,7 @@
     		<td>Facility Code / 分拣代码</td>
     	</tr>
     	<tr class="bold">
-    		<td><{$o.country_three_code}> <{$o.country_cnname}></td>
+    		<td><{$o.country_three_code}> <{$o.country_cnname}><{$o.descript}></td>
     		<td>FYYXGA</td>
     	</tr>
     	<tr>
