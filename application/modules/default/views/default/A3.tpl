@@ -23,7 +23,7 @@
 <body>	
 	<{foreach from=$data  name=o item=o}>
 	
-		<{foreach from=$o.codeArr  name=ol item=ol}>
+		<{foreach from=$o.codeArr key=k name=ol item=ol}>
 		<div class="warpdiv">
 		<table cellspacing="0" cellspadding="0" border="0">
     	<tr class="bold">
@@ -58,8 +58,8 @@
                 </ul>
             </td>
         </tr>
-        <tr>
-            <td colspan="2"></td>
+        <tr class="bold" >
+            <td colspan="2" style="font-weight: normal"><{$o.firstCode}>-<{$o.lastCode}>(<{$k+1}>/<{$o.boxnum}>)</td>
         </tr>
         <tr>
             <td class="txtRt" colspan="2"><{$o.create_date}></td>

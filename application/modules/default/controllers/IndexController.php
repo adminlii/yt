@@ -266,7 +266,7 @@ class Default_IndexController extends Ec_Controller_DefaultAction
                         	}
                         }
                         if(is_array($rs['data']['detail'])&&count($rs['data']['detail'])>0){
-                        	$lastDetail = end($rs['data']['detail']);
+                        	$lastDetail = $rs['data']['detail'][0];
                         	$rs['data']['new_track_date'] = $lastDetail['Datetime'];
                         	$rs['data']['new_track_location'] = $lastDetail['Location'];
                         	$rs['data']['new_track_comment'] = $lastDetail['Info'];
@@ -1035,6 +1035,8 @@ class Default_IndexController extends Ec_Controller_DefaultAction
     					$order['codeArr'][] =  "AS".change_no($shipper_hawbcode)."CN";
     				}
     			}
+    			$order['firstCode'] = $order['codeArr'][0];
+    			$order['lastCode'] =end($order['codeArr']);
     			$result[] = $order;
     		}
     		$this->view->data = $result;
