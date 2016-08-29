@@ -98,7 +98,7 @@ width: 100px;
     				<td><p><i>*</i>箱数 : </p><input type="text" name="order[boxnum]" style="width:50%;"/></td>
     			
 		
-    				<td><p><i>*</i>上传装箱单 : </p><input type="file" id="invoicelist" name="invoicelist" style="width:60%;"/><button id='upid' type="button">上传</button><span style="margin-left: 2%;"><a href="/file/装箱单模板.xls" target="_blank">模板下载</a></span> </td>
+    				<td><p><i>*</i>上传装箱单 : </p><input type="file" id="invoicelist" name="invoicelist" style="width:60%;"/><button id='upid' type="button">上传</button><span style="margin-left: 2%;"><a href="/file/装箱单模板.xlsx" target="_blank">模板下载</a></span> </td>
     				<input type = 'hidden' name = "invoicelistrel" id="invoicelistrel"/>
     			</tr>
                 <tr>
@@ -134,12 +134,16 @@ width: 100px;
     				
     			</tr>
     			<tr>
-    				<td><p>省/州 : </p><input type="text" name="consignee[consignee_province]"/></td>
-    				<td><p>邮编 : </p><input type="text" name="consignee[consignee_postcode]"/></td>
+    				<td><p>省/州 : </p><input disabled=true type="text" id="consignee_province"/></td>
+    				<input type="hidden" name="consignee[consignee_province]"/>
+    				<td><p>邮编 : </p><input disabled=true type="text" id="consignee_postcode"/></td>
+    				<input type="hidden" name="consignee[consignee_postcode]"/>
     			</tr>
     			<tr>
-    				<td><p>城市 : </p><input type="text"  name="consignee[consignee_city]"/></td>
-    				<td><p>地址 : </p><input type="text" name="consignee[consignee_street]"/></td>
+    				<td><p>城市 : </p><input disabled=true type="text"  id="consignee_city"/></td>
+    				<input type="hidden" name="consignee[consignee_city]"/>
+    				<td><p>地址 : </p><input disabled=true type="text" id="consignee_street"/></td>
+    				<input type="hidden" name="consignee[consignee_street]"/>
     			</tr>
 
     		</table>
@@ -366,9 +370,13 @@ $(function(){
 				      $("input[name='consignee[consignee_countrycode]']").val(json.data.country);
 	                  $("#consignee_countrycode").val(json.data.country);
 	                  $("input[name='consignee[consignee_province]']").val(json.data.state);
+	                  $("#consignee_province").val(json.data.state);
 	                  $("input[name='consignee[consignee_city]']").val(json.data.city);
+	                  $("#consignee_city").val(json.data.city);
 	                  $("input[name='consignee[consignee_postcode]']").val(json.data.zip);
+	                  $("#consignee_postcode").val(json.data.zip);
 	                  $("input[name='consignee[consignee_street]']").val(json.data.stree);
+	                  $("#consignee_street").val(json.data.stree);
 				    }
 			   }
 			}); 

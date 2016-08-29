@@ -19,6 +19,7 @@
     			<!--<label class="fpx-label-input-label" for="pdf">PDF</label>-->
     			 
 			</div>
+			<!--
 			<div>
 				打印类型： <input type="radio" checked="checked" id="label" value="1"
 					name="LablePaperType"> <label class="fpx-label-input-label"
@@ -26,16 +27,17 @@
 					name="LablePaperType"> <label class="fpx-label-input-label"
 					for="a4">A4纸</label>
 			</div>
+			
 			<div>
 				打印选项： <select name='LableContentType' class='input_text_select input_select'
 					style='padding: 0 3px;'>
 					<option value='1'>标签</option>
-					<!--
+					
 					<option value='2'>报关单</option>
 					<option value='3'>配货单</option>
 					<option value='4'>标签+报关单</option>
 					<option value='5'>标签+配货单</option>
-					<option value='6'>标签+报关单+配货单</option>-->
+					<option value='6'>标签+报关单+配货单</option>
 				</select>
 			</div>
 			<div>
@@ -43,26 +45,28 @@
 					style='padding: 0 3px;'>
 				</select>
 			</div>
-			<div>
+			-->
+			<!--<div>
 				打印内容： <input type="checkbox" id="PrintDeclareInfoSign" value="Y"
 					name="PrintDeclareInfoSign"> <label class="fpx-label-input-label"
 					for="PrintDeclareInfoSign">在标签上打印配货信息</label> <input
 					type="checkbox" id="printBuyerID" value="Y" name="printBuyerID"> <label
-					class="fpx-label-input-label" for="printBuyerID">打印买家ID</label>
+					class="fpx-label-input-label" for="printBuyerID">打印买家ID</label>-->
 				<!-- <input type="checkbox" id="InsuranceSign" value="Y" name="InsuranceSign">
     			<label class="fpx-label-input-label" for="InsuranceSign">打印保险标记</label> -->
 				<!-- <input type="checkbox" id="HighValueSign" value="Y" name="HighValueSign">
-    			<label class="fpx-label-input-label" for="HighValueSign">打印高价值标记</label> -->
+    			<label class="fpx-label-input-label" for="HighValueSign">打印高价值标记</label> 
 				<input type="checkbox" id="PrintTimeSign" value="Y"
 					name="PrintTimeSign"> <label class="fpx-label-input-label"
-					for="PrintTimeSign">打印时间</label>
+					for="PrintTimeSign">打印时间</label>-->
 				<!-- <input type="checkbox" id="ReturnSign" value="Y" name="ReturnSign">
-    			<label class="fpx-label-input-label" for="ReturnSign">打印退货标记</label>  -->
+    			<label class="fpx-label-input-label" for="ReturnSign">打印退货标记</label>  
 				<input type="checkbox" id="printWeight" value="Y" name="printWeight">
 				<label class="fpx-label-input-label" for="printWeight">打印实际重量（报关单）</label>
 			</div>
+			
 			<div style='color: red;'>如果订单重量未填写,报关单重量默认为0.2KG</div>
-
+			-->
 			<div id='pring_order_id_wrap'>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;单号：<input
 					name='order_code' type='text' class='input_text keyToSearch'

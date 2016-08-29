@@ -728,10 +728,10 @@ $('input[name="invoice[invoice_enname][]"]').live('keyup',function(){
 <div class="location">
     		<p><a href="javascript:void(0)">在线订单</a> > 
     		<a href="javascript:void(0)" onclick="leftMenu('order-list','订单管理','/order/order-list/list?quick=39')">订单管理</a>
-    		 > ESB录单</p>
+    		 > E速宝录单</p>
     	</div>
     	<ul class="tabnav">
-    		<li class="on"><a href="javascript:void(0)">ESB录单</a></li>
+    		<li class="on"><a href="javascript:void(0)">E速宝录单</a></li>
     		<li><a href="javascript:void(0)" onclick="leftMenu('order-list','订单管理','/order/order-list/list?quick=39')">订单管理</a></li>
     		<!--<li><a href="">上传记录</a></li>-->
     	</ul>
