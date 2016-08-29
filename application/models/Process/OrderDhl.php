@@ -535,8 +535,8 @@ class Process_OrderDhl
                     $this->_err[] = "(" . Ec::Lang('申报信息') . $k . ")" . Ec::Lang('申报单价不可为空');
                 }else{
 //                     print_r($invoice);exit;
-                    if(! is_numeric($invoice['invoice_unitcharge'])||$invoice['invoice_unitcharge']<=0){
-                        $this->_err[] = "(" . Ec::Lang('申报信息') . $k . ")" . Ec::Lang('申报单价必须为大于0数字');
+                    if(! is_numeric($invoice['invoice_unitcharge'])){
+                        $this->_err[] = "(" . Ec::Lang('申报信息') . $k . ")" . Ec::Lang('申报单价必须为数字');
                     }
                 }
                 if($invoice['invoice_weight'] === ''){

@@ -26,20 +26,20 @@ class Process_OrderUpload extends Process_Order
 
     public function exportColumnMap(){
         $map = array(
-            'order_id' => Ec::lang('系统主键'),
-            'order_create_code' => Ec::lang('订单创建方式'),
+            //'order_id' => Ec::lang('系统主键'),
+            //'order_create_code' => Ec::lang('订单创建方式'),
 //             'customer_id' => Ec::lang('customer_id'),
 //             'customer_channelid' => Ec::lang('customer_channelid'),
             'product_code' => Ec::lang('运输方式'),
             'shipper_hawbcode' => Ec::lang('客户单号'),
             'server_hawbcode' => Ec::lang('服务商单号'),
-            'channel_hawbcode' => Ec::lang('渠道换单号'),
+            //'channel_hawbcode' => Ec::lang('渠道换单号'),
             'country_code' => Ec::lang('目的国家'),
             'order_pieces' => Ec::lang('货物件数'),
             'order_weight' => Ec::lang('货物重量'),
             'order_status' => Ec::lang('订单状态'),
             'mail_cargo_type' => Ec::lang('邮政货物类型'),
-            'document_change_sign' => Ec::lang('服务商单号换号类型'),
+            //'document_change_sign' => Ec::lang('服务商单号换号类型'),
 //             'oda_checksign' => Ec::lang('oda_checksign'),
 //             'oda_sign' => Ec::lang('oda_sign'),
 //             'return_sign' => Ec::lang('return_sign'),
@@ -50,13 +50,13 @@ class Process_OrderUpload extends Process_Order
             'creater_id' => Ec::lang('创建人'),
             'create_date' => Ec::lang('创建时间'),
 //             'modify_date' => Ec::lang('modify_date'),
-            'print_date' => Ec::lang('打印时间'),
-            'post_date' => Ec::lang('提交预报时间'),
-            'checkin_date' => Ec::lang('收货时间'),
-            'checkout_date' => Ec::lang('出货时间'),
+            //'print_date' => Ec::lang('打印时间'),
+            //'post_date' => Ec::lang('提交预报时间'),
+            //'checkin_date' => Ec::lang('收货时间'),
+            //'checkout_date' => Ec::lang('出货时间'),
 //             'tms_id' => Ec::lang('tms_id'),
-            'transaction_id'=>Ec::Lang('交易ID'),
-            'order_info'=>Ec::Lang('订单备注'),
+            //'transaction_id'=>Ec::Lang('交易ID'),
+            //'order_info'=>Ec::Lang('订单备注'),
         
 //             'shipper_account' => Ec::lang('shipper_account'),
             'shipper_name' => Ec::lang('发件人姓名'),
@@ -66,14 +66,14 @@ class Process_OrderUpload extends Process_Order
             'shipper_city' => Ec::lang('发件人城市'),
             'shipper_street' => Ec::lang('发件人街道地址'),
             'shipper_postcode' => Ec::lang('发件人邮编'),
-            'shipper_areacode' => Ec::lang('发件人地区代码'),
+            //'shipper_areacode' => Ec::lang('发件人地区代码'),
             'shipper_telephone' => Ec::lang('发件人电话号码'),
-            'shipper_mobile' => Ec::lang('发件人手机'),
-            'shipper_email' => Ec::lang('发件人邮箱'),                
-            'shipper_fax' => Ec::lang('发件人传真'),
-            'shipper_certificatetype' => Ec::lang('发件人证件类型'),
-            'shipper_certificatecode' => Ec::lang('发件人证件号码'),
-            'shipper_mallaccount' => Ec::lang('发件的商城账号'),
+            //'shipper_mobile' => Ec::lang('发件人手机'),
+            //'shipper_email' => Ec::lang('发件人邮箱'),                
+            //'shipper_fax' => Ec::lang('发件人传真'),
+            //'shipper_certificatetype' => Ec::lang('发件人证件类型'),
+            //'shipper_certificatecode' => Ec::lang('发件人证件号码'),
+            //'shipper_mallaccount' => Ec::lang('发件的商城账号'),
                 
             'consignee_name' => Ec::lang('收件人'),
             'consignee_company' => Ec::lang('收件人公司'),
@@ -82,17 +82,17 @@ class Process_OrderUpload extends Process_Order
             'consignee_city' => Ec::lang('收件人城市'),
             'consignee_street' => Ec::lang('收件人街道地址'),
             'consignee_postcode' => Ec::lang('收件人邮编'),
-            'consignee_areacode' => Ec::lang('收件人地区代码'),
+            //'consignee_areacode' => Ec::lang('收件人地区代码'),
             'consignee_telephone' => Ec::lang('收件人电话号码'),
             'consignee_mobile' => Ec::lang('收件人手机'),
-            'consignee_email' => Ec::lang('收件人邮箱'),
-            'consignee_fax' => Ec::lang('收件人传真'),
-            'consignee_mallaccount' => Ec::lang('收件人商城账号'),
-            'consignee_certificatetype' => Ec::lang('证件类型'),
-            'consignee_certificatecode' => Ec::lang('收件人证件号码'),
-            'consignee_credentials_period' => Ec::lang('证件有效期间'),
+            //'consignee_email' => Ec::lang('收件人邮箱'),
+            //'consignee_fax' => Ec::lang('收件人传真'),
+            //'consignee_mallaccount' => Ec::lang('收件人商城账号'),
+            //'consignee_certificatetype' => Ec::lang('证件类型'),
+            //'consignee_certificatecode' => Ec::lang('收件人证件号码'),
+            //'consignee_credentials_period' => Ec::lang('证件有效期间'),
 
-            'invoice_enname' => Ec::lang('发票名称'),
+            'invoice_enname' => Ec::lang('英文申报品名'),
             'unit_code' => Ec::lang('单位'),
             'invoice_quantity' => Ec::lang('数量'),
             'invoice_unitcharge' => Ec::lang('单价'),
@@ -196,6 +196,11 @@ class Process_OrderUpload extends Process_Order
                 
                 $order['order_status'] = isset($status[$order['order_status']]) ? $status[$order['order_status']]['name'] : Ec::Lang('异常状态');
                 
+                if($order['product_code']){
+                	$product_ini = Common_Common::getProductAllByCode($order['product_code']);
+                	$order['product_code'] = $product_ini['cname'];
+                }
+                
                 $con = array(
                     'order_id' => $order_id
                 );
@@ -210,9 +215,8 @@ class Process_OrderUpload extends Process_Order
                     'invoice_url'
                 );
                 $invoice = Service_CsdInvoice::getByCondition($con, $invoiceColumns, 0, 0, 'invoice_id asc');
-                
                 foreach($invoice as $k => $v){
-                    // $v['invoice_unitcharge'] = $v['invoice_quantity'] ? ($v['invoice_totalcharge'] / $v['invoice_quantity']) : 0;
+                    $v['invoice_unitcharge'] = $v['invoice_quantity'] ? ($v['invoice_totalcharge'] / $v['invoice_quantity']) : 0;
                     $invoice[$k] = $v;
                 }
                 // 表字段不存在
@@ -307,7 +311,7 @@ class Process_OrderUpload extends Process_Order
                 );
                 Service_OrderLog::add($logRow);
             }
-            // print_r($dataList);exit;
+            //print_r($dataList);exit;
             $fileName = Service_ExcelExport::exportToFile($dataList, '订单');
             Common_Common::downloadFile($fileName);
         }catch(Exception $e){
@@ -664,8 +668,8 @@ class Process_OrderUpload extends Process_Order
             }
             
             //如果目的国家确定
-            if(!empty($v['country_code'])&&$v['country_code']){
-            	$changeCode = Common_Common::getProductAllByCountryCode($v['country_code'],$v['country_code']);
+            if(!empty($v['country_code'])&&$v['product_code']){
+            	$changeCode = Common_Common::getProductAllByCountryCode($v['country_code'],$v['product_code']);
             	if(!empty($changeCode)){
             		$v['product_code'] = $changeCode;
             	}	
