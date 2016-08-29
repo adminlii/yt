@@ -288,12 +288,12 @@ class Process_OrderDhl
             }
          	if($this->_shipper['shipper_name'] === ''){
                  $this->_err[] = Ec::Lang('发件人姓名不可为空');
-            }else if(!preg_match('/^[a-zA-Z\s]+$/',$this->_shipper['shipper_name'])){
-            		$this->_err[] = "发件人姓名不可为非英文";
+            }else if(!preg_match('/^[a-zA-Z\s]{1,35}$/',$this->_shipper['shipper_name'])){
+            		$this->_err[] = "发件人姓名不可为非英文，长度最多35字符";
             }
             if(!empty($this->_shipper['shipper_city'])){
-            	if(!preg_match('/^[a-zA-Z\s]+$/',$this->_shipper['shipper_city'])){
-            		$this->_err[] = "发件人城市不可为非英文";
+            	if(!preg_match('/^[a-zA-Z\s]{1,35}$/',$this->_shipper['shipper_city'])){
+            		$this->_err[] = "发件人城市不可为非英文，长度最多35字符";
             	}
             }else{
             	$this->_err[] = Ec::Lang('发件人城市不可为空');
@@ -303,9 +303,13 @@ class Process_OrderDhl
             }
             if(!$this->_shipper['shipper_company']){
             	$this->_err[] = Ec::Lang('发件人公司不可为空');
+            }else if(!preg_match('/^[a-zA-Z\d\s]{1,35}$/',$this->_shipper['shipper_company'])){
+            		$this->_err[] = "发件人公司不可为非英文，长度最多35字符";
             }
             if(!$this->_shipper['shipper_telephone']){
             	$this->_err[] = Ec::Lang('发件人电话不可为空');
+            }else if(!preg_match('/^[0-9]{4,25}$/',$this->_shipper['shipper_telephone'])){
+            		$this->_err[] = "发件人电话应4到25位数字";
             }
             if(empty($this->_shipper['shipper_postcode'])){
             	$this->_err[] = Ec::Lang('发件人邮编不可为空');
@@ -511,11 +515,11 @@ class Process_OrderDhl
                 // sort($this->_invoice);
             }
             // print_r($this->_invoice);exit;
-            foreach($this->_invoice as $k => $invoice){ Ec::showError("result:".print_r($this->_invoice,true)."\n", '_Ssssss_' . date('Y-m-d') . "_");
-                if($invoice['invoice_enname'] === ''){
+            foreach($this->_invoice as $k => $invoice){ //Ec::showError("result:".print_r($this->_invoice,true)."\n", '_Ssssss_' . date('Y-m-d') . "_");
+                if(empty($invoice['invoice_enname'])){
                     $this->_err[] = "(" . Ec::Lang('申报信息') . $k . ")" . Ec::Lang('申报品名不可为空');
                 }
-                if($invoice['invoice_cnname'] === ''){
+                if(empty($invoice['invoice_cnname'])){
                     $this->_err[] = "(" . Ec::Lang('申报信息') . $k . ")" . Ec::Lang('中文申报品名不可为空');
                 }
                 if($invoice['invoice_quantity'] === ''){
@@ -531,16 +535,16 @@ class Process_OrderDhl
                     $this->_err[] = "(" . Ec::Lang('申报信息') . $k . ")" . Ec::Lang('申报单价不可为空');
                 }else{
 //                     print_r($invoice);exit;
-                    if(! is_numeric($invoice['invoice_unitcharge'])){
-                        $this->_err[] = "(" . Ec::Lang('申报信息') . $k . ")" . Ec::Lang('申报单价必须为数字');
+                    if(! is_numeric($invoice['invoice_unitcharge'])||$invoice['invoice_unitcharge']<=0){
+                        $this->_err[] = "(" . Ec::Lang('申报信息') . $k . ")" . Ec::Lang('申报单价必须为大于0数字');
                     }
                 }
                 if($invoice['invoice_weight'] === ''){
                 	$this->_err[] = "(" . Ec::Lang('申报信息') . $k . ")" . Ec::Lang('申报重量不可为空');
                 }else{
                 	//                     print_r($invoice);exit;
-                	if(! is_numeric($invoice['invoice_weight'])){
-                		$this->_err[] = "(" . Ec::Lang('申报信息') . $k . ")" . Ec::Lang('申报重量必须为数字');
+                	if(! is_numeric($invoice['invoice_weight'])||$invoice['invoice_weight']<=0){
+                		$this->_err[] = "(" . Ec::Lang('申报信息') . $k . ")" . Ec::Lang('申报重量必须为大于0数字');
                 	}
                 }
             }
@@ -652,8 +656,8 @@ class Process_OrderDhl
         		if(!$label['invoice_quantity'])
         			$this->_err[] = "(" . Ec::Lang('发票信息') . $labelk . ")" . Ec::Lang('数量不可为空');
         		else{
-        			if(! is_numeric($label['invoice_quantity'])){
-        				$this->_err[] = $this->_err[] = "(" . Ec::Lang('发票信息') . $labelk . ")" . Ec::Lang('数量必须为数字');
+        			if(! is_numeric($label['invoice_quantity'])||$label['invoice_quantity']<=0){
+        				$this->_err[] = $this->_err[] = "(" . Ec::Lang('发票信息') . $labelk . ")" . Ec::Lang('数量必须为大于0数字');
         			}else{
         				$totalpice +=$label['invoice_quantity'];
         			}
@@ -662,8 +666,8 @@ class Process_OrderDhl
         			$this->_err[] = "(" . Ec::Lang('发票信息') . $labelk . ")" . Ec::Lang('单价不可为空');
         		}else{
 	    			//                     print_r($invoice);exit;
-	    			if(! is_numeric($label['invoice_unitcharge'])){
-	    				$this->_err[] = $this->_err[] = "(" . Ec::Lang('发票信息') . $labelk . ")" . Ec::Lang('单价必须为数字');
+	    			if(! is_numeric($label['invoice_unitcharge'])||$label['invoice_unitcharge']<=0){
+	    				$this->_err[] = $this->_err[] = "(" . Ec::Lang('发票信息') . $labelk . ")" . Ec::Lang('单价必须为大于0数字');
 	    			}else{
 	    				if($label['invoice_quantity']){
 	    					$totalvalue += $label['invoice_quantity']*$label['invoice_unitcharge'];

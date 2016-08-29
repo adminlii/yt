@@ -13,7 +13,6 @@ public function indexAction()
     {
         if($this->getRequest()->isPost()){
             $params = $this->getRequest()->getParams();
-//             print_r($params);
             $return = array(
                 'ask' => 0,
                 'message' => '账号注册失败'
@@ -81,6 +80,10 @@ public function indexAction()
                 }
                	if(empty($row['user_mobile_phone']) && empty($row['user_phone'])){
                		throw new Exception(Ec::Lang('phone_is_not_empty'));
+               	}
+               	
+               	if(empty($row['user_name'])){
+               		throw new Exception('姓名不能为空');
                	}
                	
                	$company_name = $this->getParam('company_name', '');

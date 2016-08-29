@@ -290,6 +290,17 @@ class Process_Order
             if($this->_shipper['shipper_street'] === ''){
                 $this->_err[] = Ec::Lang('发件人地址不可为空');
             }
+            if(!$this->_shipper['shipper_company']){
+            	$this->_err[] = Ec::Lang('发件人公司不可为空');
+            }
+            if(!$this->_shipper['shipper_telephone']){
+            	$this->_err[] = Ec::Lang('发件人电话不可为空');
+            }else if(!preg_match("/^(\d){4,25}$/",$this->_shipper['shipper_telephone'])){
+        		$this->_err[] = Ec::Lang('发件人电话格式为4-25位纯数字');
+        	}
+            if(!$this->_shipper['shipper_postcode']){
+            	$this->_err[] = Ec::Lang('发件人邮编不可为空');
+            }
         }
         
         // 验证收件人
@@ -446,6 +457,9 @@ class Process_Order
             if(! is_numeric($this->_order['order_length'])){
                 $this->_err[] = Ec::Lang('包装长度必须为数字');
             }else{
+            	if($this->_order['order_length']<=0){
+            		$this->_err[] = Ec::Lang('包装长度必须为大于0数字');
+            	}
                 if($this->_order['product_code'] =='TNT'){
                     if($this->_order['order_length']>240){
                         $this->_err[] = Ec::Lang('包装长度必须小于等于240cm');
@@ -468,6 +482,9 @@ class Process_Order
             if(! is_numeric($this->_order['order_width'])){
                 $this->_err[] = Ec::Lang('包装宽度必须为数字');
             }else{
+            	if($this->_order['order_width']<=0){
+            		$this->_err[] = Ec::Lang('包装宽度必须为大于0数字');
+            	}
                 if($this->_order['product_code'] =='TNT'){
                     if($this->_order['order_width']>120){
                         $this->_err[] = Ec::Lang('包装宽度必须小于等于120cm');
@@ -491,6 +508,9 @@ class Process_Order
             if(! is_numeric($this->_order['order_height'])){
                 $this->_err[] = Ec::Lang('包装高度必须为数字');
             }else{
+            	if($this->_order['order_height']<=0){
+            		$this->_err[] = Ec::Lang('包装高度必须为大于0数字');
+            	}
                 if($this->_order['product_code'] =='TNT'){
                     if($this->_order['order_height']>150){
                         $this->_err[] = Ec::Lang('包装高度必须小于等于150cm');
@@ -523,7 +543,7 @@ class Process_Order
             $this->_consignee['mail_cargo_type'] = '4';
         }
         
-        if($this->_order['order_pieces'] !== ''){
+        if(!empty($this->_order['order_pieces'])){
             if(! preg_match('/^[0-9]+$/', $this->_order['order_pieces']) || intval($this->_order['order_pieces']) <= 0){
                 $this->_err[] = Ec::Lang('外包装件数必须为大于0的整数');
             }
@@ -573,7 +593,7 @@ class Process_Order
                     	$this->_err[] = "(" . Ec::Lang('申报信息') . $k . ")" . Ec::Lang('申报英文品名不可带中文');
                     }
                 }
-                if($invoice['invoice_cnname'] === ''){
+                if(empty($invoice['invoice_cnname'])){
                     $this->_err[] = "(" . Ec::Lang('申报信息') . $k . ")" . Ec::Lang('中文申报品名不可为空');
                 }
                 if($invoice['invoice_quantity'] === ''){
@@ -587,8 +607,8 @@ class Process_Order
                     $this->_err[] = "(" . Ec::Lang('申报信息') . $k . ")" . Ec::Lang('申报单价不可为空');
                 }else{
 //                     print_r($invoice);exit;
-                    if(! is_numeric($invoice['invoice_unitcharge'])){
-                        $this->_err[] = "(" . Ec::Lang('申报信息') . $k . ")" . Ec::Lang('申报单价必须为数字');
+                    if(! is_numeric($invoice['invoice_unitcharge'])||$invoice['invoice_unitcharge']<=0){
+                        $this->_err[] = "(" . Ec::Lang('申报信息') . $k . ")" . Ec::Lang('申报单价必须为大于0数字');
                     }else{
                     	if(preg_match('/^[0-9]+$/', $invoice['invoice_quantity']) && intval($invoice['invoice_quantity'])>0){
                     		$_invoice_totalValue+=$invoice['invoice_quantity']*$invoice['invoice_unitcharge'];
@@ -599,8 +619,8 @@ class Process_Order
                 	$this->_err[] = "(" . Ec::Lang('申报信息') . $k . ")" . Ec::Lang('申报重量不可为空');
                 }else{
                 	//                     print_r($invoice);exit;
-                	if(! is_numeric($invoice['invoice_weight'])){
-                		$this->_err[] = "(" . Ec::Lang('申报信息') . $k . ")" . Ec::Lang('申报重量必须为数字');
+                	if(! is_numeric($invoice['invoice_weight'])||$invoice['invoice_weight']<=0){
+                		$this->_err[] = "(" . Ec::Lang('申报信息') . $k . ")" . Ec::Lang('申报重量必须为大于0数字');
                 	}
                 }
                 

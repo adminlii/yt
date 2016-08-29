@@ -239,6 +239,8 @@ class Process_Orderfba
         	if(!preg_match("/^[1-9]\d*$/",$this->_order['boxnum']))
         	{
         		$this->_err[] = Ec::Lang('箱数必须为大于0整数');
+        	}else if($this->_order['boxnum']>500){
+        		$this->_err[] = Ec::Lang('箱数必须小于等于500');
         	}
         }
         
