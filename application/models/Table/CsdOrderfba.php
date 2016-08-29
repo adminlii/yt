@@ -314,8 +314,12 @@ class Table_CsdOrderfba
         if(isset($condition["ems_status"]) && $condition["ems_status"] !== ""){
         	$select->where("ems_status = ?", $condition["ems_status"]);
         }
-        // echo $select;
-        // exit();
+        if(isset($condition["storage"]) && $condition["storage"] !== ""){
+        	$select->where("csd_shipperconsigneefba.storage = ?", $condition["storage"]);
+        }
+        if(isset($condition["storagelike"]) && $condition["storagelike"] !== ""){
+        	$select->where("csd_shipperconsigneefba.storage like ?", "%{$condition["storagelike"]}%");
+        }
         /* CONDITION_END */
         if('count(*)' == $type){
             return $this->_table->getAdapter()->fetchOne($select);

@@ -211,6 +211,11 @@ class Order_OrderListController extends Ec_Controller_Action
 					}
 				}
 			}else{
+				if($condition['consignee_name_like']){
+					$condition['storagelike'] = $condition['consignee_name_like']; 
+					unset($condition['consignee_name_like']);
+				}
+			
 				$count = Service_CsdOrderfba::getByCondition($condition, 'count(*)');
 				$return['total'] = $count;
 				if($count){
