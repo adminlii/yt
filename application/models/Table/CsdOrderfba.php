@@ -279,7 +279,7 @@ class Table_CsdOrderfba
             $select->where("server_hawbcode = ?", $condition["server_hawbcode"]);
         }
         if(isset($condition["country_code"]) && $condition["country_code"] != ""){
-            $select->where("country_code = ?", $condition["country_code"]);
+            $select->where("csd_shipperconsigneefba.consignee_countrycode = ?", $condition["country_code"]);
         }
         if(isset($condition["order_status"]) && $condition["order_status"] != ""){
             $select->where("order_status = ?", $condition["order_status"]);
@@ -320,6 +320,7 @@ class Table_CsdOrderfba
         if(isset($condition["storagelike"]) && $condition["storagelike"] !== ""){
         	$select->where("csd_shipperconsigneefba.storage like ?", "%{$condition["storagelike"]}%");
         }
+        //echo $select;exit;
         /* CONDITION_END */
         if('count(*)' == $type){
             return $this->_table->getAdapter()->fetchOne($select);
