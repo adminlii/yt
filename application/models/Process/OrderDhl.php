@@ -397,6 +397,8 @@ class Process_OrderDhl
             }
             if(empty($this->_consignee['consignee_company'])){
             	$this->_err[] = Ec::Lang('收件人公司不可为空');
+            }else if(!preg_match('/^[a-zA-Z\d\s]{1,35}$/',$this->_consignee['consignee_company'])){
+            		$this->_err[] = "收件人公司不可为非英文，长度最多35字符";
             }
         }
         

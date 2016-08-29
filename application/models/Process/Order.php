@@ -453,7 +453,7 @@ class Process_Order
         }
         
         //TNT需要验证外包装的最大长宽高
-        if($this->_order['order_length']){
+        if($this->_order['order_length']!==''){
             if(! is_numeric($this->_order['order_length'])){
                 $this->_err[] = Ec::Lang('包装长度必须为数字');
             }else{
@@ -478,7 +478,7 @@ class Process_Order
             }
         }
         
-        if($this->_order['order_width']){
+        if($this->_order['order_width']!==''){
             if(! is_numeric($this->_order['order_width'])){
                 $this->_err[] = Ec::Lang('包装宽度必须为数字');
             }else{
@@ -504,7 +504,7 @@ class Process_Order
         }
         
         
-        if($this->_order['order_height']){
+        if($this->_order['order_height']!==''){
             if(! is_numeric($this->_order['order_height'])){
                 $this->_err[] = Ec::Lang('包装高度必须为数字');
             }else{
