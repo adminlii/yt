@@ -59,22 +59,22 @@ $(function(){
 				<td><{$rs.new_track_location}></td>
 				<td><{$rs.new_track_comment}></td>
 				<td>
-					<a href="javascript:;" onclick='alertTip($("#track_<{$rs.tbs_id}>").html(),800,400);'>查看</a>
+					<a href="javascript:;" onclick='alertTip($("#track_<{$rs.shipper_hawbcode}>").html(),800,400);'>查看</a>
 				</td>
 			</tr>
 			<tr style='display: none;'>
-				<td colspan='8' id='track_<{$rs.tbs_id}>'>
+				<td colspan='8' id='track_<{$rs.shipper_hawbcode}>'>
 					<div class="depotTab2">
 						 <ul>
 			                <li>
-			                    <a hhref="javascript:void(0);" id='tab_cn_<{$rs.tbs_id}>' class='tab' style="cursor:pointer">中文</a>
+			                    <a hhref="javascript:void(0);" id='tab_cn_<{$rs.shipper_hawbcode}>' class='tab' style="cursor:pointer">中文</a>
 			                </li>
 			               <!-- <li class="chooseTag">
-			                    <a href="javascript:void(0);" id="tab_en_<{$rs.tbs_id}>" class="tab" style="cursor:pointer">English</a>
+			                    <a href="javascript:void(0);" id="tab_en_<{$rs.shipper_hawbcode}>" class="tab" style="cursor:pointer">English</a>
 			                </li> -->
 			             </ul>
 		            </div>
-		            <div class="tabContent" id="cn_<{$rs.tbs_id}>" style="display:block;">
+		            <div class="tabContent" id="cn_<{$rs.shipper_hawbcode}>" style="display:block;">
 						<table cellspacing="0" cellpadding="0" width="100%" border="0" class="table-module">
 							<caption style='text-align: left;line-height:30px;'><!-- <{t}>服务商<{/t}>：<{$rs.product_code}>&nbsp;&nbsp;&nbsp;&nbsp; --> <{t}>服务商单号<{/t}>:<{$rs.server_hawbcode}></caption>
 							<tbody>
@@ -93,7 +93,7 @@ $(function(){
 							<{/foreach}>
 						</table>
 					</div>
-		            <div class="tabContent" id="en_<{$rs.tbs_id}>" style="display:none;">
+		            <div class="tabContent" id="en_<{$rs.shipper_hawbcode}>" style="display:none;">
 						<table cellspacing="0" cellpadding="0" width="100%" border="0" class="table-module">
 							<caption style='text-align: left;line-height:30px;'>Code:<{$rs.server_hawbcode}></caption>
 							<tbody>
