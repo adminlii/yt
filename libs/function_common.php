@@ -288,6 +288,16 @@ function change_no($shipper_no){
 	return join('', $_shipper_no);
 }
 
+function xml_filter_c($value){
+
+	$_value = str_replace("&", "&amp;", $value);
+	$_value = str_replace("<", "&lt;", $_value);
+	$_value = str_replace(">", "&gt;", $_value);
+	$_value = str_replace('"', "&quot;", $_value);
+	$_value = str_replace("'", "&apos;", $_value);
+	return $_value;
+}
+
 function xml_filter(&$value,$k){
 
 	$_value = str_replace("&", "&amp;", $value);

@@ -477,7 +477,7 @@ class Order_OrderController extends Ec_Controller_Action
             );
             //添加一个发票类型
             if($orderArr["invoice_print"]==1){
-            	$orderArr["invoice_type"]=$order['invoice_print'];
+            	$orderArr["invoice_type"]=$order['invoice_type'];
             }else{
             	$orderArr["invoice_type"]=0;
             }

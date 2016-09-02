@@ -176,6 +176,7 @@ class Default_ApiController extends Zend_Controller_Action
 				if(!empty($res['Data'])){
 					$returnArr["ack"]=1;
 					$returnArr["data"]=$res['Data']['TrackingNumber'];
+					$returnArr["_data"]=$res['Data']['SmallLabelNumber'];
 					$debug["line4"] = 1;
 				}else{
 					$returnArr["ack"]=2;
@@ -234,6 +235,10 @@ class Default_ApiController extends Zend_Controller_Action
 		if($result["ack"]==1){
 			// 更新单号，订单状态改为"P"已预报
 			$update_order = array('server_hawbcode' => $result['data'],"order_status" => "P");
+			if(!empty($result['_data'])&&$result['_data']!='null'){
+				$update_order['server_hawbcode'] = $result['_data'];
+				$update_order['small_hawbcode']  = $result['data'];
+			}
 			Service_CsdOrder::update($update_order, $result["param"]["order_id"]);
 			//更新物流主干
 			$update_TakTrackingbusiness = array('server_hawbcode' => $result['data']);
@@ -321,8 +326,6 @@ class Default_ApiController extends Zend_Controller_Action
 		sleep(20);
 		$return = array(
 			"Data"	=>array("OrderID"=>"EMS16195209080","TrackingNumber"=>"AS000001933CN"),
-				
-				
 		);
 		// 记录响应数据
 		echo json_encode($return);

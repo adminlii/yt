@@ -626,6 +626,10 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
 		    					
 		    					// 更新单号，订单状态改为"P"已预报
 		    					$update_order = array('server_hawbcode' => $notice['notifyResult']['TrackNumber'],"order_status" => "P");
+		    					if(!empty($notice['notifyResult']['SmallLabelNumber'])){
+		    						$update_order['small_hawbcode'] = $notice['notifyResult']['TrackNumber'];
+		    						$update_order['server_hawbcode'] = $notice['notifyResult']['SmallLabelNumber'];
+		    					}
 		    					Service_CsdOrder::update($update_order, $order_process['order_id']);
 		    					//更新物流主干
 		    					$update_TakTrackingbusiness = array('server_hawbcode' => $notice['notifyResult']['TrackNumber']);
@@ -934,7 +938,7 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
       		$array_three['minordernum']=$_ordernum;
       	}
       	$array_three['mpostalnum'] = $this->orderData['server_hawbcode'];
-      	$array_three['ordernum'] = $this->orderCode;
+      	$array_three['ordernum'] = empty($this->orderData['small_hawbcode'])?$this->orderCode:$this->orderData['small_hawbcode'];
       	$array_three['forecastshut'] = 0;
       	$array_three['internals'] = 1;
       	$array_three['portoffice'] = '';

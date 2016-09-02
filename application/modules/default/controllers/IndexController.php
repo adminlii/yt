@@ -221,7 +221,9 @@ class Default_IndexController extends Ec_Controller_DefaultAction
                         //调取信息
                         if($rs['ask']){
                         	$_server_hawbcode = $rs['data']['server_hawbcode'];
-                        	 
+                        	if(!empty($rs['data']['small_hawbcode'])){
+                        		$_server_hawbcode = $rs['data']['small_hawbcode'];
+                        	}
                         	$obj  = 	new API_YunExpress_ForApiService();
                         	//插入头程
                         	$gettrackDetail_rs = $obj->gettrackDetail(2,array("server_code"=>$_server_hawbcode));
