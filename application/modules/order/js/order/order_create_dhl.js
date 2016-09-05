@@ -141,7 +141,7 @@ $('.checkchar').live('keyup',function(){
 			alert('不允许出现非英文允许英文数字混合,长度最多50字符');
 		}
 	}else{
-		if($(this).val()&&!/^[a-zA-Z0-9\s]{1,35}$/.test($(this).val())){
+		if($(this).val()&&!/^[a-zA-Z0-9\.%&\(\)\{\},\$-;#@\*\[\]【】\s]{1,35}$/.test($(this).val())){
 			alert('不允许出现非英文允许英文数字混合,长度最多35字符');
 		}
 	}
@@ -155,7 +155,7 @@ $('.checkchar1').live('keyup',function(){
 			alert('不允许出现非英文，长度最多25字符');
 		}
 	}else{
-		if($(this).val()&&!/^[a-zA-Z\s]{1,35}$/.test($(this).val())){
+		if($(this).val()&&!/^[a-zA-Z\s\.%&\(\)\{\},\$-;#@\*\[\]【】]{1,35}$/.test($(this).val())){
 			alert('不允许出现非英文，长度最多35字符');
 		}
 	}
@@ -185,7 +185,7 @@ $('.checkchar2').live('keyup',function(){
 			alert('长度最多30字符');
 		}
 	}else{
-		if($(this).val()&&!/^[0-9a-zA-Z,\s]{0,35}$/.test($(this).val())){
+		if($(this).val()&&!/^[0-9a-zA-Z\s\.%&\(\)\{\},\$-;#@\*\[\]【】]{0,35}$/.test($(this).val())){
 			alert('长度最多35字符');
 		}
 	}
@@ -204,7 +204,7 @@ $('.checkchar5').live('keyup',function(){
 			alert('不允许出现非英文，长度最多25字符');
 		}
 	}else{
-		if($(this).val()&&!/^[a-zA-Z\s]{1,35}$/.test($(this).val())){
+		if($(this).val()&&!/^[a-zA-Z\s\.%&\(\)\{\},\$-;#@\*\[\]【】]{1,35}$/.test($(this).val())){
 			alert('不允许出现非英文，长度最多35字符');
 		}
 	}
@@ -255,7 +255,7 @@ $('.quantity').live('keyup',function(){
 
 // 海关商品名
 $('.invoename').live('keyup',function(){
-	var reg = /^[\w\s]+?$/;
+	var reg = /^[\w\s\.%&\(\)\{\},\$-;#@\*\[\]【】]+?$/;
 	err_tip(this,reg,'须为英文');
 })
 // ==============结束

@@ -431,7 +431,9 @@ class Order_ReportController extends Ec_Controller_Action
                 $orderInfoArr[] = $orderInfo;
 
                 //获取打印标签
-                
+                if(!empty($order['small_hawbcode'])){
+                	$order['server_hawbcode'] = $order['small_hawbcode'];
+                }
                 $printParam["Data"][] = $order['server_hawbcode'];
 
             }catch(Exception $e){

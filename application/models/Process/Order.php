@@ -279,7 +279,7 @@ class Process_Order
             }
             if($this->_shipper['shipper_name'] === ''){
                  $this->_err[] = Ec::Lang('发件人姓名不可为空');
-            }else if(!preg_match('/^[a-zA-Z\s]+$/',$this->_shipper['shipper_name'])){
+            }else if(!preg_match('/^[a-zA-Z\s\.%&\(\)\{\},\$-;#@\*\[\]【】]+$/',$this->_shipper['shipper_name'])){
             		$this->_err[] = "发件人姓名不可为非英文";
             }
             if(!empty($this->_shipper['shipper_city'])){
@@ -292,6 +292,8 @@ class Process_Order
             }
             if(!$this->_shipper['shipper_company']){
             	$this->_err[] = Ec::Lang('发件人公司不可为空');
+            }else if(!preg_match('/^[a-zA-Z\s\.%&\(\)\{\},\$-;#@\*\[\]【】]+$/',$this->_shipper['shipper_company'])){
+            		$this->_err[] = "发件人公司不可为非英文";
             }
             if(!$this->_shipper['shipper_telephone']){
             	$this->_err[] = Ec::Lang('发件人电话不可为空');

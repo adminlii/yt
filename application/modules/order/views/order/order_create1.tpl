@@ -620,11 +620,13 @@ function rule_check_num(data){
 //公司
 $('.checkchar').live('keyup',function(){
     var reg;var msg = '';
+    /*
 	switch($("#product_code").val()){
 		case "TNT":reg=/^[a-zA-Z0-9\s]{1,50}$/;msg="不允许出现非英文允许英文数字混合,长度最多50字符";break;
 		case "ESB":reg=/^[a-zA-Z0-9\s]{1,200}$/;msg="不允许出现非英文允许英文数字混合,长度最多200字符";break;
 		default:reg=/^[a-zA-Z0-9\s]{1,36}$/;msg = '不允许出现非英文允许英文数字混合,长度最多36字符';break;
-	}
+	}*/
+	reg=/^[a-zA-Z0-9\s\.%&\(\)\{\},\$-;#@\*\[\]【】]{1,36}$/;msg = '不允许出现非英文允许英文数字混合,长度最多36字符';
 	err_tip(this,reg,msg);
 })
 //州省
