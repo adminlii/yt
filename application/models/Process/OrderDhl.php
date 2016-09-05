@@ -288,7 +288,7 @@ class Process_OrderDhl
             }
          	if($this->_shipper['shipper_name'] === ''){
                  $this->_err[] = Ec::Lang('发件人姓名不可为空');
-            }else if(!preg_match('/^[a-zA-Z\s\.%&\(\)\{\},\$-;#@\*\[\]【】]{1,35}$/',$this->_shipper['shipper_name'])){
+            }else if(!preg_match('/^[a-zA-Z\s\.&,]{1,35}$/',$this->_shipper['shipper_name'])){
             		$this->_err[] = "发件人姓名不可为非英文，长度最多35字符";
             }
             if(!empty($this->_shipper['shipper_city'])){
@@ -303,7 +303,7 @@ class Process_OrderDhl
             }
             if(!$this->_shipper['shipper_company']){
             	$this->_err[] = Ec::Lang('发件人公司不可为空');
-            }else if(!preg_match('/^[a-zA-Z\d\s\.%&\(\)\{\},\$-;#@\*\[\]【】]{1,35}$/',$this->_shipper['shipper_company'])){
+            }else if(!preg_match('/^[a-zA-Z\d\s\.&,]{1,35}$/',$this->_shipper['shipper_company'])){
             		$this->_err[] = "发件人公司不可为非英文，长度最多35字符";
             }
             if(!$this->_shipper['shipper_telephone']){
@@ -340,7 +340,7 @@ class Process_OrderDhl
                     if(!preg_match('/^[a-zA-Z\s]{1,25}$/', $this->_consignee['consignee_name'])){
                         $this->_err[] = Ec::Lang('收件人姓名不允许出现非英文，长度最多25字符');
                     }
-                }else if(!preg_match('/^[a-zA-Z\s\.%&\(\)\{\},\$-;#@\*\[\]【】]{1,35}$/', $this->_consignee['consignee_name'])){
+                }else if(!preg_match('/^[a-zA-Z\s\.&,]{1,35}$/', $this->_consignee['consignee_name'])){
             		$this->_err[] = Ec::Lang('收件人姓名不允许出现非英文，长度最多35字符');
             	}
             }
@@ -397,7 +397,7 @@ class Process_OrderDhl
             }
             if(empty($this->_consignee['consignee_company'])){
             	$this->_err[] = Ec::Lang('收件人公司不可为空');
-            }else if(!preg_match('/^[a-zA-Z\d\s\.%&\(\)\{\},\$-;#@\*\[\]【】]{1,35}$/',$this->_consignee['consignee_company'])){
+            }else if(!preg_match('/^[a-zA-Z\d\s\.&,]{1,35}$/',$this->_consignee['consignee_company'])){
             		$this->_err[] = "收件人公司不可为非英文，长度最多35字符";
             }
         }

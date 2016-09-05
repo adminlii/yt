@@ -279,7 +279,7 @@ class Process_Order
             }
             if($this->_shipper['shipper_name'] === ''){
                  $this->_err[] = Ec::Lang('发件人姓名不可为空');
-            }else if(!preg_match('/^[a-zA-Z\s\.%&\(\)\{\},\$-;#@\*\[\]【】]+$/',$this->_shipper['shipper_name'])){
+            }else if(!preg_match('/^[a-zA-Z\s\.&,]+$/',$this->_shipper['shipper_name'])){
             		$this->_err[] = "发件人姓名不可为非英文";
             }
             if(!empty($this->_shipper['shipper_city'])){
@@ -292,7 +292,7 @@ class Process_Order
             }
             if(!$this->_shipper['shipper_company']){
             	$this->_err[] = Ec::Lang('发件人公司不可为空');
-            }else if(!preg_match('/^[a-zA-Z\s\.%&\(\)\{\},\$-;#@\*\[\]【】]+$/',$this->_shipper['shipper_company'])){
+            }else if(!preg_match('/^[a-zA-Z\s\.&,]+$/',$this->_shipper['shipper_company'])){
             		$this->_err[] = "发件人公司不可为非英文";
             }
             if(!$this->_shipper['shipper_telephone']){
@@ -325,11 +325,11 @@ class Process_Order
             if($this->_consignee['consignee_name'] === ''){
                 $this->_err[] = Ec::Lang('收件人姓名不可为空');
             }else{
-            	$reg = "/^[a-zA-Z\s]{1,36}$/";$msg = Ec::Lang('收件人姓名不允许出现非英文，长度最多36字符');
-                switch ($this->_order['product_code']){
+            	$reg = "/^[a-zA-Z\s\.&,]{1,36}$/";$msg = Ec::Lang('收件人姓名不允许出现非英文，长度最多36字符');
+               /*  switch ($this->_order['product_code']){
                 	case 'TNT':$reg = '/^[a-zA-Z\s]{1,25}$/';$msg=Ec::Lang('收件人姓名不允许出现非英文，长度最多25字符');break;
                 	case 'ESB':$reg = '/^[a-zA-Z\s]{1,50}$/';$msg=Ec::Lang('收件人姓名不允许出现非英文，长度最多50字符');break;
-                }
+                } */
                 if(!preg_match($reg,$this->_consignee['consignee_name'])){
                 	$this->_err[] = $msg;
                 }
@@ -360,6 +360,12 @@ class Process_Order
             }
             if(empty($this->_consignee['consignee_postcode'])){
             	$this->_err[] = Ec::Lang('收件人邮编不可为空');
+            }
+            
+            if(!$this->_consignee['consignee_company']){
+            	//$this->_err[] = Ec::Lang('收件人公司不可为空');
+            }else if(!preg_match('/^[a-zA-Z\s\.&,]+$/',$this->_consignee['consignee_company'])){
+            	$this->_err[] = "收件人公司不可为非英文";
             }
         }
         
