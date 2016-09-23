@@ -1,0 +1,113 @@
+@charset "UTF-8";
+/**
+ * 
+ * @authors Your Name (you@example.org)
+ * @date    2016-08-03 11:01:49
+ * @version $Id$
+ */
+*{padding: 0px;margin: 0px;font-style: normal;list-style-type: none;text-decoration: none;font-family: "微软雅黑";font-size: 14px;border:0 none;line-height: 24px;color: #666;outline: none;resize:none; }
+p,a{font-size: 14px;}
+button{background: none;cursor: pointer;}
+input,select,textarea{border:1px solid #e2e2e2;}
+.BoxRadius5 input{border-radius:5px;-webkit-border-radius:5px;-moz-border-radius:5px;}
+.Radius5{border-radius:5px;-webkit-border-radius:5px;-moz-border-radius:5px;}
+input{height: 30px;}
+input,textarea{padding: 3px 5px;line-height: 20px;color: #666;}
+select,button{height: 38px;}
+form{display: block;}
+body{background: #fff;clear: both;}
+.oflr{overflow: hidden;}
+.fl{float: left;}.fr{float: right;}.clear{clear: both;overflow: hidden;}
+
+.wrapper{width: 1180px;margin:0 auto;position: relative;}
+.head{height: 80px;}
+.head h1{padding-top: 10px;float: left;}
+.head p{line-height: 75px;font-size: 18px;padding-left: 20px;font-weight: bold;color: #333; overflow: hidden;}
+.banner{background: url(../../images/index/banner.jpg) no-repeat center top;height: 400px;}
+.banner .loginBox{background: url(../../images/index/bg_gray.png) repeat;position: absolute;top: 55px;right: 160px;width: 260px;padding: 15px 35px 0;overflow: hidden;}
+.accmm{padding-top: 5px;}
+.accmm li{padding: 8px 0;}
+.accmm li input{width: 216px;padding-left: 37px;height: 36px; font-size: 14px;border:1px solid #fff; }
+.accmm li input:focus{border:1px solid #f7ca29;}
+.accmm li .acc{background: #fff url(../../images/index/user.png) no-repeat 10px 12px;}
+.accmm li .mm{background: #fff url(../../images/index/mm.png) no-repeat 12px 12px;}
+.Codes{padding: 8px 0 15px;overflow: hidden;}
+.Codes li{float: left;padding-right: 5px;}
+.Codes li input{width: 100px;color: #666;}
+.Codes li input:focus{border:1px solid #f7ca29;}
+.Codes li img{height: 36px;display: block;margin-top: 1px; }
+.Codes li.change a{display: block; padding-left: 16px;line-height: 40px;background: url(../../images/index/refrash.png) no-repeat left center;margin-left: 5px;color: #fff;font-size: 12px;}
+.Codes li.change a:hover{text-decoration: underline;}
+
+.sevicepro{background: #ff8800;padding: 8px 0;overflow: hidden;}
+.sevicepro li{float: left;margin-right: 8px;border:2px solid #d97400;}
+.sevicepro li:hover{border:2px solid #ffb35d;}
+.sevicepro li img{width: 110px;}
+.sevicepro li a{display: block;}
+.sevicepro li h3{font-size: 16px;color: #fff;line-height: 51px;background: #d97400;width: 120px;text-align: center;font-weight: normal;}
+.loginbtn{display: block;width: 100%;background: #f08300;line-height: 40px;text-align: center; height: 40px;color: #fff;font-size: 16px;}
+.resginer{overflow: hidden;clear: both;padding: 5px 0 10px;}
+.resginer p{color: #fff;}
+.resginer a{color: #fff;line-height: 30px;color: #394869;}
+.resginer a:hover{text-decoration: underline;}
+.resginer .forgotmm{float: left;}
+
+/*注册*/
+.grayBg{background: #f6f6f6;}
+.grayBg .wrapper{background: #fff;width: 750px;border-radius: 15px;-webkit-border-radius: 15px;-moz-border-radius: 15px;overflow: hidden;}
+.Content{background: url(../../images/index/bigbg.png) no-repeat center bottom;padding-bottom: 180px;}
+.Content .logo{text-align: center;padding: 50px 0 30px;}
+.rgstitle{padding: 20px 30px 10px;background: #ff8800; margin-bottom: 25px;overflow: hidden;}
+.rgstitle h3{font-size: 20px;color: #fff;line-height: 30px; font-weight: normal;float: left;}
+.rgstitle a{color: #fff;float: right;}
+.rgstitle a:hover{text-decoration: underline;}
+.regForm{overflow: hidden;display: block;padding:0 0 30px 165px;}
+.inpList li{clear: both;padding-bottom: 20px;overflow:hidden;position:relative;}
+.inpList li.remind{border:1px solid #f6f0d0;background:#fdf8e4;padding:5px 10px; width:398px;margin-bottom:15px;}
+.inpList li.remind  p{color:#c1974d;padding:0px;}
+.inpList li em{display:block;overflow:hidden;position:absolute;top:0px;right:0px;width:160px; padding-left:10px;color:red;overflow:hidden;line-height:20px;}
+.inpList li i,.regForm .Codes li i{color: red;}
+.inpList li label,.regForm .Codes li label{display: block;width: 100px;float: left;text-align: right;color: #666;line-height: 36px;height: 36px;}
+.inpList li input,.inpList li div{overflow: hidden;}
+.inpList li input{height: 32px;color: #666;width: 308px;padding-left: 5px;border-radius: 0;float:left;}
+.inpList li input:focus{border:1px solid #f7ca29;}
+.inpList li select{height: 40px;color: #666;width: 154px;border-radius: 0;}
+.inpList li p{color: #828282;font-size: 12px;padding-top: 5px;clear:both;width:320px;}
+.regForm .Codes{overflow: hidden;clear: both;width: 100%;}
+.regForm .Codes input{border-radius: 0;}
+.regForm .Codes li.change a{color: #666;background: url(../../images/index/refresh.jpg) no-repeat left center;}
+.regForm .Btns{padding: 20px 0 0 100px;}
+.regForm .Btns button,.forgetForm .Btns button{width: 100%;background: #ff8800;color: #fff;text-align: center;height: 42px;cursor: pointer;font-size: 16px;}
+.regForm .Btns .had{background: #00baff;}
+
+/*forget*/
+.logo_mm{width: 1180px;margin:0 auto;padding: 20px 0 20px 15px;overflow: hidden;}
+.logo_mm p{padding: 34px 2px 0 0;}
+.logo_mm a:hover{color: #00baff;}
+.navbtn{background: #ff8800;text-align: right;}
+.navbtn p{color: #fff;}
+.navbtn a{color: #fff;line-height: 42px;}
+.forgetForm{width: 320px;margin: 0 auto;}
+.layer_content{height: 244px;width: 100%; position: absolute;top: 50%;left: 0;margin-top: -200px;}
+.mmtitle{padding: 30px 0;text-align: center;}
+.mmtitle h3{font-size: 25px;font-weight: normal;}
+.forgetfoot{width: 100%;position: absolute;bottom: 0;left: 0;}
+
+.floor{padding-bottom: 30px;overflow: hidden;}
+.title{padding: 30px 0;background: url(../../images/index/line.jpg) no-repeat center center;text-align: center;}
+.title h3{font-size: 20px;color: #ff8800;}
+.title span{font-size: 14px;color: #828282;font-weight: normal;}
+.LeftCont{width: 750px;padding-top: 20px;}
+.LeftCont p{line-height: 30px;}
+.RightCont{overflow: hidden;}
+.footer{text-align: center;padding: 20px 0;}
+.footer a:hover{color: #ff8800;text-decoration: underline;}
+
+.pop_up{display:none; position:fixed;z-index:999; top:0px;right:0px;bottom:0px;left:0px;width:100%;}
+.pop_up .bg{position:absolute;top:0px;right:0px;left:0px;bottom:0px; background:#000;filter:alpha(opacity=50); -moz-opacity:0.5;  -khtml-opacity: 0.5; opacity: 0.5;}
+.pop_up .content{width:500px;margin:10% auto 0;background:#fff;overflow:hidden; border-radius:8px;-webkit-border-radius:8px;-moz-border-radius:8px; position:relative;z-index:1;}
+.pop_up .content .Title{overflow:hidden;background:#eee;clear:both;}
+.pop_up .content .Title h4{float:left;line-height:40px;padding-left:15px;}
+.pop_up .content .Title a{float:right;font-size:18px; display:block;width:40px;line-height:40px;background:#e6e6e6;text-align:center;}
+.pop_up .content .Title a:hover{background:#ddd;color:#333;}
+.pop_up .content .text{padding:15px;}

@@ -3,7 +3,7 @@ include('DES.php');
 class Default_IndexController extends Ec_Controller_DefaultAction
 {
     public $_loginSuccessUrl = '/';
-    public $_authCode = 0; //是否用验证码
+    public $_authCode = 1; //是否用验证码
     private static $log_name = 'AppForPlatform_Authorized_';
 
     public function preDispatch()
@@ -1118,5 +1118,10 @@ class Default_IndexController extends Ec_Controller_DefaultAction
 				$filelist[]	=	$filesavepath.'invoicelist/'.$order_info['packlistfile'];
     		$zipdown->toZip($filelist,true);
     	}
+    }
+    
+    //找回密码新页
+    public function findPwdAction(){
+    	echo $this->view->render($this->tplDirectory . 'find_pwd.tpl');
     }
 }

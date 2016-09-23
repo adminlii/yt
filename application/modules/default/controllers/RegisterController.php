@@ -70,7 +70,7 @@ public function indexAction()
                 }
                 unset($row['user_password_confirm']);
                 
-                if (!eregi("^[a-zA-Z0-9_\.-]+\@([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,4}$", $row['user_email'])) {
+                if (!preg_match("/^[a-zA-Z0-9_\.-]+\@([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,4}$/", $row['user_email'])) {
                 	throw new Exception(Ec::Lang('validateEmail'));
                 }
                 
@@ -168,7 +168,7 @@ public function indexAction()
     	$content_customer = "尊敬的客户：" . $row['user_name'] . " 您好!<br>"
     			. "恭喜您成功注册商业渠道发运系统，请牢记您的登录名：" . $row['user_code'] . "<br>"
     			. "即刻可以验证邮箱，请点击以下链接：<br>"
-    			. $url .'shipping/default/register/activate-email?user_code='. $row['user_code'] . '&activate=' . $row['user_activate_code']
+    			. $url .'/shipping/default/register/activate-email?user_code='. $row['user_code'] . '&activate=' . $row['user_activate_code']
     			. "<br><br>打不开链接？复制以上地址在浏览器打开即可。";
     	
     	/*
@@ -283,16 +283,19 @@ public function indexAction()
             'message' => '账号已经存在'
         );
         $user_email = $this->getParam('user_email', '');
-        
-        $exist = Service_User::getByField($user_email, 'user_email');
-        if($exist){
-            $return['ask'] = 1;
-            $return['message'] = '邮箱已经存在';
+        if (!preg_match("/^[a-zA-Z0-9_\.-]+\@([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,4}$/",$user_email)) {
+        	$return['ask'] = 1;
+        	$return['message'] = '邮箱格式不正确';
         }else{
-            $return['ask'] = 0;
-            $return['message'] = '邮箱不存在';
+	        $exist = Service_User::getByField($user_email, 'user_email');
+	        if($exist){
+	            $return['ask'] = 1;
+	            $return['message'] = '邮箱已经存在';
+	        }else{
+	            $return['ask'] = 0;
+	            $return['message'] = '邮箱不存在';
+	        }
         }
-        
         die(Zend_Json::encode($return));
     }
     
