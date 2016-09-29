@@ -5,12 +5,15 @@ class Common_FileToZip{
 	public $removeAfterDown	= '';
 	public $err_num	 =	0;
 	public $errflag	 =	false;
-	public function __construct($savepath,$removeAfterDown=true){
+	public function __construct($savepath,$zipName='',$removeAfterDown=true){
 		if(is_dir($savepath))
 			$this->savepath	=	$savepath;
 		else{
 			$this->err_num	=	1;
 			$this->errflag	=	true;
+		}
+		if(!empty($zipName)){
+			$this->zipName = $zipName;
 		}
 		$this->removeAfterDown	=	$removeAfterDown;
 	}
@@ -45,6 +48,7 @@ class Common_FileToZip{
 	public function toZip($filelist,$skip=true,$return=false){
 		if($this->errflag){
 			echo "<script>alert('".$this->getErrorMsg()."')</script>";
+			return false;
 		}
 		if(is_array($filelist)){
 			//如果是数组但是长度也是1则就和单文件一样处理
@@ -54,7 +58,7 @@ class Common_FileToZip{
 						return $filelist;
 					else{
 						if(!$return){
-							$dw=new download(basename($filelist[0]),dirname($filelist[0]).DIRECTORY_SEPARATOR); //下载文件
+							$dw=new download($this->zipName,basename($filelist[0]),dirname($filelist[0]).DIRECTORY_SEPARATOR); //下载文件
 							$dw->getfiles();
 						}else
 							return $filelist;
@@ -65,7 +69,7 @@ class Common_FileToZip{
 					if($return){
 						return $zip_name;
 					}else{
-						$dw=new download(basename($zip_name),dirname($zip_name).DIRECTORY_SEPARATOR); //下载文件
+						$dw=new download($this->zipName,basename($zip_name),dirname($zip_name).DIRECTORY_SEPARATOR); //下载文件
 						$dw->getfiles(1);
 					}
 				}
@@ -74,7 +78,7 @@ class Common_FileToZip{
 				if($return){
 					return $zip_name;
 				}else{
-					$dw=new download(basename($zip_name),dirname($zip_name).DIRECTORY_SEPARATOR); //下载文件
+					$dw=new download($this->zipName,basename($zip_name),dirname($zip_name).DIRECTORY_SEPARATOR); //下载文件
 					$dw->getfiles(1);
 				}
 			}
@@ -82,7 +86,7 @@ class Common_FileToZip{
 			if($return)
 				return $filelist;
 			else{
-				$dw=new download(basename($filelist),dirname($filelist).DIRECTORY_SEPARATOR); //下载文件
+				$dw=new download($this->zipName,basename($filelist),dirname($filelist).DIRECTORY_SEPARATOR); //下载文件
 				$dw->getfiles();
 			}
 		}else{
@@ -96,7 +100,10 @@ class Common_FileToZip{
 		$zip=new \ZipArchive();
 		$m=0;
 		do{
-			$zipFileName	=	rtrim($this->savepath,'/').'/'.date('YmdHis').mt_rand(1,999).'.zip';
+			if(empty($this->zipName))
+				$zipFileName	=	rtrim($this->savepath,'/').'/'.date('YmdHis').mt_rand(1,999).'.zip';
+			else 
+				$zipFileName	=	rtrim($this->savepath,'/').'/'.date('mdHis').mt_rand(1,999).'-'.$this->zipName;
 			if(!file_exists($zipFileName)){
 				break;
 			}
@@ -128,10 +135,15 @@ class Common_FileToZip{
 
 class download{
 	protected $_filename;
+	protected $_downfilename;
 	protected $_filepath;
 	protected $_filesize;//文件大小
 	protected $savepath;//文件大小
-	public function __construct($filename,$savepath){
+	public function __construct($downfilename,$filename,$savepath){
+		if(!empty($downfilename))
+			$this->_downfilename=$downfilename;
+		else 
+			$this->_downfilename=$filename;
 		$this->_filename=$filename;
 		$this->_filepath=$savepath.$filename;
 	}
@@ -160,7 +172,7 @@ class download{
 			//返回文件的大小
 			Header("Accept-Length: ".filesize($this->_filepath));
 			//这里对客户端的弹出对话框，对应的文件名
-			Header("Content-Disposition: attachment; filename=".$this->_filename);
+			Header("Content-Disposition: attachment; filename=".$this->_downfilename);
 			//修改之前，一次性将数据传输给客户端
 			echo fread($file, filesize($this->_filepath));
 			//修改之后，一次只传输1024个字节的数据给客户端

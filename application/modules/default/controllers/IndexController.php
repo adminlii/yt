@@ -1089,36 +1089,36 @@ class Default_IndexController extends Ec_Controller_DefaultAction
     /**
      * 导出订单
      */
-    public function exportfbaAction(){
-    	$type = $this->getParam('type',2);
-    	if($type == 2){
-    		$order_id_arr = $this->getParam('orderId', array());
-    		$process = new Process_OrderfbaUpload();
-    		$process->baseExportProcess($order_id_arr);
-    	}else if($type == 1){
-    		//导出附件的功能
-    		header("Content-type:text/html;charset=utf-8");
-    		//导出附件
-    		$savepath	=	'../public/fba/save';
-    		$order_id = $this->getParam('orderid','');
-    		if(empty($order_id))
-    			exit;
-    		//获取详细信息
-    		$order_info = Service_CsdOrderfba::getByField($order_id);
-    		if(empty($order_info)){
-    			echo '未找到订单数据';die;
-    		}
-    		$filesavepath = '../public/fba/';
-    		$zipdown	= new Common_FileToZip($savepath);
-    		$filelist	=	array();
-    			
-    		if($order_info['invoicefile']&&file_exists($filesavepath.'invoice/'.$order_info['invoicefile']))
+	public function exportfbaAction(){
+		$type = $this->getParam('type',2);
+		if($type == 2){
+			$order_id_arr = $this->getParam('orderId', array());
+			$process = new Process_OrderfbaUpload();
+			$process->baseExportProcess($order_id_arr);
+		}else if($type == 1){
+			//导出附件的功能
+			header("Content-type:text/html;charset=utf-8");
+			//导出附件
+			$savepath	=	'../public/fba/save';
+			$order_id = $this->getParam('orderid','');
+			if(empty($order_id))
+				exit;
+			//获取详细信息
+			$order_info = Service_CsdOrderfba::getByField($order_id);
+			if(empty($order_info)){
+				echo '未找到订单数据';die;
+			}
+			$filesavepath = '../public/fba/';
+			$zipdown	= new Common_FileToZip($savepath,$order_info['shipper_hawbcode'].'.zip');
+			$filelist	=	array();
+			
+			if($order_info['invoicefile']&&file_exists($filesavepath.'invoice/'.$order_info['invoicefile']))
 				$filelist[]	=	$filesavepath.'invoice/'.$order_info['invoicefile'];
 			if($order_info['packlistfile']&&file_exists($filesavepath.'invoicelist/'.$order_info['packlistfile']))
 				$filelist[]	=	$filesavepath.'invoicelist/'.$order_info['packlistfile'];
-    		$zipdown->toZip($filelist,true);
-    	}
-    }
+			$zipdown->toZip($filelist,true);
+		}
+	}
     
     //找回密码新页
     public function findPwdAction(){

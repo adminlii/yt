@@ -743,274 +743,226 @@ class Order_OrderController extends Ec_Controller_Action
     /**
      * 手工创建TNT订单
      */
-    public function createtntAction()
+	public function createtntAction()
     {
-    	$order_id = $this->getRequest()->getParam('order_id', '');
-    	if($this->getRequest()->isPost()){
-    		$orderR = array();
-    		$params = $this->getRequest()->getParams();
-    		//订单头
-    		$order = $this->getParam('order',array());
-    		//收件人,发件人
-    		$consignee = $this->getParam('consignee',array());
-    		//发件人
-    		$shipper = $this->getParam('shipper',array());
-    		//预报？草稿？
-    		$status = $this->getParam('status','1');
+    	$uuid = create_guid();
+        $order_id = $this->getRequest()->getParam('order_id', '');
+        $cpy = $this->getRequest()->getParam('cpy', null);
+        if($this->getRequest()->isPost()){
+            $orderR = array();
+            $params = $this->getRequest()->getParams();
+            //订单头
+            $order = $this->getParam('order',array());
+            //收件人,发件人
+            $consignee = $this->getParam('consignee',array());
+            //发件人
+            $shipper = $this->getParam('shipper',array());
+            //申报信息
+            $invoice = json_decode($params['invoice'],1);
+            //额外服务
+            $extraservice = $this->getParam('extraservice',array());
+            //预报？草稿？
+            $status = $this->getParam('status','1');
+            //日志记录start
+            $logrow = array();
+            $logrow['requestid'] = $uuid;
+             
+            $logrow['type'] = 3;
+            $logrow['detail'] = '创建订单';
+            list($usec, $sec) = explode(" ", microtime());
+            $logrow['creattime'] = date("Y-m-d H:i:s|",$sec-3600*8).$usec;
+            $db = Common_Common::getAdapter();
+            $db ->insert('logapi', $logrow);
+            //日志记录end
+            $orderArr = array(
+                'product_code' => 'TNT',
+                'country_code' => strtoupper($order['country_code']),
+                'refer_hawbcode' => strtoupper($order['refer_hawbcode']),
+                'order_weight' => 0.01,
+                'order_pieces' => 10,
+                 
+                'order_length'=>10,
+                'order_width'=>10,
+                'order_height'=>10,
+            	'dangerousgoods'=>empty($order['dangerousgoods'])?0:1,
+                'buyer_id' =>'',
+                'order_id' => $order['order_id'],
+                'order_create_code'=>'w',
+                'customer_id'=>Service_User::getCustomerId(),
+                'creater_id'=>Service_User::getUserId(),
+                'modify_date'=>date('Y-m-d H:i:s'),
+                'mail_cargo_type' => $order['mail_cargo_type'],
+                'tms_id'=>Service_User::getTmsId(),
+                'customer_channelid'=>Service_User::getChannelid(),
+                'insurance_value' => trim($order['insurance_value']),
+                'insurance_value_gj' => $order['insurance_value_gj'],
+            	'invoice_print'=>empty($order['invoice_print'])?0:1,
+            	'makeinvoicedate'=> $order['makeinvoicedate'],
+            	'export_type'=> $order['export_type'],
+            	'trade_terms'=> $order['trade_terms'],
+            	'invoicenum'=> $order['invoicenum'],
+            	'pay_type'=> $order['pay_type'],
+            	'fpnote'=> $order['fpnote'],
+            	'untread'=>empty($order['untread'])?0:intval($order['untread']),
+            );
+            //添加一个发票类型
+            if($orderArr["invoice_print"]==1){
+            	$orderArr["invoice_type"]=$order['invoice_type'];
+            }else{
+            	$orderArr["invoice_type"]=0;
+            }
+    		//货币类型
+            $orderArr['currencytype'] =  $params['currencytype'];
+            $orderArr['invoice_totalcharge_all'] =  $order['invoice_totalcharge_all'];
+            $orderArr['invoice_shippertax'] =  $params['invoice_shippertax'];
+            $orderArr['invoice_consigneetax'] =  $params['invoice_consigneetax'];
+            $orderArr['order_info'] = $params['DESCRIPTION'];
+            $consigneeArr = array(
+                'consignee_countrycode' => strtoupper($order['country_code']),
+                'consignee_company' => $consignee['consignee_company'],
+                'consignee_province' => $consignee['consignee_province'],
+                'consignee_name' => $consignee['consignee_name'],
+                'consignee_city' => $consignee['consignee_city'],
+                'consignee_telephone' => $consignee['consignee_telephone'],
+                'consignee_mobile' => $consignee['consignee_mobile'],
+                'consignee_postcode' => $consignee['consignee_postcode'],
+                'consignee_email' => $consignee['consignee_email'],
+                'consignee_street' => $consignee['consignee_street'],
+                'consignee_street2' => $consignee['consignee_street2'],
+                'consignee_street3' => $consignee['consignee_street3'],
+                'consignee_certificatetype' => '',
+                'consignee_certificatecode' => '',
+                'consignee_credentials_period' => '',
+                'consignee_doorplate' => '',
+            );
     
-    		$orderArr = array(
-    				'product_code' => strtoupper($order['product_code']),
-    				'country_code' => strtoupper($order['country_code']),
-    				'refer_hawbcode' => strtoupper($order['refer_hawbcode']),
-    				'order_weight' => $order['order_weight'],
-    				'order_pieces' => $order['order_pieces'],
-    				 
-    				'order_length'=>$order['order_length'],
-    				'order_width'=>$order['order_width'],
-    				'order_height'=>$order['order_height'],
-    				'buyer_id' =>$order['buyer_id'],
-    				'order_id' => $order['order_id'],
-    				'order_create_code'=>'w',
-    				'customer_id'=>Service_User::getCustomerId(),
-    				'creater_id'=>Service_User::getUserId(),
-    				'modify_date'=>date('Y-m-d H:i:s'),
-    				'mail_cargo_type' => $order['mail_cargo_type'],
-    				'tms_id'=>Service_User::getTmsId(),
-    				'customer_channelid'=>Service_User::getChannelid(),
-    				'insurance_value' => trim($order['insurance_value']),
-    				'insurance_value_gj' => $order['insurance_value_gj'],
-    				'invoice_print'=>empty($order['invoice_print'])?0:1,
-    				'makeinvoicedate'=> $order['makeinvoicedate'],
-    				'export_type'=> $order['export_type'],
-    				'trade_terms'=> $order['trade_terms'],
-    				'invoicenum'=> $order['invoicenum'],
-    				'pay_type'=> $order['pay_type'],
-    				'fpnote'=> $order['fpnote'],
-    		);
+            $consignee['shipper_account'] = ! empty($consignee['shipper_account']) ? $consignee['shipper_account'] : '';
+            $shipperArr = array(
+                'shipper_name' => $shipper['shipper_name'],
+                'shipper_company' => $shipper['shipper_company'],
+                'shipper_countrycode' => $shipper['shipper_countrycode'],
+                'shipper_province' => $shipper['shipper_province'],
+                'shipper_city' => $shipper['shipper_city'],
+                'shipper_street' => $shipper['shipper_street'],
+                'shipper_postcode' => $shipper['shipper_postcode'],
+                'shipper_areacode' => $shipper['shipper_areacode'],
+                'shipper_telephone' => $shipper['shipper_telephone'],
+                'shipper_mobile' => $shipper['shipper_mobile'],
+                'shipper_email' => $shipper['shipper_email'],
+                'shipper_certificatecode' => '',
+                'shipper_certificatetype' => '',
+                'shipper_fax' => '',
+                'shipper_mallaccount' => ''
+            );
+            
+            $invoiceArr = $invoice;
+            //DHL 添加了规则，refer用来存取城市代码
+            $condtion_sp['cityname'] = $shipper['shipper_city'];
+            $condtion_sp['status'] =   1;
+            $condtion_sp['productcode'] =   $orderArr["product_code"];
+            $server_csi_prs=new Service_CsiProductRuleShipper();
+            $rs_cisprs = $server_csi_prs->getByCondition($condtion_sp);
+            if($rs_cisprs[0]){
+            	//如果是DHL不认的替换掉邮编和城市
+            	if($rs_cisprs[0]['cityrname']&&$condtion_sp['productcode']=='G_DHL'){
+            		if($shipperArr['shipper_street']){
+            			$shipperArr['shipper_street'].=" ".$shipperArr['shipper_city'];
+            		}
+            		$shipperArr['shipper_city']=$rs_cisprs[0]['cityrname'];
+            		$shipperArr['shipper_postcode']=$rs_cisprs[0]['postcode'];
+            	}
+            	//ref里面设定上citycode
+            	$orderArr['refer_hawbcode'] = $rs_cisprs[0]['citycode'];
+            }
+            $process = new Process_OrderTnt();
+            //$process->setVolume($volumeArr);
+            $process->setOrder($orderArr);
+            $process->setInvoice($invoiceArr);
+            $process->setExtraservice($extraservice);
+            $process->setShipper($shipperArr);
+            $process->setConsignee($consigneeArr);
+            $process->setUuid($uuid);
+            $return = $process->createOrderTransaction($status);
+            die(Zend_Json::encode($return));
+        }
     
+        if($order_id){
+            try {
+                $order = Service_CsdOrder::getByField($order_id, 'order_id');
+                if(!$order){
+                    throw new Exception(Ec::Lang('订单不存在或已删除'));
+                }
+                if($order['customer_id']!=Service_User::getCustomerId()){
+                    throw new Exception(Ec::Lang('非法操作'));
+                }
+                // 历史数据 start
+                $con = array(
+                    'order_id' => $order_id
+                );
+               /*  $invoice = Service_CsdInvoice::getByCondition($con,'*',0,0,'invoice_id asc');
     
-    		/*$return = array(
-    		 'ask' => 0,
-    				'message' => Ec::Lang('订单操作失败')
-    		);
-    		$return["message"] = $volumeArr['length'];
-    		die(Zend_Json::encode($return));*/
+                foreach($invoice as $k=>$v){
+                    $v['invoice_unitcharge'] = $v['invoice_quantity']?($v['invoice_totalcharge']/$v['invoice_quantity']):0;
+                    $v['invoice_weight'] = $v['invoice_weight']?($v['invoice_totalWeight']/$v['invoice_quantity']):0;
+                    $invoice[$k] = $v;
+                } */
     
-    		$consigneeArr = array(
-    				'consignee_countrycode' => strtoupper($order['country_code']),
-    				'consignee_company' => $consignee['consignee_company'],
-    				'consignee_province' => $consignee['consignee_province'],
-    				'consignee_name' => $consignee['consignee_name'],
-    				'consignee_city' => $consignee['consignee_city'],
-    				'consignee_telephone' => $consignee['consignee_telephone'],
-    				'consignee_mobile' => $consignee['consignee_mobile'],
-    				'consignee_postcode' => $consignee['consignee_postcode'],
-    				'consignee_email' => $consignee['consignee_email'],
-    				'consignee_street' => $consignee['consignee_street'],
-    				'consignee_street2' => $consignee['consignee_street2'],
-    				'consignee_street3' => $consignee['consignee_street3'],
-    				'consignee_certificatetype' => $consignee['consignee_certificatetype'],
-    				'consignee_certificatecode' => $consignee['consignee_certificatecode'],
-    				'consignee_credentials_period' => $consignee['consignee_credentials_period'],
-    				'consignee_doorplate' => $consignee['consignee_doorplate'],
-    		);
-    
-    		$consignee['shipper_account'] = ! empty($consignee['shipper_account']) ? $consignee['shipper_account'] : '';
-    		//$shipperArr = Service_CsiShipperTrailerAddress::getByField($consignee['shipper_account'], 'shipper_account');
-    		$shipperArr = array(
-    				'shipper_name' => $shipper['shipper_name'],
-    				'shipper_company' => $shipper['shipper_company'],
-    				'shipper_countrycode' => $shipper['shipper_countrycode'],
-    				'shipper_province' => $shipper['shipper_province'],
-    				'shipper_city' => $shipper['shipper_city'],
-    				'shipper_street' => $shipper['shipper_street'],
-    				'shipper_postcode' => $shipper['shipper_postcode'],
-    				'shipper_areacode' => $shipper['shipper_areacode'],
-    				'shipper_telephone' => $shipper['shipper_telephone'],
-    				'shipper_mobile' => $shipper['shipper_mobile'],
-    				'shipper_email' => $shipper['shipper_email'],
-    				'shipper_certificatecode' => $shipper['shipper_certificatecode'],
-    				'shipper_certificatetype' => $shipper['shipper_certificatetype'],
-    				'shipper_fax' => $shipper['shipper_fax'],
-    				'shipper_mallaccount' => $shipper['shipper_mallaccount']
-    		);
-    
-    		$invoiceArr = array();
-    		foreach($invoice as $column=>$v){
-    			foreach($v as $kk=>$vv){
-    				$invoiceArr[$kk][$column] = $vv;
-    			}
-    		}
-    		//去掉都为空的海关信息
-    		foreach ($invoiceArr as $k=>$v){
-    			$flag = false;
-    			foreach ($v as $vv){
-    				if(!empty($vv)){
-    					$flag=true;
-    					break;
-    				}
-    			}
-    			if(!$flag){
-    				unset($invoiceArr[$k]);
-    			}
-    		}
-    		//dhl 中 根据货物计算 包裹信息
-    		$invoice_weight	= 0;
-    		$invoice_lenght = 0;
-    		$invoice_width 	= 0;
-    		$invoice_height	= 0;
-    		foreach ($invoiceArr as $column=>$vc){
-    			$invoice_weight+=$vc["invoice_weight"]*$vc["invoice_quantity"];
-    			$invoice_lenght>$vc["invoice_length"]?"":$invoice_lenght=$vc["invoice_length"];
-    			$invoice_width>$vc["invoice_width"]?"":$invoice_width=$vc["invoice_width"];
-    			$invoice_height>$vc["invoice_height"]?"":$invoice_height=$vc["invoice_height"];
-    			if(!$vc['invoice_enname']){
-    				$vc['invoice_enname'] = $invoice['invoice_enname'][0];
-    				$vc['invoice_cnname'] = $invoice['invoice_cnname'][0];
-    				$vc['invoice_shippertax'] = $invoice['invoice_shippertax'][0];
-    				$vc['invoice_consigneetax'] = $invoice['invoice_consigneetax'][0];
-    				$vc['invoice_totalcharge_all'] = $invoice['invoice_totalcharge_all'][0];
-    				$vc['hs_code'] = $invoice['hs_code'][0];
-    				$invoiceArr[$column]=$vc;
-    			}
-    		}
-    		$orderArr['order_length'] = $volumeArr['length'] = intval($invoice_lenght);
-    		$orderArr['order_width'] = $volumeArr['width'] = intval($invoice_width);
-    		$orderArr['order_height'] = $volumeArr['height'] = intval($invoice_height);
-    		$orderArr["order_weight"] = round($invoice_weight,1);
-    
-    		
-    		// php hack
-    		if(! empty($invoiceArr)){
-    			array_unshift($invoiceArr, array());
-    			unset($invoiceArr[0]);
-    		}
-    		
-    		//标签打印 add
-    		$labelArr = array();
-    		foreach($invoice1 as $column=>$v){
-    			foreach($v as $kk=>$vv){
-    				$labelArr[$kk][$column] = $vv;
-    			}
-    		}
-    		//去掉都为空的海关信息
-    		foreach ($labelArr as $k=>$v){
-    			$flag = false;
-    			foreach ($v as $vv){
-    				if(!empty($vv)){
-    					$flag=true;
-    					break;
-    				}
-    			}
-    			if(!$flag){
-    				unset($labelArr[$k]);
-    			}
-    		}
-    		if(! empty($labelArr)){
-    			array_unshift($labelArr, array());
-    			unset($labelArr[0]);
-    		}
-    		$process = new Process_OrderDhl();
-    		$process->setVolume($volumeArr);
-    		$process->setOrder($orderArr);
-    		$process->setInvoice($invoiceArr);
-    		$process->setLabel($labelArr);
-    		$process->setExtraservice($extraservice);
-    		$process->setShipper($shipperArr);
-    		$process->setConsignee($consigneeArr);
-    		//             $process
-    		$return = $process->createOrderTransaction($status);
-    
-    		//             print_r($params);exit;
-    		die(Zend_Json::encode($return));
-    	}
-    
-    	if($order_id){
-    		try {
-    			$order = Service_CsdOrder::getByField($order_id, 'order_id');
-    			if(!$order){
-    				throw new Exception(Ec::Lang('订单不存在或已删除'));
-    			}
-    			if($order['customer_id']!=Service_User::getCustomerId()){
-    				throw new Exception(Ec::Lang('非法操作'));
-    			}
-    			// 历史数据 start
-    			$con = array(
-    					'order_id' => $order_id
-    			);
-    			$invoice = Service_CsdInvoice::getByCondition($con,'*',0,0,'invoice_id asc');
-    
-    			foreach($invoice as $k=>$v){
-    				$v['invoice_unitcharge'] = $v['invoice_quantity']?($v['invoice_totalcharge']/$v['invoice_quantity']):0;
-    				$v['invoice_weight'] = $v['invoice_weight']?($v['invoice_totalWeight']/$v['invoice_quantity']):0;
-    				$invoice[$k] = $v;
-    			}
-    
-    			$atd_extraservice_kind_arr = Common_DataCache::getAtdExtraserviceKindAll();
-    			$extservice = Service_CsdExtraservice::getByCondition($con);
-    			foreach($extservice as $v){
-    				$extra_servicecode = $v['extra_servicecode'];
-    				//保险费 C0
-    				if($atd_extraservice_kind_arr[$extra_servicecode]['extra_service_group']=='C0'){
-    					$order['insurance_value'] = $v['extra_servicevalue'];
-    				}
-    			}
-    			$shipperConsignee = Service_CsdShipperconsignee::getByField($order_id,'order_id');
-    			// 历史数据 end
-    			if($cpy){
-    				unset($order['order_id']);
-    				if($order['order_status']!='E'){
-    					unset($order['shipper_hawbcode']);
-    					unset($order['refer_hawbcode']);
-    					unset($order['server_hawbcode']);
-    				}
-    			}//print_r($order);die;
-    			$this->view->order = $order;
-    			$this->view->invoice = $invoice;
-    			$this->view->shipperConsignee = $shipperConsignee;
-    			$this->view->extservice = $extservice;
-    		} catch (Exception $e) {
-    			header("Content-type: text/html; charset=utf-8");
-    			echo $e->getMessage();exit;
-    		}
-    	}else{
-    		$op = $this->getParam ( 'op', '' );
-    		if ($op == 'fast-create-order') {
-    			$product_code = $this->getParam ( 'product_code', '' );
-    			$country_code = $this->getParam ( 'country_code', '' );
-    			$order = array (
-    					'product_code' => $product_code,
-    					'country_code' => $country_code
-    			);
-    			$this->view->order = $order;
-    		}
-    	}
-    
-    	$countrys = Process_ProductRule::arrivalCountry('TNT');
-    	//var_dump($countrys);
-    	//$countrys = Service_IddCountry::getByCondition(null, '*', 0, 0, '');
-    	$this->view->country = $countrys;
-    
-    	$this->view->productKind = Process_ProductRule::getProductKind();
-    	$con = array('unit_status'=>'ON');
-    	$units = Service_AddDeclareunit::getByCondition($con);
-    	$this->view->units = $units;
-    
-    	//证件类型
-    	$con = array();
-    	$certificates = Service_AtdCertificateType::getByCondition($con);
-    	$this->view->certificates = $certificates;
-    
-    	//邮政包裹申报种类表
-    	$con = array();
-    	$mailCargoTypes = Service_AtdMailCargoType::getByCondition($con);
-    	$this->view->mailCargoTypes = $mailCargoTypes;
-    	//选取默认收件人
-    	$this->view->shipperCustom=$this->getShipper($order_id,1);
-    	//var_dump($this->getShipper($order_id,1));
-    	$html =  Ec::renderTpl($this->tplDirectory . "order_create_tnt.tpl", 'system-layout-0506');
-    	$html = preg_replace('/>\s+</','><',$html);
-    	echo $html;
+                /* $atd_extraservice_kind_arr = Common_DataCache::getAtdExtraserviceKindAll();
+                $extservice = Service_CsdExtraservice::getByCondition($con);
+                foreach($extservice as $v){
+                    $extra_servicecode = $v['extra_servicecode'];
+                    //保险费 C0
+                    if($atd_extraservice_kind_arr[$extra_servicecode]['extra_service_group']=='C0'){
+                        $order['insurance_value'] = $v['extra_servicevalue'];
+                    }
+                } */
+                $shipperConsignee = Service_CsdShipperconsignee::getByField($order_id,'order_id');
+                // 历史数据 end
+                if($cpy){
+                    unset($order['order_id']);
+                    if($order['order_status']!='E'){
+                        unset($order['shipper_hawbcode']);
+                        unset($order['refer_hawbcode']);
+                        unset($order['server_hawbcode']);
+                    }
+                }//print_r($order);die;
+                $this->view->order = $order;
+                //$this->view->invoice = $invoice;
+                //分割收件人地址
+                $shipperstreeArr = explode("||", $shipperConsignee["shipper_street"]);
+                $shipperConsignee["shipper_street1"]=$shipperstreeArr[0]?$shipperstreeArr[0]:'';
+                $shipperConsignee["shipper_street2"]=$shipperstreeArr[1]?$shipperstreeArr[1]:'';
+                $shipperConsignee["shipper_street3"]=$shipperstreeArr[2]?$shipperstreeArr[2]:'';
+                $this->view->shipperConsignee = $shipperConsignee;
+                //var_dump($shipperConsignee);
+                //$this->view->extservice = $extservice;
+            } catch (Exception $e) {
+                header("Content-type: text/html; charset=utf-8");
+                echo $e->getMessage();exit;
+            }
+        }else{
+            $op = $this->getParam ( 'op', '' );
+            if ($op == 'fast-create-order') {
+                $product_code = $this->getParam ( 'product_code', '' );
+                $country_code = $this->getParam ( 'country_code', '' );
+                $order = array (
+                    'product_code' => $product_code,
+                    'country_code' => $country_code
+                );
+                $this->view->order = $order;
+            }
+        }
+        
+        $countrys = Process_ProductRule::arrivalCountry('TNT');
+        $countrys = Service_IddCountry::getByCondition(null, '*', 0, 0, '');
+        $this->view->country = $countrys;
+        //邮政包裹申报种类表
+        $con = array();
+        $mailCargoTypes = Service_AtdMailCargoType::getByCondition($con);
+        $this->view->mailCargoTypes = $mailCargoTypes;
+        $html =  Ec::renderTpl($this->tplDirectory . "order_create_tnt.tpl", 'system-layout-tnt');
+        $html = preg_replace('/>\s+</','><',$html);
+        echo $html;
     }
     
     /**
@@ -1811,13 +1763,16 @@ class Order_OrderController extends Ec_Controller_Action
 				"message" => "Fail."
 		);
 		if ($this->_request->isPost()) {
-			$productcode = !empty($this->_request->getPost('dc'))?$this->_request->getPost('dc'):'';
+			$productcode = !empty($this->_request->getPost('dc'))?$this->_request->getPost('dc'):'G_DHL';
 			$condition = array();
 			$condition['countrycode'] = !empty($this->_request->getPost('cd'))?$this->_request->getPost('cd'):'';
 			$condition['cityename'] = !empty($this->_request->getPost('cn'))?$this->_request->getPost('cn'):'';;
 			$condition['postcode'] = !empty($this->_request->getPost('pc'))?$this->_request->getPost('pc'):'';;
 			$condition['status'] = 1;
-			$csiPostcodeRule	=	new Service_CsiPostcodeRule();
+			if($productcode=='G_DHL')
+				$csiPostcodeRule	=	new Service_CsiPostcodeRule();
+			else 
+				$csiPostcodeRule	=	new Service_CsiPostcodeRuleTnt();
 			if (!empty($condition)) {
 				//获取总数
 				$pagesize = 50;
@@ -1840,7 +1795,12 @@ class Order_OrderController extends Ec_Controller_Action
 						    if($rs_cisprs){
 						    	foreach ($res as $k=>$v){
 						    		foreach ($rs_cisprs as $vv){
-						    			if($v['cityename']==$vv['cityname']){
+						    			$_cityname = $v['cityename'];
+						    			$_cityname_exits = strpos($_cityname,"-");
+						    			if($_cityname_exits!==false){
+						    				$_cityname=substr($_cityname,0,$_cityname_exits);
+						    			}
+						    			if($_cityname==$vv['cityname']){
 						    				$res[$k]['dhlcount'] = $vv['countnum'];
 						    				$res[$k]['citycode'] = $vv['citycode'];
 						    				continue;
@@ -1923,7 +1883,7 @@ class Order_OrderController extends Ec_Controller_Action
 				echo '未找到订单数据';die;
 			}
 			$filesavepath = '../public/fba/';
-			$zipdown	= new Common_FileToZip($savepath);
+			$zipdown	= new Common_FileToZip($savepath,$order_info['shipper_hawbcode'].'.zip');
 			$filelist	=	array();
 			
 			if($order_info['invoicefile']&&file_exists($filesavepath.'invoice/'.$order_info['invoicefile']))
