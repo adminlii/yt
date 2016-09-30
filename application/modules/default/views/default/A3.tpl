@@ -65,7 +65,7 @@
             <td class="txtRt" colspan="2"><{$o.create_date}></td>
         </tr>
         <tr>
-            <td colspan="2"> &nbsp;</td>
+            <td colspan="2" class="bold" style="font-size: 48px;line-height: 48px;text-align:center;"><{$o.firstCode}></td>
         </tr>
     </table>	
 	</div>	
