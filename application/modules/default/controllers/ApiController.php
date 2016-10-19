@@ -330,4 +330,305 @@ class Default_ApiController extends Zend_Controller_Action
 		// 记录响应数据
 		echo json_encode($return);
 	}
+	
+	public function test21Action(){
+		$sc = new Common_ApiService();
+		$req  = array(
+				'usercode'=>'1',
+				'userpwd'=>'123456',
+				
+		);
+		print_r($sc->setToken($req));
+	}
+	
+	public function test22Action(){
+		$arr = array(
+			'usercode'=>'1',
+			'versions'=>1,
+			'service'=>'create',
+			'token'=>'72b2b888d57fb245b903ae5218a0ebaf',
+			'order'=>array(
+					'refer_hawbcode'=>'',
+					'order_weight'=>1,
+					'order_pieces'=>1,
+					'order_length'=>10,
+					'order_width'=>10,
+					'order_height'=>10,
+					'mail_cargo_type'=>4,
+					'product_code'=>'ESB',
+					'country_code'=>'DE',
+			),
+			'consignee'=>array(
+				    'consignee_company'=>'asc',
+					'consignee_name'=>'asc',
+					'consignee_province'=>'',
+					'consignee_email'=>'',
+					'consignee_street'=>'9B Griffin Ave,Epsom',
+					'consignee_street2'=>'',
+					'consignee_street3'=>'',
+					'consignee_telephone'=>'121212123',
+					'consignee_city'=>'Berlin',
+					'consignee_mobile'=>'',
+					'consignee_postcode'=>'10115',
+			),
+			'shipper'=>array(
+					'shipper_company'=>'STEVE COM',
+					'shipper_name'=>'STEVE LIU',
+					'shipper_countrycode'=>'CN',
+					'shipper_province'=>'RFEWREWREWR',
+					'shipper_street'=>'510||MINZHI DA DAO',
+					'shipper_telephone'=>'075577887',
+					'shipper_city'=>'shenzhen',
+					'shipper_postcode'=>'210001',
+			),
+			'invoice'=>array(
+					array(
+							'invoice_enname'=>'case',
+							'invoice_cnname'=>'盒子',
+							'invoice_quantity'=>1,
+							'invoice_unitcharge'=>10,
+							'invoice_weight'=>1.5,
+							'invoice_note'=>'',
+							'invoice_url'=>'',
+							'unit_code'=>'PCE',
+							'sku'=>'shkk',
+							'hs_code'=>''
+					),
+			)							
+		);
+		print_r(json_encode($arr));
+	}
+	
+	public function test23Action(){
+		$arr = array(
+				'usercode'=>'1',
+				'versions'=>1,
+				'service'=>'createDhl',
+				'token'=>'79d96dea0366f5e91e20a9f2da4c8966',
+				'order'=>array(
+						'refer_hawbcode'=>'',
+						'dangerousgoods'=>1,
+						'mail_cargo_type'=>4,
+						'country_code'=>'DE',
+						'insurance_value_gj'=>'15',
+						'invoice_totalcharge_all'=>'22',
+				),
+				'consignee'=>array(
+						'consignee_company'=>'asc',
+						'consignee_name'=>'asc',
+						'consignee_province'=>'',
+						'consignee_email'=>'',
+						'consignee_street'=>'9B Griffin Ave,Epsom',
+						'consignee_street2'=>'',
+						'consignee_street3'=>'',
+						'consignee_telephone'=>'121212123',
+						'consignee_city'=>'Berlin',
+						'consignee_mobile'=>'',
+						'consignee_postcode'=>'10115',
+				),
+				'shipper'=>array(
+						'shipper_company'=>'STEVE COM',
+						'shipper_name'=>'STEVE LIU',
+						'shipper_countrycode'=>'CN',
+						'shipper_province'=>'RFEWREWREWR',
+						'shipper_street'=>'510||MINZHI DA DAO',
+						'shipper_telephone'=>'075577887',
+						'shipper_city'=>'shenzhen',
+						'shipper_postcode'=>'210001',
+				),
+				'productinformations'=>array(
+						array(
+								'invoice_quantity'=>1,
+								'invoice_weight'=>1,
+								'invoice_length'=>10,
+								'invoice_width'=>10,
+								'invoice_height'=>10,
+						),
+						array(
+								'invoice_quantity'=>2,
+								'invoice_weight'=>2,
+								'invoice_length'=>10,
+								'invoice_width'=>10,
+								'invoice_height'=>10,
+						),
+				),
+				'productinformations_ext'=>array(
+						'invoice_enname'=>'case',
+						'invoice_cnname'=>'盒子',
+						'invoice_currencycode'=>'USD',
+						'invoice_shippertax'=>'test',
+						'invoice_consigneetax'=>'test1',
+						'hs_code'=>'test2',
+				),
+				'invoice'=>array(
+						'makeinvoicedate'=>'2016-10-11',
+						'export_type'=>'Permanent',
+						'trade_terms'=>'DAP-Delivered at Place',
+						'invoicenum'=>'test3',
+						'pay_type'=>'freight prepaid',
+						'fpnote'=>'test4',
+						'invoice_type'=>1,
+						'detail'=>
+						array(
+								array(
+										'invoice_note'=>'test5',
+										'invoice_quantity'=>1,
+										'invoice_shipcode'=>'test7',
+										'invoice_unitcharge'=>2,
+										'invoice_proplace'=>'CN',
+								),
+								array(
+										'invoice_note'=>'test6',
+										'invoice_quantity'=>2,
+										'invoice_shipcode'=>'test8',
+										'invoice_unitcharge'=>10,
+										'invoice_proplace'=>'CN',
+								),
+								
+						),
+				),
+				'extraservice'=>array(
+						'C2'
+				)
+		);
+		print_r(json_encode($arr));
+	}
+	
+	
+	public function test24Action(){
+		$arr = array(
+				'usercode'=>'1',
+				'versions'=>1,
+				'service'=>'getLabel',
+				'token'=>'79d96dea0366f5e91e20a9f2da4c8966',
+				'order_num'=>'EMS1628450000',
+				
+		);
+		print_r(json_encode($arr));
+	}
+	
+	public function test25Action(){
+		$arr = array(
+				'usercode'=>'1',
+				'versions'=>1,
+				'service'=>'createFba',
+				'token'=>'79d96dea0366f5e91e20a9f2da4c8966',
+				'order_num'=>'EMS1628450000',
+				'order'=>array(
+						'refer_hawbcode'=>'',
+						'product_code'=>'FBA1',
+						'boxnum'=>10,
+						'storage'=>'PHX3',
+				),
+				'shipper'=>array(
+						'shipper_company'=>'STEVE COM',
+						'shipper_name'=>'STEVE LIU',
+						'shipper_countrycode'=>'CN',
+						'shipper_province'=>'RFEWREWREWR',
+						'shipper_street'=>'510||MINZHI DA DAO',
+						'shipper_telephone'=>'075577887',
+						'shipper_city'=>'shenzhen',
+						'shipper_postcode'=>'210001',
+				),
+				'fileData'=>array(
+						'invoicelist'=>array(
+							'data'=>'','ext'=>'xlsx'	
+						),
+						'invoice'=>array(
+							'data'=>'','ext'=>'xlsx'
+						),
+				)
+		);
+		print_r(json_encode($arr));
+	}
+	
+public function test26Action(){
+		$arr = array(
+				'usercode'=>'1',
+				'versions'=>1,
+				'service'=>'createTnt',
+				'token'=>'79d96dea0366f5e91e20a9f2da4c8966',
+				'order'=>array(
+						'refer_hawbcode'=>'',
+						'dangerousgoods'=>1,
+						'mail_cargo_type'=>4,
+						'country_code'=>'US',
+						//'insurance_value_gj'=>'1344.26',
+						'invoice_totalcharge_all'=>'200',
+						'DESCRIPTION'=>'this is test data',
+				),
+				'consignee'=>array(
+						'consignee_company'=>'asc',
+						'consignee_name'=>'asc',
+						'consignee_province'=>'',
+						'consignee_email'=>'',
+						'consignee_street'=>'9B Griffin Ave,Epsom',
+						'consignee_street2'=>'',
+						'consignee_street3'=>'',
+						'consignee_telephone'=>'121212123',
+						'consignee_city'=>'Berlin',
+						'consignee_mobile'=>'',
+						'consignee_postcode'=>'10115',
+				),
+				'shipper'=>array(
+						'shipper_company'=>'STEVE COM',
+						'shipper_name'=>'STEVE LIU',
+						'shipper_countrycode'=>'CN',
+						'shipper_province'=>'RFEWREWREWR',
+						'shipper_street'=>'510||MINZHI DA DAO',
+						'shipper_telephone'=>'075577887',
+						'shipper_city'=>'shenzhen',
+						'shipper_postcode'=>'210001',
+				),
+				'productinformations'=>array(
+						'pack'=>array(
+							array('ITEMS'=>1,'WEIGHT'=>10,"LENGTH"=>10,"WIDTH"=>10,"HEIGHT"=>10),		
+						),
+						'packdetail'=>array(
+							array("packId"=>0,"invoice_enname"=>"test","invoice_quantity"=>20,"invoice_weight"=>0.5,"invoice_unitcharge"=>10,"invoice_totalcharge"=>200,"hs_code"=>"test1","invoice_proplace"=>"CN"),	
+						)
+				),
+				'productinformations_ext'=>array(
+						'invoice_currencycode'=>'USD',
+						'invoice_shippertax'=>'test',
+						'invoice_consigneetax'=>'test1',
+				),
+				'invoice'=>array(
+						'makeinvoicedate'=>'2016-10-11',
+						'export_type'=>'Permanent',
+						'trade_terms'=>'DAP-Delivered at Place',
+						'invoicenum'=>'test3',
+						'pay_type'=>'freight prepaid',
+						'fpnote'=>'test4',
+						'invoice_type'=>1,
+						
+				),
+				'extraservice'=>array(
+						'C2'
+				)
+		);
+		print_r(json_encode($arr));
+	} 
+	
+	
+	public function rtoDoAction()
+	{
+		$return = array('ret'=>-1,'msg'=>'','data'=>array()); 
+		try {
+			$json = file_get_contents('php://input');
+			if (empty ($json)) {
+				throw new Exception ('无请求数据');
+			}
+			// 请求格式为json
+			$req = json_decode($json, true);
+			if (!$req) {
+				throw new Exception ('数据格式需为json格式');
+			}
+			$sc = new Common_ApiService();
+			$return = $sc->callService($req);
+		} catch (Exception $e) {
+			$return ['msg'] = $e->getMessage();
+		}
+		echo json_encode($return);
+	}
 }

@@ -137,7 +137,7 @@ class Process_Order
         $db = Common_Common::getAdapterForDb2();
         $sql = "select * from csi_productkind where 
                 product_status='Y' 
-                and tms_id='".Service_User::getTmsId()."' 
+                and tms_id='1' 
                 and (product_code='{$product_code}' or product_cnname='{$product_code}' or product_enname='{$product_code}');";
         $productKind = $db->fetchAll($sql);
 //         print_r($sql);die;
@@ -223,7 +223,7 @@ class Process_Order
         
         
         // 验证运输方式,
-        if($this->_order['product_code'] === ''){
+        if(empty($this->_order['product_code'])){
             $this->_err[] = Ec::Lang('运输方式不可为空');
         }else{
             // $product = Service_CsiProductkind::getByField($this->_order['product_code'], 'product_code');
@@ -238,7 +238,7 @@ class Process_Order
             }
         }
         // 验证国家
-        if($this->_order['country_code'] === ''){
+        if(empty($this->_order['country_code'])){
             $this->_err[] = Ec::Lang('目的国家不可为空');
         }else{
             // $country = Service_IddCountry::getByField($this->_order['country_code'], 'country_code');            
@@ -277,7 +277,7 @@ class Process_Order
                     $this->_shipper['shipper_countrycode'] = $country['country_code'];
                 }
             }
-            if($this->_shipper['shipper_name'] === ''){
+            if(empty($this->_shipper['shipper_name'])){
                  $this->_err[] = Ec::Lang('发件人姓名不可为空');
             }else if(!preg_match('/^[a-zA-Z\s\.&,]+$/',$this->_shipper['shipper_name'])){
             		$this->_err[] = "发件人姓名不可为非英文";
@@ -287,7 +287,7 @@ class Process_Order
             		$this->_err[] = "发件人城市不可为非英文";
             	}
             }
-            if($this->_shipper['shipper_street'] === ''){
+            if(empty($this->_shipper['shipper_street'])){
                 $this->_err[] = Ec::Lang('发件人地址不可为空');
             }
             if(!$this->_shipper['shipper_company']){
@@ -310,7 +310,7 @@ class Process_Order
             $this->_err[] = Ec::Lang('收件人信息不可为空');
         }else{
             // 收件人必填项
-            if($this->_consignee['consignee_countrycode'] == ''){
+            if(empty($this->_consignee['consignee_countrycode'])){
                  $this->_err[] = Ec::Lang('收件人国家不可为空');
             }else{
                 
@@ -322,7 +322,7 @@ class Process_Order
                     $this->_consignee['consignee_countrycode'] = $country['country_code'];
                 }
             }
-            if($this->_consignee['consignee_name'] === ''){
+            if(empty($this->_consignee['consignee_name'])){
                 $this->_err[] = Ec::Lang('收件人姓名不可为空');
             }else{
             	$reg = "/^[a-zA-Z\s\.&,]{1,36}$/";$msg = Ec::Lang('收件人姓名不允许出现非英文，长度最多36字符');
@@ -334,7 +334,7 @@ class Process_Order
                 	$this->_err[] = $msg;
                 }
             }
-            if($this->_consignee['consignee_street'] === ''){
+            if(empty($this->_consignee['consignee_street'])){
                 $this->_err[] = Ec::Lang('收件人地址不可为空');
             }else{
             	$reg = "/^[\w\W]{0,36}$/";$msg = Ec::Lang('收件人地址长度最多36字符');
@@ -346,7 +346,7 @@ class Process_Order
             		$this->_err[] = $msg;
             	}
             }
-            if ($this->_consignee['consignee_city'] === ''){
+            if (empty($this->_consignee['consignee_city'])){
             	$this->_err[] = Ec::Lang('收件人城市不可为空');
             }else{
             	$reg = "/^[a-zA-Z\s]{1,36}$/";$msg = Ec::Lang('收件人城市不允许出现非英文，长度最多36字符');
@@ -389,7 +389,7 @@ class Process_Order
         
         
         
-        if($this->_order['order_weight'] !== ''){
+        if(!empty($this->_order['order_weight'])){
         	if(!preg_match("/(^0\.\d{0,3}$)|(^[1-9]\d*(\.\d{0,3})?$)/",$this->_order['order_weight'])){
                 $this->_err[] = Ec::Lang('货物重量须为数字,最多3位小数');
             }else{
@@ -561,8 +561,7 @@ class Process_Order
         // echo $this->_consignee['consignee_certificatecode'];exit;
 
         //证件类型验证   
-        
-        if($this->_consignee['consignee_certificatetype'] !== ''){
+        if(!empty($this->_consignee['consignee_certificatetype'])){
             $sql = "select * from atd_certificate_type where certificate_type='{$this->_consignee['consignee_certificatetype']}' or certificate_type_cnname='{$this->_consignee['consignee_certificatetype']}' or certificate_type_enname='{$this->_consignee['consignee_certificatetype']}'";
 
             $db = Common_Common::getAdapterForDb2();
@@ -576,7 +575,7 @@ class Process_Order
             $this->_consignee['consignee_certificatetype'] = '';
         }
         //证件号码验证
-        if($this->_consignee['consignee_certificatecode'] !== ''){
+        if(!empty($this->_consignee['consignee_certificatecode'])){
             if(! preg_match('/^[0-9A-Za-z]+$/', $this->_consignee['consignee_certificatecode'])){
                 $this->_err[] = Ec::Lang('证件号码只能包含数字和字母');
             }
@@ -951,7 +950,54 @@ class Process_Order
         $return['order'] = $this->_order;
         return $return;
     }
-
+	
+    public function createOrderTransactionApi($status)
+    {
+    	$return = array(
+    			'ask' => 0,
+    			'message' => Ec::Lang('订单操作失败')
+    	);
+    	$db = Common_Common::getAdapter();
+    	$db->beginTransaction();
+    	$log = array();
+    	try{
+    		$status = strtoupper($status);
+    		$statusArr = array(
+    				// 草稿
+    				'D',
+    				// 预报
+    				'P'
+    		);
+    		if(! in_array($status, $statusArr)){
+    			throw new Exception(Ec::Lang('订单状态不合法'));
+    		}
+    		$this->createOrder($status,1);
+    
+    		$successTip = Ec::Lang('订单保存草稿成功');
+    		if($status == 'P'){
+    			$successTip = Ec::Lang('订单提交预报成功');
+    		}
+    		$db->commit();
+    		
+    		
+    		$this->_order['order_id'] = $this->_order_id;
+    		$return['ask'] = 1;
+    		if($this->_existOrder){
+    			$return['message'] = Ec::Lang('订单更新成功');
+    		}else{}
+    		$return['message'] = $successTip;
+    	}catch(Exception $e){
+    		$db->rollback();
+    		$return['message'] = "服务异常：" . trim($e->getMessage());
+    		Ec::showError($e->getMessage(), 'Order_Create');
+    		//             array_unshift($this->_err, $e->getMessage());
+    	}
+    	$return['err'] = $this->_err;
+    	$return['order_id'] = $this->_order_id;
+    	$return['order'] = $this->_order;
+    	return $return;
+    }
+    
     public function createOrder($status,$import=FALSE)
     {
         $status = strtoupper($status);
@@ -1205,7 +1251,7 @@ class Process_Order
         
         // 提交预报
         if($status == 'P'){
-            $this->_verifyValidate($this->_order_id, 'verify');
+            $this->_verifyValidate($this->_order_id, 'verify',$import);
             
             // 订单验证异常
             if($this->_err){
@@ -1226,14 +1272,14 @@ class Process_Order
      * @param unknown_type $op            
      * @throws Exception
      */
-    protected function _verifyValidate($order_id, $op)
+    protected function _verifyValidate($order_id, $op,$import=false)
     {
         try{
             $order = Service_CsdOrder::getByField($order_id, 'order_id');
             if(! $order){
                 throw new Exception(Ec::Lang('订单不存在或已删除') . '-->' . $order_id);
             } 
-            if($order['customer_id'] != Service_User::getCustomerId()){
+            if(!$import&&$order['customer_id'] != Service_User::getCustomerId()){
                 throw new Exception(Ec::Lang('非法操作'));
             }
             // 1.草稿 D

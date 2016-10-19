@@ -247,7 +247,7 @@ class Process_OrderDhl
             }
         }
         // 验证国家
-        if($this->_order['country_code'] === ''){
+        if(empty($this->_order['country_code'])){
             $this->_err[] = Ec::Lang('目的国家不可为空');
         }else{
             // $country = Service_IddCountry::getByField($this->_order['country_code'], 'country_code');            
@@ -286,7 +286,7 @@ class Process_OrderDhl
                     $this->_shipper['shipper_countrycode'] = $country['country_code'];
                 }
             }
-         	if($this->_shipper['shipper_name'] === ''){
+         	if(empty($this->_shipper['shipper_name'])){
                  $this->_err[] = Ec::Lang('发件人姓名不可为空');
             }else if(!preg_match('/^[a-zA-Z\s\.&,]{1,35}$/',$this->_shipper['shipper_name'])){
             		$this->_err[] = "发件人姓名不可为非英文，长度最多35字符";
@@ -321,7 +321,7 @@ class Process_OrderDhl
             $this->_err[] = Ec::Lang('收件人信息不可为空');
         }else{
             // 收件人必填项
-            if($this->_consignee['consignee_countrycode'] == ''){
+            if(empty($this->_consignee['consignee_countrycode'])){
                  $this->_err[] = Ec::Lang('收件人国家不可为空');
             }else{
                 
@@ -333,36 +333,26 @@ class Process_OrderDhl
                     $this->_consignee['consignee_countrycode'] = $country['country_code'];
                 }
             }
-            if($this->_consignee['consignee_name'] === ''){
+            if(empty($this->_consignee['consignee_name'])){
                 $this->_err[] = Ec::Lang('收件人姓名不可为空');
             }else{
-                if($this->_order['product_code'] =='TNT'){
-                    if(!preg_match('/^[a-zA-Z\s]{1,25}$/', $this->_consignee['consignee_name'])){
-                        $this->_err[] = Ec::Lang('收件人姓名不允许出现非英文，长度最多25字符');
-                    }
-                }else if(!preg_match('/^[a-zA-Z\s\.&,]{1,35}$/', $this->_consignee['consignee_name'])){
+                if(!preg_match('/^[a-zA-Z\s\.&,]{1,35}$/', $this->_consignee['consignee_name'])){
             		$this->_err[] = Ec::Lang('收件人姓名不允许出现非英文，长度最多35字符');
             	}
             }
             if($this->_consignee['consignee_street'] === ''){
                 $this->_err[] = Ec::Lang('收件人地址不可为空');
             }else{
-                if($this->_order['product_code'] =='TNT'){
-                    if(!preg_match('/^[\w\W]{0,30}$/', $this->_consignee['consignee_street'])){
-                        $this->_err[] = Ec::Lang('收件人地址长度最多30字符');
-                    }
-                }else if(!preg_match('/^[\w\W]{0,35}$/', $this->_consignee['consignee_street'])){
+               if(!preg_match('/^[\w\W]{0,35}$/', $this->_consignee['consignee_street'])){
             		$this->_err[] = Ec::Lang('收件人地址长度最多35字符');
-            	}
+               }
             }
             
             
             if($this->_consignee['consignee_street2'] === ''){
             	//$this->_err[] = Ec::Lang('收件人地址不可为空');
             }else{
-            	if($this->_order['product_code'] =='TNT'){
-            		
-            	}else if(!preg_match('/^[\w\W]{0,35}$/', $this->_consignee['consignee_street2'])){
+            	if(!preg_match('/^[\w\W]{0,35}$/', $this->_consignee['consignee_street2'])){
             		$this->_err[] = Ec::Lang('收件人地址2长度最多35字符');
             	}
             }
@@ -370,27 +360,18 @@ class Process_OrderDhl
         	if($this->_consignee['consignee_street3'] === ''){
             	//$this->_err[] = Ec::Lang('收件人地址不可为空');
             }else{
-            	if($this->_order['product_code'] =='TNT'){
-            		
-            	}else if(!preg_match('/^[\w\W]{0,35}$/', $this->_consignee['consignee_street3'])){
+            	if(!preg_match('/^[\w\W]{0,35}$/', $this->_consignee['consignee_street3'])){
             		$this->_err[] = Ec::Lang('收件人地址3长度最多35字符');
             	}
             }
             
             
-            if ($this->_consignee['consignee_city'] === ''){
+            if (empty($this->_consignee['consignee_city'])){
             	$this->_err[] = Ec::Lang('收件人城市不可为空');
             }else{
-                if($this->_order['product_code'] =='TNT'){
-                    if(!preg_match('/^[a-zA-Z\s]{1,30}$/', $this->_consignee['consignee_city'])){
-                        $this->_err[] = Ec::Lang('收件人城市不允许出现非英文，长度最多30字符');
-                    }
-                }else if(!preg_match('/^[a-zA-Z\s]{1,35}$/', $this->_consignee['consignee_city'])){
+               if(!preg_match('/^[a-zA-Z\s]{1,35}$/', $this->_consignee['consignee_city'])){
             		$this->_err[] = Ec::Lang('收件人城市不允许出现非英文，长度最多35字符');
             	}
-            }
-            if(empty($this->_consignee['consignee_postcode'])){
-            	$this->_err[] = Ec::Lang('收件人邮编不可为空');
             }
             if(empty($this->_consignee['consignee_postcode'])){
             	$this->_err[] = Ec::Lang('收件人邮编不可为空');
@@ -404,9 +385,6 @@ class Process_OrderDhl
         
         // 验证必填项
         if($this->_consignee['consignee_telephone']){
-        	/* if(preg_match('/^\(\d+\)\d+-\d+$|^\d+\s\d+$/', $this->_consignee['consignee_certificatetype'])){
-        		$this->_err[] = Ec::Lang('收件人电话不正确');
-        	} */
         	if(!preg_match("/^(\d){4,25}$/",$this->_consignee['consignee_telephone'])){
         		$this->_err[] = Ec::Lang('收件人电话格式为4-25位纯数字');
         	}
@@ -416,7 +394,7 @@ class Process_OrderDhl
         
         
         
-        if($this->_order['order_weight'] !== ''){
+        if(!empty($this->_order['order_weight'])){
             if(! is_numeric($this->_order['order_weight'])){
                 $this->_err[] = Ec::Lang('货物重量必须为数字');
             }
@@ -428,24 +406,12 @@ class Process_OrderDhl
         if($this->_order['order_length']){
             if(! is_numeric($this->_order['order_length'])){
                 $this->_err[] = Ec::Lang('包装长度必须为数字');
-            }else{
-                if($this->_order['product_code'] =='TNT'){
-                    if($this->_order['order_length']>240){
-                        $this->_err[] = Ec::Lang('包装长度必须小于等于240cm');
-                    }
-                }
             }
         }
         
         if($this->_order['order_width']){
             if(! is_numeric($this->_order['order_width'])){
                 $this->_err[] = Ec::Lang('包装宽度必须为数字');
-            }else{
-                if($this->_order['product_code'] =='TNT'){
-                    if($this->_order['order_width']>120){
-                        $this->_err[] = Ec::Lang('包装宽度必须小于等于120cm');
-                    }
-                }
             }
         }
         
@@ -453,12 +419,6 @@ class Process_OrderDhl
         if($this->_order['order_height']){
             if(! is_numeric($this->_order['order_height'])){
                 $this->_err[] = Ec::Lang('包装高度必须为数字');
-            }else{
-                if($this->_order['product_code'] =='TNT'){
-                    if($this->_order['order_height']>150){
-                        $this->_err[] = Ec::Lang('包装高度必须小于等于150cm');
-                    }
-                }
             }
         }
         
@@ -487,7 +447,7 @@ class Process_OrderDhl
 
         //证件类型验证   
         
-        if($this->_consignee['consignee_certificatetype'] !== ''){
+        if(!empty($this->_consignee['consignee_certificatetype'])){
             $sql = "select * from atd_certificate_type where certificate_type='{$this->_consignee['consignee_certificatetype']}' or certificate_type_cnname='{$this->_consignee['consignee_certificatetype']}' or certificate_type_enname='{$this->_consignee['consignee_certificatetype']}'";
 
             $db = Common_Common::getAdapterForDb2();
@@ -501,7 +461,7 @@ class Process_OrderDhl
             $this->_consignee['consignee_certificatetype'] = '';
         }
         //证件号码验证
-        if($this->_consignee['consignee_certificatecode'] !== ''){
+        if(!empty($this->_consignee['consignee_certificatecode'])){
             if(! preg_match('/^[0-9A-Za-z]+$/', $this->_consignee['consignee_certificatecode'])){
                 $this->_err[] = Ec::Lang('证件号码只能包含数字和字母');
             }
@@ -524,7 +484,7 @@ class Process_OrderDhl
                 if(empty($invoice['invoice_cnname'])){
                     $this->_err[] = "(" . Ec::Lang('申报信息') . $k . ")" . Ec::Lang('中文申报品名不可为空');
                 }
-                if($invoice['invoice_quantity'] === ''){
+                if(empty($invoice['invoice_quantity'])){
                     $this->_err[] = "(" . Ec::Lang('申报信息') . $k . ")" . Ec::Lang('申报数量不可为空');
                 }else{
                     if(! preg_match('/^[0-9]+$/', $invoice['invoice_quantity']) || intval($invoice['invoice_quantity']) <= 0){
@@ -533,7 +493,7 @@ class Process_OrderDhl
                     	$_totalpice += $invoice['invoice_quantity'];
                     }
                 }
-                if($invoice['invoice_unitcharge'] === ''){
+                if($invoice['invoice_unitcharge']!=0&&empty($invoice['invoice_unitcharge'])){
                     $this->_err[] = "(" . Ec::Lang('申报信息') . $k . ")" . Ec::Lang('申报单价不可为空');
                 }else{
 //                     print_r($invoice);exit;
@@ -541,7 +501,7 @@ class Process_OrderDhl
                         $this->_err[] = "(" . Ec::Lang('申报信息') . $k . ")" . Ec::Lang('申报单价必须为数字');
                     }
                 }
-                if($invoice['invoice_weight'] === ''){
+                if(empty($invoice['invoice_weight'])){
                 	$this->_err[] = "(" . Ec::Lang('申报信息') . $k . ")" . Ec::Lang('申报重量不可为空');
                 }else{
                 	//                     print_r($invoice);exit;
@@ -904,7 +864,52 @@ class Process_OrderDhl
         $return['order'] = $this->_order;
         return $return;
     }
-
+	
+    public function createOrderTransactionapi($status)
+    {
+    	$return = array(
+    			'ask' => 0,
+    			'message' => Ec::Lang('订单操作失败')
+    	);
+    	$db = Common_Common::getAdapter();
+    	$db->beginTransaction();
+    	$log = array();
+    	try{
+    		$status = strtoupper($status);
+    		$statusArr = array(
+    				// 草稿
+    				'D',
+    				// 预报
+    				'P'
+    		);
+    		if(! in_array($status, $statusArr)){
+    			throw new Exception(Ec::Lang('订单状态不合法'));
+    		}
+    		$this->createOrder($status,1);
+    
+    		$successTip = Ec::Lang('订单保存草稿成功');
+    		if($status == 'P'){
+    			$successTip = Ec::Lang('订单提交预报成功');
+    		}
+    		$db->commit();
+    		$this->_order['order_id'] = $this->_order_id;
+    		$return['ask'] = 1;
+    		if($this->_existOrder){
+    			$return['message'] = Ec::Lang('订单更新成功');
+    		}else{}
+    		$return['message'] = $successTip;
+    	}catch(Exception $e){
+    		$db->rollback();
+    		$return['message'] = "服务异常：" . trim($e->getMessage());
+    		Ec::showError($e->getMessage(), 'Order_Create');
+    		//             array_unshift($this->_err, $e->getMessage());
+    	}
+    	$return['err'] = $this->_err;
+    	$return['order_id'] = $this->_order_id;
+    	$return['order'] = $this->_order;
+    	return $return;
+    }
+    
     public function createOrder($status,$import=FALSE)
     {
         $status = strtoupper($status);

@@ -320,6 +320,15 @@ class Table_CsdOrderfba
         if(isset($condition["storagelike"]) && $condition["storagelike"] !== ""){
         	$select->where("csd_shipperconsigneefba.storage like ?", "%{$condition["storagelike"]}%");
         }
+        if(isset($condition["ext_status"]) && $condition["ext_status"] != ""){
+        	$select->where("ext_status = ?", $condition["ext_status"]);
+        }
+        if(isset($condition["shipper_name"]) && $condition["shipper_name"] != ""){
+        	$select->where("shipper_name = ?", $condition["shipper_name"]);
+        }
+        if(isset($condition["shipper_company"]) && $condition["shipper_company"] != ""){
+        	$select->where("shipper_company = ?", $condition["shipper_company"]);
+        }
         //echo $select;exit;
         /* CONDITION_END */
         if('count(*)' == $type){
