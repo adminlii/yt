@@ -24,6 +24,11 @@ EZ.getListData = function(json) {
 		if(val.order_status=='F'){
 			html += '运单号：<a url="/order/order/detail?order_id='+val.order_id+'" ref_id="'+val.order_id+'" class="" href="javascript:;">'+val.shipper_hawbcode+'</a>';
 			html += '<br/>箱数：'+val.boxnum;
+			if(val.ext_status==0){
+				html += '<span style="color:red">实收数量：未到货</span>';
+			}else{
+				html += '<span style="color:red">实收数量：'+val.boxnum_real+'</span>';
+			}
 			html += '<br/>FBA订单号：'+(val.refer_hawbcode ? val.refer_hawbcode : '');
 		}else{
 			html += '运单号：<a url="/order/order/detail?order_id='+val.order_id+'" ref_id="'+val.order_id+'" class="orderDetail" href="javascript:;">'+val.shipper_hawbcode+'</a>';

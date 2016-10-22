@@ -804,6 +804,7 @@ class Order_OrderController extends Ec_Controller_Action
             	'pay_type'=> $order['pay_type'],
             	'fpnote'=> $order['fpnote'],
             	'untread'=>empty($order['untread'])?0:intval($order['untread']),
+            	'service_code'=>empty($params['servicecode'])?'':trim($params['servicecode']),
             );
             //添加一个发票类型
             if($orderArr["invoice_print"]==1){
@@ -1821,6 +1822,95 @@ class Order_OrderController extends Ec_Controller_Action
 				
 			}
 		}
+		die(Zend_Json::encode($result));
+	}
+	
+	//邮编记录查询
+	public function getTntPostcodeListAction(){
+		$result = array(
+				"state" => 0,
+				"message" => "Fail."
+		);
+		do{
+			if ($this->_request->isPost()) {
+				$productcode = !empty($this->_request->getPost('dc'))?$this->_request->getPost('dc'):'G_DHL';
+				$condition = array();
+				$condition['countrycode'] = !empty($this->_request->getPost('cd'))?$this->_request->getPost('cd'):'';
+				if(!empty($this->_request->getPost('cn')))
+				$condition['cityename'] = $this->_request->getPost('cn');
+				if(!empty($this->_request->getPost('pc')))
+				$condition['postcode'] = $this->_request->getPost('pc');
+				$condition['status'] = 1;
+				if(empty($condition['countrycode'])){
+					$result['state']   = 0;
+					$result['nextpage'] = -1;
+					break;
+				}
+				if (!empty($condition)) {
+					//获取总数
+					$pagesize = 50;
+					$page = empty($this->_request->getPost('p'))?1:intval($this->_request->getPost('p'));
+					$tableName = 'csi_postcode_rule_tnt_'.strtolower($condition['countrycode']);
+					$_condition = 'countrycode="'.$condition['countrycode'].'"';
+					foreach ($condition as $k=>$v){
+						if($k=='cityename'){
+							$_condition .= ' AND cityename like "'.$condition['cityename'].'%"';
+						}
+						if($k=='postcode'){
+							$_condition .= ' AND postcode like "'.$condition['postcode'].'%"';
+						}
+					}
+					$db = Common_Common::getAdapterForDb3();
+					$sql  = "select count(*) as count from ".$tableName." where ".$_condition;
+					$count = $db->fetchRow($sql);
+					$count = $count['count'];
+					$allpage = ceil($count/$pagesize);
+					if($page>$allpage){
+						$result['state']   = 2;
+						$result['nextpage'] = -1;
+						break;
+					}else{
+						$sql = "select * from ".$tableName." where ".$_condition;
+						$res = $db->fetchAll($sql);
+						//如果是中国的话，DHL渠道会带上校验规则
+						if(!empty($res)){
+							if($condition['countrycode']=="CN"){
+								//$condtion_sp['cityname'] = $condition['cityename'];
+								$condtion_sp['status'] =   1;
+								$condtion_sp['productcode'] =   $productcode;
+								$server_csi_prs=new Service_CsiProductRuleShipper();
+								$rs_cisprs = $server_csi_prs->getByCondition($condtion_sp);
+								if($rs_cisprs){
+									foreach ($res as $k=>$v){
+										foreach ($rs_cisprs as $vv){
+											$_cityname = $v['cityename'];
+											$_cityname_exits = strpos($_cityname,"-");
+											if($_cityname_exits!==false){
+												$_cityname=substr($_cityname,0,$_cityname_exits);
+											}
+											if($_cityname==$vv['cityname']){
+												$res[$k]['dhlcount'] = $vv['countnum'];
+												$res[$k]['citycode'] = $vv['citycode'];
+												continue;
+											}
+										}
+									}
+								}
+							}
+							$result['state']   = 1;
+							$result['data']    = $res;
+							$result['message'] = 'Success.';
+							$result['nextpage'] = $page==$allpage?-1:++$page;
+							$result['totalpage'] = $allpage;
+							//搜索条件
+							$result['select'] = array('cd'=>$condition['countrycode'],'cn'=>$condition['cityename'],'pc'=>$condition['postcode']);
+						}
+					}
+			
+				}
+			}
+		}while (0);
+		
 		die(Zend_Json::encode($result));
 	}
 	

@@ -429,5 +429,11 @@ class Ec
     	return $db;
     }
     
-
+    public static function getDb3(){
+    	$server = new Zend_Config_Ini(APPLICATION_PATH . '/../application/configs/db.ini', 'production');
+    	$params = $server->get('resources')->get('multidb')->get('db3')->toArray();
+    	$db = Zend_Db::factory('PDO_MYSQL', $params);
+    	$db->query('set names utf8');
+    	return $db;
+    }
 }

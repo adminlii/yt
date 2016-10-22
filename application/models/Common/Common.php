@@ -451,6 +451,13 @@ class Common_Common
     	return Ec::getDb2();
     }
 
+    /**
+     * 获取第三连接
+     * @return Ambigous <Zend_Db_Adapter_Abstract, unknown>
+     */
+    public static function getAdapterForDb3(){
+    	return Ec::getDb3();
+    }
     //字符串解密加密
     public static function authcode($string, $operation = 'DECODE', $key = '', $expiry = 0) {
     

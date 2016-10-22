@@ -5,7 +5,11 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
 	// token信息
 	protected $_user = "";
 	protected $_orderOnline = "";
-	
+	//接口
+	protected $postOrdertotmsApi="http://112.126.68.251:8088/v5/api/Order/PacketOrder?type=json";
+	//protected $postOrdertotmsApi="https://202.104.134.94/chinapost/api/Order/PacketOrder?type=json";
+	protected $notifyTms = "http://112.126.68.251:8088/v5/api/LabelPrintService/PrintTomsLabel?type=json";
+	//protected $notifyTms = "https://202.104.134.94/chinapost/api/LabelPrintService/PrintTomsLabel?type=json";
     public function __construct()
     {
     	// 创建日志目录
@@ -77,113 +81,10 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
     
     //调用服务接口
     public function excuteOrderTo(){
-    
-    	/*
-    	 * 构造订单信息
-    	*/
-    	$data = array();
-    
-    	//销售产品
-    	$items = array();
-    	$data["ForecastNumber"] = $this->orderCode;
-    
-    	//获取渠道运输方式
-    	$data["ChannelCode"] = $this->serverProductCode;
-    	$data["Weight"] = $this->orderKey["weight"]*1000;
-    	$data["Length"] = $this->orderKey["length"];
-    	$data["Width"] = $this->orderKey["width"];
-    	$data["Height"] = $this->orderKey["height"];
-    	$data["type"]   = $this->orderKey["type"];
-    	$data["isOrdangerousgoods"] = $this->orderKey["dangerousgoods"];
-    	// 收件人
-    	$data["ShippingCountryCode"] = $this->orderKey['consigneeCountryCode'];
-    	
-    	//国家
-    	$ct=Service_IddCountry::getAll();
-    	$country=array();
-    	foreach ($ct as $ck=>$cv){
-    		$country[$cv['country_code']]=$cv['country_enname'];
-    	}
-    	// TODO
-    	$data["ShippingCountryEnName"] = $country[$this->orderKey['consigneeCountryCode']];
-    	$data["ShippingFirstName"] = $this->orderKey['consigneeName'];
-    	$data["ShippingLastName"] = "";
-    	$data["ShippingCompany"] = $this->orderKey["consigneeCompanyName"];
-    	$data["ShippingAddress"] = $this->orderKey["consigneeStreet"];
-    	$data["ShippingAddress1"] = $this->orderKey["consigneeStreet1"];
-    	$data["ShippingAddress2"] = $this->orderKey["consigneeStreet2"];
-    	$data["ShippingCity"] = $this->orderKey['consigneeCity'];
-    	$data["ShippingState"] = $this->orderKey['consigneeStateOrProvince'];
-    	$data["ShippingStateCode"] = $this->orderKey['consigneeStateOrProvince'];//TODO
-    	$data["ShippingPhone"] = $this->orderKey['consigneePhone'];
-    	$data["ShippingTaxId"] = "";
-    	$data["ShippingZip"] = $this->orderKey['consigneePostalCode'];
-    
-    	/***发件人信息****/
-    	$data["SenderFirstName"] = $this->shipperKey["shipperName"];
-    	$data["SenderLastName"] = "";
-    	$data["SenderCompany"] = $this->shipperKey["shipperCompanyName"];
-    	$data["SenderAddress"] = $this->shipperKey["shipperStreet"];
-    	$data["SenderState"] = $this->shipperKey["shipperStateOrProvince"];
-    	$data["SenderCity"] = $this->shipperKey["shipperCity"];
-    	$data["SenderPhone"] = $this->shipperKey["shipperPhone"];
-    	$data["SenderZip"] = $this->shipperKey["shipperPostCode"];
-    	$data["SenderCountryCode"] = $this->shipperKey["shipperCountryCode"];
-    	
-    	$declareInvoice = array();
-    	//报关产品
-    	foreach($this->orderInvoiceItemKey as $oKey=>$row){
-    		$cnname = (!empty($row['titleCn']) ? $row['titleCn'] : $row['titleEn']);
-    		$enname = (!empty($row['titleEn']) ? $row['titleEn'] : $row['titleCn']);
-    		
-    		$declareInvoice_temp = array();
-    		$declareInvoice_temp["ApplicationEnName"] = $enname;
-    		$declareInvoice_temp["ApplicationCnName"] = $cnname;
-    		$declareInvoice_temp["UnitPrice"] = $row['value'];
-    		$declareInvoice_temp["Qty"] = $row["quantity"];
-    		$declareInvoice_temp["UnitWeight"] = $row["weight"];
-    		$declareInvoice_temp["HSCode"] = $row["hsCode"];
-    		$declareInvoice_temp["SKU"] = $row["sku"];
-    		$declareInvoice_temp["Remark"] = $row["description"];
-    		$declareInvoice_temp["Currency"] = $row["currencyCode"];
-    		$declareInvoice_temp["SalesUrl"] = $row["url"];
-    		$declareInvoice[] = $declareInvoice_temp;
-    	}
-    	
-    	$data["applicationInfos"] = $declareInvoice;
-        //保险额外服务
-        $data["extservice"] = $this->orderExtservice;
-        //
-        $data["invoice_shippertax"]=$this->orderKey["invoice_shippertax"] ;
-        $data["invoice_consigneetax"]=$this->orderKey["invoice_consigneetax"];
-        //总价值
-        $data['declaredValue']    = empty($this->orderKey["declaredValue"])?"0.01":$this->orderKey["declaredValue"];
-        //保险价值
-        $data['insurance_value_gj']   =  empty($this->orderKey["insurance_value_gj"])?0:$this->orderKey["insurance_value_gj"];
-        //注册编号
-        //$data["RegisterNumber"] = empty($this->customer_ext["registernumber"])?"":$this->customer_ext["registernumber"];
-        //$data["AgencyCode"]		= empty($this->customer_ext["agencycode"])?"":$this->customer_ext["agencycode"];
-        //citycode
-        if($data["ChannelCode"]=="G_DHL"||$data["ChannelCode"]=="TNT"){
-        	//上传REF和绑定的账号
-        	//$data["reference"] 		 = $this->orderKey["refer_hawbcode"];
-        	$condtion_sp['citycode'] = $this->orderKey["refer_hawbcode"];
-        	$condtion_sp['status']   =   1;
-        	$condtion_sp['productcode'] =   $data["ChannelCode"];
-        	$server_csi_prs=new Service_CsiProductRuleShipper();
-        	$rs_cisprs = $server_csi_prs->getByCondition($condtion_sp);
-        	if($rs_cisprs[0]){
-        		//设定上发件人账号
-        		$data['accuntnum'] = $rs_cisprs[0]['countnum'];
-        		$data["reference"] = $rs_cisprs[0]['citycode'];
-        	}
-        }
-        if($data["ChannelCode"]=="TNT"){
-        	//是否废弃包裹
-        	$data['untread'] = $this->orderKey["untread"];
-        }
-        $params = array('CustomerCode'=> $this->_user, 'packageMessage' => array($data));  
-
+    	if($this->serverProductCode!='TNT')
+    		$params = $this->bindNoticeData('normal');
+    	else
+    		$params = $this->bindNoticeData('tnt');
         $sysResult = $this->createAndPreAlertOrderService($params);
   
     	Ec::showError("**************start*************\r\n"
@@ -202,7 +103,8 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
     public function createAndPreAlertOrderService($data = array()) {
     	//$url = $this->_orderOnline . "/api/Order/PacketOrder";
 		//$url = "http://test.hwcservice.com/ChinaPost/Api/Order/PacketOrder";
-		$url = "http://112.126.68.251:8088/v4/api/Order/PacketOrder";
+		//$url = "http://112.126.68.251:8088/v4/api/Order/PacketOrder";
+		$url = $this->postOrdertotmsApi;
 		$result = $this->excuteService($url, json_encode($data), "POST");
 		header("Content-type: text/html; charset=utf-8");
     
@@ -216,10 +118,12 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
      */
     public function PreAlertOrderService($sendParams = array()) {
     	//$url = "http://test.hwcservice.com/ChinaPost/Api/LabelPrintService/PrintTomsLabel?type=json";
-    	$url = "http://112.126.68.251:8088/v4/api/LabelPrintService/PrintTomsLabel?type=json";
+    	//$url = "http://112.126.68.251:8088/v4/api/LabelPrintService/PrintTomsLabel?type=json";
+    	$url = $this->notifyTms;
     	$sendParams = json_encode($sendParams);
     	$header =array("Content-Type:application/json; charset=utf-8");
     	$result = $this->curl_send($url,$sendParams,$header,"post","tmsuser:1234567890");
+    	//$result = $this->curl_send($url,$sendParams,$header,"post","tmsuser:123456");
     	return $result;
     }
     
@@ -337,7 +241,8 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
     	try {
     		$tuCurl = curl_init();
 			curl_setopt($tuCurl, CURLOPT_URL, $url);
-			curl_setopt($tuCurl, CURLOPT_SSL_VERIFYPEER, 0);
+			curl_setopt($tuCurl ,CURLOPT_SSL_VERIFYPEER,false);
+            curl_setopt($tuCurl ,CURLOPT_SSL_VERIFYHOST,FALSE);
 			curl_setopt($tuCurl, CURLOPT_CUSTOMREQUEST, $method);
 			curl_setopt($tuCurl, CURLOPT_RETURNTRANSFER, 1);
 			//curl_setopt($tuCurl,CURLOPT_TIMEOUT,10);
@@ -352,9 +257,11 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
 			$data = curl_exec($tuCurl);
 			
 			if(curl_errno($tuCurl) != 0){
-				//$error = '发送CURL时发生错误:'.curl_error($tuCurl).'(code:'.curl_errno($curl).')'.PHP_EOL;
-				throw new Exception ('通知标签服务器失败！！！');
+				$error = '发送CURL时发生错误:'.curl_error($tuCurl).'(code:'.curl_errno($curl).')'.PHP_EOL;
+				//throw new Exception ('通知标签服务器失败！！');
+				throw new Exception ($error);
 				curl_close($tuCurl);
+				
 			}else{
 	    		$data = Common_Common::objectToArray(json_decode($data));
 	    		$result["ack"] = 1;
@@ -1251,17 +1158,22 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
           return $result;
  	}
  	
- 	//异步通知TMS
- 	public function sendToTms($uuid=false){
+ 	//通知数据组装
+ 	private function bindNoticeData($type){
+ 		$class = 'bindNoticeData'.ucfirst($type);
+ 		return $this->$class();
+ 	}
+ 	
+ 	private function bindNoticeDataNormal(){
  		/*
  		 * 构造订单信息
  		*/
  		$data = array();
- 		
+ 			
  		//销售产品
  		$items = array();
  		$data["OrderID"] = $this->orderCode;
- 		
+ 			
  		//获取渠道运输方式
  		$ChannelCode = $this->serverProductCode;
  		$ParcelInformation["Weight"] = $this->orderKey["weight"]*1000;
@@ -1278,7 +1190,7 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
  		foreach($this->orderInvoiceItemKey as $oKey=>$row){
  			$cnname = (!empty($row['titleCn']) ? $row['titleCn'] : $row['titleEn']);
  			$enname = (!empty($row['titleEn']) ? $row['titleEn'] : $row['titleCn']);
- 				
+ 		
  			$declareInvoice_temp = array();
  			$declareInvoice_temp["Description"] = $enname.'-'.$cnname;
  			$declareInvoice_temp["Value"] = $row['value'];
@@ -1297,14 +1209,14 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
  		
  		// 收件人
  		//$data["ShippingCountryCode"] = $this->orderKey['consigneeCountryCode'];
- 		 
+ 			
  		//国家
  		$ct=Service_IddCountry::getAll();
  		$country=array();
  		foreach ($ct as $ck=>$cv){
  			$country[$cv['country_code']]=$cv['country_enname'];
  		}
-
+ 		
  		$RecipientAddress = array();
  		// TODO
  		$RecipientAddress["Country"] = $this->orderKey['consigneeCountryCode'];
@@ -1391,204 +1303,196 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
  		$data["WarehouseCode"] =$product_set_rs['area'];
  		$data["LabelMarkText"] =null;
  		$data["RedundancyField"] =$RedundancyField;
- 		
  		$params["data"] = $data;
+ 		return $params;
+ 	}
+ 	private function bindNoticeDataTnt(){
+ 		/*
+ 		 * 构造订单信息
+ 		*/
+ 		$data = array();
+ 			
+ 		//销售产品
+ 		$items = array();
+ 		$data["OrderID"] = $this->orderCode;
+ 			
+ 		//获取渠道运输方式
+ 		$ChannelCode = $this->serverProductCode;
+ 		$ParcelInformation["Weight"] = $this->orderKey["weight"]*1000;
+ 		$ParcelInformation["WeightUnit"] =3;
+ 		$ParcelInformation["Length"] = $this->orderKey["length"];
+ 		$ParcelInformation["Width"] = $this->orderKey["width"];
+ 		$ParcelInformation["Height"] = $this->orderKey["height"];
+ 		$ParcelInformation["SizeUnit"]   = 2;
+ 		$ParcelInformation["ExistDangerousGoods"] = $this->orderKey["dangerousgoods"]?true:false;
+ 		$ParcelInformation["ProductInformations"] = null;
+ 			
+ 		$declareInvoice = array();
+ 		//报关产品
+ 		foreach($this->orderInvoiceItemKey as $oKey=>$row){
+ 			$cnname = (!empty($row['titleCn']) ? $row['titleCn'] : $row['titleEn']);
+ 			$enname = (!empty($row['titleEn']) ? $row['titleEn'] : $row['titleCn']);
+ 				
+ 			$declareInvoice_temp = array();
+ 			$declareInvoice_temp["Description"] = $enname.'-'.$cnname;
+ 			$declareInvoice_temp["Value"] = $row['value'];
+ 			$declareInvoice_temp["Quantity"] = $row["quantity"];
+ 			$declareInvoice_temp["Weight"] = $row["weight"];
+ 			$declareInvoice_temp["WeightUnit"] = 4;
+ 			$declareInvoice_temp["HSCode"] = $row["hsCode"];
+ 			$declareInvoice_temp["Sku"] = $row["sku"];
+ 			$declareInvoice_temp["Remark"] = $row["description"];
+ 			$declareInvoice_temp["Currency"] = $row["currencyCode"];
+ 			$declareInvoice_temp["ProductUrl"] = $row["url"];
+ 			$declareInvoice[] = $declareInvoice_temp;
+ 		}
+ 		$ParcelInformation["ProductInformations"] = $declareInvoice;
+ 		$data["ParcelInformation"] = $ParcelInformation;
+ 			
+ 	
+ 		//国家
+ 		$ct=Service_IddCountry::getAll();
+ 		$country=array();
+ 		foreach ($ct as $ck=>$cv){
+ 			$country[$cv['country_code']]=$cv['country_enname'];
+ 		}
+ 	
+ 		$RecipientAddress = array();
+ 		// TODO
+ 		$RecipientAddress["Country"] = $this->orderKey['consigneeCountryCode'];
+ 		$RecipientAddress["FirstName"] = $this->orderKey['consigneeName'];
+ 		$RecipientAddress["LastName"] = "";
+ 		$RecipientAddress["Company"] = $this->orderKey["consigneeCompanyName"];
+ 		$RecipientAddress["StreetAddress"] = $this->orderKey["consigneeStreet"];
+ 		$RecipientAddress["StreetAddress2"] = $this->orderKey["consigneeStreet1"];
+ 		$RecipientAddress["StreetAddress3"] = $this->orderKey["consigneeStreet2"];
+ 		$RecipientAddress["City"] = $this->orderKey['consigneeCity'];
+ 		$RecipientAddress["State"] = $this->orderKey['consigneeStateOrProvince'];
+ 		$RecipientAddress["IsResidential"] = false;
+ 		$RecipientAddress["PhoneNumber"] = $this->orderKey['consigneePhone'];
+ 		$RecipientAddress["ZIPCode"] = $this->orderKey['consigneePostalCode'];
+ 			
+ 		$data['RecipientAddress'] = $RecipientAddress;
+ 			
+ 		/***发件人信息****/
+ 		$ShipperAddress = array();
+ 		$ShipperAddress["FirstName"] = $this->shipperKey["shipperName"];
+ 		$ShipperAddress["LastName"] = "";
+ 		$ShipperAddress["Company"] = $this->shipperKey["shipperCompanyName"];
+ 		if($this->shipperKey["shipperStreet"]){
+ 			$streeArr = explode("||", $this->shipperKey["shipperStreet"]);
+ 			$ShipperAddress["StreetAddress"] = $streeArr[0]?$streeArr[0]:'';
+ 			$ShipperAddress["StreetAddress2"] = $streeArr[1]?$streeArr[1]:'';
+ 			$ShipperAddress["StreetAddress3"] = $streeArr[2]?$streeArr[2]:'';
+ 		}
+ 		$ShipperAddress["State"] = $this->shipperKey["shipperStateOrProvince"];
+ 		$ShipperAddress["City"] = $this->shipperKey["shipperCity"];
+ 		$ShipperAddress["PhoneNumber"] = $this->shipperKey["shipperPhone"];
+ 		$ShipperAddress["ZIPCode"] = $this->shipperKey["shipperPostCode"];
+ 		$ShipperAddress["Country"] = $this->shipperKey["shipperCountryCode"];
+ 		$ShipperAddress["Email"] = null;
+ 		$ShipperAddress = print_r(json_encode($ShipperAddress),true);
+ 		//冗余字段
+ 		$RedundancyField = array();
  		
- 		//unset($params["data"]["RedundancyField"]['ShipperAddress']);
- 		//print_r($params);
+ 		//获取TNTpackages信息
+ 		
+ 		$TNTpackages = array();
+ 		
+ 		$packages = array();
+ 		
+ 		foreach ($this->orderInvoiceItemKey as $oKey=>$row){
+ 			$ARTICLE = array();
+ 			$ARTICLE['ITEMS'] =  $row['quantity'];
+ 			$ARTICLE['DESCRIPTION'] =  $row['titleEn'];
+ 			$ARTICLE['WEIGHT'] =  $row['weight'];
+ 			$ARTICLE['INVOICEVALUE'] =  $row['value'];
+ 			$ARTICLE['INVOICEDESC'] =  "";
+ 			$ARTICLE['HTS']   = $row['hsCode'];
+ 			$ARTICLE['COUNTRY'] =  $row['invoice_proplace'];
+ 			
+ 			
+ 			if(!isset($packages[$row['packageid']])){
+ 				$_packages = array();
+ 				$_packages_invoice = json_decode($row['packinfo'],1);
+ 				$_packages['ITEMS'] = $_packages_invoice[0]['ITEMS'];
+ 				$_packages['DESCRIPTION'] ="";
+ 				$_packages['LENGTH'] =$_packages_invoice[0]['LENGTH']/1000;
+ 				$_packages['WIDTH'] =$_packages_invoice[0]['WIDTH']/1000;
+ 				$_packages['HEIGHT'] =$_packages_invoice[0]['HEIGHT']/1000;
+ 				$_packages['WEIGHT'] = $_packages_invoice[0]['WEIGHT']*$_packages_invoice[0]['ITEMS'];
+ 				$_packages['VOLUME'] =round($_packages['LENGTH']*$_packages['WIDTH']*$_packages['HEIGHT'],3);
+ 				$packages[$row['packageid']] = $_packages;
+ 			}
+ 			
+ 			$packages[$row['packageid']]['ARTICLE'][] = $ARTICLE;
+ 		}
+ 		
+ 		$RedundancyField['TNTPackages'] = print_r(json_encode($packages),true);;
+ 		$RedundancyField['ShipperAddress'] = $ShipperAddress;
+ 		$RedundancyField['ProductCode'] = $this->orderKey['type']==3?"D":"N";
+ 			
+ 		//保险额外服务
+ 		$extservice = $this->orderExtservice;
+ 		if($extservice[0]['servicevalue']){
+ 			$RedundancyField['InsuredFee']= $extservice[0]['servicevalue'];
+ 		}
+ 		$RedundancyField["ShipperEIN"]=$this->orderKey["invoice_shippertax"] ;
+ 		$RedundancyField["RecipientEIN"]=$this->orderKey["invoice_consigneetax"];
+ 		$RedundancyField["CommodityCode"] = $declareInvoice[0]['HSCode']?$declareInvoice[0]['HSCode']:'';
+ 		//总价值
+ 		$RedundancyField['DeclaredValue']    = empty($this->orderKey["declaredValue"])?"0.01":$this->orderKey["declaredValue"];
+ 		//保险价值
+ 		if(!empty($this->orderKey["insurance_value_gj"])){
+ 			$RedundancyField['InsuredAmount'] = $this->orderKey["insurance_value_gj"];
+ 		}
+ 		if($ChannelCode=="TNT"){
+ 			//上传REF和绑定的账号
+ 			$condtion_sp['citycode'] = $this->orderKey["refer_hawbcode"];
+ 			$condtion_sp['status']   =   1;
+ 			$condtion_sp['productcode'] =   $ChannelCode;
+ 			$server_csi_prs=new Service_CsiProductRuleShipper();
+ 			$rs_cisprs = $server_csi_prs->getByCondition($condtion_sp);
+ 			if($rs_cisprs[0]){
+ 				//设定上发件人账号
+ 				$RedundancyField['AccuntNum'] = $rs_cisprs[0]['countnum'];
+ 				$RedundancyField["Reference"] = $rs_cisprs[0]['citycode'];
+ 			}
+ 		}
+ 		if($ChannelCode=="TNT"){
+ 			//是否废弃包裹
+ 			$RedundancyField['Abandon'] = $this->orderKey["untread"];
+ 		}
+ 		//$params = array('CustomerCode'=> $this->_user, 'packageMessage' => array($data));
+ 		$params["Version"] = '0.0.0.3';
+ 		$params["RequestId"] = empty($uuid)?"":$uuid;
+ 		$data["Token"] = '99999999999999999999999999999999';
+ 		$product_set_rs=Common_Common::getProductAllByCode($ChannelCode);
+ 		$data["ChannelName"] =$product_set_rs['ccode'];
+ 		//$data["ServiceTypeCode"] =$product_set_rs['name'];
+ 		$data["ServiceTypeCode"] = $this->orderData['service_code'];
+ 		$data["WarehouseCode"] =$product_set_rs['area'];
+ 		$data["LabelMarkText"] =null;
+ 		$data["RedundancyField"] =$RedundancyField;
+ 			
+ 		$params["data"] = $data;
+ 		return $params;
+ 	}
+ 	
+ 	//异步通知TMS
+ 	public function sendToTms($uuid=false){
+ 		if($this->serverProductCode!='TNT')
+ 			$params = $this->bindNoticeData('normal');
+ 		else 
+ 			$params = $this->bindNoticeData('tnt');
  		$sysResult = $this->PreAlertOrderService($params);
- 		
  		Ec::showError("**************start*************\r\n"
  				. print_r(json_encode($params), true)
  				. "\r\n" . print_r($sysResult, true)
  				. "**************end*************\r\n",
  				'YunExpress_API/Async_Create_response_info'.date("Ymd"));
+ 		
  		return $sysResult;
  	}
- 	
- 	//推送TNTXML的服务
- 	public function sendXmlToTntService(){
- 	      $callResult = array("ack"=>0,"orderCode"=>$this->orderCode,"error"=>"","errorCode"=>"");
- 	      $callResult["orderCode"] = $this->orderCode;
- 	  try {
-     	    $length_package = $this->orderKey["length"]/100;
-     	    $width_package = $this->orderKey["width"]/100;
-     	    $height_package = $this->orderKey["height"]/100;
-     		$volume = floor($length_package*$width_package*$height_package*1000)/1000;
-     		$type = $this->orderKey['type']==3?"D":"N";
-     		if($type == "D"){
-     		    $volume="0.0";
-     		}
-     		$consignee_mobile = empty($this->orderKey['consignee_mobile']) ? $this->orderKey['consignee_telephone'] : $this->orderKey['consignee_mobile'];
-     		$consignee_telephone = empty($this->orderKey['consignee_telephone']) ? $this->orderKey['consignee_mobile'] : $this->orderKey['consignee_telephone'];
-     		$xml = '<?xml version="1.0" encoding="utf-8"?>
-<ESHIPPER>
-  <LOGIN>
-    <COMPANY></COMPANY>
-    <PASSWORD></PASSWORD>
-    <APPID>EC</APPID>
-    <APPVERSION>2.2</APPVERSION>
-  </LOGIN>
-  <CONSIGNMENTBATCH>
-    <GROUPCODE>1</GROUPCODE>
-    <SENDER>
-      <COMPANYNAME>'.$this->shipperKey["shipperCompanyName"].'</COMPANYNAME>
-      <STREETADDRESS1>'.$this->shipperKey['shipperStreet'].'</STREETADDRESS1>
-      <STREETADDRESS2/>
-      <STREETADDRESS3/>
-      <CITY>'.$this->shipperKey["shipperCity"].'</CITY>
-      <PROVINCE>'.$this->shipperKey["shipperStateOrProvince"].'</PROVINCE>
-      <POSTCODE>'.$this->shipperKey["shipperPostCode"].'</POSTCODE>
-      <COUNTRY>'.$this->shipperKey["shipperCountryCode"].'</COUNTRY>
-      <ACCOUNT>1</ACCOUNT>
-      <VAT/>
-      <CONTACTNAME>'.$this->shipperKey["shipperName"].'</CONTACTNAME>
-      <CONTACTDIALCODE>'.$this->shipperKey["shipperPhone"].'</CONTACTDIALCODE>
-      <CONTACTTELEPHONE>'.$this->shipperKey["shipperPhone"].'</CONTACTTELEPHONE>
-      <CONTACTEMAIL/>
-      <COLLECTION>
-        <SHIPDATE>'.date("d/m/Y",time()+3600*24).'</SHIPDATE>
-        <PREFCOLLECTTIME>
-          <FROM>0900</FROM>
-          <TO>1600</TO>
-        </PREFCOLLECTTIME>
-        <ALTCOLLECTTIME/>
-        <COLLINSTRUCTIONS>this is import</COLLINSTRUCTIONS>
-        <CONFIRMATIONEMAILADDRESS/>
-      </COLLECTION>
-    </SENDER>
-    <CONSIGNMENT>
-      <CONREF>'.$this->orderCode.'</CONREF>
-      <CONNUMBER>'.$this->orderData['server_hawbcode'].'</CONNUMBER>
-      <DETAILS>
-        <DELIVERY/>
-        <CONNUMBER>'.$this->orderData['server_hawbcode'].'</CONNUMBER>
-        <CUSTOMERREF/>
-        <CONTYPE>'.$type.'</CONTYPE>
-        <PAYMENTIND/>
-        <ITEMS>1</ITEMS>
-        <TOTALWEIGHT>'.$this->orderKey['weight'].'</TOTALWEIGHT>
-        <TOTALVOLUME>'.$volume.'</TOTALVOLUME>
-        <CURRENCY>USD</CURRENCY>
-        <GOODSVALUE>'.$this->orderKey['declaredValue'].'</GOODSVALUE>
-        <SERVICE>TNT</SERVICE>
-        <OPTION/>
-        <DESCRIPTION/>
-        <DELIVERYINST>this import</DELIVERYINST>
-        <CUSTOMCONTROLIN/>
-        <HAZARDOUS/>
-        <UNNUMBER/>
-        <PACKAGE>
-          <ITEMS>1</ITEMS>
-          <DESCRIPTION>this import</DESCRIPTION>
-          <LENGTH>'.$length_package.'</LENGTH>
-          <WIDTH>'.$width_package.'</WIDTH>
-          <HEIGHT>'.$height_package.'</HEIGHT>
-          <WEIGHT>'.$this->orderKey['weight'].'</WEIGHT>';
- 			foreach($this->orderInvoiceItemKey as $oKey=>$row){
- 				$cnname = (!empty($row['titleCn']) ? $row['titleCn'] : $row['titleEn']);
- 				$enname = (!empty($row['titleEn']) ? $row['titleEn'] : $row['titleCn']);
- 				$xml.='
-          <ARTICLE>
-            <ITEMS>'.$row['quantity'].'</ITEMS>
-            <DESCRIPTION>'.$enname.'</DESCRIPTION>
-            <WEIGHT>'.$row['weight'].'</WEIGHT>
-            <INVOICEVALUE>'.$row['value'].'</INVOICEVALUE>
-            <INVOICEDESC>this is import!'.$row['description'].'</INVOICEDESC>
-            <HTS>'.$row['hsCode'].'</HTS>
-            <COUNTRY/>
-          </ARTICLE>';
- 			}
- 			$xml.='
-        </PACKAGE>
- 		<RECEIVER>
-          <COMPANYNAME>'.$this->orderKey['consigneeCompanyName'].'</COMPANYNAME>
-          <STREETADDRESS1>'.$this->orderKey['consigneeStreet'].'</STREETADDRESS1>
-          <STREETADDRESS2>'.$this->orderKey['consigneeStreet1'].'</STREETADDRESS2>
-          <STREETADDRESS3>'.$this->orderKey['consigneeStreet2'].'</STREETADDRESS3>
-          <CITY>'.$this->orderKey['consigneeCity'].'</CITY>
-          <PROVINCE>'.$this->orderKey['consigneeStateOrProvince'].'</PROVINCE>
-          <POSTCODE>'.$this->orderKey['consigneePostalCode'].'</POSTCODE>
-          <COUNTRY>'.$this->orderKey['consigneeCountryCode'].'</COUNTRY>
-          <VAT/>
-          <CONTACTNAME>'.$this->orderKey['consigneeName'].'</CONTACTNAME>
-          <CONTACTDIALCODE>'.$consignee_mobile.'</CONTACTDIALCODE>
-          <CONTACTTELEPHONE>'.$consignee_telephone.'</CONTACTTELEPHONE>
-          <CONTACTEMAIL>'.$this->orderKey['consigneeEmail'].'</CONTACTEMAIL>
-          <ACCOUNT/>
-          <ACCOUNTCOUNTRY/>
-          <DELIVERY/>
-        </RECEIVER>
-      </DETAILS>
-    </CONSIGNMENT>
-  </CONSIGNMENTBATCH>
-  <ACTIVITY>
-    <CREATE>
-      <CONREF>'.$this->orderCode.'</CONREF>
-    </CREATE>
-    <PRINT>
-      <REQUIRED>
-        <CONREF>'.$this->orderCode.'</CONREF>
-        <CONNUMBER>'.$this->orderData['server_hawbcode'].'</CONNUMBER>
-      </REQUIRED>
-      <CONNOTE>
-        <CONREF>'.$this->orderCode.'</CONREF>
-        <CONNUMBER>'.$this->orderData['server_hawbcode'].'</CONNUMBER>
-      </CONNOTE>
-      <LABEL>
-        <CONREF>'.$this->orderCode.'</CONREF>
-        <CONNUMBER>'.$this->orderData['server_hawbcode'].'</CONNUMBER>
-      </LABEL>
-      <MANIFEST>
-        <CONREF>'.$this->orderCode.'</CONREF>
-        <CONNUMBER>'.$this->orderData['server_hawbcode'].'</CONNUMBER>
-        <GROUPCODE>1</GROUPCODE>
-      </MANIFEST>
-      <INVOICE>
-        <CONREF>'.$this->orderCode.'</CONREF>
-        <CONNUMBER>'.$this->orderData['server_hawbcode'].'</CONNUMBER>
-      </INVOICE>
-      <EMAILTO>
-        <Type attribute="">SMTP</Type>
-      </EMAILTO>
-      <EMAILFROM>'.$this->orderKey['consigneeEmail'].'</EMAILFROM>
-    </PRINT>
-    <SHOW_GROUPCODE/>
-  </ACTIVITY>
-</ESHIPPER>
-';
- 	 $dir = APPLICATION_PATH."/../data/tntftp/".date("Ymd").DIRECTORY_SEPARATOR;
- 	 $filename = date("His").rand(1,9999999999999999).'.xml';
- 	 Common_Common::mkdirs($dir);
- 	 while(file_exists($dir.$filename)){
- 	 	$filename = date("His").rand(1,9999999999999999).'.xml';
- 	 };
- 	 $realpath = $dir.$filename;		
- 	 file_put_contents($realpath,$xml);		
-     $config = array(
-            'hostname' => '120.25.169.143',
-            'username' => 'root',
-            'password' => 'root',
-            'port' => 21
-            );
-     $ftp = new Process_Ftp();
-     $ftp->connect($config);
-     if(!$ftp->upload($realpath,$filename)){
-         $callResult["ack"] = -1;
-         $callResult["error"] = "订单号：".$this->orderCode."异常信息：上传xml失败";
-         return $callResult;
-     }
-     $callResult["ack"] = 1;
-     //记录日志
-     Ec::showError("**************start*************\r\n"
-     		. $this->orderCode."=>".$realpath
-     		. "\r\n" . print_r($callResult, true)
-     		. "**************end*************\r\n",
-     		'YunExpress_API/notify_tnt_xml'.date("Ymd"));
- 	} catch (Exception $e) {
- 	    $callResult["error"] = "同步未知异常，订单号：".$this->orderCode."异常信息：".$e->getMessage();
- 	}
- 	return $callResult;		
- }
  
 }

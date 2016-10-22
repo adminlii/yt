@@ -301,6 +301,9 @@ class Common_APIChannelDataSet
                 "currencyCode" => $val["invoice_currencycode"], //买家ID
                 "hsCode" => $val["hs_code"], //买家ID
                 "url" => $val["invoice_url"], //买家ID
+                "invoice_proplace" => $val["invoice_proplace"],
+            	"packageid" => $val["packageid"],
+            	"packinfo" => $val["packinfo"],
             );
             
             $total_declare_num += $val["invoice_quantity"];
