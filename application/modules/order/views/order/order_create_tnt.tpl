@@ -345,9 +345,9 @@
 					<th><em>*</em> 件数：</th>
 					<th><em>*</em> 单件重量：</th>
 					<th><em>*</em> 总重量：</th>
-					<th>长度(厘米)：</th>
-					<th>宽度(厘米)：</th>
-					<th>高度(厘米)：</th>
+					<th><em>*</em>长度(厘米)：</th>
+					<th><em>*</em>宽度(厘米)：</th>
+					<th><em>*</em>高度(厘米)：</th>
 					<th>操作</th>
 				</tr>
 			</thead>
@@ -553,7 +553,7 @@
 			</div>
 		</div>
 		<div class="fromBtns">
-			<input type="reset" value="重置内容" />
+			<!--<input type="reset" value="重置内容" />-->
 			<input type="submit" class="tjBtn" value="提交并打印运单" status="P" id="orderSubmitBtn"/>
 		</div>
 	</form>

@@ -136,6 +136,8 @@ EZ.getListData = function(json) {
 		}else{
 			if(val.product_code=='中速-DHL'){
 				html += '<a href="javascript:;" class="cpyBtn" ref_id="'+val.order_id+'"  url="/order/order/createdhl?order_id='+val.order_id+'&cpy=1" ><{t}>cpy<{/t}></a>';
+			}else if(val.product_code=='中速-TNT'){
+				html += '<a href="javascript:;" class="cpyBtn" ref_id="'+val.order_id+'"  url="/order/order/createtnt?order_id='+val.order_id+'&cpy=1" ><{t}>cpy<{/t}></a>';
 			}else
 				html += '<a href="javascript:;" class="cpyBtn" ref_id="'+val.order_id+'"  url="/order/order/create?order_id='+val.order_id+'&cpy=1" ><{t}>cpy<{/t}></a>';
 			if(val.order_status=='D'||val.order_status=='Q'){

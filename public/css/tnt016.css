@@ -15,6 +15,7 @@ input:focus,textarea:focus{border:1px solid #9ab6d6;}
 button{background: none;cursor: pointer;}
 input[type="radio"],input[type="checkbox"]{vertical-align: middle;}
 label{cursor: pointer;}
+.Contentbox{padding-bottom:64px;}
 .wrapper{width: 1180px; margin: 0 auto;clear: both;}
 .oflr{overflow: hidden;}
 .fl{float: left;}.fr{float: right;}.clear{clear: both;overflow: hidden;}
