@@ -459,7 +459,8 @@
 						<td colspan="3">
 							<ul class="tdUl">
 								<li><label><input type="checkbox" id="C2" value="C2"  name="extraservice[]"/> 是</label></li>
-								<li>保险价值： <input type="text" placeholder="RMB" name="order[insurance_value_gj]"/></li>
+								
+								<li><div style="position: absolute;width: 450px;height: 53px;"></div>保险价值： <input type="text" placeholder="RMB" name="order[insurance_value_gj]"/></li>
 								<li>保费： <input type="text" placeholder="RMB" name="order[insurance_value]"/></li>
 							</ul>
 						</td>

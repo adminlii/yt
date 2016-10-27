@@ -292,6 +292,10 @@ function formSubmit(status){
 	$("#shipperstree1").val()?shipperstree+="||"+$("#shipperstree1").val():'';
 	$("#shipperstree2").val()?shipperstree+="||"+$("#shipperstree2").val():'';
 	param+='&shipper[shipper_street]='+shipperstree;
+	//是否选择了发票
+	if($("h3 em").hasClass("on")){
+		param+='&order[invoice_print]=1';
+	}
 	//拼接物流的json串
 	var invoice = getInovice();
 	param+='&invoice='+JSON.stringify(invoice);
@@ -867,7 +871,7 @@ $("input[name='shipper[shipper_postcode]']").focus(function(){
 	select.cd = $("input[name='shipper[shipper_countrycode]']").val();
 	select.cn = $(this).val().toUpperCase();
 	var nowtime = new Date().getTime();
-	var timer = setTimeout(function(){getpostcadeData(select,$(this),$("#checkcity"),$("#checkpostcodediv"),0)},200); 	
+	var timer = setTimeout(function(){getpostcadeData(select,$(this),$("#checkcity"),$("#checkcitydiv"),0)},200); 	
  	if(nowtime-window.lastKeyUp.lasttime_1.time<200){
  		clearTimeout(window.lastKeyUp.lasttime_1.timer);
  	}	
@@ -927,7 +931,7 @@ $("input[name='consignee[consignee_postcode]").focus(function(){
 	select.cd = $("#country_code").val();
 	select.cn = $(this).val().toUpperCase();
 	var nowtime = new Date().getTime();
-	var timer = setTimeout(function(){getpostcadeData(select,$(this),$("#checkcity1"),$("#checkpostcodediv1"),0)},200); 	
+	var timer = setTimeout(function(){getpostcadeData(select,$(this),$("#checkcity1"),$("#checkcitydiv1"),0)},200); 	
  	if(nowtime-window.lastKeyUp.lasttime_1.time<200){
  		clearTimeout(window.lastKeyUp.lasttime_1.timer);
  	}	

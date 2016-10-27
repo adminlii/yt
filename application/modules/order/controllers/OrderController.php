@@ -164,6 +164,8 @@ class Order_OrderController extends Ec_Controller_Action
                 'tms_id'=>Service_User::getTmsId(),
                 'customer_channelid'=>Service_User::getChannelid(),
                 'insurance_value' => trim($order['insurance_value1']),
+            	'battery'=>empty($order['battery'])?'':$order['battery'],
+            		
             );
             $volumeArr=array(
             	'length'=>$order['order_length'],
@@ -633,7 +635,7 @@ class Order_OrderController extends Ec_Controller_Action
             $process->setConsignee($consigneeArr);
             $process->setUuid($uuid);
             //             $process
-            $return = $process->createOrderTransaction($status);
+            $return = $process->createOrderTransactionapi($status);
     
             //             print_r($params);exit;
             die(Zend_Json::encode($return));
@@ -1840,6 +1842,7 @@ class Order_OrderController extends Ec_Controller_Action
 				$condition['cityename'] = $this->_request->getPost('cn');
 				if(!empty($this->_request->getPost('pc')))
 				$condition['postcode'] = $this->_request->getPost('pc');
+				//print_r($condition);
 				$condition['status'] = 1;
 				if(empty($condition['countrycode'])){
 					$result['state']   = 0;
@@ -1862,6 +1865,7 @@ class Order_OrderController extends Ec_Controller_Action
 					}
 					$db = Common_Common::getAdapterForDb3();
 					$sql  = "select count(*) as count from ".$tableName." where ".$_condition;
+					//echo $sql;
 					$count = $db->fetchRow($sql);
 					$count = $count['count'];
 					$allpage = ceil($count/$pagesize);
@@ -1870,7 +1874,9 @@ class Order_OrderController extends Ec_Controller_Action
 						$result['nextpage'] = -1;
 						break;
 					}else{
-						$sql = "select * from ".$tableName." where ".$_condition;
+						$limitx = ($page-1)*$pagesize;
+						$sql = "select * from ".$tableName." where ".$_condition." limit ".$limitx.','.$pagesize;
+						//echo $sql;
 						$res = $db->fetchAll($sql);
 						//如果是中国的话，DHL渠道会带上校验规则
 						if(!empty($res)){
@@ -1903,7 +1909,7 @@ class Order_OrderController extends Ec_Controller_Action
 							$result['nextpage'] = $page==$allpage?-1:++$page;
 							$result['totalpage'] = $allpage;
 							//搜索条件
-							$result['select'] = array('cd'=>$condition['countrycode'],'cn'=>$condition['cityename'],'pc'=>$condition['postcode']);
+							$result['select'] = array('cd'=>$condition['countrycode'],'cn'=>empty($condition['cityename'])?'':$condition['cityename'],'pc'=>empty($condition['postcode'])?'':$condition['postcode']);
 						}
 					}
 			

@@ -791,6 +791,20 @@ $('input[name="invoice[invoice_enname][]"]').live('keyup',function(){
 						</select></td>
     			</tr>
     			<tr>
+    				
+    				<td colspan="2"><p>是否带电池: </p>
+    				
+    				<select
+							default="<{if isset($order)}><{$order.battery}><{/if}>"
+							name="order[battery]"
+							class="input_select" id='battery'>
+								<option value='' class='ALL'><{t}>-select-<{/t}></option>
+								<option value="NOBattery">NOBattery(不带电)</option>
+								<option value="WithBattery">WithBattery(带电)</option>
+								<option value="Battery">Battery(纯电池)</option>
+						</select></td>
+    			</tr>
+    			<tr>
     				<td colspan="2">
     				<p><i>*</i>体积 : </p>
     				<div class="goodvolume">

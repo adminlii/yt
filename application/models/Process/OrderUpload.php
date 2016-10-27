@@ -39,6 +39,7 @@ class Process_OrderUpload extends Process_Order
             'order_weight' => Ec::lang('货物重量'),
             'order_status' => Ec::lang('订单状态'),
             'mail_cargo_type' => Ec::lang('邮政货物类型'),
+        		'mail_cargo_type' => Ec::lang('邮政货物类型'),
             //'document_change_sign' => Ec::lang('服务商单号换号类型'),
 //             'oda_checksign' => Ec::lang('oda_checksign'),
 //             'oda_sign' => Ec::lang('oda_sign'),
@@ -477,6 +478,7 @@ class Process_OrderUpload extends Process_Order
              '外包装件数' => 'order_pieces',
              '货物重量' => 'order_weight',
              '包裹申报种类' => 'mail_cargo_type',
+         	 '是否带电池' => 'battery',
              '外包装长(cm)'=>'order_length',
              '外包装宽(cm)'=>'order_width',
              '外包装高(cm)'=>'order_height',
@@ -696,6 +698,8 @@ class Process_OrderUpload extends Process_Order
                 'tms_id'=>Service_User::getTmsId(),
                 'customer_channelid'=>Service_User::getChannelid(),
                 'insurance_value' => trim($v['insurance_value1']),
+            	'battery' => trim($v['battery']),
+            		
             );
             /* if(empty($order['shipper_hawbcode'])){
                  $this->_errArr[] = Ec::Lang('客户单号不可为空');

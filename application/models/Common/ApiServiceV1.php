@@ -561,6 +561,7 @@ class Common_ApiServiceV1
 		    	 		'tms_id'=>$order['tms_id'],
 		    	 		'customer_channelid'=>null,
 		    	 		'insurance_value' => trim($order['insurance_value1']),
+		    	 		'battery'=>empty($order['battery'])?'':$order['battery'],
 		    	 );
 		    	 $volumeArr=array(
 		    	 		'length'=>$order['order_length'],

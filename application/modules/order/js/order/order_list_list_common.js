@@ -281,7 +281,10 @@ $(function() {
         var cp_order = $(this).attr('order_type')=='return'?'<{t}>cpy_return_order<{/t}>':'<{t}>cpy_order<{/t}>';
         if(url.indexOf("createdhl")>=0){
         	leftMenu('order/createdhl',cp_order,url);
-        }else
+        }else if(url.indexOf("createtnt")>=0){
+        	leftMenu('order/createtnt',cp_order,url);
+        }
+        else
         	leftMenu('order/create',cp_order,url);
 	})
 	

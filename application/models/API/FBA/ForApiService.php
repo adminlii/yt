@@ -320,7 +320,7 @@ class API_FBA_ForApiService
       	$xml = xml_encode($xmlarray['orders'],'orders','item');
       	$xml=preg_replace('/item_(\d)+/i','item', $xml);
       	//echo $xml;return false;  
-      	$url="http://shipping2.ems.com.cn/partner/api/public/p/orderSpecial";
+      	$url="http://shipping.ems.com.cn/partner/api/public/p/orderSpecial";
         $data = $xml;
         $header = array("authenticate:pdfTest_dhfjh98983948jdf78475fj65375fjdhfj","version:international_eub_us_1.1");
         $result = $this->curl_send($url,$data,$header,"post");
@@ -350,7 +350,7 @@ class API_FBA_ForApiService
     				$citycname =  $res[0]['citycname'];
     				$provincecname = $res[0]['provincecname'];
     				//获取省区域代码
-    				$url = 'http://shipping2.ems.com.cn/partner/api/public/p/area/cn/province/list';
+    				$url = 'http://shipping.ems.com.cn/partner/api/public/p/area/cn/province/list';
     				$header = array("authenticate:pdfTest_dhfjh98983948jdf78475fj65375fjdhfj","version:international_eub_us_1.1");
     				$res = $this->curl_send($url,'',$header);
     				if(is_array($res)){
@@ -362,7 +362,7 @@ class API_FBA_ForApiService
     				}
     				$return_arr['provincecode'] = $proinceArr[$provincecname];
     				//然后再去调取该省下面的市
-    				$url = 'http://shipping2.ems.com.cn/partner/api/public/p/area/cn/city/list/'.$return_arr['provincecode'];
+    				$url = 'http://shipping.ems.com.cn/partner/api/public/p/area/cn/city/list/'.$return_arr['provincecode'];
     				$res = $this->curl_send($url,'',$header);
     				if(is_array($res)){
     					break;

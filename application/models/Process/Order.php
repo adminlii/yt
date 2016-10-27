@@ -1076,7 +1076,7 @@ class Process_Order
             'length'=>$this->_order['order_length']?$this->_order['order_length']:10,
             'width'=>$this->_order['order_width']?$this->_order['order_width']:10,
             'height'=>$this->_order['order_height']?$this->_order['order_height']:10,
-
+            
             //'customer_channelid'=>$this->_order['customer_channelid']?$this->_order['customer_channelid']:Service_User::getChannelid(),
         );
         
@@ -1095,6 +1095,8 @@ class Process_Order
         foreach($order as $k => $v){
             $order[$k] = strtoupper($v);
         }
+        //避开大写判断
+        $order['battery'] = $this->_order['battery'];
         unset($order['order_id']);
         // 提交预报？保存草稿
         $order['order_status'] = 'D';
