@@ -24,19 +24,47 @@ $(".invoice h3").click(function(){
 	//选择物品
 	$('.opends').click(function(){
 		clearInvoice();
+		$("#servicecode").html(getservicecode(1));
 		$('#invoicediv').stop().fadeIn('fast');
 		$('#servicediv').stop().fadeOut('fast');
 		$('.invoice').stop().fadeIn('fast');
-		
+		$('.activetable').show();
 	});
 	
 	$('.clogds').click(function(){
 		clearInvoice();
+		$("#servicecode").html(getservicecode(0));
 		$('#invoicediv').stop().fadeOut('fast');
 		$('#servicediv').stop().fadeIn('fast');
 		$('.invoice').stop().fadeOut('fast');
+		$('.activetable').hide();
 	});
 });
+
+//服务类型、
+function getservicecode(type){
+	var data_p = [];
+	data_p.push({k:'P15D',v:'EXPRESS(DOCS)全球快递（文件）'});
+	var data = [];
+	data.push({k:'P15N',v:'EXPRESS(NON DOCS)全球快递（包裹）'});
+	data.push({k:'P48N',v:'ECONOMY EXPRESS(NON DOCS)经济快递（包裹）'});
+	data.push({k:'S48F',v:' ECONOMY FREIGHT经济空运'});
+	data.push({k:'S728',v:'SPECIAL ECONOMY EXPRESS FBA亚马逊海外仓'});
+	data.push({k:'S87',v:'AIRFREIGHT DOOR TO DOOR空运到门'});
+	data.push({k:'S88',v:'AIRFREIGHT DOOR TO AIRPORT空运到港'});
+	//物品
+	var str = '<option value="">请选择</option>';
+	if(type==1){
+		$.each(data,function(k,v){
+			str+='<option value="'+v['k']+'">'+v['v']+'</option>'
+		});
+	}else{
+		$.each(data_p,function(k,v){
+			str+='<option value="'+v['k']+'">'+v['v']+'</option>'
+		});
+	}
+	return str;
+}
 //切换产品种类时数据清除
 function clearInvoice(){
 	//清空保险
@@ -46,21 +74,71 @@ function clearInvoice(){
 
 $(function(){
 	$('.innerbtn').click(function(){
-		$(this).next('.pop_box').slideDown('400');
+		//判断是否填写了包裹信息
+		if(!isEmptyTr($(this).parent().parent())){
+			$(this).next('.pop_box').slideDown('400');
+		}else{
+			alert('请先填写包裹信息');
+		}
+		
 	});
 	$('.closepop').click(function(){
+		
+		if($(this).html()=="x"){
+			var count = getInoviceCount($(this).parent().next('.textmian').find('table'));
+			$(this).parents(".pop_box").prev().find("span").html(count);
+		}else{
+			//回调内件
+			var count = getInoviceCount($(this).parent().prev());
+			$(this).parents(".pop_box").prev().find("span").html(count);
+		}
 		$('.pop_box').slideUp('400');
 	});
 
 	$('.tbody1').on("click",".alonTr .innerbtn",function(){
-		$(this).next('.pop_box').slideDown('400');
+		//判断是否填写了包裹信息
+		if(!isEmptyTr($(this).parent().parent())){
+			$(this).next('.pop_box').slideDown('400');
+		}
 	})
 	$('.tbody1').on("click",".alonTr .closepop",function(){
+		if($(this).html()=="x"){
+			var count = getInoviceCount($(this).parent().next('.textmian').find('table'));
+			$(this).parents(".pop_box").prev().find("span").html(count);
+		}else{
+			//回调内件
+			var count = getInoviceCount($(this).parent().prev());
+			$(this).parents(".pop_box").prev().find("span").html(count);
+		}
 		$('.pop_box').slideUp('400');
 	})
 
-
 });
+
+function isEmptyTr(obj){
+	
+	console.log(obj);
+	var flag = true;
+	obj.children("td").each(function(index,dom){
+		if($(dom).find("input").val()){
+			flag = false;
+			return false;
+		}
+	});
+	return flag;
+}
+
+//统计内件数
+function getInoviceCount(table){
+	var tr = table.find("tr");
+	var count = 0;
+	tr.each(function(index,dom){
+		if(!isEmptyTr($(dom))){
+			count++;
+		}
+	});
+	return count;
+}
 
 $(function () {
 // 新增表单
@@ -574,7 +652,7 @@ $('.checkchar1').live('keyup',function(){
 })
 //城市 
 $('.checkchar3').live('keyup',function(){
-	if($(this).val()&&!/^[a-zA-Z\s]{0,30}$/.test($(this).val())){
+	if($(this).val()&&!/^[a-zA-Z\s-]{0,30}$/.test($(this).val())){
 		alert('不允许出现非英文，长度最多30字符');
 	}
 })
@@ -855,18 +933,10 @@ $("input[name='shipper[shipper_postcode]']").focus(function(){
 	 	//return false;
 	$("#checkcitydiv").show();
  	return false; 	
-	 	var select = {};
-	select.cd = $("input[name='shipper[shipper_countrycode]']").val();
-	select.cn = $(this).val().toUpperCase();
-	
-	getpostcadeData(select,$(this),$("#checkcity"),$("#checkcitydiv"),1);
 }).blur(function(){
-	//if($("#product_code").val()!="G_DHL")
-	 //	return false;
 	setTimeout('$("#checkcitydiv").hide()',200);
 }).keyup(function(){
-	//if($("#product_code").val()!="G_DHL")
-	 	//return false;
+	
  	var select = {};
 	select.cd = $("input[name='shipper[shipper_countrycode]']").val();
 	select.cn = $(this).val().toUpperCase();
@@ -972,6 +1042,7 @@ function getpostcadeData(select,that,obj,obj1,isshow){
 			}
 			
 			obj.empty().append(listr);
+			obj1.find('.li_extentd').remove();
 			//如果有下页的话
 			if(data.nextpage>1){
 				var alist="<a class='li_extentd' href='javascript:void(0)'  onclick = \"getMorePostCode(this,'"+data.select.cd+"','"+data.select.cn+"','"+data.select.pc+"',"+data.nextpage+")\">更多</a>"

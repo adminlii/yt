@@ -1564,7 +1564,7 @@ class Order_OrderController extends Ec_Controller_Action
 				}
 			}
 			if(!empty($row['shipper_city'])){
-				if(!preg_match('/^[a-zA-Z\s]+$/', $row['shipper_city'])) {
+				if(!preg_match('/^[a-zA-Z\s-]+$/', $row['shipper_city'])) {
 					$errorArr[]= "发件人城市不能为非英文";
 				}
 			}

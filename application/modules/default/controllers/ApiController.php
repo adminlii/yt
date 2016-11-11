@@ -631,4 +631,48 @@ public function test26Action(){
 		}
 		echo json_encode($return);
 	}
+	
+	public function getTokenAction()
+	{
+		$return = array('ret'=>-1,'msg'=>'','data'=>array());
+		try {
+			$json = file_get_contents('php://input');
+			if (empty ($json)) {
+				throw new Exception ('无请求数据');
+			}
+			// 请求格式为json
+			$req = json_decode($json, true);
+			if (!$req) {
+				throw new Exception ('数据格式需为json格式');
+			}
+			$sc = new Common_ApiService();
+			$req  = array(
+					'usercode'=>'1',
+					'userpwd'=>'123456',
+			
+			);
+			$return = $sc->setToken($req);
+		} catch (Exception $e) {
+			$return ['msg'] = $e->getMessage();
+		}
+		echo json_encode($return);
+	}
+	
+	public function getStorageAction()
+	{
+		$return = array('ret'=>-1,'msg'=>'','data'=>array());
+		try {
+			$storageStore	=	new Service_StorageStore();
+			$rs = $storageStore->getByCondition(null,'*',0,1);
+			if(empty($rs)){
+				throw new Exception ('服务器异常，请稍后重试');
+			}else{
+				$return['ret']=0;
+				$return['data']=$rs;
+			}
+		} catch (Exception $e) {
+			$return ['msg'] = $e->getMessage();
+		}
+		echo json_encode($return);
+	}
 }

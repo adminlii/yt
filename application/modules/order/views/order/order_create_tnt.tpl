@@ -228,15 +228,9 @@
 					<p><em>*</em> 包装类型</p>
 					<ul class="tabUl oflr">
 						<li><span>服务类型：</span> 
-						<select name="servicecode">
+						<select name="servicecode" id="servicecode">
 							<option value="">请选择</option>
 							<option value="P15D">EXPRESS(DOCS)全球快递（文件）</option>
-							<option value="P15N">EXPRESS(NON DOCS)全球快递（包裹）</option>
-							<option value="P48N">ECONOMY EXPRESS(NON DOCS)经济快递（包裹）</option>
-							<option value="S48F"> ECONOMY FREIGHT经济空运</option>
-							<option value="S728">SPECIAL ECONOMY EXPRESS FBA亚马逊海外仓</option>
-							<option value="S87">AIRFREIGHT DOOR TO DOOR空运到门</option>
-							<option value="S88">AIRFREIGHT DOOR TO AIRPORT空运到港</option>
 						</select>
 						</li>
 						<li><span>币种：</span> 
@@ -251,7 +245,7 @@
 				</div>
 			</div>
 		</div>
-<div class="activetable">
+<div class="activetable" style="display:none;">
 	<table cellspacing="0" cellpadding="0" border="0" class="normTbe model2 hide">
 		<tbody>
 		<tr class="alonTr2">

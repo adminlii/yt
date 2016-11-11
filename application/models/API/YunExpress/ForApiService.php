@@ -6,10 +6,10 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
 	protected $_user = "";
 	protected $_orderOnline = "";
 	//接口
-	//protected $postOrdertotmsApi="http://112.126.68.251:8088/v5/api/Order/PacketOrder?type=json";
-	protected $postOrdertotmsApi="https://202.104.134.94/chinapost/api/Order/PacketOrder?type=json";
-	//protected $notifyTms = "http://112.126.68.251:8088/v5/api/LabelPrintService/PrintTomsLabel?type=json";
-	protected $notifyTms = "https://202.104.134.94/chinapost/api/LabelPrintService/PrintTomsLabel?type=json";
+	protected $postOrdertotmsApi="http://112.126.68.251:8088/v5/api/Order/PacketOrder?type=json";
+	//protected $postOrdertotmsApi="https://202.104.134.94/chinapost/api/Order/PacketOrder?type=json";
+	protected $notifyTms = "http://112.126.68.251:8088/v5/api/LabelPrintService/PrintTomsLabel?type=json";
+	//protected $notifyTms = "https://202.104.134.94/chinapost/api/LabelPrintService/PrintTomsLabel?type=json";
     public function __construct()
     {
     	// 创建日志目录
@@ -122,8 +122,8 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
     	$url = $this->notifyTms;
     	$sendParams = json_encode($sendParams);
     	$header =array("Content-Type:application/json; charset=utf-8");
-    	//$result = $this->curl_send($url,$sendParams,$header,"post","tmsuser:1234567890");
-    	$result = $this->curl_send($url,$sendParams,$header,"post","tmsuser:123456");
+    	$result = $this->curl_send($url,$sendParams,$header,"post","tmsuser:1234567890");
+    	//$result = $this->curl_send($url,$sendParams,$header,"post","tmsuser:123456");
     	return $result;
     }
     
@@ -876,7 +876,7 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
       	$xmlarray = xml_filterInArr($xmlarray);
       	$xml = xml_encode($xmlarray['orders'],'orders','item');
       	$xml=preg_replace('/item_(\d)+/i','item', $xml);  
-        $url="http://shipping2.ems.com.cn/partner/api/public/p/orderSpecial";
+        $url="http://shipping.ems.com.cn/partner/api/public/p/orderSpecial";
         $data = $xml;
         $header = array("authenticate:pdfTest_dhfjh98983948jdf78475fj65375fjdhfj","version:international_eub_us_1.1");
         $result = $this->curl_send($url,$data,$header,"post");
@@ -894,6 +894,7 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
     	do{
     		try{
     			//如果出现xxx,xxx的取第一个
+    			$positionename = str_replace('-', ',', $positionename);
     			$_positionename = strpos($positionename,",");
     			if($_positionename!==false){
     				$positionename=substr($positionename,0,$_positionename);
@@ -906,7 +907,7 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
     				$citycname =  $res[0]['citycname'];
     				$provincecname = $res[0]['provincecname'];
     				//获取省区域代码
-    				$url = 'http://shipping2.ems.com.cn/partner/api/public/p/area/cn/province/list';
+    				$url = 'http://shipping.ems.com.cn/partner/api/public/p/area/cn/province/list';
     				$header = array("authenticate:pdfTest_dhfjh98983948jdf78475fj65375fjdhfj","version:international_eub_us_1.1");
     				$res = $this->curl_send($url,'',$header);
     				if(is_array($res)){
@@ -918,7 +919,7 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
     				}
     				$return_arr['provincecode'] = $proinceArr[$provincecname];
     				//然后再去调取该省下面的市
-    				$url = 'http://shipping2.ems.com.cn/partner/api/public/p/area/cn/city/list/'.$return_arr['provincecode'];
+    				$url = 'http://shipping.ems.com.cn/partner/api/public/p/area/cn/city/list/'.$return_arr['provincecode'];
     				$res = $this->curl_send($url,'',$header);
     				if(is_array($res)){
     					break;
@@ -1433,7 +1434,6 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
  			
  			$packages[$row['packageid']]['ARTICLE'][] = $ARTICLE;
  		}
- 		
  		$RedundancyField['TNTPackages'] = print_r(json_encode($packages),true);;
  		$RedundancyField['ShipperAddress'] = $ShipperAddress;
  		$RedundancyField['ProductCode'] = $this->orderKey['type']==3?"D":"N";
