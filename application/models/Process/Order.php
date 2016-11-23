@@ -300,6 +300,8 @@ class Process_Order
             }else if(!preg_match("/^(\d){4,25}$/",$this->_shipper['shipper_telephone'])){
         		$this->_err[] = Ec::Lang('发件人电话格式为4-25位纯数字');
         	}
+        	
+        	
             if(!$this->_shipper['shipper_postcode']){
             	$this->_err[] = Ec::Lang('发件人邮编不可为空');
             }
@@ -552,8 +554,8 @@ class Process_Order
         }
         
         if(!empty($this->_order['order_pieces'])){
-            if(! preg_match('/^[0-9]+$/', $this->_order['order_pieces']) || intval($this->_order['order_pieces']) <= 0){
-                $this->_err[] = Ec::Lang('外包装件数必须为大于0的整数');
+            if(! preg_match('/^[1-9][0-9]?$/', $this->_order['order_pieces']) || intval($this->_order['order_pieces']) <= 0){
+                $this->_err[] = Ec::Lang('外包装件数必须为1-99的整数');
             }
         }else{
             $this->_order['order_pieces'] = '1';
@@ -606,16 +608,16 @@ class Process_Order
                 if($invoice['invoice_quantity'] === ''){
                     $this->_err[] = "(" . Ec::Lang('申报信息') . $k . ")" . Ec::Lang('申报数量不可为空');
                 }else{
-                    if(! preg_match('/^[0-9]+$/', $invoice['invoice_quantity']) || intval($invoice['invoice_quantity']) <= 0){
-                        $this->_err[] = "(" . Ec::Lang('申报信息') . $k . ")" . Ec::Lang('申报数量必须为大于0的整数');
+                    if(! preg_match('/^[1-9][0-9]?$/', $invoice['invoice_quantity']) || intval($invoice['invoice_quantity']) <= 0){
+                        $this->_err[] = "(" . Ec::Lang('申报信息') . $k . ")" . Ec::Lang('申报数量必须为1-99的整数');
                     }
                 }
                 if(empty($invoice['invoice_unitcharge'])){
                     $this->_err[] = "(" . Ec::Lang('申报信息') . $k . ")" . Ec::Lang('申报单价不可为空');
                 }else{
 //                     print_r($invoice);exit;
-                    if(! is_numeric($invoice['invoice_unitcharge'])||$invoice['invoice_unitcharge']<=0){
-                        $this->_err[] = "(" . Ec::Lang('申报信息') . $k . ")" . Ec::Lang('申报单价必须为大于0数字');
+                    if(! is_numeric($invoice['invoice_unitcharge'])||! preg_match('/^\d+(\.\d{1,2})?$/', $invoice['invoice_unitcharge'])){
+                        $this->_err[] = "(" . Ec::Lang('申报信息') . $k . ")" . Ec::Lang('申报单价必须为小数点最多2位的数字');
                     }else{
                     	if(preg_match('/^[0-9]+$/', $invoice['invoice_quantity']) && intval($invoice['invoice_quantity'])>0){
                     		$_invoice_totalValue+=$invoice['invoice_quantity']*$invoice['invoice_unitcharge'];

@@ -66,6 +66,80 @@
 	color: #fff;
 	top: -10px;
 }
+
+.gridTable {
+    font-size: 12px;
+    margin: 0;
+    padding: 0;
+}
+.gridBody {
+    border-right: 1px solid silver;
+    border-top: 1px solid silver;
+    font-size: 12px;
+    table-layout: fixed;
+}
+.gridBody th {
+    background-color: #e5e5e5;
+    border-bottom: 1px solid silver;
+    border-left: 1px solid silver;
+    font-size: 12px;
+    height: 20px;
+    line-height: 20px;
+    vertical-align: middle;
+}
+.gridBody td {
+    border-bottom: 1px solid silver;
+    border-left: 1px solid silver;
+    color: black;
+    font-size: 12px;
+    height: 22px;
+    line-height: 22px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.gridBody th.sort {
+}
+.gridBody th.sort.desc {
+    background: #c5c5c5 url("images/sort_desc.gif") no-repeat scroll right center;
+}
+.gridBody th.sort.asc {
+    background: #c5c5c5 url("images/sort_asc.gif") no-repeat scroll right center;
+}
+.gridBody .tableHeaderSortHover {
+    background-color: #f5f5f5 !important;
+    cursor: pointer;
+    text-decoration: underline;
+}
+.gridBody .odd {
+    background-color: #ffffff;
+}
+.gridBody .even {
+    background-color: #f8f8f8;
+}
+.gridBody .highlight {
+    background-color: #fdeccf !important;
+}
+.gridToolbar .leftControls {
+}
+.gridToolbar .paginationControls .buttonLabel {
+    font-size: 12px;
+    margin: 0 0 0 12px;
+}
+.gridToolbar .box div {
+    display: inline;
+    float: left;
+}
+.gridToolbar .box .paginationControls {
+    float: right;
+}
+.gridToolbar td {
+    background-color: #f4f4f4;
+}
+.gridBody .odd a, .even a {
+    color: #005c9c !important;
+    font-size: 12px;
+}
 </style>
 <div class="TNT_Form">
 	<form method="POST" id="orderForm" action="" class="wrapper" onsubmit="return false;">
@@ -86,7 +160,7 @@
 					<tr>
 						<td class="col"><em>*</em> 联系人姓名：</td>
 						<td><input type="text" name="shipper[shipper_name]" class="checkchar1" value="<{if isset($shipperConsignee["shipper_name"])}><{$shipperConsignee.shipper_name}><{/if}>"/></td>
-						<td class="col" ><em>*</em> 发件人参考信息：</td>
+						<td class="col" style="width:125px;"><em>*</em> 发件人参考信息：</td>
 						<td><input type="text" disabled class="checkchar4 use" value='<{if isset($order)}><{$order.refer_hawbcode}><{/if}>'
 							name='order[refer_hawbcode]' id='refer_hawbcode' /></td>
 					</tr>
@@ -255,7 +329,7 @@
 			<td><input type="text" class="invoice_unitcharge invoice_unitcharge_do"/></td>
 			<td><input type="text" disabled/></td>
 			<td><input type="text" /></td>
-			<td><select name='' style="width:118px;">
+			<td><select name='' style="width:100px;">
 								<option value='' class='ALL'><{t}>-select-<{/t}></option>
 								
 								<{foreach from=$country item=c name=c}>
@@ -308,7 +382,7 @@
 										<td><input type="text" class="invoice_unitcharge invoice_unitcharge_do"/></td>
 										<td><input type="text" disabled/></td>
 										<td><input type="text" /></td>
-										<td><select style="width:118px;" name='' >
+										<td><select style="width:100px;" name='' >
 								<option value='' class='ALL'><{t}>-select-<{/t}></option>
 								
 								<{foreach from=$country item=c name=c}>
@@ -384,7 +458,7 @@
 										<td><input type="text" class="invoice_unitcharge invoice_unitcharge_do"/></td>
 										<td><input type="text" disabled/></td>
 										<td><input type="text" /></td>
-										<td><select style="width:118px;" name='' >
+										<td><select style="width:100px;" name='' >
 								<option value='' class='ALL'><{t}>-select-<{/t}></option>
 								
 								<{foreach from=$country item=c name=c}>
@@ -552,6 +626,68 @@
 			<input type="submit" class="tjBtn" value="提交并打印运单" status="P" id="orderSubmitBtn"/>
 		</div>
 	</form>
-</div>
+</div>	
+<!--地址铺弹窗-->
+<!--地址铺弹窗-->
+<div id="consigneeloc" class="pop_box hide">
+	<div class="bg"></div>
+	<div class="contentP">
+		<div class="PTit">
+			<h3>收件人地址簿</h3>
+			<a href="javascript:;" class="closepop">x</a>
+		</div>
+		<div class="textmian">
+		<table cellspacing="0" cellpadding="0" border="0" class="normTbe tabInfo">
+		    <thead>
+		    	<tr>
+						<th >公司名称</th>
+						<th >地址</th>
+						<th >国家</th>
+						<th >州/省</th>
+						<th >城市</th>
+						<th >邮编</th>
+						<th >联系人</th>
+						<th >电话号码</th>
+						<th style="display: none;">国家编码</th>
+						<th >操作</th>
+				</tr>
+			</thead>
+		<tbody class="tbody1">
+			
+		</tbody>
+		</table>		
+			
+		</div>
+	</div>
+</div>		
+<!--地址铺弹窗-->
+<div id="shippingloc" class="pop_box hide">
+	<div class="bg"></div>
+	<div class="contentP">
+		<div class="PTit">
+			<h3>发件人地址簿</h3>
+			<a href="javascript:;" class="closepop">x</a>
+		</div>
+		<div class="textmian">
+		<table cellspacing="0" cellpadding="0" border="0" class="normTbe tabInfo">
+		    <thead>
+		    	<tr>
+						<th >联系人姓名</th>
+						<th >公司名称</th>
+						<th >地址</th>
+						<th>城市</th>
+						<th >邮编</th>
+						<th >电话号码</th>
+						<th >操作</th>
+				</tr>
+			</thead>
+		<tbody class="tbody1">
+			
+		</tbody>
+		</table>		
+			
+		</div>
+	</div>
+</div>		
 </body>
 </html>

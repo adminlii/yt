@@ -131,6 +131,28 @@ background:#cfcfcf;
 .li_extentd:hover{
 	background:#ee9611;text-decoration:none;
 }
+.whiteBg{background: #fff;}
+.normTbe{border-left:1px solid #ddd;border-top:1px solid #ddd;width: 100%; }
+.normTbe td,.normTbe th{border-bottom: 1px solid #ddd;border-right:1px solid #ddd;padding: 15px 0;text-align: center;}
+.normTbe th em{color: red;}
+.normTbe td a{color: #50abfd;}.normTbe a span{color: #ff8800;}
+.normTbe td a:hover{text-decoration: underline;}
+.normTbe input{width: 80%;text-align: center;}
+.hide{display: none;}
+.hideTr{background: #ddd;}
+.pop_box{position: fixed;top: 0;left: 0;right: 0;bottom: 0;z-index: 99999;}
+.pop_box .bg{background: #000;opacity: 0.7;filter:alpha(opacity=70);position: absolute;top:0;left: 0;right: 0;bottom: 0;}
+.pop_box .contentP{position: relative;margin:0 auto;margin-top: 10%; background: #fff;width: 80%;}
+.pop_box .PTit{height: 45px;background: #eee;}
+.pop_box .PTit h3{line-height: 45px;float: left;padding-left: 15px;font-weight: normal;font-size: 16px;}
+.pop_box .PTit a{display: block;width: 45px;line-height: 45px;text-align: center;background: #ddd;float: right;font-size: 20px;color: #666;}
+.pop_box .PTit a:hover{background: #50abfd;color: #fff;}
+.pop_box .textmian{padding: 15px;height: 500px;overflow: auto;}
+.btn_a1{padding-top: 15px;}
+.pop_box .btn_a1 a{display: inline-block;*display: inline;*zoom: 1;width: 120px;line-height: 45px;background: #50abfd;color: #fff;}
+.pop_box .btn_a1 .addtr2,.pop_box .btn_a1 .dtadd{background: #ff9900;}
+.copybtn{padding-top: 10px;height: 40px;}
+.copybtn a{line-height: 40px;}
 </style>
 </head>
 <script>
@@ -838,6 +860,12 @@ $(function(){
 	 }
  })
  
+ //刷新保费
+ $("#currencetype").change(function(){
+ 	$("input[name='order[insurance_value_gj]']").val('');
+ 	$("input[name='order[insurance_value]']").val('');
+ });
+ 
  function checkBfTNT(){
     var that = $("input[name='order[insurance_value_gj]']");
  	var now_value = parseFloat(that.val());
@@ -1111,52 +1139,78 @@ $(function(){
  });
  
  //弹窗
- $("#shipperaddrs").click(function(){
- 	var url = "/order/order/shipper-adress?quick=77";
-	var params = "dialogWidth=800px;dialogHeight=400px";
-	$("#refer_hawbcode").val('');
-	var returnResult = window.showModalDialog(url, '',params);
-	//数据绑定
-	$("input[name='shipper[shipper_name]']").val(returnResult.shipper_name);
-	$("input[name='shipper[shipper_company]']").val(returnResult.shipper_company);
-	streeArr = returnResult.shipper_street.split("||");
-	$("#shipperstree").val(streeArr[0]?streeArr[0]:'');
-	$("#shipperstree1").val(streeArr[1]?streeArr[1]:'');
-	$("#shipperstree2").val(streeArr[2]?streeArr[2]:'');
-	$("input[name='shipper[shipper_city]']").val(returnResult.shipper_city);
-	$("input[name='shipper[shipper_postcode]']").val(returnResult.shipper_postcode);
-	$("input[name='shipper[shipper_telephone]']").val(returnResult.shipper_telephone);
- 	//获取citycode
- 	var _params = {};
- 	_params.dc = $("#product_code").val();
- 	_params.cn = returnResult.shipper_city;
- 	$.post("/order/order/get-post-code-rule",_params,function(data){
-					if(data.state){
-						$("#refer_hawbcode").val(data.data[0]['citycode']?data.data[0]['citycode']:'');
+$("#shipperaddrs").click(function(){
+	var url = "/order/order/shipper-adress?quick=77";
+	if(isFirefox()){
+		var params = "dialogWidth=800px;dialogHeight=400px";
+		$("#refer_hawbcode").val('');
+		var returnResult = window.showModalDialog(url, '',params);
+		shipinglocdataBind(returnResult);
+	}else{
+		url += "&xhr=1";
+		$.post(url,{},function(data){
+			if(data.ack==1){
+				var data = data.data;
+				var html = '';
+				for(var i in data){
+					html+="<tr><td title='"+data[i]['shipper_name']+"'>"+data[i]['shipper_name']
+					+"</td><td title='"+data[i]['shipper_company']+"'>"+data[i]['shipper_company']+"</td>"
+					+"<td title='"+data[i]['shipper_street']+"'>"+data[i]['shipper_street']+"</td>"
+					+"<td title='"+data[i]['shipper_city']+"'>"+data[i]['shipper_city']+"</td>"
+					+"<td title='"+data[i]['shipper_postcode']+"'>"+data[i]['shipper_postcode']+"</td>"
+					+"<td title='"+data[i]['shipper_telephone']+"'>"+data[i]['shipper_telephone']+"</td>"
+					+"<td><a class='addtr2' href='javascript:;' onclick='selectShipRow(this)'>确定</a></td></tr>";
+				}
+				$("#shippingloc .contentP .textmian table tbody").append(html);
+				$("#shippingloc").show();
+			}else{
+			}
+		},"json");
+	}
+});
+
+ //弹窗
+$("#consigneeaddrs").click(function(){
+	var url = "/order/order/consignee-adress?quick=77";
+	if(isFirefox()){
+		
+		var params = "dialogWidth=800px;dialogHeight=400px";
+		var returnResult = window.showModalDialog(url, '',params);
+		locdataBind(returnResult);
+	}else{
+		url += "&xhr=1";
+		$.post(url,{},function(data){
+			if(data.ack==1){
+				var data = data.data;
+				var html = '';
+				for(var i in data){
+					var stree = data[i]['consignee_street'];
+					if(data[i]['consignee_street1']!=''){
+						stree+="||"+data[i]['consignee_street1'];
 					}
-				},"json");
- 
- });
- 
-  //弹窗
- $("#consigneeaddrs").click(function(){
- 	var url = "/order/order/consignee-adress?quick=77";
-	var params = "dialogWidth=800px;dialogHeight=400px";
+					if(data[i]['consignee_street2']!=''){
+						stree+="||"+data[i]['consignee_street2'];
+					}
+					html+="<tr><td title='"+data[i]['consignee_company']+"'>"+data[i]['consignee_company']
+					+"</td><td title='"+stree+"'>"+stree+"</td>"
+					+"<td title='"+data[i]['country_cnname']+"'>"+data[i]['country_cnname']+"</td>"
+					+"<td title='"+data[i]['consignee_province']+"'>"+data[i]['consignee_province']+"</td>"
+					+"<td title='"+data[i]['consignee_city']+"'>"+data[i]['consignee_city']+"</td>"
+					+"<td>"+data[i]['consignee_postcode']+"</td>"
+					+"<td>"+data[i]['consignee_name']+"</td>"
+					+"<td>"+data[i]['consignee_telephone']+"</td>"
+					+"<td style='display: none;'>"+data[i]['consignee_countrycode']+"</td>"
+					+"<td><a class='addtr2' href='javascript:;' onclick='selectRow(this)'>确定</a></td></tr>";
+				}
+				$("#consigneeloc .contentP .textmian table tbody").append(html);
+				$("#consigneeloc").show();
+			}else{
+			}
+		},"json");
+	}
 	
-	var returnResult = window.showModalDialog(url, '',params);
-	//数据绑定
-	$("#consignee_company").val(returnResult.consignee_company);
-	$("#country_code").val(returnResult.consignee_countrycode.toLocaleUpperCase());
-	$("#consignee_province").val(returnResult.consignee_province);
-	streeArr = returnResult.consignee_street.split("||");
-	$("#consignee_street").val(streeArr[0]?streeArr[0]:'');
-	$("#consignee_street2").val(streeArr[1]?streeArr[1]:'');
-	$("#consignee_street3").val(streeArr[2]?streeArr[2]:'');
-	$("#consignee_city").val(returnResult.consignee_city);
-	$("#consignee_name").val(returnResult.consignee_name);
-	$("#consignee_postcode").val(returnResult.consignee_postcode);
-	$("#consignee_telephone").val(returnResult.consignee_telephone);
- });
+	
+});
  
   //弹窗
  $("#contentslist").click(function(){
@@ -1358,4 +1412,138 @@ $(function(){
     $("#boxend").css("height",height+"px");
   }				
 });
+//判断是否是火狐浏览器
+function isFirefox(){
+	var explorer =navigator.userAgent;
+	return explorer.indexOf("Firefox") >= 0;
+}
+
+var selectRow = function (that){
+	var tdArr = $(that).parent().parent().children();
+	var params = {};
+	params.consignee_company=tdArr.eq(0).html();
+	params.consignee_street=tdArr.eq(1).html();
+	params.consignee_province=tdArr.eq(3).html();
+	params.consignee_city=tdArr.eq(4).html();
+	params.consignee_postcode=tdArr.eq(5).html();
+	params.consignee_name=tdArr.eq(6).html();
+	params.consignee_telephone=tdArr.eq(7).html();
+	params.consignee_countrycode=tdArr.eq(8).html();
+	locdataBind(params);
+	$("#consigneeloc").hide();
+}
+
+var selectShipRow = function (that){
+	var tdArr = $(that).parent().parent().children();
+	var params = {};
+	params.shipper_name=tdArr.eq(0).html();
+	params.shipper_company=tdArr.eq(1).html();
+	params.shipper_street=tdArr.eq(2).html();
+	params.shipper_city=tdArr.eq(3).html();
+	params.shipper_postcode=tdArr.eq(4).html();
+	params.shipper_telephone=tdArr.eq(5).html();
+	shipinglocdataBind(params);
+	$("#shippingloc").hide();
+}
+//绑定地址薄内容
+//数据绑定
+function locdataBind(returnResult){
+	$("#consignee_company").val(returnResult.consignee_company);
+	$("#country_code").val(returnResult.consignee_countrycode.toLocaleUpperCase());
+	$("#consignee_province").val(returnResult.consignee_province);
+	streeArr = returnResult.consignee_street.split("||");
+	$("#consignee_street").val(streeArr[0]?streeArr[0]:'');
+	$("#consignee_street2").val(streeArr[1]?streeArr[1]:'');
+	$("#consignee_street3").val(streeArr[2]?streeArr[2]:'');
+	$("#consignee_city").val(returnResult.consignee_city);
+	$("#consignee_name").val(returnResult.consignee_name);
+	$("#consignee_postcode").val(returnResult.consignee_postcode);
+	$("#consignee_telephone").val(returnResult.consignee_telephone);
+}
+
+function shipinglocdataBind(returnResult){
+	//数据绑定
+	$("input[name='shipper[shipper_name]']").val(returnResult.shipper_name);
+	$("input[name='shipper[shipper_company]']").val(returnResult.shipper_company);
+	streeArr = returnResult.shipper_street.split("||");
+	$("#shipperstree").val(streeArr[0]?streeArr[0]:'');
+	$("#shipperstree1").val(streeArr[1]?streeArr[1]:'');
+	$("#shipperstree2").val(streeArr[2]?streeArr[2]:'');
+	$("input[name='shipper[shipper_city]']").val(returnResult.shipper_city);
+	$("input[name='shipper[shipper_postcode]']").val(returnResult.shipper_postcode);
+	$("input[name='shipper[shipper_telephone]']").val(returnResult.shipper_telephone);
+	//获取citycode
+	var _params = {};
+	_params.dc = $("#product_code").val();;
+	_params.cn = returnResult.shipper_city;
+	$.post("/order/order/get-post-code-rule",_params,function(data){
+					if(data.state){
+						$("#refer_hawbcode").val(data.data[0]['citycode']?data.data[0]['citycode']:'');
+					}
+				},"json");
+}
+if(!isFirefox()){
+	$("#contentslist").hide();
+}
 </script>
+<!--地址铺弹窗-->
+<div id="consigneeloc" class="pop_box hide">
+	<div class="bg"></div>
+	<div class="contentP">
+		<div class="PTit">
+			<h3>收件人地址簿</h3>
+			<a href="javascript:;" class="closepop">x</a>
+		</div>
+		<div class="textmian">
+		<table cellspacing="0" cellpadding="0" border="0" class="normTbe tabInfo">
+		    <thead>
+		    	<tr>
+						<th >公司名称</th>
+						<th >地址</th>
+						<th >国家</th>
+						<th >州/省</th>
+						<th >城市</th>
+						<th >邮编</th>
+						<th >联系人</th>
+						<th >电话号码</th>
+						<th style="display: none;">国家编码</th>
+						<th >操作</th>
+				</tr>
+			</thead>
+		<tbody class="tbody1">
+			
+		</tbody>
+		</table>		
+			
+		</div>
+	</div>
+</div>		
+<!--地址铺弹窗-->
+<div id="shippingloc" class="pop_box hide">
+	<div class="bg"></div>
+	<div class="contentP">
+		<div class="PTit">
+			<h3>发件人地址簿</h3>
+			<a href="javascript:;" class="closepop">x</a>
+		</div>
+		<div class="textmian">
+		<table cellspacing="0" cellpadding="0" border="0" class="normTbe tabInfo">
+		    <thead>
+		    	<tr>
+						<th >联系人姓名</th>
+						<th >公司名称</th>
+						<th >地址</th>
+						<th>城市</th>
+						<th >邮编</th>
+						<th >电话号码</th>
+						<th >操作</th>
+				</tr>
+			</thead>
+		<tbody class="tbody1">
+			
+		</tbody>
+		</table>		
+			
+		</div>
+	</div>
+</div>	

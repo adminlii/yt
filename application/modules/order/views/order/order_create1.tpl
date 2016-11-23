@@ -1,4 +1,5 @@
 <style>
+.tip-error-message{display:block}
 .select1{
 width: 100px;
 }

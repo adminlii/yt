@@ -20,6 +20,17 @@
     		<p>商业渠道在线发运</p>
     	</div>
     </div>
+    <div style="display: none" id="browser_ie">
+		<div class="brower_info">
+			<div class="notice_info">
+				<P>你的浏览器版本过低，可能导致网站不能正常访问！<br>为了你能正常使用网站功能，请使用这些浏览器。</P></div>
+				<div class="browser_list">
+				<span><a href="https://www.baidu.com/s?word=谷歌浏览器下载" target="_blank"><img src="/images/index/Chrome.png"><br>Chrome</a></span>
+				<span><a href="https://www.baidu.com/s?word=火狐浏览器下载" target="_blank"><img src="/images/index/Firefox.png"><br>Firefox</a></span>
+				<span><a href="https://www.baidu.com/s?word=最新版IE浏览器下载" target="_blank"><img src="/images/index/IE.png"><br>IE9及以上</a></span>
+			</div>
+		</div>
+	</div>
     <div class="banner">
     	<div class="wrapper">
 	    	<div class="loginBox Radius5">
@@ -88,6 +99,9 @@
     	</div>
     </div>
     <script>
+    if (!$.support.leadingWhitespace) {
+        $("#browser_ie").show();
+    }
     $(".change").click(function(){
     	$('#verifyCode').attr('src', '/default/index/verify-code/' + Math.random());
     });

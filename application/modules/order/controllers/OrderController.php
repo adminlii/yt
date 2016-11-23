@@ -1471,6 +1471,7 @@ class Order_OrderController extends Ec_Controller_Action
 	}
 	
 	public function shipperAdressAction(){
+		$isxhr = $this->getParam('xhr','');
 		$CsiShipperTrailerAddress = new Service_CsiShipperTrailerAddress();
 	 	$condition['customer_id'] = Service_User::getCustomerId();
     	$condition['customer_channelid'] = Service_User::getChannelid();
@@ -1494,7 +1495,15 @@ class Order_OrderController extends Ec_Controller_Action
     	);
     	$rows = $CsiShipperTrailerAddress->getByCondition($condition,'*', 0, 1, array('shipper_account asc'));
     	$this->view->rows = $rows;
-    	echo $this->view->render($this->tplDirectory . "shipper_address.tpl");
+    	if(!empty($isxhr)){
+    		$res = array('ack'=>0,'msg'=>'','data'=>array());
+    		if(!empty($rows)){
+    			$res['ack'] = 1 ;
+    			$res['data'] = $rows;
+    		}
+    		echo json_encode($res);
+    	}else
+    		echo $this->view->render($this->tplDirectory . "shipper_address.tpl");
 	}
 	
 	public function shipperAdressDelAction(){
@@ -1607,6 +1616,7 @@ class Order_OrderController extends Ec_Controller_Action
 	}
 	
 	public function consigneeAdressAction(){
+		$isxhr = $this->getParam('xhr','');
 		$CsiConsigneeTrailerAddress = new Service_CsiConsigneeTrailerAddress();
 		$condition['customer_id'] = Service_User::getCustomerId();
 		$condition['customer_channelid'] = Service_User::getChannelid();
@@ -1635,10 +1645,17 @@ class Order_OrderController extends Ec_Controller_Action
 			$result_country = Service_IddCountry::getByField($v['consignee_countrycode'],'country_code');
 			$rows[$k]['country_cnname']=$result_country['country_cnname'];
 		}
-		
 		$this->view->rows = $rows;
 		//print_r($rows);
-		echo $this->view->render($this->tplDirectory . "consignee_address.tpl");
+		if(!empty($isxhr)){
+			$res = array('ack'=>0,'msg'=>'','data'=>array());
+			if(!empty($rows)){
+				$res['ack'] = 1 ;
+				$res['data'] = $rows;
+			}
+			echo json_encode($res);
+		}else
+			echo $this->view->render($this->tplDirectory . "consignee_address.tpl");
 	}
 	
 	public function consigneeAdressEditAction(){

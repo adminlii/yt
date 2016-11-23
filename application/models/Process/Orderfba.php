@@ -294,6 +294,9 @@ class Process_Orderfba
             if(empty($this->_consignee['consignee_postcode'])){
             	$this->_err[] = Ec::Lang('收件人邮编不可为空');
             }
+       		if(empty($this->_consignee['storage'])){
+            	$this->_err[] = Ec::Lang('FBA仓库不可为空');
+            }
         }
         
         
@@ -344,7 +347,7 @@ class Process_Orderfba
             }
             $this->createOrder($status);
             
-            $successTip = Ec::Lang('订单保存草稿成功');
+            $successTip = Ec::Lang('FBA(订单)保存成功');
             if($status == 'P'){
                 $successTip = Ec::Lang('订单提交预报成功');
             }

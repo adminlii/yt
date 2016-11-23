@@ -39,6 +39,8 @@ class GetYuntNumbers
         }
         //$condition['customer_code'] = $this->customerCode;
         $condition['customer_code'] = 'SYS';
+        $db = Common_Common::getAdapter();
+        $db->getConnection()->query("LOCK TABLES `application` WRITE ");
         $application = Service_Application::getByCondition($condition, '*');
         $date = date('Ymd');
         $time = date('Y-m-d H:i:s');
@@ -61,14 +63,14 @@ class GetYuntNumbers
             if ($date == $arr[0]) {
                 $count = $arr[1] + 1;
             } else {
-                $count = 1;
+                $count = 50000;
             }
         } else {
             $count = 1;
         }
         $update = array('current_number' => $date . '-' . $count, 'app_update_time' => $time);
         Service_Application::update($update, $application['application_id']);
-       
+        $db->getConnection()->query("UNLOCK TABLES ");
         return $count;
     }
 

@@ -733,49 +733,75 @@ $(function(){
 //弹窗
 $("#shipperaddrs").click(function(){
 	var url = "/order/order/shipper-adress?quick=77";
-	var params = "dialogWidth=800px;dialogHeight=400px";
-	$("#refer_hawbcode").val('');
-	var returnResult = window.showModalDialog(url, '',params);
-	//数据绑定
-	$("input[name='shipper[shipper_name]']").val(returnResult.shipper_name);
-	$("input[name='shipper[shipper_company]']").val(returnResult.shipper_company);
-	streeArr = returnResult.shipper_street.split("||");
-	$("#shipperstree").val(streeArr[0]?streeArr[0]:'');
-	$("#shipperstree1").val(streeArr[1]?streeArr[1]:'');
-	$("#shipperstree2").val(streeArr[2]?streeArr[2]:'');
-	$("input[name='shipper[shipper_city]']").val(returnResult.shipper_city);
-	$("input[name='shipper[shipper_postcode]']").val(returnResult.shipper_postcode);
-	$("input[name='shipper[shipper_telephone]']").val(returnResult.shipper_telephone);
-	//获取citycode
-	var _params = {};
-	_params.dc = "TNT";
-	_params.cn = returnResult.shipper_city;
-	$.post("/order/order/get-post-code-rule",_params,function(data){
-					if(data.state){
-						$("#refer_hawbcode").val(data.data[0]['citycode']?data.data[0]['citycode']:'');
-					}
-				},"json");
-
+	if(isFirefox()){
+		var params = "dialogWidth=800px;dialogHeight=400px";
+		$("#refer_hawbcode").val('');
+		var returnResult = window.showModalDialog(url, '',params);
+		shipinglocdataBind(returnResult);
+	}else{
+		url += "&xhr=1";
+		$.post(url,{},function(data){
+			if(data.ack==1){
+				var data = data.data;
+				var html = '';
+				for(var i in data){
+					html+="<tr><td title='"+data[i]['shipper_name']+"'>"+data[i]['shipper_name']
+					+"</td><td title='"+data[i]['shipper_company']+"'>"+data[i]['shipper_company']+"</td>"
+					+"<td title='"+data[i]['shipper_street']+"'>"+data[i]['shipper_street']+"</td>"
+					+"<td title='"+data[i]['shipper_city']+"'>"+data[i]['shipper_city']+"</td>"
+					+"<td title='"+data[i]['shipper_postcode']+"'>"+data[i]['shipper_postcode']+"</td>"
+					+"<td title='"+data[i]['shipper_telephone']+"'>"+data[i]['shipper_telephone']+"</td>"
+					+"<td><a class='addtr2' href='javascript:;' onclick='selectShipRow(this)'>确定</a></td></tr>";
+				}
+				$("#shippingloc .contentP .textmian table tbody").append(html);
+				$("#shippingloc").show();
+			}else{
+			}
+		},"json");
+	}
 });
 
  //弹窗
 $("#consigneeaddrs").click(function(){
 	var url = "/order/order/consignee-adress?quick=77";
-	var params = "dialogWidth=800px;dialogHeight=400px";
+	if(isFirefox()){
+		
+		var params = "dialogWidth=800px;dialogHeight=400px";
+		var returnResult = window.showModalDialog(url, '',params);
+		locdataBind(returnResult);
+	}else{
+		url += "&xhr=1";
+		$.post(url,{},function(data){
+			if(data.ack==1){
+				var data = data.data;
+				var html = '';
+				for(var i in data){
+					var stree = data[i]['consignee_street'];
+					if(data[i]['consignee_street1']!=''){
+						stree+="||"+data[i]['consignee_street1'];
+					}
+					if(data[i]['consignee_street2']!=''){
+						stree+="||"+data[i]['consignee_street2'];
+					}
+					html+="<tr><td title='"+data[i]['consignee_company']+"'>"+data[i]['consignee_company']
+					+"</td><td title='"+stree+"'>"+stree+"</td>"
+					+"<td title='"+data[i]['country_cnname']+"'>"+data[i]['country_cnname']+"</td>"
+					+"<td title='"+data[i]['consignee_province']+"'>"+data[i]['consignee_province']+"</td>"
+					+"<td title='"+data[i]['consignee_city']+"'>"+data[i]['consignee_city']+"</td>"
+					+"<td>"+data[i]['consignee_postcode']+"</td>"
+					+"<td>"+data[i]['consignee_name']+"</td>"
+					+"<td>"+data[i]['consignee_telephone']+"</td>"
+					+"<td style='display: none;'>"+data[i]['consignee_countrycode']+"</td>"
+					+"<td><a class='addtr2' href='javascript:;' onclick='selectRow(this)'>确定</a></td></tr>";
+				}
+				$("#consigneeloc .contentP .textmian table tbody").append(html);
+				$("#consigneeloc").show();
+			}else{
+			}
+		},"json");
+	}
 	
-	var returnResult = window.showModalDialog(url, '',params);
-	//数据绑定
-	$("#consignee_company").val(returnResult.consignee_company);
-	$("#country_code").val(returnResult.consignee_countrycode.toLocaleUpperCase());
-	$("#consignee_province").val(returnResult.consignee_province);
-	streeArr = returnResult.consignee_street.split("||");
-	$("#consignee_street").val(streeArr[0]?streeArr[0]:'');
-	$("#consignee_street2").val(streeArr[1]?streeArr[1]:'');
-	$("#consignee_street3").val(streeArr[2]?streeArr[2]:'');
-	$("#consignee_city").val(returnResult.consignee_city);
-	$("#consignee_name").val(returnResult.consignee_name);
-	$("#consignee_postcode").val(returnResult.consignee_postcode);
-	$("#consignee_telephone").val(returnResult.consignee_telephone);
+	
 });
 
  
@@ -1116,4 +1142,75 @@ function getMorePostCode(that,cd,cn,pc,p){
 			//parent.parent().show()
 		},200);
 	},"json");
+}
+
+//判断是否是火狐浏览器
+function isFirefox(){
+	var explorer =navigator.userAgent;
+	return explorer.indexOf("Firefox") >= 0;
+}
+
+var selectRow = function (that){
+	var tdArr = $(that).parent().parent().children();
+	var params = {};
+	params.consignee_company=tdArr.eq(0).html();
+	params.consignee_street=tdArr.eq(1).html();
+	params.consignee_province=tdArr.eq(3).html();
+	params.consignee_city=tdArr.eq(4).html();
+	params.consignee_postcode=tdArr.eq(5).html();
+	params.consignee_name=tdArr.eq(6).html();
+	params.consignee_telephone=tdArr.eq(7).html();
+	params.consignee_countrycode=tdArr.eq(8).html();
+	locdataBind(params);
+	$("#consigneeloc").hide();
+}
+
+var selectShipRow = function (that){
+	var tdArr = $(that).parent().parent().children();
+	var params = {};
+	params.shipper_name=tdArr.eq(0).html();
+	params.shipper_company=tdArr.eq(1).html();
+	params.shipper_street=tdArr.eq(2).html();
+	params.shipper_city=tdArr.eq(3).html();
+	params.shipper_postcode=tdArr.eq(4).html();
+	params.shipper_telephone=tdArr.eq(5).html();
+	shipinglocdataBind(params);
+	$("#shippingloc").hide();
+}
+//绑定地址薄内容
+//数据绑定
+function locdataBind(returnResult){
+	$("#consignee_company").val(returnResult.consignee_company);
+	$("#country_code").val(returnResult.consignee_countrycode.toLocaleUpperCase());
+	$("#consignee_province").val(returnResult.consignee_province);
+	streeArr = returnResult.consignee_street.split("||");
+	$("#consignee_street").val(streeArr[0]?streeArr[0]:'');
+	$("#consignee_street2").val(streeArr[1]?streeArr[1]:'');
+	$("#consignee_street3").val(streeArr[2]?streeArr[2]:'');
+	$("#consignee_city").val(returnResult.consignee_city);
+	$("#consignee_name").val(returnResult.consignee_name);
+	$("#consignee_postcode").val(returnResult.consignee_postcode);
+	$("#consignee_telephone").val(returnResult.consignee_telephone);
+}
+
+function shipinglocdataBind(returnResult){
+	//数据绑定
+	$("input[name='shipper[shipper_name]']").val(returnResult.shipper_name);
+	$("input[name='shipper[shipper_company]']").val(returnResult.shipper_company);
+	streeArr = returnResult.shipper_street.split("||");
+	$("#shipperstree").val(streeArr[0]?streeArr[0]:'');
+	$("#shipperstree1").val(streeArr[1]?streeArr[1]:'');
+	$("#shipperstree2").val(streeArr[2]?streeArr[2]:'');
+	$("input[name='shipper[shipper_city]']").val(returnResult.shipper_city);
+	$("input[name='shipper[shipper_postcode]']").val(returnResult.shipper_postcode);
+	$("input[name='shipper[shipper_telephone]']").val(returnResult.shipper_telephone);
+	//获取citycode
+	var _params = {};
+	_params.dc = "TNT";
+	_params.cn = returnResult.shipper_city;
+	$.post("/order/order/get-post-code-rule",_params,function(data){
+					if(data.state){
+						$("#refer_hawbcode").val(data.data[0]['citycode']?data.data[0]['citycode']:'');
+					}
+				},"json");
 }

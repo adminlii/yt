@@ -158,6 +158,13 @@ class Order_SubmiterController extends Ec_Controller_Action
     				$errorArr[]= "发件人城市不能为非英文";
     			}
     		}
+    		
+    		if(!empty($row['shipper_telephone'])){
+    			if(!preg_match('/^(\d){4,25}$/', $row['shipper_telephone'])) {
+    				$errorArr[]= "电话格式应为4-25位纯数字";
+    			}
+    		}
+    		
     		if (!empty($errorArr)) {
     			$return = array(
     					'state' => 0,

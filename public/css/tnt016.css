@@ -39,7 +39,7 @@ label{cursor: pointer;}
 .Floor_comlu table td,.Floor_comlu table th{border-right: 1px solid #ddd;border-bottom: 1px solid #ddd;line-height: 25px; padding: 10px;min-width: 80px;}
 .Floor_comlu table input[type="text"]{width: 240px;}.Floor_comlu table select{width:200px; }.Floor_comlu table textarea{width: 280px;height: 50px;}
 .Floor_comlu input[type="checkbox"],.Floor_comlu input[type="checkbox"]{vertical-align: middle;margin-top: -3px;}
-.Floor_comlu table .col{text-align: right;}
+.Floor_comlu table .col{text-align: right;width: 100px;}
 .TxtCenter{text-align: center;float: right;}
 .TxtCenter a{display: block;float: left; margin-left: 10px; background: #ff6600;color: #fff;width: 120px;line-height: 30px;border:0 none;-webkit-border-radius:5px;-moz-border-radius:5px;border-radius: 5px;filter:alpha(opacity=80); -moz-opacity:0.8;  -khtml-opacity: 0.8; opacity: 0.8;}
 .TxtCenter a:hover{opacity: 1;filter:alpha(opacity=100);}
@@ -106,7 +106,7 @@ label{cursor: pointer;}
 .pop_box .PTit h3{line-height: 45px;float: left;padding-left: 15px;font-weight: normal;font-size: 16px;}
 .pop_box .PTit a{display: block;width: 45px;line-height: 45px;text-align: center;background: #ddd;float: right;font-size: 20px;color: #666;}
 .pop_box .PTit a:hover{background: #50abfd;color: #fff;}
-.pop_box .textmian{padding: 15px;}
+.pop_box .textmian{padding: 15px;height: 500px;overflow: auto;}
 .btn_a1{padding-top: 15px;}
 .pop_box .btn_a1 a{display: inline-block;*display: inline;*zoom: 1;width: 120px;line-height: 45px;background: #50abfd;color: #fff;}
 .pop_box .btn_a1 .addtr2,.pop_box .btn_a1 .dtadd{background: #ff9900;}

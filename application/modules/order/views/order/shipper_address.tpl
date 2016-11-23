@@ -20,7 +20,6 @@
 			//根据按钮爬到行TR,然后行分析所有列
 			//var count = $(id).parent().parent().children().size();
 			var tdArr = $(id).parent().parent().children();
-			console.log(tdArr.eq(0).html());
 			var params = {};
 			params.shipper_name=tdArr.eq(0).html();
 			params.shipper_company=tdArr.eq(1).html();

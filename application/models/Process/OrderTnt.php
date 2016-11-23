@@ -91,7 +91,8 @@ class Process_OrderTnt
     		$invoice['pack'] = array();
     		$invoice['pack'][] = array('ITEMS'=>1,'WEIGHT'=>1,'WEIGHTALL'=>1,'LENGTH'=>1,'WIDTH'=>1,'HEIGHT'=>1);
     		$invoice['invoice'] = array();
-    		$invoice['invoice'][] = array('packId'=>0);
+    		$invoice['invoice'][] = array('packId'=>0,'invoice_enname'=>'document','invoice_quantity'=>1);
+    	
     	}
     	if(!empty($invoice)){
         	$package = $invoice['pack'];

@@ -111,3 +111,11 @@ body{background: #fff;clear: both;}
 .pop_up .content .Title a{float:right;font-size:18px; display:block;width:40px;line-height:40px;background:#e6e6e6;text-align:center;}
 .pop_up .content .Title a:hover{background:#ddd;color:#333;}
 .pop_up .content .text{padding:15px;}
+
+#browser_ie {background: #f6f6b4; display: none; height: 85px; color: #000; font-size: 15px;border-top:1px solid #e6e6e6;}
+#browser_ie .brower_info {margin: 0px auto; width: 760px; padding-top: 17px}
+#browser_ie .brower_info .notice_info {position: relative; float: left}
+#browser_ie .brower_info .notice_info p {text-align: left; line-height: 25px; width: 360px;color: #333; display: inline-block}
+#browser_ie .browser_list {	position: relative; float: left}
+#browser_ie .browser_list img {	width: 40px; height: 40px}
+#browser_ie .browser_list span {text-align: center; width: 80px; display: inline-block}
