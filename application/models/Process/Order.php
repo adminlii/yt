@@ -552,9 +552,8 @@ class Process_Order
         }else{
             $this->_consignee['mail_cargo_type'] = '4';
         }
-        
-        if(!empty($this->_order['order_pieces'])){
-            if(! preg_match('/^[1-9][0-9]?$/', $this->_order['order_pieces']) || intval($this->_order['order_pieces']) <= 0){
+        if($this->_order['order_pieces']==='0'||!empty($this->_order['order_pieces'])){
+            if(!preg_match('/^[1-9][0-9]?$/', $this->_order['order_pieces']) || intval($this->_order['order_pieces']) <= 0){
                 $this->_err[] = Ec::Lang('外包装件数必须为1-99的整数');
             }
         }else{

@@ -484,11 +484,14 @@ class Order_LabelPrintController extends Ec_Controller_Action {
                 if($pdfData){
                     $PdfReturn = $process->CreatePdfFile($pdfData,$trackingCodes);
                     $return['pdf'] = $PdfReturn;
+                    $updateRow ['print_date'] = date ( 'Y-m-d H:i:s' );
+                    Service_CsdOrder::update($updateRow, $order_id, 'order_id');
                 }
                 if($return["data"]["ResponseError"]){
                     $return['ack'] = 0;
                     $return["message"] = $return["data"]["ResponseError"]["ShortMessage"];
                 }
+               
         		//header("Location: {$PdfReturn}" );
                 echo  Zend_Json::encode($return);die;
         	} else {

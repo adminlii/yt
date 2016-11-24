@@ -151,7 +151,7 @@
 					<li>
 						<label><i>*</i> 电话：</label>
 						<div class="constinp">
-							<input type="text" value="区号-电话号-分机号" onfocus="if (value =='区号-电话号-分机号'){value =''}" onblur="if (value ==''){value='区号-电话号-分机号'}" name="user_phone" id='user_phone'/>
+							<input type="text" placeholder="区号-电话号-分机号"  name="user_phone" id='user_phone'/>
 							<em></em>
 							<p>请填写真实的手机或联系电话，注册后客服人员将在1个工作日内与您取得联系进行信息确认以及开通账户。</p>
 						</div>

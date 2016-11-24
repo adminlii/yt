@@ -9,6 +9,6 @@ return array(
 	'verification_code'=>'验证码',
 	'logoing'=>'立刻登录',
 	'register'=>'立即注册',
-	'register_success_01'=>'注册成功，请查收邮件验证邮箱，并等待客服与您联系，开通账户.',
+	'register_success_01'=>'注册成功，请到您的邮箱激活账号',
 	'register_email_verify'=>'邮箱验证成功，已开通账户.',
 );

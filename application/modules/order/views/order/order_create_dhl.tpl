@@ -1482,9 +1482,16 @@ function shipinglocdataBind(returnResult){
 					}
 				},"json");
 }
-if(!isFirefox()){
-	$("#contentslist").hide();
-}
+$(function(){
+	if(!isFirefox()){
+		$("#contentslist").hide();
+	}
+	$('.closepop').click(function(){
+		$('.pop_box').slideUp('400');
+	});
+
+});
+
 </script>
 <!--地址铺弹窗-->
 <div id="consigneeloc" class="pop_box hide">

@@ -79,7 +79,7 @@ class Order_OrderListController extends Ec_Controller_Action
             if($condition['print_sign'] == '1') {
             	$condition['print_date_unequals'] = '0000-00-00 00:00:00';
             } else if($condition['print_sign'] == '0') {
-            	$condition['print_date'] = '0000-00-00 00:00:00';
+            	$condition['print_date_null'] = 1;
             }
             
             unset($condition['print_sign']);

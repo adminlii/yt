@@ -334,6 +334,9 @@ class Table_CsdOrder
         if(isset($condition["print_date_unequals"]) && $condition["print_date_unequals"] != ""){
             $select->where("print_date != ?", $condition["print_date_unequals"]);
         }
+        if(isset($condition["print_date_null"]) && $condition["print_date_null"] != ""){
+        	$select->where("print_date IS NULL");
+        }
         if(isset($condition["post_date"]) && $condition["post_date"] != ""){
             $select->where("post_date = ?", $condition["post_date"]);
         }

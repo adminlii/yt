@@ -504,7 +504,7 @@ class Process_OrderDhl
                 if(empty($invoice['invoice_weight'])){
                 	$this->_err[] = "(" . Ec::Lang('申报信息') . $k . ")" . Ec::Lang('申报重量不可为空');
                 }else{
-                	if(!preg_match('/(^0\.[5-9]$)|(^[1-9]\d*(\.?\d?)$)/', $invoice['invoice_weight'])||! is_numeric($invoice['invoice_weight'])){
+                	if(!preg_match('/(^0\.[5-9]$)|(^[1-9]\d{0,5}(\.\d)?$)/', $invoice['invoice_weight'])||! is_numeric($invoice['invoice_weight'])){
                 		$this->_err[] = "(" . Ec::Lang('申报信息') . $k . ")" . Ec::Lang('须为数字,且小数最多为1位,范围为0.5-999999.9');
                 	}
                 }
@@ -580,14 +580,17 @@ class Process_OrderDhl
         
 //         print_r($this->_invoice);die;
         //体积验证
-        
         //申报价值校验
-        if(!empty($this->_invoice[1]['invoice_totalcharge_all'])){
-        	if(!preg_match('/^\d+(\.\d{1,2})?$/', $this->_invoice[1]['invoice_totalcharge_all'])){
+        if($this->_invoice[1]['invoice_totalcharge_all']==='0'||!empty($this->_invoice[1]['invoice_totalcharge_all'])){
+        	if(!preg_match('/^\d+(\.\d{1,2})?$/', $this->_invoice[1]['invoice_totalcharge_all'])||$this->_invoice[1]['invoice_totalcharge_all']==='0'){
         		$this->_err[] =  Ec::Lang('通关的申报价值须为数字,且小数最多为2位');
         	}
         }
-        
+        if($this->_order['insurance_value_gj']==='0'||!empty($this->_order['insurance_value_gj'])){
+       	 	if(!preg_match('/^\d+(\.\d{1,2})?$/', $this->_invoice[1]['insurance_value_gj'])||$this->_order['insurance_value_gj']==='0'){
+        		$this->_err[] =  Ec::Lang('保险价值须为数字,且小数最多为2位');
+        	}
+        }
         
         
         //地址校验
