@@ -124,6 +124,7 @@ class Default_ApiController extends Zend_Controller_Action
      * 中邮TOMS通知接受接口
      */ 
 	public function receiveAction() {
+		echo 111;die;
 		header("Content-type:text/html;charset=utf-8");
 		$param = $this->_request->getParams();
 		$json = file_get_contents('php://input');

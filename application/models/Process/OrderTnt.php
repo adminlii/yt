@@ -160,7 +160,7 @@ class Process_OrderTnt
         $db = Common_Common::getAdapterForDb2();
         $sql = "select * from csi_productkind where 
                 product_status='Y' 
-                and tms_id='".Service_User::getTmsId()."' 
+                and tms_id='1' 
                 and (product_code='{$product_code}' or product_cnname='{$product_code}' or product_enname='{$product_code}');";
         $productKind = $db->fetchAll($sql);
 //         print_r($sql);die;
@@ -816,8 +816,8 @@ class Process_OrderTnt
         $return['order'] = $this->_order;
         return $return;
     }
-
-    public function createOrderTransactionapi($status)
+	
+    public function createOrderTransactionApi($status)
     {
     	$return = array(
     			'ask' => 0,
@@ -844,7 +844,6 @@ class Process_OrderTnt
     			$successTip = Ec::Lang('订单提交预报成功');
     		}
     		$db->commit();
-    		
     		$this->_order['order_id'] = $this->_order_id;
     		$return['ask'] = 1;
     		if($this->_existOrder){
@@ -862,7 +861,6 @@ class Process_OrderTnt
     	$return['order'] = $this->_order;
     	return $return;
     }
-    
     
     public function createOrder($status,$import=FALSE)
     {
@@ -1148,14 +1146,14 @@ class Process_OrderTnt
         
         // 提交预报
         if($status == 'P'){
-            $this->_verifyValidate($this->_order_id, 'verify');
+            $this->_verifyValidate($this->_order_id, 'verify',$import);
             
             // 订单验证异常
             if($this->_err){
                 throw new Exception(Ec::Lang('信息异常，处理中断'));
             }
             if($import){
-            	$this->_verifyRs = $this->_verifyProcess($this->_order_id, 'verify',true);
+            	$this->_verifyRs = $this->_verifyProcess($this->_order_id, 'verify',$import);
             }
             // 订单处理
             //
@@ -1169,14 +1167,14 @@ class Process_OrderTnt
      * @param unknown_type $op            
      * @throws Exception
      */
-    protected function _verifyValidate($order_id, $op)
+    protected function _verifyValidate($order_id, $op,$import=false)
     {
         try{
             $order = Service_CsdOrder::getByField($order_id, 'order_id');
             if(! $order){
                 throw new Exception(Ec::Lang('订单不存在或已删除') . '-->' . $order_id);
             } 
-            if($order['customer_id'] != Service_User::getCustomerId()){
+            if(!$import&&$order['customer_id'] != Service_User::getCustomerId()){
                 throw new Exception(Ec::Lang('非法操作'));
             }
             // 1.草稿 D

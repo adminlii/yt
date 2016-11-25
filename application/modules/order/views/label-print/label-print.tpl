@@ -70,7 +70,7 @@
 			<div id='pring_order_id_wrap'>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;单号：<input
 					name='order_code' type='text' class='input_text keyToSearch'
-					value='' placeholder="客户单号或服务商单号" id='order_code'/> &nbsp;&nbsp;<input
+					value='' placeholder="运单号或跟踪单号" id='order_code'/> &nbsp;&nbsp;<input
 					type="button" value="打印" class="baseBtn printBtn">
 			</div>
 

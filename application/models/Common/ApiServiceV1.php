@@ -325,7 +325,7 @@ class Common_ApiServiceV1
 	            print_r($shipperArr);
 	            print_r($consigneeArr);
 	            die; */
-	            $cres = $process->createOrderTransactionapi('P');
+	            $cres = $process->createOrderTransactionApi('P');
     			if($cres['ask']!=1){
     				$return['ret'] = 1001;
     				$return['err_arr'] = $cres['err'];
@@ -384,7 +384,8 @@ class Common_ApiServiceV1
 	            	'pay_type'=> empty($invoice1['pay_type'])?'':$invoice1['pay_type'],
 	            	'fpnote'=> empty($invoice1['fpnote'])?'':$invoice1['fpnote'],
 	            	'untread'=>empty($order['untread'])?0:intval($order['untread']),
-	            );
+    				'service_code'=>$order['service_code'],
+    			);
 	            //添加一个发票类型
 	            if($orderArr["invoice_print"]==1){
 	            	$orderArr["invoice_type"]=$order['invoice_type'];
@@ -506,7 +507,7 @@ class Common_ApiServiceV1
 	            $process->setExtraservice($extraservice);
 	            $process->setShipper($shipperArr);
 	            $process->setConsignee($consigneeArr);
-    			$cres = $process->createOrderTransactionapi('P');
+    			$cres = $process->createOrderTransactionApi('P');
     			if($cres['ask']!=1){
     				$return['ret'] = 1001;
     				$return['err_arr'] = $cres['err'];
@@ -560,7 +561,7 @@ class Common_ApiServiceV1
 		    	 		'mail_cargo_type' => $order['mail_cargo_type'],
 		    	 		'tms_id'=>$order['tms_id'],
 		    	 		'customer_channelid'=>null,
-		    	 		'insurance_value' => trim($order['insurance_value1']),
+		    	 		//'insurance_value' => trim($order['insurance_value1']),
 		    	 		'battery'=>empty($order['battery'])?'':$order['battery'],
 		    	 );
 		    	 $volumeArr=array(

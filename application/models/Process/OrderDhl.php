@@ -143,10 +143,9 @@ class Process_OrderDhl
         $db = Common_Common::getAdapterForDb2();
         $sql = "select * from csi_productkind where 
                 product_status='Y' 
-                and tms_id='".Service_User::getTmsId()."' 
+                and tms_id='1' 
                 and (product_code='{$product_code}' or product_cnname='{$product_code}' or product_enname='{$product_code}');";
         $productKind = $db->fetchAll($sql);
-//         print_r($sql);die;
         foreach($productKind as $k => $v){
             $rule = Service_PbrProductrule::getByField($v['product_code'], 'product_code');
             if(! $rule || $rule['web_show_type'] != 'Y'){
@@ -587,7 +586,7 @@ class Process_OrderDhl
         	}
         }
         if($this->_order['insurance_value_gj']==='0'||!empty($this->_order['insurance_value_gj'])){
-       	 	if(!preg_match('/^\d+(\.\d{1,2})?$/', $this->_invoice[1]['insurance_value_gj'])||$this->_order['insurance_value_gj']==='0'){
+       	 	if(!preg_match('/^\d+(\.\d{1,2})?$/', $this->_order['insurance_value_gj'])||$this->_order['insurance_value_gj']==='0'){
         		$this->_err[] =  Ec::Lang('保险价值须为数字,且小数最多为2位');
         	}
         }
@@ -871,7 +870,7 @@ class Process_OrderDhl
         return $return;
     }
 	
-    public function createOrderTransactionapi($status)
+    public function createOrderTransactionApi($status)
     {
     	$return = array(
     			'ask' => 0,
@@ -1196,14 +1195,14 @@ class Process_OrderDhl
         
         // 提交预报
         if($status == 'P'){
-            $this->_verifyValidate($this->_order_id, 'verify');
+            $this->_verifyValidate($this->_order_id, 'verify',$import);
             
             // 订单验证异常
             if($this->_err){
                 throw new Exception(Ec::Lang('信息异常，处理中断'));
             }
             if($import){
-            	$this->_verifyRs = $this->_verifyProcess($this->_order_id, 'verify',true);
+            	$this->_verifyRs = $this->_verifyProcess($this->_order_id, 'verify',$import);
             }
             // 订单处理
             //
@@ -1217,14 +1216,14 @@ class Process_OrderDhl
      * @param unknown_type $op            
      * @throws Exception
      */
-    protected function _verifyValidate($order_id, $op)
+    protected function _verifyValidate($order_id, $op,$import=false)
     {
         try{
             $order = Service_CsdOrder::getByField($order_id, 'order_id');
             if(! $order){
                 throw new Exception(Ec::Lang('订单不存在或已删除') . '-->' . $order_id);
             } 
-            if($order['customer_id'] != Service_User::getCustomerId()){
+            if(!$import&&$order['customer_id'] != Service_User::getCustomerId()){
                 throw new Exception(Ec::Lang('非法操作'));
             }
             // 1.草稿 D
