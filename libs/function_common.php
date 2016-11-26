@@ -250,6 +250,8 @@ function filter_input_m($data,$filter_method = false){
 	return $data;
 }
 
+
+
 function create_guid() {
 	$charid = strtoupper(md5(uniqid(mt_rand(), true)));
 	$hyphen = chr(45);// "-"
@@ -311,4 +313,32 @@ function xml_filter(&$value,$k){
 function xml_filterInArr($arr){
 	array_walk_recursive($arr,'xml_filter');
 	return $arr;
+}
+//配合前端js代码
+/**
+ * @param $data
+ * @param $time
+ * @param string $set
+ * @return string
+ *
+var setToken = '~!@#$%^&4512*-678';
+var randToken = function(){
+var str = '1480066205940~!@#$%^&4512*-678';
+return hex_md5(str).substr(8, 16);
+}
+var data = "mysql_connect('111.111.111.111','root','111111')";
+var token = randToken();
+var key = CryptoJS.enc.Latin1.parse(token);
+var iv =    CryptoJS.enc.Latin1.parse(token);
+var encrypted = encodeURIComponent(CryptoJS.AES.encrypt(data, key, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.ZeroPadding }));
+document.write(encrypted);
+ */
+function M_decrypt($data,$time,$set = '~!@#$%^&4512*-678'){
+    if(empty($data)||empty($time))
+        return '';
+    $token = substr(md5($time.$set),8,16);
+    $iv = $privateKey = $token;
+    $encryptedData = base64_decode(urldecode($data));
+    $decrypted = mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $privateKey, $encryptedData, MCRYPT_MODE_CBC, $iv);
+    return  rtrim($decrypted,"\0");
 }
