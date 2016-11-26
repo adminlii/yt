@@ -392,7 +392,7 @@ function formSubmit(status){
 					successTip(html,json.order);
 					 //如果勾选了发票弹窗
 	    			var invoice_type = $("input[name='order[invoice_type]']:checked").val();
-					if($("#makeinvoice").attr("checked")&&json.ask==1)
+					if($("h3 em").hasClass("on")&&json.ask==1)
 					window.open("/order/invoice-print/invoice-label1/?orderId="+json.order.order_id+"&invoice_type="+invoice_type);
 				}else{
 					 if(json.err){
@@ -703,7 +703,7 @@ $('.weight').live('keyup',function(){
 
 // 数量
 $('.quantity').live('keyup',function(){
-	err_tip(this,/^[1-9][0-9]{0,3}$/,'须为正整数，范围为1-9999');
+	err_tip(this,/^[1-9](00|[0-9]?)$/,'须为正整数，范围为1-100');
 })
 
 // 海关商品名

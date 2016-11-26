@@ -280,7 +280,7 @@ class Order_OrderListController extends Ec_Controller_Action
         $this->view->countryArr = $countryArr;
 		$productKind = Process_ProductRule::getProductKind();
 		foreach ($productKind as $prok => $prov){
-			if(!in_array($prov['product_code'], array("ESB","ESBR","G_DHL"))){
+			if(!in_array($prov['product_code'], array("ESB","ESBR","G_DHL","TNT"))){
 				unset($productKind[$prok]);
 			}
 		}

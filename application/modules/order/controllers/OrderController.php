@@ -635,7 +635,7 @@ class Order_OrderController extends Ec_Controller_Action
             $process->setConsignee($consigneeArr);
             $process->setUuid($uuid);
             //             $process
-            $return = $process->createOrderTransactionapi($status);
+            $return = $process->createOrderTransactionApi($status);
     
             //             print_r($params);exit;
             die(Zend_Json::encode($return));
@@ -781,11 +781,10 @@ class Order_OrderController extends Ec_Controller_Action
                 'country_code' => strtoupper($order['country_code']),
                 'refer_hawbcode' => strtoupper($order['refer_hawbcode']),
                 'order_weight' => 0.01,
-                'order_pieces' => 10,
-                 
-                'order_length'=>10,
-                'order_width'=>10,
-                'order_height'=>10,
+                'order_pieces' => 1,
+                'order_length'=>1,
+                'order_width'=>1,
+                'order_height'=>1,
             	'dangerousgoods'=>empty($order['dangerousgoods'])?0:1,
                 'buyer_id' =>'',
                 'order_id' => $order['order_id'],

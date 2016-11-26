@@ -50,8 +50,8 @@ public function indexAction()
                 if($codeExist){
                     throw new Exception('用户名已被使用');
                 }
-                if(! preg_match('/^([a-zA-Z0-9_\-]+)$/', $row['user_code'])){
-                    throw new Exception('用户名只能由字母，数字，下划线，中划线组成');
+                if(! preg_match('/^([a-zA-Z0-9_\-]{1,15})$/', $row['user_code'])){
+                    throw new Exception('用户名只能由字母，数字，下划线，中划线组成长度最多15位');
                 }
                 /* if(empty($row['user_password'])||strlen($row['user_password'])<6){
                     throw new Exception('密码不能为空且长度必须>=6');

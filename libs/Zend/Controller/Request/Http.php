@@ -725,11 +725,11 @@ class Zend_Controller_Request_Http extends Zend_Controller_Request_Abstract
 
         $paramSources = $this->getParamSources();
         if (isset($this->_params[$keyName])) {
-            return $this->_params[$keyName];
+            return filter_input_m($this->_params[$keyName]);
         } elseif (in_array('_GET', $paramSources) && (isset($_GET[$keyName]))) {
-            return $_GET[$keyName];
+            return filter_input_m($_GET[$keyName]);
         } elseif (in_array('_POST', $paramSources) && (isset($_POST[$keyName]))) {
-            return $_POST[$keyName];
+            return filter_input_m($_POST[$keyName]);
         }
 
         return $default;

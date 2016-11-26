@@ -312,7 +312,7 @@
 							
 						</select>
 						</li>
-						<li><span>订单金额：</span> 
+						<li><span>申报价值：</span> 
 						<input type="text" value="" name="order[invoice_totalcharge_all]"/>
 						</li>
 					</ul>
@@ -617,7 +617,7 @@
 				<h3>发件人协议</h3>
 			</div>
 			<div class="Box oflr">
-				<p>除非提供另外的书面协议，我/我们同意下述附件所列运输条款和条件将作为我/我们与中国邮政速递物流有限公司之间的合同条款<a href="">（条款和条件）</a>。</p>
+				<p>除非提供另外的书面协议，我/我们同意下述附件所列运输条款和条件将作为我/我们与中国邮政速递物流有限公司之间的合同条款<a href="/file/dhltk.pdf" target="_blank">（条款和条件）</a>。</p>
 				<p class="agree_pact"><label><input type="checkbox" checked id="allow"/> 我同意</label></p>
 			</div>
 		</div>
@@ -637,7 +637,7 @@
 			<a href="javascript:;" class="closepop">x</a>
 		</div>
 		<div class="textmian">
-		<table cellspacing="0" cellpadding="0" border="0" class="normTbe tabInfo">
+		<table cellspacing="0" cellpadding="0" border="0" class="normTbe">
 		    <thead>
 		    	<tr>
 						<th >公司名称</th>
@@ -652,7 +652,7 @@
 						<th >操作</th>
 				</tr>
 			</thead>
-		<tbody class="tbody1">
+		<tbody class="">
 			
 		</tbody>
 		</table>		
@@ -669,7 +669,7 @@
 			<a href="javascript:;" class="closepop">x</a>
 		</div>
 		<div class="textmian">
-		<table cellspacing="0" cellpadding="0" border="0" class="normTbe tabInfo">
+		<table cellspacing="0" cellpadding="0" border="0" class="normTbe">
 		    <thead>
 		    	<tr>
 						<th >联系人姓名</th>
@@ -681,7 +681,7 @@
 						<th >操作</th>
 				</tr>
 			</thead>
-		<tbody class="tbody1">
+		<tbody class="">
 			
 		</tbody>
 		</table>		
