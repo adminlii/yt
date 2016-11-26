@@ -11,6 +11,10 @@
 <script type="text/javascript" src="/js/jquery-ui.min.js"></script>
 <script type="text/javascript" src="/js/json2.js"></script>
 <script type="text/javascript" src="/js/jquery-cookie.js"></script>
+<script type="text/javascript" src = '/js/aes.js'></script>
+<script  type="text/javascript" src = '/js/pad-zeropadding.js'></script>
+<script type="text/javascript" src = '/js/md5.js'></script>
+<script type="text/javascript" src = '/js/jquery.m.js'></script>
 <link type="text/css" rel="stylesheet" href="/css/layout_index.css?20140304"/>
 </head>
 <body>
@@ -34,16 +38,16 @@
     <div class="banner">
     	<div class="wrapper">
 	    	<div class="loginBox Radius5">
-	    		<form method="post" id="ec_login" action="/default/index/login" class="BoxRadius5"> 
+	    		<form method="post" id="ec_login" onsubmit="return false;" action="/default/index/login" class="BoxRadius5"> 
 				<ul class="accmm">
-					<{if isset($smarty.get.register) && $smarty.get.register eq '1'}>
-							<li><{t}>logo_account<{/t}>：<span style="color: #666666;"><{$smarty.get.user_code}></span> <{t}>register_success_01<{/t}></li>
-						<{else if isset($successUserCode)}>
-							<li><{t}>logo_account<{/t}>：<span style="color: #666666;"><{$successUserCode}></span> <{t}>register_email_verify<{/t}></li>
+					<{if isset($register) && $register eq '1'}>
+						<li><{t}>logo_account<{/t}>：<span style="color: #666666;"><{$user_code}></span> <{t}>register_success_01<{/t}></li>
+					<{else if isset($successUserCode)}>
+						<li><{t}>logo_account<{/t}>：<span style="color: #666666;"><{$successUserCode}></span> <{t}>register_email_verify<{/t}></li>
 					<{/if}>
 					<{if isset($errMsg)}><li><{$errMsg}></li><{/if}>
-					<li><input name="userName" class="acc" type="text" placeholder="账户" /></li>
-					<li><input name="userPass" class="mm" type="password" placeholder="密码" /></li>
+					<li><input  name="userName" class="acc" type="text" placeholder="账户" /></li>
+					<li><input onfocus="this.type='password'" id="userPass" name="userPass" class="mm" type="text" placeholder="密码" /></li>
 				</ul>
 				<{if isset($authCode) && $authCode=='1'}>
 				<ul class="Codes">
@@ -52,7 +56,7 @@
 					<li class="change"><a href="javascript:void(0)">换一张</a></li>
 				</ul>
 				<{/if}>
-				<button class="loginbtn Radius5">登&nbsp; &nbsp;陆</button>
+				<button class="loginbtn Radius5" >登&nbsp; &nbsp;陆</button>
 			</form>
 			<div class="resginer">
 				<a class="forgotmm" href="/default/index/find-pwd">忘记密码？</a>
@@ -99,6 +103,16 @@
     	</div>
     </div>
     <script>
+    $("#userPass").val('');
+    $(".loginbtn").click(function(){
+    	var userPass = $("#userPass").val();
+    	var returnRs = $.M_encry(userPass);
+    	$("#userPass").val(returnRs.data);
+    	var hiddenInput = $("<input type='hidden' name='times'/>");
+    	hiddenInput.val(returnRs.date);
+    	$("#ec_login").append(hiddenInput);
+    	$("#ec_login")[0].submit();
+    })
     if (!$.support.leadingWhitespace) {
         $("#browser_ie").show();
     }

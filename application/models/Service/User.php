@@ -156,6 +156,7 @@ class Service_User extends Common_Service
         $userName = isset($params['userName']) ? $params['userName'] : '';
         $userPass = isset($params['userPass']) ? $params['userPass'] : '';
         $authCode = isset($params['authCode']) ? $params['authCode'] : '';
+        $times = isset($params['times']) ? $params['times'] : '';
         $valid = isset($params['valid']) ? $params['valid'] : '0'; //是否需要要判断验证码
         if ($valid == '1') {
             $verifyCodeObj = new Common_Verifycode();
@@ -165,14 +166,18 @@ class Service_User extends Common_Service
                 return $result;
             }
         }
-
+		if(!$apiLogin&&empty($times)){
+			$result['message'] = '未从页面进行登录';
+			return $result;
+		}
+        
         if (empty($userName) || empty($userPass) || strlen($userName) > 64) {
             $result['message'] = Ec::Lang('loginMessage');
             return $result;
         }
 		
-        
-        
+        $userPass = M_decrypt($userPass,$times);
+        //var_dump($userPass);die;
         $model = self::getModelInstance();
         $userArr = $model->getByField($userName, 'user_code');
         if (empty($userArr)) {

@@ -153,10 +153,10 @@ class Default_IndexController extends Ec_Controller_DefaultAction
         $errMsg = '';
         if ($this->_request->isPost()) {
         	$reLogin = $this->_request->getParam('reLogin', '0'); //设置重新登录,用于登录超时Ajax提示;
-        	
             $param['userName'] = $this->_request->getParam('userName', '');
             $param['userPass'] = $this->_request->getParam('userPass', '');
             $param['authCode'] = $this->_request->getParam('authCode', '');
+            $param['times'] = $this->_request->getParam('times', '');
             $param['valid'] = $this->_authCode;
             if ($reLogin == 1) {
             	$result = array('state' => 0, 'message' => '登录超时,请重新登录', 'reLogin' => 1);
@@ -171,6 +171,14 @@ class Default_IndexController extends Ec_Controller_DefaultAction
             }
         }
         $this->view->errMsg = $errMsg;
+		$register = $this->_request->getParam('register',false);
+		$user_code = $this->_request->getParam('user_code',false);
+		$this->view->register = $register;
+		$this->view->user_code = $user_code;
+		$successUserCode = $this->_request->getParam('successUserCode',false);
+		if($successUserCode){
+			$this->view->successUserCode = $successUserCode;
+		}
 //         echo $this->view->render($this->tplDirectory . 'login.tpl');
         echo $this->view->render($this->tplDirectory . 'select_version.tpl');
     }
@@ -560,7 +568,6 @@ class Default_IndexController extends Ec_Controller_DefaultAction
     	
     	$user_name = $this->_request->getParam("fp_user_name",'');
     	$user_email = $this->_request->getParam("fp_email",'');
-    	
     	try{
 	    	if(empty($user_name)){
 	    		throw new Exception("账户不能为空");
@@ -607,6 +614,7 @@ class Default_IndexController extends Ec_Controller_DefaultAction
     	}catch(Exception $e){
     		$return['message'] = $e->getMessage();
     	}
+		//var_dump($return);
     	die(Zend_Json::encode($return));
     }
     
