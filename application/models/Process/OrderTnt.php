@@ -438,7 +438,7 @@ class Process_OrderTnt
 	            	if(empty($packv['WEIGHT'])){
 	                	$this->_err[] = "(" . Ec::Lang('包裹信息') . $_packk . ")" . Ec::Lang('包裹单件重量不可为空');
 	                }else{
-	                	if(! preg_match('/(^0\.[1-9]$)|(^[1-9](\d{1,3})?(\.?\d?)$)/', $packv['WEIGHT']) ||$packv['WEIGHT']<=0){
+	                	if(! preg_match('/(^0\.[1-9]$)|(^[1-9](\d{1,3})?(\.\d)?$)/', $packv['WEIGHT']) ||$packv['WEIGHT']<=0){
 	                		$this->_err[] = "(" . Ec::Lang('包裹信息') . $_packk . ")" . Ec::Lang('包裹单件重量必须为0.1-9999.9数字');
 	                	}
 	                }
@@ -494,7 +494,7 @@ class Process_OrderTnt
 	                if(!$invoice['invoice_weight']){
 	                	$this->_err[] = "(" . Ec::Lang('申报信息') . $_k . ")" . Ec::Lang('申报重量不可为空');
 	                }else{
-	                	if(! preg_match('/(^0\.[1-9]$)|(^[1-9](\d{1,3})?(\.?\d?)$)/', $invoice['invoice_weight']) ||$invoice['invoice_weight']<=0){
+	                	if(! preg_match('/(^0\.[1-9]$)|(^[1-9](\d{1,3})?(\.\d)?$)/', $invoice['invoice_weight']) ||$invoice['invoice_weight']<=0){
 	                		$this->_err[] = "(" . Ec::Lang('申报信息') . $_k . ")" . Ec::Lang('申报重量必须为0.1-9999.9数字');
 	                	}
 	                }

@@ -261,6 +261,8 @@ class Process_Orderfba
             }
             if(empty($this->_shipper['shipper_name'])){
                 $this->_err[] = Ec::Lang('发件人姓名不可为空');
+            }else if(!preg_match('/^[a-zA-Z\s\.&,]+$/',$this->_shipper['shipper_name'])){
+            	 $this->_err[] = "发件人姓名不可为非英文";
             }
             if(empty($this->_shipper['shipper_street'])){
                 $this->_err[] = Ec::Lang('发件人地址不可为空');
@@ -279,6 +281,10 @@ class Process_Orderfba
             	}
             }else{
             	$this->_err[] = Ec::Lang('发件人省不可为空');
+            }
+            
+            if(!$this->_shipper['shipper_postcode']){
+            	$this->_err[] = Ec::Lang('发件人邮编不可为空');
             }
         }
         
