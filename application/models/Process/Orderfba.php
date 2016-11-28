@@ -248,8 +248,8 @@ class Process_Orderfba
         if(empty($this->_shipper)){
             $this->_err[] = Ec::Lang('发件人信息不可为空');
         }else{
-            if($this->_shipper['shipper_countrycode'] === ''){
-                // $this->_err[] = Ec::Lang('发件人国家不可为空');
+            if(empty($this->_shipper['shipper_countrycode'])){
+                $this->_err[] = Ec::Lang('发件人国家不可为空');
             }else{
                  //$country = Service_IddCountry::getByField($this->_shipper['shipper_countrycode'], 'country_code');
                 $country = $this->_getCountry($this->_shipper['shipper_countrycode']);
@@ -259,11 +259,26 @@ class Process_Orderfba
                     $this->_shipper['shipper_countrycode'] = $country['country_code'];
                 }
             }
-            if($this->_shipper['shipper_name'] === ''){
-                // $this->_err[] = Ec::Lang('发件人姓名不可为空');
+            if(empty($this->_shipper['shipper_name'])){
+                $this->_err[] = Ec::Lang('发件人姓名不可为空');
             }
-            if($this->_shipper['shipper_street'] === ''){
-                // $this->_err[] = Ec::Lang('发件人地址不可为空');
+            if(empty($this->_shipper['shipper_street'])){
+                $this->_err[] = Ec::Lang('发件人地址不可为空');
+            }
+            
+            if(!empty($this->_shipper['shipper_city'])){
+            	if(!preg_match('/^[a-zA-Z\s]+$/',$this->_shipper['shipper_city'])){
+            		$this->_err[] = "发件人城市不可为非英文";
+            	}
+            }else{
+            	$this->_err[] = Ec::Lang('发件人城市不可为空');
+            }
+            if(!empty($this->_shipper['shipper_province'])){
+            	if(!preg_match('/^[a-zA-Z\s]+$/',$this->_shipper['shipper_province'])){
+            		$this->_err[] = "发件人省不可为非英文";
+            	}
+            }else{
+            	$this->_err[] = Ec::Lang('发件人省不可为空');
             }
         }
         

@@ -280,12 +280,21 @@ class Process_Order
             if(empty($this->_shipper['shipper_name'])){
                  $this->_err[] = Ec::Lang('发件人姓名不可为空');
             }else if(!preg_match('/^[a-zA-Z\s\.&,]+$/',$this->_shipper['shipper_name'])){
-            		$this->_err[] = "发件人姓名不可为非英文";
+            	 $this->_err[] = "发件人姓名不可为非英文";
             }
             if(!empty($this->_shipper['shipper_city'])){
             	if(!preg_match('/^[a-zA-Z\s]+$/',$this->_shipper['shipper_city'])){
             		$this->_err[] = "发件人城市不可为非英文";
             	}
+            }else{
+            	$this->_err[] = Ec::Lang('发件人城市不可为空');
+            }
+            if(!empty($this->_shipper['shipper_province'])){
+            	if(!preg_match('/^[a-zA-Z\s]+$/',$this->_shipper['shipper_province'])){
+            		$this->_err[] = "发件人省不可为非英文";
+            	}
+            }else{
+            	$this->_err[] = Ec::Lang('发件人省不可为空');
             }
             if(empty($this->_shipper['shipper_street'])){
                 $this->_err[] = Ec::Lang('发件人地址不可为空');
@@ -467,14 +476,14 @@ class Process_Order
             if(! is_numeric($this->_order['order_length'])){
                 $this->_err[] = Ec::Lang('包装长度必须为数字');
             }else{
+            	if(!preg_match("/^\d+(\.\d)?$/",$this->_order['order_length'])){
+            		$this->_err[] = Ec::Lang('包装长度必须是须为数字,且小数最多为1位');
+            	}
+            	/*
             	if($this->_order['order_length']<=0){
             		$this->_err[] = Ec::Lang('包装长度必须为大于0数字');
             	}
-                if($this->_order['product_code'] =='TNT'){
-                    if($this->_order['order_length']>240){
-                        $this->_err[] = Ec::Lang('包装长度必须小于等于240cm');
-                    }
-                }else if($this->_order['product_code'] =='ESB'){
+                if($this->_order['product_code'] =='ESB'){
                     if(!preg_match("/^[1-9]\d*(\.0+)?$/",$this->_order['order_length'])){
                         $this->_err[] = Ec::Lang('包装长度必须是大于0整数');
                     }else if($this->_order['order_length']>60){
@@ -485,6 +494,7 @@ class Process_Order
                 		$this->_err[] = Ec::Lang('包装长度必须小于等于10000cm');
                 	}
                 }
+                */
             }
         }
         
@@ -492,10 +502,10 @@ class Process_Order
             if(! is_numeric($this->_order['order_width'])){
                 $this->_err[] = Ec::Lang('包装宽度必须为数字');
             }else{
-            	if($this->_order['order_width']<=0){
-            		$this->_err[] = Ec::Lang('包装宽度必须为大于0数字');
+            	if(!preg_match("/^\d+(\.\d)?$/",$this->_order['order_width'])){
+            		$this->_err[] = Ec::Lang('包装宽度必须是须为数字,且小数最多为1位');
             	}
-                if($this->_order['product_code'] =='TNT'){
+                /* if($this->_order['product_code'] =='TNT'){
                     if($this->_order['order_width']>120){
                         $this->_err[] = Ec::Lang('包装宽度必须小于等于120cm');
                     }
@@ -509,7 +519,7 @@ class Process_Order
                 	if($this->_order['order_width']>=10000){
                 		$this->_err[] = Ec::Lang('包装宽度必须小于等于10000cm');
                 	}
-                } 
+                }  */
             }
         }
         
@@ -518,10 +528,10 @@ class Process_Order
             if(! is_numeric($this->_order['order_height'])){
                 $this->_err[] = Ec::Lang('包装高度必须为数字');
             }else{
-            	if($this->_order['order_height']<=0){
-            		$this->_err[] = Ec::Lang('包装高度必须为大于0数字');
+            	if(!preg_match("/^\d+(\.\d)?$/",$this->_order['order_height'])){
+            		$this->_err[] = Ec::Lang('包装高度必须是须为数字,且小数最多为1位');
             	}
-                if($this->_order['product_code'] =='TNT'){
+                /* if($this->_order['product_code'] =='TNT'){
                     if($this->_order['order_height']>150){
                         $this->_err[] = Ec::Lang('包装高度必须小于等于150cm');
                     }
@@ -535,7 +545,7 @@ class Process_Order
                 	if($this->_order['order_height']>=10000){
                 		$this->_err[] = Ec::Lang('包装高度必须小于等于10000cm');
                 	}
-                } 
+                }  */
             }
         }
         

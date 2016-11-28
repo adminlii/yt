@@ -23,7 +23,13 @@ class Common_ApiServiceV1
     			'invoicelistrel'=>'',
     			'invoicerel'=>'',		
 	    		);
-	    		//
+	    		if(!empty($orderArr['product_code'])){
+	    			if(!in_array($orderArr['product_code'], array('FBA1'))){
+	    				$return['ret'] = 22;
+	    				$return['msg'] = Ec::Lang('暂不支持该运输方式');;
+	    				break;
+	    			}
+	    		}
 	    		if(empty($fileData)){
 	    			$return['ret'] = 22;
 	    			$return['msg'] = Ec::Lang('没有传入装箱单，发票数据');;
@@ -164,6 +170,15 @@ class Common_ApiServiceV1
 	            	$orderArr["invoice_type"]=0;
 	            }
 	    		
+	            //限制枚举
+	            if(!empty($orderArr['mail_cargo_type'])){
+	            	if(!in_array($orderArr['mail_cargo_type'], array(3,4))){
+	            		$return['ret'] = 14;
+	            		$return['msg'] = Ec::Lang('不支持的货物类型');
+	            		break;
+	            	}
+	            }
+	            
 	            if(!empty($extraservice)){
 	            	if($order['mail_cargo_type']==4&&$extraservice[0]!='C2'){
 	            		$return['ret'] = 14;
@@ -283,6 +298,52 @@ class Common_ApiServiceV1
 	                unset($invoiceArr[0]);
 	            }
 	            
+	            //枚举检测
+	            if(!empty($invoice1)){
+	            	if(empty($orderArr['export_type'])){
+	            		$return['ret'] = 15;
+	            		$return['msg'] = Ec::Lang('制作发票时出口类型应必填');
+	            		break;
+	            	}
+	            	if(empty($orderArr['trade_terms'])){
+	            		$return['ret'] = 16;
+	            		$return['msg'] = Ec::Lang('制作发票时贸易条款应必填');
+	            		break;
+	            	}
+	            	if(empty($orderArr['pay_type'])){
+	            		$return['ret'] = 17;
+	            		$return['msg'] = Ec::Lang('制作发票时付款方式应必填');
+	            		break;
+	            	}
+	            }
+	            if(!empty($orderArr['export_type'])){
+	            	$exitsExport_type = array('Permanent','Temporary','Repair/Return');
+	            	if(!in_array($orderArr['export_type'], $exitsExport_type)){
+	            		$return['ret'] = 15;
+	            		$return['msg'] = Ec::Lang('不支持的出口类型');
+	            		break;
+	            	}
+	            }
+	            if(!empty($orderArr['trade_terms'])){
+	            	$exitstrade_terms = array(
+	            		'DAP-Delivered at Place','EXW-Ex Works','FCA-Free Carrier',
+	            		'CPT-Carried Paid To','CIP-Carriage and insurance Paid','DAT--Delivered at Terminal',
+	            		'DDP-Delivered Duty Paid'
+	            	);
+	            	if(!in_array($orderArr['trade_terms'], $exitstrade_terms)){
+	            		$return['ret'] = 15;
+	            		$return['msg'] = Ec::Lang('不支持的贸易方式');
+	            		break;
+	            	}
+	            }
+	            if(!empty($orderArr['pay_type'])){
+	            	$exitspay_type = array('freight prepaid');
+	            	if(!in_array($orderArr['pay_type'], $exitspay_type)){
+	            		$return['ret'] = 15;
+	            		$return['msg'] = Ec::Lang('不支持的付费方式');
+	            		break;
+	            	}
+	            }
 	          
 	            //标签打印 add
 	            $labelArr = $invoice1['detail'];
@@ -392,8 +453,68 @@ class Common_ApiServiceV1
 	            }else{
 	            	$orderArr["invoice_type"]=0;
 	            }
-	            
-	            
+	            //枚举检测
+	            if(!empty($orderArr["service_code"])){
+	            	$service_codeFilter =$orderArr['mail_cargo_type']==3?array('P15D'):array('P15N','P48N','S48F','S728','S87','S88'); 
+	            	if(!in_array($orderArr["service_code"], $service_codeFilter)){
+	            		$return['ret'] = 15;
+	            		$return['msg'] = Ec::Lang('服务类型不匹配');
+	            		break;
+	            	}
+	            }
+	            if(!empty($invoice1)){
+	            	if(empty($orderArr['export_type'])){
+	            		$return['ret'] = 15;
+	            		$return['msg'] = Ec::Lang('制作发票时出口类型应必填');
+	            		break;
+	            	}
+	            	if(empty($orderArr['trade_terms'])){
+	            		$return['ret'] = 16;
+	            		$return['msg'] = Ec::Lang('制作发票时贸易条款应必填');
+	            		break;
+	            	}
+	            	if(empty($orderArr['pay_type'])){
+	            		$return['ret'] = 17;
+	            		$return['msg'] = Ec::Lang('制作发票时付款方式应必填');
+	            		break;
+	            	}
+	            }
+	            if(!empty($orderArr['export_type'])){
+	            	$exitsExport_type = array('Permanent','Temporary','Repair/Return');
+	            	if(!in_array($orderArr['export_type'], $exitsExport_type)){
+	            		$return['ret'] = 15;
+	            		$return['msg'] = Ec::Lang('不支持的出口类型');
+	            		break;
+	            	}
+	            }
+	            if(!empty($orderArr['trade_terms'])){
+	            	$exitstrade_terms = array(
+	            			'DAP-Delivered at Place','EXW-Ex Works','FCA-Free Carrier',
+	            			'CPT-Carried Paid To','CIP-Carriage and insurance Paid','DAT--Delivered at Terminal',
+	            			'DDP-Delivered Duty Paid'
+	            	);
+	            	if(!in_array($orderArr['trade_terms'], $exitstrade_terms)){
+	            		$return['ret'] = 15;
+	            		$return['msg'] = Ec::Lang('不支持的贸易方式');
+	            		break;
+	            	}
+	            }
+	            if(!empty($orderArr['pay_type'])){
+	            	$exitspay_type = array('freight prepaid');
+	            	if(!in_array($orderArr['pay_type'], $exitspay_type)){
+	            		$return['ret'] = 15;
+	            		$return['msg'] = Ec::Lang('不支持的付费方式');
+	            		break;
+	            	}
+	            }
+	            //限制枚举
+	            if(!empty($orderArr['mail_cargo_type'])){
+	            	if(!in_array($orderArr['mail_cargo_type'], array(3,4))){
+	            		$return['ret'] = 14;
+	            		$return['msg'] = Ec::Lang('不支持的货物类型');
+	            		break;
+	            	}
+	            }
 	    		//货币类型
 	            $orderArr['currencytype'] =  $invoice_ext['invoice_currencycode'];
 	            $orderArr['invoice_totalcharge_all'] =  $order['invoice_totalcharge_all'];
@@ -564,6 +685,14 @@ class Common_ApiServiceV1
 		    	 		//'insurance_value' => trim($order['insurance_value1']),
 		    	 		'battery'=>empty($order['battery'])?'':$order['battery'],
 		    	 );
+		    	 //限制枚举
+		    	 if(!empty($orderArr['mail_cargo_type'])){
+		    	 	if(!in_array($orderArr['mail_cargo_type'], array(1,2,3,4))){
+		    	 		$return['ret'] = 14;
+		    	 		$return['msg'] = Ec::Lang('不支持的货物类型');
+		    	 		break;
+		    	 	}
+		    	 }
 		    	 $volumeArr=array(
 		    	 		'length'=>$order['order_length'],
 		    	 		'width'=>$order['order_width'],
