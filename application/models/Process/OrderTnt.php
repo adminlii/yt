@@ -571,7 +571,17 @@ class Process_OrderTnt
 //         print_r($this->_invoice);die;
         //体积验证
         
-        
+        //申报价值校验
+        if($this->_order['invoice_totalcharge_all']==='0'||!empty($this->_order['invoice_totalcharge_all'])){
+        	if(!preg_match('/^\d+(\.\d{1,2})?$/', $this->_order['invoice_totalcharge_all'])||$this->_order['invoice_totalcharge_all']==='0'){
+        		$this->_err[] =  Ec::Lang('通关的申报价值须为数字,且小数最多为2位');
+        	}
+        }
+        if($this->_order['insurance_value_gj']==='0'||!empty($this->_order['insurance_value_gj'])){
+        	if(!preg_match('/^\d+(\.\d{1,2})?$/', $this->_order['insurance_value_gj'])||$this->_order['insurance_value_gj']==='0'){
+        		$this->_err[] =  Ec::Lang('保险价值须为数字,且小数最多为2位');
+        	}
+        }
         
         
         

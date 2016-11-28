@@ -501,6 +501,8 @@ $(function(){
 		 var currency = $("#currencetype").val()?$("#currencetype").val():"USD";
 		 var hl = huilv[currency];
 		 var max_insurance_value = accMul(value,hl);
+		 //取两位小数
+		 max_insurance_value = parseInt(max_insurance_value*100)/100;
 		 $("input[name='order[insurance_value_gj]']").val(max_insurance_value);
 		 getInsurance_value_tnt(max_insurance_value);
 		 
