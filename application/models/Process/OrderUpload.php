@@ -1023,9 +1023,9 @@ class Process_OrderUpload extends Process_Order
             //$v['shipper_countrycode'] = $this->_checkCountryExist($v['shipper_countrycode']);  //修改从excel读取到的原始数据
            // $fileData[$k][$map_flip['shipper_countrycode']] = $v['shipper_countrycode'];
             //拼接收件人地址
-            $shipperStree = $v['shipper_street1'];
-            $shipperStree.=empty($v['shipper_street2'])?'':'||'.$v['shipper_street2'];
-            $shipperStree.=empty($v['shipper_street3'])?'':'||'.$v['shipper_street3'];
+            $shipperStree = str_replace('||', ' ',$v['shipper_street1']);
+            $shipperStree.=empty($v['shipper_street2'])?'':'||'.str_replace('||', ' ',$v['shipper_street2']);
+            $shipperStree.=empty($v['shipper_street3'])?'':'||'.str_replace('||', ' ',$v['shipper_street3']);
             $shipper = array(
                 // 'shipper_account' => $v['shipper_account'],
                 'shipper_name' => $v['shipper_name'],

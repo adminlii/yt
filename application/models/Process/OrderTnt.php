@@ -265,14 +265,27 @@ class Process_OrderTnt
             		$this->_err[] = "发件人姓名不可为非英文，长度最多25字符";
             }
             if(!empty($this->_shipper['shipper_city'])){
-            	if(!preg_match('/^[a-zA-Z\s-]{1,35}$/',$this->_shipper['shipper_city'])){
-            		$this->_err[] = "发件人城市不可为非英文，长度最多35字符";
+            	if(!preg_match('/^[a-zA-Z\s-]{1,30}$/',$this->_shipper['shipper_city'])){
+            		$this->_err[] = "发件人城市不可为非英文，长度最多30字符";
             	}
             }else{
             	$this->_err[] = Ec::Lang('发件人城市不可为空');
             }
             if(!$this->_shipper['shipper_street']){
                  $this->_err[] = Ec::Lang('发件人地址不可为空');
+                 
+            }else{
+            	//分割
+            	$shipper_street  = explode('||',$this->_shipper['shipper_street']);
+            	if(!preg_match('/^[0-9a-zA-Z\s\.%&\(\)\{\},\$-;#@\*\[\]【】]{0,30}$/',$shipper_street[0])){
+            		$this->_err[] = Ec::Lang('发件人地址1长度最多30字符');
+            	}
+            	if(isset($shipper_street[1])&&!preg_match('/^[0-9a-zA-Z\s\.%&\(\)\{\},\$-;#@\*\[\]【】]{0,30}$/',$shipper_street[1])){
+            		$this->_err[] = Ec::Lang('发件人地址2长度最多30字符');
+            	}
+            	if(isset($shipper_street[2])&&!preg_match('/^[0-9a-zA-Z\s\.%&\(\)\{\},\$-;#@\*\[\]【】]{0,30}$/',$shipper_street[2])){
+            		$this->_err[] = Ec::Lang('发件人地址3长度最多30字符');
+            	}
             }
             if(!$this->_shipper['shipper_company']){
             	$this->_err[] = Ec::Lang('发件人公司不可为空');
@@ -351,8 +364,8 @@ class Process_OrderTnt
             }
             if(empty($this->_consignee['consignee_company'])){
             	$this->_err[] = Ec::Lang('收件人公司不可为空');
-            }else if(!preg_match('/^[a-zA-Z\d\s\.&,]{1,35}$/',$this->_consignee['consignee_company'])){
-            		$this->_err[] = "收件人公司不可为非英文，长度最多35字符";
+            }else if(!preg_match('/^[a-zA-Z\d\s\.&,]{1,50}$/',$this->_consignee['consignee_company'])){
+            		$this->_err[] = "收件人公司不可为非英文，长度最多50字符";
             }
         }
         
@@ -473,6 +486,14 @@ class Process_OrderTnt
 	            	$this->_order['order_pieces'] = $_totalpice;
 	            foreach($this->_invoice as $k => $invoice){ //Ec::showError("result:".print_r($this->_invoice,true)."\n", '_Ssssss_' . date('Y-m-d') . "_");
 	                $_k = $k+1;
+	            	if(!is_int($invoice['packId'])||$invoice['packId']<0){
+	            		$this->_err[] = "(" . Ec::Lang('申报信息') . $_k . ")" . Ec::Lang('所属包裹id号不一致');
+	            	}else{
+	            		//判断箱子归属
+	            		if(empty($this->_package[$invoice['packId']])){
+	            			$this->_err[] = "(" . Ec::Lang('申报信息') . $_k . ")" . Ec::Lang('所属包裹不存在');
+	            		}
+	            	}
 	            	if(empty($invoice['invoice_enname'])){
 	                    $this->_err[] = "(" . Ec::Lang('申报信息') . $_k . ")" . Ec::Lang('申报品名不可为空');
 	                }
@@ -489,6 +510,9 @@ class Process_OrderTnt
 	                }else{
 	                	if(! preg_match('/^\d+(\.\d{1,2})?$/', $invoice['invoice_unitcharge'])||$invoice['invoice_unitcharge']<=0){
 	                		$this->_err[] = "(" . Ec::Lang('申报信息') . $_k . ")" . Ec::Lang('申报单价必须为数字,且小数最多为2位');
+	                	}else{
+	                		if($invoice['invoice_quantity'])
+	                			$this->_invoice[k]['invoice_totalcharge'] = $invoice['invoice_quantity']*$invoice['invoice_unitcharge'];
 	                	}
 	                }
 	                if(!$invoice['invoice_weight']){

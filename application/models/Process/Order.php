@@ -301,8 +301,8 @@ class Process_Order
             }
             if(!$this->_shipper['shipper_company']){
             	$this->_err[] = Ec::Lang('发件人公司不可为空');
-            }else if(!preg_match('/^[a-zA-Z\s\.&,]+$/',$this->_shipper['shipper_company'])){
-            		$this->_err[] = "发件人公司不可为非英文";
+            }else if(!preg_match('/^[a-zA-Z0-9\s\.&,]{1,36}$/',$this->_shipper['shipper_company'])){
+            		$this->_err[] = "发件人公司不允许出现非英文允许英文数字混合,长度最多36字符";
             }
             if(!$this->_shipper['shipper_telephone']){
             	$this->_err[] = Ec::Lang('发件人电话不可为空');
@@ -375,8 +375,8 @@ class Process_Order
             
             if(!$this->_consignee['consignee_company']){
             	//$this->_err[] = Ec::Lang('收件人公司不可为空');
-            }else if(!preg_match('/^[a-zA-Z\s\.&,]+$/',$this->_consignee['consignee_company'])){
-            	$this->_err[] = "收件人公司不可为非英文";
+            }else if(!preg_match('/^[a-zA-Z0-9\s\.&,]{1,36}$/',$this->_consignee['consignee_company'])){
+            	$this->_err[] = "收件人公司不允许出现非英文允许英文数字混合,长度最多36字符";
             }
         }
         

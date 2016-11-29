@@ -299,6 +299,19 @@ class Process_OrderDhl
             }
             if(!$this->_shipper['shipper_street']){
                  $this->_err[] = Ec::Lang('发件人地址不可为空');
+                 
+            }else{
+            	//分割
+            	$shipper_street  = explode('||',$this->_shipper['shipper_street']);
+            	if(!preg_match('/^[0-9a-zA-Z\s\.%&\(\)\{\},\$-;#@\*\[\]【】]{0,35}$/',$shipper_street[0])){
+            		$this->_err[] = Ec::Lang('发件人地址1长度最多35字符');
+            	}
+            	if(isset($shipper_street[1])&&!preg_match('/^[0-9a-zA-Z\s\.%&\(\)\{\},\$-;#@\*\[\]【】]{0,35}$/',$shipper_street[1])){
+            		$this->_err[] = Ec::Lang('发件人地址2长度最多35字符');
+            	}
+            	if(isset($shipper_street[2])&&!preg_match('/^[0-9a-zA-Z\s\.%&\(\)\{\},\$-;#@\*\[\]【】]{0,35}$/',$shipper_street[2])){
+            		$this->_err[] = Ec::Lang('发件人地址3长度最多35字符');
+            	}
             }
             if(!$this->_shipper['shipper_company']){
             	$this->_err[] = Ec::Lang('发件人公司不可为空');

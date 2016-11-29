@@ -9,9 +9,9 @@ class Common_ApiServiceV1
     	do{
     		try {
     			$userInfo = Service_User::getByField($req['usercode'],'user_code');
-    			$order = $req['order'];
-    			$fileData = $req['fileData'];
-    			$shipper  = $req['shipper'];
+    			$order 	  = filter_input_m($req['order']);
+    			$fileData = filter_input_m($req['fileData']);
+    			$shipper  = filter_input_m($req['shipper']);
     			$orderArr = array(
     			'product_code'=> 	$order['product_code'],
     			'refer_hawbcode'=> 	$order['refer_hawbcode'],
@@ -126,13 +126,13 @@ class Common_ApiServiceV1
     	do{
     		try {
     			$userInfo = Service_User::getByField($req['usercode'],'user_code');
-    			$order = $req['order'];
-    			$invoice = $req['productinformations'];
-    			$invoice_ext =  $req['productinformations_ext'];
-    			$consignee = $req['consignee'];
-    			$shipper  = $req['shipper'];
-	          	$invoice1 = $req['invoice'];
-	          	$extraservice= $req['extraservice'];
+    			$order =    filter_input_m($req['order']);
+    			$invoice =  filter_input_m($req['productinformations']);
+    			$invoice_ext =  filter_input_m($req['productinformations_ext']);
+    			$consignee = filter_input_m($req['consignee']);
+    			$shipper  = filter_input_m($req['shipper']);
+	          	$invoice1 = filter_input_m($req['invoice']);
+	          	$extraservice= filter_input_m($req['extraservice']);
 	            $orderArr = array(
 	                'product_code' => 'G_DHL',
 	                'country_code' => strtoupper($order['country_code']),
@@ -409,20 +409,19 @@ class Common_ApiServiceV1
     	do{
     		try {
     			$userInfo = Service_User::getByField($req['usercode'],'user_code');
-    			$order = $req['order'];
-    			$invoice = $req['productinformations'];
-    			$invoice_ext =  $req['productinformations_ext'];
-    			$consignee = $req['consignee'];
-    			$shipper  = $req['shipper'];
-    			$invoice1 = $req['invoice'];
-    			$extraservice= $req['extraservice'];
+    			$order = filter_input_m($req['order']);
+    			$invoice = filter_input_m($req['productinformations']);
+    			$invoice_ext =  filter_input_m($req['productinformations_ext']);
+    			$consignee = filter_input_m($req['consignee']);
+    			$shipper  = filter_input_m($req['shipper']);
+    			$invoice1 = filter_input_m($req['invoice']);
+    			$extraservice= filter_input_m($req['extraservice']);
     			$orderArr = array(
 	                'product_code' => 'TNT',
 	                'country_code' => strtoupper($order['country_code']),
 	                'refer_hawbcode' => strtoupper($order['refer_hawbcode']),
 	                'order_weight' => 0.01,
 	                'order_pieces' => 10,
-	                 
 	                'order_length'=>10,
                 	'order_width'=>10,
                 	'order_height'=>10,
@@ -449,7 +448,7 @@ class Common_ApiServiceV1
     			);
 	            //添加一个发票类型
 	            if($orderArr["invoice_print"]==1){
-	            	$orderArr["invoice_type"]=$order['invoice_type'];
+	            	$orderArr["invoice_type"]=$invoice1['invoice_type'];
 	            }else{
 	            	$orderArr["invoice_type"]=0;
 	            }
@@ -548,6 +547,7 @@ class Common_ApiServiceV1
 	            			break;
 	            		}
 	            		$max_insurance = $order['invoice_totalcharge_all']*$huilv[$curencycode];
+	            		$max_insurance = intval($max_insurance*100)/100;
 	            		$orderArr['insurance_value_gj'] = $max_insurance;
 	            		$orderArr['insurance_value'] = intval(($max_insurance>10000?$max_insurance*0.0015:10)*10)/10;
 	            	}
@@ -575,13 +575,13 @@ class Common_ApiServiceV1
 	            //发件人地址拼接
 	            $streetArr = array();
 	            if(!empty($shipper['shipper_street'])){
-	            	$streetArr[] = $shipper['shipper_street'];
+	            	$streetArr[] = str_replace('||', ' ',$shipper['shipper_street']);
 	            }
 	            if(!empty($shipper['shipper_street2'])){
-	            	$streetArr[] = $shipper['shipper_street2'];
+	            	$streetArr[] = str_replace('||', ' ',$shipper['shipper_street2']);
 	            }
 	            if(!empty($shipper['shipper_street3'])){
-	            	$streetArr[] = $shipper['shipper_street3'];
+	            	$streetArr[] = str_replace('||', ' ',$shipper['shipper_street3']);
 	            }
 	            $street = join('||', $streetArr);
 	            $shipperArr = array(
@@ -601,8 +601,6 @@ class Common_ApiServiceV1
 	                'shipper_fax' => '',
 	                'shipper_mallaccount' => ''
 	            );
-	           	
-	            
 	            $invoiceArr = array('pack'=>$invoice['pack'],'invoice'=>$invoice['packdetail']);
 	            //DHL 添加了规则，refer用来存取城市代码
 	            $condtion_sp['cityname'] = $shipper['shipper_city'];
@@ -651,10 +649,10 @@ class Common_ApiServiceV1
     	do{
     		try {
 		    	 $userInfo = Service_User::getByField($req['usercode'],'user_code');
-		    	 $order = $req['order'];
-		    	 $invoice = $req['invoice'];
-		    	 $consignee = $req['consignee'];
-		    	 $shipper  = $req['shipper'];
+		    	 $order = filter_input_m($req['order']);
+		    	 $invoice = filter_input_m($req['invoice']);
+		    	 $consignee = filter_input_m($req['consignee']);
+		    	 $shipper  = filter_input_m($req['shipper']);
 		    	 if(empty($order['country_code'])||empty($order['product_code'])){
 		    	 	$return['ret'] = 9;
 		    	 	$return['msg'] = Ec::Lang('产品名或者目的地国家未填写');
