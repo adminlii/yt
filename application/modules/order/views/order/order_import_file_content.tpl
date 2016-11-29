@@ -13,7 +13,7 @@
 				<span class="order_title"><{t}>异常订单<{/t}></span>
 			</a>
 		</li>
-		
+		<!--
 		<li class="" style="position: relative;border:0 none;">
 			<a class="addPrefixBtn " href="javascript:;" style='color:#2283c5;'>
 				<{t}>批量添加单号前缀<{/t}>
@@ -24,7 +24,7 @@
 			<a class="setProductCodeBtn " href="javascript:;" style='color:#2283c5;'>
 				<{t}>批量设置运输方式<{/t}>
 			</a>
-		</li>
+		</li>-->
 	</ul>
 </div>
 <div style='width: 100%; overflow: auto;position:relative;' id='data_wrapper'>
@@ -36,7 +36,7 @@
 					<{foreach from=$result.excel_column name=o item=o key=k}>
 					<td><{$o}></td>
 					<{/foreach}>
-					<td width="100"><{t}>operation<{/t}></td>
+					<!--<td width="100"><{t}>operation<{/t}></td>-->
 				</tr>
 			</tbody>							
 		</table>
@@ -49,7 +49,7 @@
 					<{foreach from=$result.excel_column name=o item=o key=k}>
 					<td><{$o}></td>
 					<{/foreach}>
-					<td width="100"><{t}>operation<{/t}></td>
+					<!--<td width="100"><{t}>operation<{/t}></td>-->
 				</tr>
 			</tbody>
 			<tbody class="table-module-list-data">
@@ -61,9 +61,9 @@
 						<input class='input_text' name='fileData[<{$k}>][<{$kk}>]' value='<{$oo}>' />	
 					</td>
 					<{/foreach}>
-					<td>
+					<!--<td>
 						<a href='javascript:;' class='delBtn'><{t}>删除<{/t}></a>
-					</td>
+					</td>-->
 				</tr>
 				<{/foreach}>
 			</tbody>
@@ -77,7 +77,7 @@
 					<{foreach from=$result.excel_column name=o item=o key=k}>
 					<td><{$o}></td>
 					<{/foreach}>
-					<td width="100"><{t}>operation<{/t}></td>
+					<!--<td width="100"><{t}>operation<{/t}></td>-->
 				</tr>
 			</tbody>
 			<tbody class="table-module-list-data">
@@ -111,9 +111,9 @@
 						<{/if}>
 					</td>
 					<{/foreach}>
-					<td>
+					<!--<td>
 						<a href='javascript:;' class='delBtn'><{t}>删除<{/t}></a>
-					</td>
+					</td>-->
 				</tr>
 				<{/foreach}>
 			</tbody>
@@ -207,7 +207,7 @@ $(function(){
 <div style='padding: 15px; line-height: 22px;max-height:250px;overflow:auto;border:1px solid #ccc;margin-top:10px;position:relative;' id='result_message'>
 	<p style='font-weight: bold; font-size: 25px; line-height: 30px; color: red;'><{$result.message}>
 	<{if $result.ask==0}>
-	<input type='button' class='submitBtn' value='<{t}>验证并上传<{/t}>' style='margin-left:15px;margin-top:-5px;'>
+	<!--<input type='button' class='submitBtn' value='<{t}>验证并上传<{/t}>' style='margin-left:15px;margin-top:-5px;'>-->
 	<{/if}>
 	<{if $result.ask==1}>
 		<{if $result.ansych==0}>
