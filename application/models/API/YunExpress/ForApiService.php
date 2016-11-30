@@ -6,10 +6,10 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
 	protected $_user = "";
 	protected $_orderOnline = "";
 	//接口
-	protected $postOrdertotmsApi="http://112.126.68.251:8088/v5/api/Order/PacketOrder?type=json";
-	//protected $postOrdertotmsApi="https://202.104.134.94/chinapost/api/Order/PacketOrder?type=json";
-	protected $notifyTms = "http://112.126.68.251:8088/v5/api/LabelPrintService/PrintTomsLabel?type=json";
-	//protected $notifyTms = "https://202.104.134.94/chinapost/api/LabelPrintService/PrintTomsLabel?type=json";
+	//protected $postOrdertotmsApi="http://112.126.68.251:8088/v5/api/Order/PacketOrder?type=json";
+	protected $postOrdertotmsApi="https://202.104.134.94/chinapost/api/Order/PacketOrder?type=json";
+	//protected $notifyTms = "http://112.126.68.251:8088/v5/api/LabelPrintService/PrintTomsLabel?type=json";
+	protected $notifyTms = "https://202.104.134.94/chinapost/api/LabelPrintService/PrintTomsLabel?type=json";
     public function __construct()
     {
     	// 创建日志目录
@@ -122,8 +122,8 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
     	$url = $this->notifyTms;
     	$sendParams = json_encode($sendParams);
     	$header =array("Content-Type:application/json; charset=utf-8");
-    	$result = $this->curl_send($url,$sendParams,$header,"post","tmsuser:1234567890");
-    	//$result = $this->curl_send($url,$sendParams,$header,"post","tmsuser:123456");
+    	//$result = $this->curl_send($url,$sendParams,$header,"post","tmsuser:1234567890");
+    	$result = $this->curl_send($url,$sendParams,$header,"post","tmsuser:123456");
     	return $result;
     }
     
@@ -846,8 +846,8 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
       	}
       	$array_three['mpostalnum'] = $this->orderData['server_hawbcode'];
       	$array_three['ordernum'] = empty($this->orderData['small_hawbcode'])?$this->orderCode:$this->orderData['small_hawbcode'];
-      	if(false!==strpos($array_three['ordernum'],"019931265099999891UDW")){
-      		$array_three['ordernum'] = str_replace("019931265099999891UDW", "", $array_three['ordernum']);
+      	if(false!==strpos($array_three['ordernum'],"019931265099999891")){
+      		$array_three['ordernum'] = str_replace("019931265099999891", "", $array_three['ordernum']);
       	}
       	$array_three['forecastshut'] = 0;
       	$array_three['internals'] = 1;
@@ -1424,9 +1424,9 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
  				$_packages_invoice = json_decode($row['packinfo'],1);
  				$_packages['ITEMS'] = $_packages_invoice[0]['ITEMS'];
  				$_packages['DESCRIPTION'] ="";
- 				$_packages['LENGTH'] =$_packages_invoice[0]['LENGTH']/1000;
- 				$_packages['WIDTH'] =$_packages_invoice[0]['WIDTH']/1000;
- 				$_packages['HEIGHT'] =$_packages_invoice[0]['HEIGHT']/1000;
+ 				$_packages['LENGTH'] =$_packages_invoice[0]['LENGTH']/100;
+ 				$_packages['WIDTH'] =$_packages_invoice[0]['WIDTH']/100;
+ 				$_packages['HEIGHT'] =$_packages_invoice[0]['HEIGHT']/100;
  				$_packages['WEIGHT'] = $_packages_invoice[0]['WEIGHT']*$_packages_invoice[0]['ITEMS'];
  				$_packages['VOLUME'] =round($_packages['LENGTH']*$_packages['WIDTH']*$_packages['HEIGHT'],3);
  				$packages[$row['packageid']] = $_packages;

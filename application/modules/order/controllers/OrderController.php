@@ -782,9 +782,9 @@ class Order_OrderController extends Ec_Controller_Action
                 'refer_hawbcode' => strtoupper($order['refer_hawbcode']),
                 'order_weight' => 0.01,
                 'order_pieces' => 1,
-                'order_length'=>1,
-                'order_width'=>1,
-                'order_height'=>1,
+                'order_length'=>10,
+                'order_width'=>10,
+                'order_height'=>10,
             	'dangerousgoods'=>empty($order['dangerousgoods'])?0:1,
                 'buyer_id' =>'',
                 'order_id' => $order['order_id'],
@@ -1556,26 +1556,38 @@ class Order_OrderController extends Ec_Controller_Action
 			$errorArr = $CsiShipperTrailerAddress->validator($row);
 			//加上过滤条件
 			if(!empty($row['shipper_name'])){
-				if(!preg_match('/^[a-zA-Z\s]+$/', $row['shipper_name'])) {	
+				if(!preg_match('/^[a-zA-Z\s\.%&\(\)\{\},\$-;#@\*\[\]【】]+$/', $row['shipper_name'])) {
 					$errorArr[]= "发件人姓名不能为非英文";
 				}
 			}
 			if(!empty($row['shipper_company'])){
-				if(!preg_match('/^[a-zA-Z\s]+$/', $row['shipper_company'])) {
+				if(!preg_match('/^[a-zA-Z\s\.%&\(\)\{\},\$-;#@\*\[\]【】]+$/', $row['shipper_company'])) {
 					$errorArr[]= "发件人公司不能为非英文";
 				}
 			}
-			
+			 
 			if(!empty($row['shipper_province'])){
 				if(!preg_match('/^[a-zA-Z\s]+$/', $row['shipper_province'])) {
 					$errorArr[]= "发件人州省不能为非英文";
 				}
 			}
 			if(!empty($row['shipper_city'])){
-				if(!preg_match('/^[a-zA-Z\s-]+$/', $row['shipper_city'])) {
+				if(!preg_match('/^[a-zA-Z\s]+$/', $row['shipper_city'])) {
 					$errorArr[]= "发件人城市不能为非英文";
 				}
 			}
+			
+			if(!empty($row['shipper_telephone'])){
+				if(!preg_match('/^(\d){4,25}$/', $row['shipper_telephone'])) {
+					$errorArr[]= "电话格式应为4-25位纯数字";
+				}
+			}
+			if(!empty($row['shipper_postcode'])){
+				if(!preg_match('/^[0-9]{6,12}$/', $row['shipper_postcode'])) {
+					$errorArr[]= "发件人邮编应为6-12位数字";
+				}
+			}
+			
 			if (!empty($errorArr)) {
 				$return = array(
 						'state' => 0,

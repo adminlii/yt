@@ -164,6 +164,11 @@ class Order_SubmiterController extends Ec_Controller_Action
     				$errorArr[]= "电话格式应为4-25位纯数字";
     			}
     		}
+    		if(!empty($row['shipper_postcode'])){
+    			if(!preg_match('/^[0-9]{6,12}$/', $row['shipper_postcode'])) {
+    				$errorArr[]= "发件人邮编应为6-12位数字";
+    			}
+    		}
     		
     		if (!empty($errorArr)) {
     			$return = array(

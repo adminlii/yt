@@ -512,7 +512,7 @@ class Process_OrderTnt
 	                		$this->_err[] = "(" . Ec::Lang('申报信息') . $_k . ")" . Ec::Lang('申报单价必须为数字,且小数最多为2位');
 	                	}else{
 	                		if($invoice['invoice_quantity'])
-	                			$this->_invoice[k]['invoice_totalcharge'] = $invoice['invoice_quantity']*$invoice['invoice_unitcharge'];
+	                			$this->_invoice[$k]['invoice_totalcharge'] = $invoice['invoice_quantity']*$invoice['invoice_unitcharge'];
 	                	}
 	                }
 	                if(!$invoice['invoice_weight']){
