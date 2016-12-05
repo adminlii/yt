@@ -2039,6 +2039,14 @@ class Order_OrderController extends Ec_Controller_Action
 			if(empty($order_id_arr) || !is_array($order_id_arr)){
 				throw new Exception(Ec::Lang('没有需要打印的订单'));
 			}
+			$condition["order_id_in"] = $order_id_arr;
+			$orderlist = Service_CsdOrderfba::getByCondition($condition);
+			foreach($orderlist as $order){
+				if($order['customer_id']!=Service_User::getCustomerId()){
+					throw new Exception(Ec::Lang('非法操作'));
+					break;
+				}
+			}
 			//创建文件
 			$savepath = APPLICATION_PATH.'/../public/fba/print/';
 			do{

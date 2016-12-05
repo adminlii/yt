@@ -1028,10 +1028,7 @@ class Default_IndexController extends Ec_Controller_DefaultAction
     		$condition["order_id_in"] = $order_id_arr;
     		$orderlist = Service_CsdOrderfba::getByCondition($condition);
     		foreach($orderlist as $order){
-    			if($order['customer_id']!=Service_User::getCustomerId()){
-    				throw new Exception(Ec::Lang('非法操作'));
-    				break;
-    			} 
+    			
     			$_countryInfo  = Service_IddCountry::getByField($order['consignee_countrycode']);
     			$order['country_cnname'] = $_countryInfo['country_cnname'];
     			$order['country_enname'] = $_countryInfo['country_enname'];
