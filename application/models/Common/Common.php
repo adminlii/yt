@@ -965,4 +965,33 @@ class Common_Common
     	}
     	return $return;
     }
+    
+    /**
+     * @return mixed
+     */
+    public static function renderPdf($pdffile)
+    {
+    	$file = fopen($pdffile,"r");
+    	//返回的文件类型
+    	Header("Content-type: application/pdf");
+    	//按照字节大小返回
+    	Header("Accept-Ranges: bytes");
+    	//返回文件的大小
+    	Header("Accept-Length: ".filesize($pdffile));
+    	//修改之前，一次性将数据传输给客户端
+    	//echo fread($file, filesize($filepath));
+    	//修改之后，一次只传输1024个字节的数据给客户端
+    	//向客户端回送数据
+    	$buffer=1024;//
+    	$file_count=0;
+    	//判断文件是否读完
+    	while (!feof($file)&&$file_count<filesize($pdffile)) {
+    		//将文件读入内存
+    		$file_count+=$buffer;
+    		$file_data=fread($file,$buffer);
+    		//每次向客户端回送1024个字节的数据
+    		echo $file_data;
+    	}
+    	fclose($file);
+    }
 }
