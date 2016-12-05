@@ -92,7 +92,8 @@ class Common_ApiService
     				$return['msg'] = Ec::Lang('用户不存在');
     				break;
     			}
-    			if(!Ec_Password::comparePassword($req['userpwd'], $userInfo['user_password'])){
+    			$userPwd = base64_decode(urldecode($req['userpwd']));
+    			if(!Ec_Password::comparePassword($userPwd, $userInfo['user_password'])){
     				$return['ret'] = 3;
     				$return['msg'] = Ec::Lang('用户密码错误');
     				break;

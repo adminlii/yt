@@ -1161,7 +1161,7 @@ $("#shipperaddrs").click(function(){
 					+"<td title='"+data[i]['shipper_telephone']+"'>"+data[i]['shipper_telephone']+"</td>"
 					+"<td><a class='addtr2' href='javascript:;' onclick='selectShipRow(this)'>确定</a></td></tr>";
 				}
-				$("#shippingloc .contentP .textmian table tbody").append(html);
+				$("#shippingloc .contentP .textmian table tbody").empty().append(html);
 				$("#shippingloc").show();
 			}else{
 			}
@@ -1202,7 +1202,7 @@ $("#consigneeaddrs").click(function(){
 					+"<td style='display: none;'>"+data[i]['consignee_countrycode']+"</td>"
 					+"<td><a class='addtr2' href='javascript:;' onclick='selectRow(this)'>确定</a></td></tr>";
 				}
-				$("#consigneeloc .contentP .textmian table tbody").append(html);
+				$("#consigneeloc .contentP .textmian table tbody").empty().append(html);
 				$("#consigneeloc").show();
 			}else{
 			}
@@ -1215,17 +1215,32 @@ $("#consigneeaddrs").click(function(){
   //弹窗
  $("#contentslist").click(function(){
  	var url = "/order/order/dhl-contents?quick=78";
-	var params = "dialogWidth=800px;dialogHeight=400px";
-	
-	var returnResult = window.showModalDialog(url, '',params);
-	//数据绑定
-	$("input[name='invoice[invoice_cnname][]']").val(returnResult.cname);
-	$("input[name='invoice[invoice_enname][]']").val(returnResult.ename);
-	if(returnResult.dangerousgoods==1){
-		$("input[name='order[dangerousgoods]']").attr("checked",true);
+	if(isFirefox()){
+		var params = "dialogWidth=800px;dialogHeight=400px";
+		var returnResult = window.showModalDialog(url, '',params);
+		contentdataBind(returnResult);
 	}else{
-		$("input[name='order[dangerousgoods]']").attr("checked",false);
+		url += "&xhr=1";
+		$.post(url,{},function(data){
+			if(data.ack==1){
+				var data = data.data;
+				var html = '';
+				for(var i in data){
+					var isDangerous = data[i]['dangerousgoods']==1?'是':'否';
+					html+="<tr><td title='"+data[i]['cname']+"'>"+data[i]['cname']
+					+"</td><td title='"+data[i]['ename']+"'>"+data[i]['ename']+"</td>"
+					+"<td title='"+isDangerous+"'>"+isDangerous+"</td>"
+					+"<td><a class='addtr2' href='javascript:;' onclick='selectContentRow(this)'>确定</a></td></tr>";
+				}
+				$("#contentsloc .contentP .textmian table tbody").empty().append(html);
+				$("#contentsloc").show();
+			}else{
+			}
+		},"json");
 	}
+ 	
+ 	
+	
  });
  //添加发件人地址
  //记录上次请求的添加数据
@@ -1414,8 +1429,12 @@ $("#consigneeaddrs").click(function(){
 });
 //判断是否是火狐浏览器
 function isFirefox(){
+	/*
 	var explorer =navigator.userAgent;
 	return explorer.indexOf("Firefox") >= 0;
+	*/
+	return window.showModalDialog;
+	
 }
 
 var selectRow = function (that){
@@ -1444,6 +1463,15 @@ var selectShipRow = function (that){
 	params.shipper_telephone=tdArr.eq(5).html();
 	shipinglocdataBind(params);
 	$("#shippingloc").hide();
+}
+var selectContentRow = function (that){
+	var tdArr = $(that).parent().parent().children();
+	var params = {};
+	params.cname=tdArr.eq(0).html();
+	params.ename=tdArr.eq(1).html();
+	params.dangerousgoods=tdArr.eq(2).html()=='是'?1:0;
+	contentdataBind(params);
+	$("#contentsloc").hide();
 }
 //绑定地址薄内容
 //数据绑定
@@ -1482,9 +1510,20 @@ function shipinglocdataBind(returnResult){
 					}
 				},"json");
 }
+function contentdataBind(returnResult){
+	//数据绑定
+	$("input[name='invoice[invoice_cnname][]']").val(returnResult.cname);
+	$("input[name='invoice[invoice_enname][]']").val(returnResult.ename);
+	if(returnResult.dangerousgoods==1){
+		$("input[name='order[dangerousgoods]']").attr("checked",true);
+	}else{
+		$("input[name='order[dangerousgoods]']").attr("checked",false);
+	}
+}
+
 $(function(){
 	if(!isFirefox()){
-		$("#contentslist").hide();
+		//$("#contentslist").hide();
 	}
 	$('.closepop').click(function(){
 		$('.pop_box').slideUp('400');
@@ -1543,6 +1582,33 @@ $(function(){
 						<th>城市</th>
 						<th >邮编</th>
 						<th >电话号码</th>
+						<th >操作</th>
+				</tr>
+			</thead>
+		<tbody class="tbody1">
+			
+		</tbody>
+		</table>		
+			
+		</div>
+	</div>
+</div>	
+
+<!--物品详情弹窗-->
+<div id="contentsloc" class="pop_box hide">
+	<div class="bg"></div>
+	<div class="contentP">
+		<div class="PTit">
+			<h3>内容列表</h3>
+			<a href="javascript:;" class="closepop">x</a>
+		</div>
+		<div class="textmian">
+		<table cellspacing="0" cellpadding="0" border="0" class="normTbe tabInfo">
+		    <thead>
+		    	<tr>
+						<th >中文内容</th>
+						<th >英文内容</th>
+						<th >危险品</th>
 						<th >操作</th>
 				</tr>
 			</thead>

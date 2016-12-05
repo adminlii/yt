@@ -124,7 +124,7 @@ class Default_ApiController extends Zend_Controller_Action
      * 中邮TOMS通知接受接口
      */ 
 	public function receiveAction() {
-		echo 111;die;
+		//echo 111;die;
 		header("Content-type:text/html;charset=utf-8");
 		$param = $this->_request->getParams();
 		$json = file_get_contents('php://input');
@@ -339,6 +339,7 @@ class Default_ApiController extends Zend_Controller_Action
 				'userpwd'=>'123456',
 				
 		);
+		$req['userpwd'] = urlencode(base64_encode($req['userpwd']));
 		print_r($sc->setToken($req));
 	}
 	
@@ -557,6 +558,7 @@ public function test26Action(){
 						//'insurance_value_gj'=>'1344.26',
 						'invoice_totalcharge_all'=>'200',
 						'DESCRIPTION'=>'this is test data',
+						'service_code'=>'P15N'
 				),
 				'consignee'=>array(
 						'consignee_company'=>'asc',
@@ -576,7 +578,9 @@ public function test26Action(){
 						'shipper_name'=>'STEVE LIU',
 						'shipper_countrycode'=>'CN',
 						'shipper_province'=>'RFEWREWREWR',
-						'shipper_street'=>'510||MINZHI DA DAO',
+						'shipper_street'=>'510',
+						'shipper_street2'=>'MINZHI DA DAO',
+						'shipper_street3'=>'NI||DAO',
 						'shipper_telephone'=>'075577887',
 						'shipper_city'=>'shenzhen',
 						'shipper_postcode'=>'210001',
@@ -586,7 +590,7 @@ public function test26Action(){
 							array('ITEMS'=>1,'WEIGHT'=>10,"LENGTH"=>10,"WIDTH"=>10,"HEIGHT"=>10),		
 						),
 						'packdetail'=>array(
-							array("packId"=>0,"invoice_enname"=>"test","invoice_quantity"=>20,"invoice_weight"=>0.5,"invoice_unitcharge"=>10,"invoice_totalcharge"=>200,"hs_code"=>"test1","invoice_proplace"=>"CN"),	
+							array("packId"=>0,"invoice_enname"=>"test","invoice_quantity"=>20,"invoice_weight"=>0.5,"invoice_unitcharge"=>10,"hs_code"=>"test1","invoice_proplace"=>"CN"),	
 						)
 				),
 				'productinformations_ext'=>array(
@@ -675,5 +679,14 @@ public function test26Action(){
 			$return ['msg'] = $e->getMessage();
 		}
 		echo json_encode($return);
+	}
+	
+	public function test27Action(){
+		$token = substr(md5('1480072717263~!@#$%^&4512*-678'),8,16);
+        $privateKey =        $token;
+        $iv =                $token;
+        $encryptedData = base64_decode(urldecode('DevrK3DiJEPEuQJAfsl9BA%3D%3D'));
+        $decrypted = mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $privateKey, $encryptedData, MCRYPT_MODE_CBC, $iv);
+        var_dump(rtrim($decrypted,"\0"));
 	}
 }

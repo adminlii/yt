@@ -41,9 +41,6 @@ class API_Common_ServiceNotifyTraceOrder
     		foreach ($synchronousOrder as $key => $val) {
     			Common_Common::myEcho(print_r($val,true));
     			try {
-    				if($val['order_status']!='P'){
-    					continue;
-    				}
     				$obj = new API_Common_TraceServiceCommonClass();
     				//调用TMS查询物流
     				$openobj = new API_YunExpress_ForApiService();
@@ -232,7 +229,6 @@ class API_Common_ServiceNotifyTraceOrder
     	$condition = "ems_status=1 and formal_code = '{$producttype}'  and  nextnotify_date<='{$date}' and ops_create_date>='{$lastdate}' ";
     	
     	$sql = 'select count(*) as count FROM `order_processing` a left join `csd_order` b on a.order_id = b.order_id where '.$condition;
-    	echo $sql;
     	$count  = Common_Common::fetchOne($sql);
     	$totalPage = ceil($count / $pageSize);
     	//减少执行时间

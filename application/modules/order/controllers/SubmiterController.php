@@ -213,8 +213,12 @@ class Order_SubmiterController extends Ec_Controller_Action
     	$result = array('state' => 0, 'message' => 'Fail', 'data' => array());
     	$paramId = $this->_request->getParam('paramId', '');
     	if (!empty($paramId) && $rows = $this->serviceClass->getByField($paramId, 'shipper_account')) {
-    		$rows=$this->serviceClass->getVirtualFields($rows);
-    		$result = array('state' => 1, 'message' => '', 'data' => $rows);
+    		if($rows['customer_id'] != Service_User::getCustomerId()){
+    			$result['message']='非法操作';
+    		}else{
+    			$rows=$this->serviceClass->getVirtualFields($rows);
+    			$result = array('state' => 1, 'message' => '', 'data' => $rows);
+    		}
     	}
     	die(Zend_Json::encode($result));
     }

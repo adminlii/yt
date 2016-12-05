@@ -1028,9 +1028,10 @@ class Default_IndexController extends Ec_Controller_DefaultAction
     		$condition["order_id_in"] = $order_id_arr;
     		$orderlist = Service_CsdOrderfba::getByCondition($condition);
     		foreach($orderlist as $order){
-    			/* if($order['customer_id']!=Service_User::getCustomerId()){
-    			 continue;
-    			} */
+    			if($order['customer_id']!=Service_User::getCustomerId()){
+    				throw new Exception(Ec::Lang('非法操作'));
+    				break;
+    			} 
     			$_countryInfo  = Service_IddCountry::getByField($order['consignee_countrycode']);
     			$order['country_cnname'] = $_countryInfo['country_cnname'];
     			$order['country_enname'] = $_countryInfo['country_enname'];
@@ -1115,6 +1116,9 @@ class Default_IndexController extends Ec_Controller_DefaultAction
 			$order_info = Service_CsdOrderfba::getByField($order_id);
 			if(empty($order_info)){
 				echo '未找到订单数据';die;
+			}
+			if($order_info['customer_id'] != Service_User::getCustomerId()){
+				echo '非法操作';die;
 			}
 			$filesavepath = '../public/fba/';
 			$zipdown	= new Common_FileToZip($savepath,$order_info['shipper_hawbcode'].'.zip');

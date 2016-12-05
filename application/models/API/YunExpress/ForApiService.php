@@ -18,7 +18,15 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
     		chmod(APPLICATION_PATH . '/../data/log/YunExpress_API', 0777);
     	}
     }
-
+	
+    public function  getPostOrdertotmsApi(){
+    	return $this->postOrdertotmsApi;
+    }
+    
+    public function  getnotifyTm(){
+    	return $this->notifyTms;
+    }
+    
     public function setParam($serviceCode = '', $orderCode = '', $channelId = '', $serverProductCode = '',$order_config, $init = true)
     {
         parent::__construct($serviceCode, $orderCode, $channelId, $serverProductCode,$order_config, $init);

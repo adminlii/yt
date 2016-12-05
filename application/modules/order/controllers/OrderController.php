@@ -202,6 +202,14 @@ class Order_OrderController extends Ec_Controller_Action
             
             $consignee['shipper_account'] = ! empty($consignee['shipper_account']) ? $consignee['shipper_account'] : '';
             $shipperArr = Service_CsiShipperTrailerAddress::getByField($consignee['shipper_account'], 'shipper_account');            
+            if($shipperArr['customer_id'] != Service_User::getCustomerId()){
+            	$return = array(
+            			'ask' => 0,
+            			'message' => Ec::Lang('订单操作失败')
+            	);
+            	$return["message"] = '非法操作';
+            	die(Zend_Json::encode($return));
+            }
             $invoiceArr = array();
             foreach($invoice as $column=>$v){
                 foreach($v as $kk=>$vv){
@@ -2006,6 +2014,10 @@ class Order_OrderController extends Ec_Controller_Action
 			if(empty($order_info)){
 				echo '未找到订单数据';die;
 			}
+			if($order_info['customer_id'] != Service_User::getCustomerId()){
+				echo '非法操作';die;
+			}
+			
 			$filesavepath = '../public/fba/';
 			$zipdown	= new Common_FileToZip($savepath,$order_info['shipper_hawbcode'].'.zip');
 			$filelist	=	array();
@@ -2115,6 +2127,9 @@ class Order_OrderController extends Ec_Controller_Action
 	
 	//常用内容
 	public function dhlContentsAction(){
+		$isxhr = $this->getParam('xhr','');
+		
+		
 		$CsiDhlContents = new Service_CsiDhlContents();
 		$condition['customer_id'] = Service_User::getCustomerId();
 		$condition['customer_channelid'] = Service_User::getChannelid();
@@ -2126,8 +2141,15 @@ class Order_OrderController extends Ec_Controller_Action
 		$rows = $CsiDhlContents->getByCondition($condition,'*', 0, 1, array('content_account asc'));
 		
 		$this->view->rows = $rows;
-		//print_r($rows);
-		echo $this->view->render($this->tplDirectory . "dhl_contents.tpl");
+		if(!empty($isxhr)){
+			$res = array('ack'=>0,'msg'=>'','data'=>array());
+			if(!empty($rows)){
+				$res['ack'] = 1 ;
+				$res['data'] = $rows;
+			}
+			echo json_encode($res);
+		}else
+			echo $this->view->render($this->tplDirectory . "dhl_contents.tpl");
 	}
 	
 	public function dhlContentsEditAction(){
