@@ -767,7 +767,7 @@ $("#shipperaddrs").click(function(){
 					+"<td title='"+data[i]['shipper_telephone']+"'>"+data[i]['shipper_telephone']+"</td>"
 					+"<td><a class='addtr2' href='javascript:;' onclick='selectShipRow(this)'>确定</a></td></tr>";
 				}
-				$("#shippingloc .contentP .textmian table tbody").append(html);
+				$("#shippingloc .contentP .textmian table tbody").empty().append(html);
 				$("#shippingloc").show();
 			}else{
 			}
@@ -808,7 +808,7 @@ $("#consigneeaddrs").click(function(){
 					+"<td style='display: none;'>"+data[i]['consignee_countrycode']+"</td>"
 					+"<td><a class='addtr2' href='javascript:;' onclick='selectRow(this)'>确定</a></td></tr>";
 				}
-				$("#consigneeloc .contentP .textmian table tbody").append(html);
+				$("#consigneeloc .contentP .textmian table tbody").empty().append(html);
 				$("#consigneeloc").show();
 			}else{
 			}

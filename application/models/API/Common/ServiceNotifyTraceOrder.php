@@ -55,9 +55,9 @@ class API_Common_ServiceNotifyTraceOrder
     						//更新主表
     						//1-15天下次通知时间为1天
     						if(time()-strtotime($val['create_date'])<=15*24*3600){
-    							$update_csd_orderfba['nextnotify_date'] =  date("Y-m-d H:i:s",strtotime("+1 day"));
+    							$update_csd_orderfba['nextnotify_date'] =  date("Y-m-d H:i:s",strtotime("+4 hours"));
     						}else{
-    							$update_csd_orderfba['nextnotify_date'] =  date("Y-m-d H:i:s",strtotime("+2 day"));
+    							$update_csd_orderfba['nextnotify_date'] =  date("Y-m-d H:i:s",strtotime("+1 day"));
     						}
     						if($trackDeatail['Data']['Status']==3){
     							$update_csd_orderfba['nextnotify_date'] = '2999-10-01 00:00:00';
@@ -271,9 +271,9 @@ class API_Common_ServiceNotifyTraceOrder
     						//更新主表
     						//1-15天下次通知时间为1天
     						if(time()-strtotime($val['create_date'])<=15*24*3600){
-    							$update_csd_order['nextnotify_date'] =  date("Y-m-d H:i:s",strtotime("+1 day"));
+    							$update_csd_order['nextnotify_date'] =  date("Y-m-d H:i:s",strtotime("+4 hours"));
     						}else{
-    							$update_csd_order['nextnotify_date'] =  date("Y-m-d H:i:s",strtotime("+2 day"));
+    							$update_csd_order['nextnotify_date'] =  date("Y-m-d H:i:s",strtotime("+1 day"));
     						}
     						if($trackDeatail['Data']['Status']==3){
     							$update_csd_order['nextnotify_date'] = '2999-10-01 00:00:00';
