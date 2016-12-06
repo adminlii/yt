@@ -744,7 +744,7 @@ class Zend_Controller_Request_Http extends Zend_Controller_Request_Abstract
      *
      * @return array
      */
-    public function getParams()
+    public function getParams($notfilter=false)
     {
         $return       = $this->_params;
         $paramSources = $this->getParamSources();
@@ -760,7 +760,8 @@ class Zend_Controller_Request_Http extends Zend_Controller_Request_Abstract
         ) {
             $return += $_POST;
         }
-        return $return;
+        
+        return !$notfilter?filter_input_m($return):$return;
     }
 
     /**

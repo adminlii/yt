@@ -692,6 +692,12 @@ $('.order_phone').live('keyup',function(){
 	err_tip(this,/^(\d){4,25}$/,'格式为4-25位纯数字');
 })
 
+// 电话
+$('.order_phone_consignee').live('keyup',function(){
+    //err_tip(this,/^\(\d+\)\d+-\d+$|^\d+\s\d+$/,'格式为(xxx)xxx-xxx 或xxx空格xxxxx');
+	err_tip(this,/(^\+[\d-\s]{7,15}$)|(^[\d-\s]{8,16}$)/,'电话格式不正确总长8-16位');
+})
+
 // 申报价值
    $('.invoice_unitcharge').live('keyup',function(){
 	var reg = /^\d+(\.\d{1,2})?$/;
@@ -712,6 +718,12 @@ $('.quantity').live('keyup',function(){
 $('.invoename').live('keyup',function(){
 	var reg = /^[\w\s\.%&\(\)\{\},\$-;#@\*\[\]【】]+?$/;
 	err_tip(this,reg,'须为英文');
+})
+
+//tp账号 
+$('.tnt_tpacount').live('keyup',function(){
+	var reg = /^[\w\W]{0,13}?$/;
+	err_tip(this,reg,'小于13位');
 })
 // ==============结束
 function checkjsonequire(obj1,obj2){ 

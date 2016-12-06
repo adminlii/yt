@@ -272,7 +272,7 @@
 						</div>
 						</td>
 						<td class="col"><em>*</em> 电话号码：</td>
-						<td><input type="text" class="order_phone" value='<{if isset($shipperConsignee)}><{$shipperConsignee.consignee_telephone}><{/if}>'
+						<td><input type="text" class="order_phone_consignee" value='<{if isset($shipperConsignee)}><{$shipperConsignee.consignee_telephone}><{/if}>'
 							name='consignee[consignee_telephone]' id=consignee_telephone /></td>
 					</tr>
 					<tr>
@@ -311,6 +311,9 @@
 						<select id="currencetype" name="currencytype">
 							
 						</select>
+						</li>
+						<li><span>大客户代码：</span> 
+						<input type="text" value="" class="tnt_tpacount" name="order[tnt_tpacount]"/>
 						</li>
 						<li><span>申报价值：</span> 
 						<input type="text" value="" name="order[invoice_totalcharge_all]"/>

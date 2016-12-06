@@ -233,6 +233,13 @@ class Process_OrderTnt
         }else if(!in_array($this->_order['service_code'], array('P15D','P15N','P48N','S48F','S728','S87','S88'))){
         	$this->_err[] = Ec::Lang('服务类型不匹配');
         }
+        
+    	if(empty($this->_order['tnt_tpacount'])) {
+        	
+        } else if(!preg_match('/^[\w\W]{1,13}$/', $this->_order['tnt_tpacount'])) {
+        	$this->_err[] = Ec::Lang('大客户账号格式错误');
+        }
+        
         //验证运输方式是否到达目的国家
         if($this->_order['product_code']&&$this->_order['country_code']){
             $product_code = $this->_order['product_code'];
@@ -374,8 +381,8 @@ class Process_OrderTnt
         	/* if(preg_match('/^\(\d+\)\d+-\d+$|^\d+\s\d+$/', $this->_consignee['consignee_certificatetype'])){
         		$this->_err[] = Ec::Lang('收件人电话不正确');
         	} */
-        	if(!preg_match("/^(\d){4,25}$/",$this->_consignee['consignee_telephone'])){
-        		$this->_err[] = Ec::Lang('收件人电话格式为4-25位纯数字');
+        	if(!preg_match("/(^\+[\d-\s]{7,15}$)|(^[\d-\s]{8,16}$)/",$this->_consignee['consignee_telephone'])){
+        		$this->_err[] = Ec::Lang('收件人电话格式不正确');
         	}
         }else{
         	$this->_err[] = Ec::Lang('收件人电话不能为空');
@@ -985,6 +992,7 @@ class Process_OrderTnt
         	'invoice_type'=>$this->_order['invoice_type'],
         	'order_info' => $this->_order['order_info'],
         	'service_code'=> $this->_order['service_code'],
+        	'tnt_tpacount'=> $this->_order['tnt_tpacount'],
         );
         
         $order['order_weight'] =  empty($order['order_weight'])?0:$order['order_weight'];

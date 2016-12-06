@@ -1432,11 +1432,11 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
  				$_packages_invoice = json_decode($row['packinfo'],1);
  				$_packages['ITEMS'] = $_packages_invoice[0]['ITEMS'];
  				$_packages['DESCRIPTION'] ="";
- 				$_packages['LENGTH'] =$_packages_invoice[0]['LENGTH']/100;
- 				$_packages['WIDTH'] =$_packages_invoice[0]['WIDTH']/100;
- 				$_packages['HEIGHT'] =$_packages_invoice[0]['HEIGHT']/100;
+ 				$_packages['LENGTH'] =$_packages_invoice[0]['LENGTH'];
+ 				$_packages['WIDTH'] =$_packages_invoice[0]['WIDTH'];
+ 				$_packages['HEIGHT'] =$_packages_invoice[0]['HEIGHT'];
  				$_packages['WEIGHT'] = $_packages_invoice[0]['WEIGHT']*$_packages_invoice[0]['ITEMS'];
- 				$_packages['VOLUME'] =round($_packages['LENGTH']*$_packages['WIDTH']*$_packages['HEIGHT'],3);
+ 				//$_packages['VOLUME'] =round($_packages['LENGTH']*$_packages['WIDTH']*$_packages['HEIGHT'],3);
  				$packages[$row['packageid']] = $_packages;
  			}
  			
@@ -1470,6 +1470,9 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
  			if($rs_cisprs[0]){
  				//设定上发件人账号
  				$RedundancyField['AccuntNum'] = $rs_cisprs[0]['countnum'];
+ 				if(!empty($this->orderData["tnt_tpacount"])){
+ 					$RedundancyField['AccuntNum'].='|'.$this->orderData["tnt_tpacount"];
+ 				}
  				$RedundancyField["Reference"] = $rs_cisprs[0]['citycode'];
  			}
  		}

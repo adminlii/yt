@@ -760,7 +760,7 @@ class Order_OrderController extends Ec_Controller_Action
         $cpy = $this->getRequest()->getParam('cpy', null);
         if($this->getRequest()->isPost()){
             $orderR = array();
-            $params = $this->getRequest()->getParams();
+            $params = $this->getRequest()->getParams(1);
             //订单头
             $order = $this->getParam('order',array());
             //收件人,发件人
@@ -814,6 +814,7 @@ class Order_OrderController extends Ec_Controller_Action
             	'fpnote'=> $order['fpnote'],
             	'untread'=>empty($order['untread'])?0:intval($order['untread']),
             	'service_code'=>empty($params['servicecode'])?'':trim($params['servicecode']),
+            	'tnt_tpacount'=>empty($order['tnt_tpacount'])?'':trim($order['tnt_tpacount']),
             );
             //添加一个发票类型
             if($orderArr["invoice_print"]==1){

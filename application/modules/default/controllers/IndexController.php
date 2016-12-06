@@ -173,6 +173,12 @@ class Default_IndexController extends Ec_Controller_DefaultAction
         $this->view->errMsg = $errMsg;
 		$register = $this->_request->getParam('register',false);
 		$user_code = $this->_request->getParam('user_code',false);
+		//不允许随便捏造
+		
+		$userArr = Service_User::getByField($user_code, 'user_code');
+		if (empty($userArr)) {
+			$user_code = '';
+		}
 		$this->view->register = $register;
 		$this->view->user_code = $user_code;
 		$successUserCode = $this->_request->getParam('successUserCode',false);
