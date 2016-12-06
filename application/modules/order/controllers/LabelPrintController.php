@@ -482,7 +482,7 @@ class Order_LabelPrintController extends Ec_Controller_Action {
                 $pdfData = $return["data"]["Data"];
                 $trackingCodes = $printParam["Data"];
                 if($pdfData){
-                    $PdfReturn = $process->CreatePdfFile($pdfData,$trackingCodes);
+                    $PdfReturn = $process->CreatePdfFile($pdfData,$trackingCodes,1);
                     $return['pdf'] = $PdfReturn;
                     $updateRow ['print_date'] = date ( 'Y-m-d H:i:s' );
                     Service_CsdOrder::update($updateRow, $order_id, 'order_id');

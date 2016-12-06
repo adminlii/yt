@@ -486,8 +486,9 @@ class Order_ReportController extends Ec_Controller_Action
                 $pdfData = $return["data"]["Data"];
                 $trackingCodes = $printParam["Data"];
                 $PdfReturn = $process->CreatePdfFile($pdfData,$trackingCodes);
-                echo  Zend_Json::encode($return);
-        		header("Location: {$PdfReturn}" );
+                //echo  Zend_Json::encode($return);die;
+        		//header("Location: {$PdfReturn}" );
+                Common_Common::renderPdf($PdfReturn);
         		exit();
         	} else {
         		header("Content-type: text/html; charset=utf-8");

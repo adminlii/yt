@@ -128,10 +128,25 @@ class Order_SubmiterController extends Ec_Controller_Action
     		);
     		
     		$row = $this->serviceClass->getMatchEditFields($params,$row);
+    		
     		$paramId = $row['shipper_account'];
     		if (!empty($row['shipper_account'])) {
     			unset($row['shipper_account']);
     		}
+    		//编辑
+    		if (!empty($paramId)) {
+    			$shipperInfo = $this->serviceClass->getByField($paramId, 'shipper_account');
+    			if($shipperInfo['customer_id'] != Service_User::getCustomerId()){
+    				$return = array(
+    						'state' => 0,
+    						'message'=>'非法操作',
+    						'errorMessage'=>array('非法操作')
+    				);
+    				die(Zend_Json::encode($return));
+    			}
+    		}
+    		
+    		
     		foreach ($row as $key => $value) {
     			$row[$key] = ($value != '')?trim($value):$value;
     		}
@@ -232,6 +247,16 @@ class Order_SubmiterController extends Ec_Controller_Action
     	if ($this->_request->isPost()) {
     		$paramId = $this->_request->getPost('paramId');
     		if (!empty($paramId)) {
+    			$shipperInfo = $this->serviceClass->getByField($paramId, 'shipper_account');
+    			if($shipperInfo['customer_id'] != Service_User::getCustomerId()){
+    				$return = array(
+    						'state' => 0,
+    						'message'=>'非法操作',
+    						'errorMessage'=>array('非法操作')
+    				);
+    				die(Zend_Json::encode($return));
+    			}
+    			
     			if ($this->serviceClass->delete($paramId)) {
     				$result['state'] = 1;
     				$result['message'] = 'Success.';

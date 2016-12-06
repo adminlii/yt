@@ -1083,7 +1083,8 @@ class Default_IndexController extends Ec_Controller_DefaultAction
     		if(!file_exists($pdfFileName)){
     			exit("创建pdf失败");
     		}else{
-    			$this->redirect("/fba/print/{$filename}.pdf");
+    			Common_Common::renderPdf($pdfFileName);
+    			//$this->redirect("/fba/print/{$filename}.pdf");
     		}
     	}catch(Exception $e){
     		header("Content-type: text/html; charset=utf-8");

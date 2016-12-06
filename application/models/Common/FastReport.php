@@ -113,11 +113,12 @@ class Common_FastReport
 
     public function PrintLabel($params,$method){
         $result = array("ack"=>0,"message"=>"","data"=>"");
-        $url = "http://test.hwcservice.com/ChinaPost/api/LabelPrintService/MergeLabelByTrackingNumbers?type=json";
-        $url = "http://112.126.68.251:8088/v5/api/LabelPrintService/MergeLabelByTrackingNumbers?type=json";
+        $url = "https://202.104.134.94/ChinaPost/api/LabelPrintService/MergeLabelByTrackingNumbers?type=json";
+        //$url = "http://112.126.68.251:8088/v5/api/LabelPrintService/MergeLabelByTrackingNumbers?type=json";
         //$url ="http://192.168.10.48:3001/V3/api/LabelPrintService/MergeLabelByTrackingNumbers?type=json";
         $username = 'tmsUser';
-        $password = '1234567890';
+        //$password = '1234567890';
+        $password = '123456';
         $apiToken = base64_encode("{$username}:{$password}");
         try {
             $ch = curl_init();
@@ -132,10 +133,8 @@ class Common_FastReport
             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             $data = curl_exec($ch);
-
-
             $data = Common_Common::objectToArray(json_decode($data));
-            //$data = curl_error($tuCurl);
+            //$data = curl_error($ch);
             $result["ack"] = 1;
             $result["data"] = $data;
         } catch (Exception  $e) {
@@ -153,7 +152,7 @@ class Common_FastReport
     }
 
 
-    public function CreatePdfFile($pdfData,$trackingCodes){
+    public function CreatePdfFile($pdfData,$trackingCodes,$ajax=false){
         //$pdfData = $return["data"]["Data"];
         $pdfDir = APPLICATION_PATH . "/../public/PDF";
         if(!is_dir($pdfDir)){
@@ -176,13 +175,16 @@ class Common_FastReport
                 file_put_contents ($aimDir, $pdfData);
             }
         }else{
-            $fp=fopen($pdfDir."/".$filename, "r");
+            /* $fp=fopen($pdfDir."/".$filename, "r");
             if($fp){
                 fclose($aimDir);
-            }
+            } */
         }
-        $loactionDir = $_SERVER["REQUEST_SCHEME"]."://".$_SERVER["HTTP_HOST"]."/PDF/".$filename;
-        return $loactionDir;
+        if($ajax)
+        	$pdfFile = $_SERVER["REQUEST_SCHEME"]."://".$_SERVER["HTTP_HOST"]."/PDF/".$filename;
+        else
+        	$pdfFile = $pdfDir."/".$filename;
+        return $pdfFile;
     }
 
     

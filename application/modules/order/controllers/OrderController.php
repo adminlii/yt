@@ -1500,7 +1500,7 @@ class Order_OrderController extends Ec_Controller_Action
     			'shipper_mallaccount',
     			'is_default',
     	);
-    	$rows = $CsiShipperTrailerAddress->getByCondition($condition,'*', 0, 1, array('shipper_account asc'));
+    	$rows = $CsiShipperTrailerAddress->getByCondition($condition,$showFields, 0, 1, array('shipper_account asc'));
     	$this->view->rows = $rows;
     	if(!empty($isxhr)){
     		$res = array('ack'=>0,'msg'=>'','data'=>array());
@@ -1522,6 +1522,15 @@ class Order_OrderController extends Ec_Controller_Action
 			$CsiShipperTrailerAddress = new Service_CsiShipperTrailerAddress();
 			$paramId = $this->_request->getPost('paramId');
 			if (!empty($paramId)) {
+				$shipperInfo = $CsiShipperTrailerAddress->getByField($paramId, 'shipper_account');
+				if($shipperInfo['customer_id'] != Service_User::getCustomerId()){
+					$return = array(
+							'state' => 0,
+							'message'=>'非法操作',
+							'errorMessage'=>array('非法操作')
+					);
+					die(Zend_Json::encode($return));
+				}
 				if ($CsiShipperTrailerAddress->delete($paramId)) {
 					$result['state'] = 1;
 					$result['message'] = 'Success.';
@@ -1557,6 +1566,20 @@ class Order_OrderController extends Ec_Controller_Action
 			if (!empty($row['shipper_account'])) {
 				unset($row['shipper_account']);
 			}
+			
+			//编辑
+			if (!empty($paramId)) {
+				$shipperInfo = $CsiShipperTrailerAddress->getByField($paramId, 'shipper_account');
+				if($shipperInfo['customer_id'] != Service_User::getCustomerId()){
+					$return = array(
+							'state' => 0,
+							'message'=>'非法操作',
+							'errorMessage'=>array('非法操作')
+					);
+					die(Zend_Json::encode($return));
+				}
+			}
+			
 			foreach ($row as $key => $value) {
 				$row[$key] = ($value != '')?trim($value):$value;
 			}
@@ -1659,7 +1682,8 @@ class Order_OrderController extends Ec_Controller_Action
 				'consignee_mallaccount',
 				'is_default',
 		);
-		$rows = $CsiConsigneeTrailerAddress->getByCondition($condition,'*', 0, 1, array('consignee_account asc'));
+		//$showFields = join(',', $showFields);
+		$rows = $CsiConsigneeTrailerAddress->getByCondition($condition,$showFields, 0, 1, array('consignee_account asc'));
 		foreach ($rows as $k=>$v){
 			$result_country = Service_IddCountry::getByField($v['consignee_countrycode'],'country_code');
 			$rows[$k]['country_cnname']=$result_country['country_cnname'];
@@ -1700,11 +1724,23 @@ class Order_OrderController extends Ec_Controller_Action
 					'is_default'=>'0',
 			);
 			$CsiConsigneeTrailerAddress = new Service_CsiConsigneeTrailerAddress();
-
+				
 			$row = $CsiConsigneeTrailerAddress->getMatchEditFields($params,$row);
 			$paramId = $row['consignee_account'];
 			if (!empty($row['consignee_account'])) {
 				unset($row['consignee_account']);
+			}
+			//编辑
+			if (!empty($paramId)) {
+				$consigneeInfo = $CsiConsigneeTrailerAddress->getByField($paramId, 'consignee_account');
+				if($consigneeInfo['customer_id'] != Service_User::getCustomerId()){
+					$return = array(
+							'state' => 0,
+							'message'=>'非法操作',
+							'errorMessage'=>array('非法操作')
+					);
+					die(Zend_Json::encode($return));
+				}
 			}
 			foreach ($row as $key => $value) {
 				$row[$key] = ($value != '')?trim($value):$value;
@@ -1758,8 +1794,20 @@ class Order_OrderController extends Ec_Controller_Action
 			$paramId = $this->_request->getPost('paramId');
 			if (!empty($paramId)) {
 				$db = Common_Common::getAdapter();
+				foreach ($paramId as $vv){
+					$consigneeInfo = $CsiConsigneeTrailerAddress->getByField($paramId, 'consignee_account');
+					if($consigneeInfo['customer_id'] != Service_User::getCustomerId()){
+						$return = array(
+								'state' => 0,
+								'message'=>'非法操作',
+								'errorMessage'=>array('非法操作')
+						);
+						die(Zend_Json::encode($return));
+					}
+				}
 				$db->beginTransaction();
 				$delflag=1;
+				
 				foreach ($paramId as $k=>$v){
 					if (!$CsiConsigneeTrailerAddress->delete($v)) {
 						$delflag=0;
@@ -2255,6 +2303,24 @@ class Order_OrderController extends Ec_Controller_Action
 			$order_id = $this->_request->getPost('order_id');
 			if (!empty($order_id)) {
 				$db = Common_Common::getAdapter();
+				foreach ($order_id as $vv){
+					$orderInfo = $CsdOrder->getByField($vv);
+					if($orderInfo['customer_id'] != Service_User::getCustomerId()){
+						$return = array(
+								'state' => 0,
+								'message'=>'非法操作',
+						);
+						die(Zend_Json::encode($return));
+					}
+					if($orderInfo['order_status']!='S'){
+						$return = array(
+								'state' => 0,
+								'message'=>'不被允许的操作',
+						);
+						die(Zend_Json::encode($return));
+					}
+					
+				}
 				$db->beginTransaction();
 				$delflag=1;
 				foreach ($order_id as $k=>$v){
