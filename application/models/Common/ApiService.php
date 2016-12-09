@@ -93,9 +93,15 @@ class Common_ApiService
     				break;
     			}
     			$userPwd = base64_decode(urldecode($req['userpwd']));
-    			if(!Ec_Password::comparePassword($userPwd, $userInfo['user_password'])){
+    			$rs = Service_CustomerApi::getByField($userInfo['customer_id'],'customer_id');
+    			if(!$rs){
     				$return['ret'] = 3;
-    				$return['msg'] = Ec::Lang('用户密码错误');
+    				$return['msg'] = Ec::Lang('未授权');
+    				break;
+    			}
+    			if($rs['ca_token']!=$userPwd){
+    				$return['ret'] = 3;
+    				$return['msg'] = Ec::Lang('认证失败');
     				break;
     			}
     			$token = md5($req['usercode'].rand(1, 9999).date('YmdHis'));
@@ -124,6 +130,7 @@ class Common_ApiService
     		} catch (Exception $e) {
     			$return['ret'] = -13;
     			$return['msg'] = Ec::Lang('服务器繁忙请稍后尝试');
+    			//$return['msg'] = $e->getMessage();
     			break;
     		}
     	}while(0);
