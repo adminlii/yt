@@ -240,6 +240,12 @@ class Process_OrderTnt
         	$this->_err[] = Ec::Lang('大客户账号格式错误');
         }
         
+        if(empty($this->_order['order_info'])) {
+        	 
+        } else if(!preg_match('/^[\w\W]{1,46}$/', $this->_order['order_info'])) {
+        	$this->_err[] = Ec::Lang('描述应为小于46');
+        }
+        
         //验证运输方式是否到达目的国家
         if($this->_order['product_code']&&$this->_order['country_code']){
             $product_code = $this->_order['product_code'];
@@ -990,7 +996,7 @@ class Process_OrderTnt
             //'customer_channelid'=>$this->_order['customer_channelid']?$this->_order['customer_channelid']:Service_User::getChannelid(),
         	'untread'=>$this->_order['untread'],
         	'invoice_type'=>$this->_order['invoice_type'],
-        	'order_info' => $this->_order['order_info'],
+        	//'order_info' => $this->_order['order_info'],
         	'service_code'=> $this->_order['service_code'],
         	'tnt_tpacount'=> $this->_order['tnt_tpacount'],
         );
@@ -1014,6 +1020,7 @@ class Process_OrderTnt
         // 提交预报？保存草稿
         $order['order_status'] = 'D';
         $this->_order['order_status'] = $status;
+        $order['order_info'] = $this->_order['order_info'];
         //echo __LINE__;
         
         if($this->_order['invoice_print']){

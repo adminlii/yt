@@ -1085,7 +1085,6 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
                 );
                 
                 $sendParams = json_encode($sendParams);
-                print_r($sendParams);
                 $header =array("Content-Type:application/json; charset=utf-8");
                 $result = $this->curl_send($url,$sendParams,$header,"post","tmsuser:1234567890");
                 if(is_array($result)){
@@ -1480,6 +1479,7 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
  			//是否废弃包裹
  			$RedundancyField['Abandon'] = $this->orderKey["untread"];
  		}
+ 		$RedundancyField['DeliveryInst'] = empty($this->orderData["order_info"])?"":$this->orderData["order_info"];
  		//$params = array('CustomerCode'=> $this->_user, 'packageMessage' => array($data));
  		$params["Version"] = '0.0.0.3';
  		$params["RequestId"] = empty($uuid)?"":$uuid;

@@ -500,7 +500,7 @@
 				<table cellspacing="0" cellpadding="0" border="0";>
 					<tr>
 						<td class="col">客户留言：</td>
-						<td colspan="3"><textarea name="DESCRIPTION"></textarea></td>
+						<td colspan="3"><textarea class="customer_des" name="DESCRIPTION"></textarea></td>
 					</tr>
 				</table>
 			</div>

@@ -725,6 +725,12 @@ $('.tnt_tpacount').live('keyup',function(){
 	var reg = /^[\w\W]{0,13}?$/;
 	err_tip(this,reg,'小于13位');
 })
+
+//描述 
+$('.customer_des').live('keyup',function(){
+	var reg = /^[\w\W]{0,46}?$/;
+	err_tip(this,reg,'小于46位');
+})
 // ==============结束
 function checkjsonequire(obj1,obj2){ 
 	if($.isEmptyObject(obj1)||$.isEmptyObject(obj2))
