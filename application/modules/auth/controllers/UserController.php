@@ -530,6 +530,18 @@ class Auth_UserController extends Ec_Controller_Action
     		$checkBol = false;
     	}
     	
+    	$regex = "/^(((?=.*[A-Z])(?=.*[a-z]))|((?=.*[A-Z])(?=.*[0-9]))|((?=.*[a-z])(?=.*[0-9]))).{6,16}$/";
+    	if(empty($new_password)||!preg_match($regex, $new_password, $matches)){
+    		$return['message'] = '密码必须为6~16位,同时包含数字字母组合，请检查.';
+    		$checkBol = false;
+    	}
+    	//连续性密码校验
+    	$continuityRet = isContinuity(preg_split('/[^0-9]+/',$new_password),5,1,3);
+    	if($continuityRet['data']){
+    		$return['message'] = '密码安全性低！在'.$continuityRet['_msg'].'存在连续.';
+    		$checkBol = false;
+    	}
+    	
     	if(!$checkBol){
     		return $return;
     	}
@@ -550,14 +562,14 @@ class Auth_UserController extends Ec_Controller_Action
 		    	$return['state'] = 1;
 		    	$return['message'] = '修改密码成功.';
 		    	
-		    	//同步数据至EC系统(官网)
+		    	/* //同步数据至EC系统(官网)
 		    	$params = array(
 		    			'user_code'=>$result_ez_user['user_code'],
 		    			'user_password'=>$new_password_again
 		    			);
 		    	
 		    	$obj = new Common_Sync();
-		    	$ss = $obj->updateUser($params);
+		    	$ss = $obj->updateUser($params); */
 	    	}else{
 	    		$db->rollback();
 	    		$return['message'] = '修改密码失败，请稍后尝试.';

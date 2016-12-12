@@ -342,3 +342,95 @@ function M_decrypt($data,$time,$set = '~!@#$%^&4512*-678'){
     $decrypted = mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $privateKey, $encryptedData, MCRYPT_MODE_CBC, $iv);
     return  rtrim($decrypted,"\0");
 }
+
+/**
+ * @todo 判断是否连续
+ * @param $str 判断的对象 支持数组和字符串
+ * 		  $lastLenth 判断超过多少字为连续
+ * 		  $separate =0:默认不在乎增量 等差数列
+ * 					>0: 相差值
+ * 		  $model
+ * 			0:数字
+ * 			1:字母
+ * 			2:不区分大小写（转大写判断）
+ * 			3:自动模式
+ * 			4:自动模式不分大小写
+ */
+function isContinuity($str,$lastLenth=3,$separate=0,$model=0){
+	$resdata = array('ret'=>0,'msg'=>'','data'=>0);
+	do{
+		try {
+			if(empty($str)){
+				$resdata['msg'] 	=	'不允许为空';
+				break;
+			}
+			if(!is_numeric($model)||!in_array($model,array(0,1,2,3,4))){
+				$resdata['msg'] 	=	$str.'不支持该模式';
+				break;
+			}
+			if($model>=3){
+				if(is_string($str)&&preg_match('/^\d+&/',$str)){
+					$model = 0;
+				}else{
+					$model = $model==4?2:1;
+				}
+			}
+			//最小长度如果是2的话直接默认都不连续
+			if($lastLenth<3){
+				break;
+			}
+			//小于最小长度直接默认是非连续
+			if(is_string($str)&&strlen($str)<$lastLenth){
+				break;
+			}
+			if(is_array($str)){
+				$_isContinuity = 0;
+				foreach ($str as $str_s){
+					$rs = isContinuity($str_s,$lastLenth,$separate,$model);
+					if($rs['data']){
+						$_isContinuity=1;
+						$resdata['msg'] = 'isContinuity is found in '.$str_s;
+						$resdata['_msg'] = $str_s;
+						break;
+					}
+				}
+				$resdata['data'] 	= 	$_isContinuity;
+			}else if(is_string($str)){
+				//字母转ascall
+				$arr = str_split($str);
+
+				if(!empty($arr)){
+					if($model>0){
+						array_walk($arr,function(&$item,$key,$model){
+							$item = ord($model==2?strtoupper($item):$item);
+						},$model);
+					}
+				}else{
+					//不会出现前面已经判断是否为空
+				}
+				//判断连续
+				$count  = count($arr);
+				$index  = 0 ;
+				
+				while ($index<=$count-$lastLenth){
+					$r = $index+$lastLenth-1;
+					$sum = array_sum(array_slice($arr,$index,$lastLenth));
+					if(($arr[$index]+$arr[$r])*$lastLenth/2 == $sum&&($separate<=0||abs($arr[$index]-$arr[$index+1])<=$separate)){
+						$resdata['ret'] 	= 	0;
+						$resdata['data'] 	= 	1;
+						break 2;
+					}
+					$index++;
+				}
+			}else{
+				$resdata['msg'] = '不支持的数据格式';
+				break;
+			}
+		}catch (\Exception $e){
+			$resdata['ret'] 	= 	13;
+			$resdata['msg'] 	=	'服务器异常';
+		}
+
+	}while (0);
+	return $resdata;
+}

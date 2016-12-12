@@ -56,11 +56,15 @@ public function indexAction()
                 /* if(empty($row['user_password'])||strlen($row['user_password'])<6){
                     throw new Exception('密码不能为空且长度必须>=6');
                 } */
-                $regex = "/^(?=.{6,16})(((?=.*[A-Z])(?=.*[a-z]))|((?=.*[A-Z])(?=.*[0-9]))|((?=.*[a-z])(?=.*[0-9]))).*$/";
+                $regex = "/^(((?=.*[A-Z])(?=.*[a-z]))|((?=.*[A-Z])(?=.*[0-9]))|((?=.*[a-z])(?=.*[0-9]))).{6,16}$/";
                 if(empty($row['user_password'])||!preg_match($regex, $row['user_password'], $matches)){
                 	throw new Exception('密码必须为6~16位,同时包含数字字母组合，请检查.');
                 }
-                
+                //连续性密码校验
+                $continuityRet = isContinuity(preg_split('/[^0-9]+/',$row['user_password']),5,1,3);
+                if($continuityRet['data']){
+                	throw new Exception('密码安全性低！在'.$continuityRet['_msg'].'存在连续.');
+                }
                 if(empty($row['user_password_confirm'])){
                     throw new Exception('确认密码不能为空');
                 }
