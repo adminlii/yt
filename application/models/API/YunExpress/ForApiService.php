@@ -974,14 +974,14 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
             if($trackdetailserve['ack']!=1){
                $result= $trackdetailserve;
                $result['type'] = 1;
-               break;
+               //break;
             }
             if($mailnum_hawbcode){
                 $trackdetailmailnum = $this->gettrackDetail(2,$mailnum_hawbcode);
                 if($trackdetailmailnum['ack']!=1){
                     $result= $trackdetailmailnum;
                     $result['type'] = 2;
-                    break;
+                    //break;
                 }
             }
             //
@@ -1480,6 +1480,7 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
  			$RedundancyField['Abandon'] = $this->orderKey["untread"];
  		}
  		$RedundancyField['DeliveryInst'] = empty($this->orderData["order_info"])?"":$this->orderData["order_info"];
+ 		$RedundancyField['CustomerCode'] = empty($this->orderData["tntcustomer_code"])?"":$this->orderData["tntcustomer_code"];
  		//$params = array('CustomerCode'=> $this->_user, 'packageMessage' => array($data));
  		$params["Version"] = '0.0.0.3';
  		$params["RequestId"] = empty($uuid)?"":$uuid;

@@ -109,7 +109,7 @@ class Common_FileToZip{
 			}
 			$m++;
 		}while($m<5);
-		if ($zip->open($zipFileName,$zip::OVERWRITE)!== TRUE){
+		if ($zip->open($zipFileName,$zip::CREATE)!== TRUE){
 			$this->err_num	=	4;
 			$this->errflag	=	true;
 			return false;

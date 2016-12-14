@@ -734,12 +734,18 @@ class Process_OrderfbaUpload
         if(! isset($pathinfo["extension"]) ||(!empty($available)&&!in_array($pathinfo["extension"], $available)) ){
             throw new Exception(Ec::Lang('文件格式不正确，请上传'.join(',', $available).'文件'));
         }
+        //子目录
+        $tempDir= date('Ymd').'/';
+        if(!is_dir($savepath.$tempDir)){
+        	mkdir($savepath.$tempDir, 0777);
+    		chmod($savepath.$tempDir, 0777);
+        } 
         do{
-        	$filename = date('YmdHis').'_'.rand(1, 10000).'.'.$pathinfo["extension"];
-        }while(file_exists($savepath.$filename));
-        move_uploaded_file($filePath,$savepath.$filename);
+        	$filename = date('His').'_'.rand(1, 10000).'.'.$pathinfo["extension"];
+        }while(file_exists($savepath.$tempDir.$filename));
+        move_uploaded_file($filePath,$savepath.$tempDir.$filename);
         //file_put_contents($savepath.$filename, file_get_contents($filePath));
-        $fileData = array('path'=>$filename);
+        $fileData = array('path'=>$tempDir.$filename);
         if($skip){
         	$_fileData = $this->readUploadFile($fileName, $filePath, $shell);
         	$fileData['data'] = $_fileData;

@@ -202,6 +202,12 @@
 						<td class="col"><em>*</em> 电话号码：</td>
 						<td><input type="text" name="shipper[shipper_telephone]"  class="order_phone" value="<{if isset($shipperConsignee["shipper_telephone"])}><{$shipperConsignee.shipper_telephone}><{/if}>"></td>
 					</tr>
+					
+					<tr>
+						<td class="col"> 用户编码：</td>
+						<td><input type="text" name="order[tntcustomer_code]" class="tntcoustomer_code" value="<{if isset($order["tntcustomer_code"])}><{$order.tntcustomer_code}><{/if}>"/></td>
+						<td colspan="2"></td>
+					</tr>
 				</table>
 			</div>
 		</div>

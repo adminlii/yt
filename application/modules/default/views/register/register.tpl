@@ -9,10 +9,11 @@
 <title><{$system_title}></title>
 <script type="text/javascript" src="/js/jquery-1.8.3.min.js"></script>
 <script type="text/javascript" src="/js/jquery-ui.min.js"></script>
-<link type="text/css" rel="stylesheet" href="/css/layout_index.css?20140304"/>
+<link type="text/css" rel="stylesheet" href="/css/layout_index.css?20140305"/>
 <style type="text/css">
 
 .login_news,.login_head_text{display:none;}
+.inpList .showErr{color:red;}
 </style>
 </head>
 <body class="grayBg">
@@ -34,10 +35,20 @@
         		url: '/default/register/verify-user',
         		data: {'user_code':user_code},
         		success: function (json) {
+        			var emObj = this_.next();
         		    if(json.ask){
-        		    	this_.next().html(json.message);
+        		    	if(!emObj.hasClass('showErr')){
+        		    		emObj.addClass('showErr').html(json.message);
+        		    	}else{
+        		    		emObj.html(json.message);
+        		    	}
         		    }else{
-        		    	this_.next().html('账户名可注册');
+        		    	var msg = '账户名可注册';
+        		    	if(emObj.hasClass('showErr')){
+        		    		emObj.removeClass('showErr').html(msg);
+        		    	}else{
+        		    		emObj.html(msg);
+        		    	}
         		    }
         		}
         	});
@@ -51,9 +62,20 @@
         	if(!mediumRegex.test(user_password))
         		this_.next().html('密码必须为6~16位,同时包含数字字母组合，请检查.');
             else
-              this_.next().html('');
+              	this_.next().html('');
         });
-
+		
+		$('#user_password_confirm').blur(function(){
+        	var user_password_confirm=$(this).val();
+        	var user_password=$('#user_password').val();
+        	var this_ = $(this);
+        	if(user_password_confirm!=user_password)
+        		this_.next().html('两次密码不一致.');
+            else
+              	this_.next().html('');
+        });
+		
+		
         $('#user_email').change(function(){
         	var user_email=$(this).val();
         	var this_ = $(this);
@@ -64,15 +86,45 @@
         		url: '/default/register/verify-email',
         		data: {'user_email':user_email},
         		success: function (json) {
+        			var emObj = this_.next();
         		    if(json.ask){
-        		    	this_.next().html(json.message);
+        		    	if(!emObj.hasClass('showErr')){
+        		    		emObj.addClass('showErr').html(json.message);
+        		    	}else{
+        		    		emObj.html(json.message);
+        		    	}
         		    }else{
-        		    	this_.next().html('邮箱可注册');
+        		    	var msg = '邮箱可注册';
+        		    	if(emObj.hasClass('showErr')){
+        		    		emObj.removeClass('showErr').html(msg);
+        		    	}else{
+        		    		emObj.html(msg);
+        		    	}
         		    }
         		}
         	});
         });
 
+		$('#user_mobile_phone').blur(function(){
+        	var user_mobile_phone=$(this).val();
+        	var this_ = $(this);
+        	var mediumRegex = new RegExp("^1(3[0-9]|4[57]|5[0-35-9]|7[0135678]|8[0-9])\\d{8}$", "g");
+        	if(!mediumRegex.test(user_mobile_phone))
+        		this_.next().html('请检查手机格式.');
+            else
+              	this_.next().html('');
+        });	
+	
+		$('#user_phone').blur(function(){
+        	var user_phone=$(this).val();
+        	var this_ = $(this);
+        	var mediumRegex = new RegExp("(^\\+[\\d-\\s]{7,15}$)|(^[\\d-\\s]{8,16}$)", "g");
+        	if(!mediumRegex.test(user_phone))
+        		this_.next().html('请检查电话格式.');
+            else
+              	this_.next().html('');
+        });	
+		
         $('#registerBtn').click(function(){
             var param = $('#ec_register').serialize();
         	$.ajax({
@@ -121,12 +173,12 @@
 					<li>
 						<label><i>*</i> 密码：</label>
 						<input type="password" name="user_password" id="user_password"/>
-						<em></em>
+						<em class="showErr"></em>
 					</li>
 					<li>
 						<label><i>*</i> 确认密码：</label>
 						<input type="password" name="user_password_confirm" id="user_password_confirm"/>
-						<em></em>
+						<em class="showErr"></em>
 					</li>
 					<li>
 						<label><i>*</i> 邮箱：</label>
@@ -146,13 +198,13 @@
 					<li>
 						<label>手机：</label>
 						<input type="text" name="user_mobile_phone" id="user_mobile_phone"/>
-						<em></em>
+						<em class="showErr"></em>
 					</li>
 					<li>
 						<label><i>*</i> 电话：</label>
 						<div class="constinp">
 							<input type="text" placeholder="区号-电话号-分机号"  name="user_phone" id='user_phone'/>
-							<em></em>
+							<em class="showErr"></em>
 							<p>请填写真实的手机或联系电话，注册后客服人员将在1个工作日内与您取得联系进行信息确认以及开通账户。</p>
 						</div>
 					</li>

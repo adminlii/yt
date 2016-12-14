@@ -1026,9 +1026,13 @@ class Default_IndexController extends Ec_Controller_DefaultAction
     	try{
     		set_time_limit(0);
     		$order_id_arr = $this->getParam('orderId', array());
+    		$sign  = $this->getParam('sign','');
     		$order_id_arr =  explode(',', $order_id_arr);
     		if(empty($order_id_arr) || !is_array($order_id_arr)){
     			throw new Exception(Ec::Lang('没有需要打印的订单'));
+    		}
+    		if(empty($sign)||$sign!=md5('$Fjaj^Sn3NH9iVVP')){
+    			throw new Exception(Ec::Lang('非法操作'));
     		}
     		$result = array();
     		$condition["order_id_in"] = $order_id_arr;

@@ -86,6 +86,17 @@ public function indexAction()
                		throw new Exception(Ec::Lang('phone_is_not_empty'));
                	}
                	
+               	//判断用户填入的手机号
+               	$regex_userMobile= '/^1(3[0-9]|4[57]|5[0-35-9]|7[0135678]|8[0-9])\d{8}$/';
+               	if(!empty($row['user_mobile_phone'])&&!preg_match($regex_userMobile, $row['user_mobile_phone'], $matches)){
+               		throw new Exception('请检查手机格式.');
+               	}
+               	//判断用户填入的电话
+               	$regex_userPhone= '/(^\+[\d-\s]{7,15}$)|(^[\d-\s]{8,16}$)/';
+               	if(!empty($row['user_phone'])&&!preg_match($regex_userPhone, $row['user_phone'], $matches)){
+               		throw new Exception('请检查电话格式.');
+               	}
+               	
                	if(empty($row['user_name'])){
                		throw new Exception('姓名不能为空');
                	}

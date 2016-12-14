@@ -189,7 +189,7 @@ class Process_OrderTnt
         $prefix = "";
         $separator = "-";
         if(!empty($rule_config) && !empty($rule_config['config_value'])) {
-        	$rule_arr = split(":", $rule_config['config_value']);
+        	$rule_arr = explode(":", $rule_config['config_value']);
         	$rule = $rule_arr[0];
         	$prefix = $rule_arr[1];
         	$separator = $rule_arr[2];
@@ -238,6 +238,12 @@ class Process_OrderTnt
         	
         } else if(!preg_match('/^[\w\W]{1,13}$/', $this->_order['tnt_tpacount'])) {
         	$this->_err[] = Ec::Lang('大客户账号格式错误');
+        }
+        
+        if(empty($this->_order['tntcustomer_code'])) {
+        	 
+        } else if(!preg_match('/^[A-Za-z0-9]{8,10}$/', $this->_order['tntcustomer_code'])) {
+        	$this->_err[] = Ec::Lang('用户编码格式应为字母数字8到10位');
         }
         
         if(empty($this->_order['order_info'])) {
@@ -1021,6 +1027,7 @@ class Process_OrderTnt
         $order['order_status'] = 'D';
         $this->_order['order_status'] = $status;
         $order['order_info'] = $this->_order['order_info'];
+        $order['tntcustomer_code'] = $this->_order['tntcustomer_code'];
         //echo __LINE__;
         
         if($this->_order['invoice_print']){

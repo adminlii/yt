@@ -65,7 +65,7 @@ body{background: #fff;clear: both;}
 .inpList li{clear: both;padding-bottom: 20px;overflow:hidden;position:relative;}
 .inpList li.remind{border:1px solid #f6f0d0;background:#fdf8e4;padding:5px 10px; width:398px;margin-bottom:15px;}
 .inpList li.remind  p{color:#c1974d;padding:0px;}
-.inpList li em{display:block;overflow:hidden;position:absolute;top:0px;right:0px;width:160px; padding-left:10px;color:red;overflow:hidden;line-height:20px;}
+.inpList li em{display:block;overflow:hidden;position:absolute;top:0px;right:0px;width:160px; padding-left:10px;color:black;overflow:hidden;line-height:20px;}
 .inpList li i,.regForm .Codes li i{color: red;}
 .inpList li label,.regForm .Codes li label{display: block;width: 100px;float: left;text-align: right;color: #666;line-height: 36px;height: 36px;}
 .inpList li input,.inpList li div{overflow: hidden;}

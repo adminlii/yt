@@ -205,7 +205,7 @@ class Process_Order
         $prefix = "";
         $separator = "-";
         if(!empty($rule_config) && !empty($rule_config['config_value'])) {
-        	$rule_arr = split(":", $rule_config['config_value']);
+        	$rule_arr = explode(":", $rule_config['config_value']);
         	$rule = $rule_arr[0];
         	$prefix = $rule_arr[1];
         	$separator = $rule_arr[2];

@@ -815,6 +815,7 @@ class Order_OrderController extends Ec_Controller_Action
             	'untread'=>empty($order['untread'])?0:intval($order['untread']),
             	'service_code'=>empty($params['servicecode'])?'':trim($params['servicecode']),
             	'tnt_tpacount'=>empty($order['tnt_tpacount'])?'':trim($order['tnt_tpacount']),
+            	'tntcustomer_code'=>empty($order['tntcustomer_code'])?'':trim($order['tntcustomer_code']),
             );
             //添加一个发票类型
             if($orderArr["invoice_print"]==1){
@@ -2075,6 +2076,7 @@ class Order_OrderController extends Ec_Controller_Action
 				$filelist[]	=	$filesavepath.'invoice/'.$order_info['invoicefile'];
 			if($order_info['packlistfile']&&file_exists($filesavepath.'invoicelist/'.$order_info['packlistfile']))
 				$filelist[]	=	$filesavepath.'invoicelist/'.$order_info['packlistfile'];
+			
 			$zipdown->toZip($filelist,true);
 		}
 	}
@@ -2098,23 +2100,35 @@ class Order_OrderController extends Ec_Controller_Action
 			}
 			//创建文件
 			$savepath = APPLICATION_PATH.'/../public/fba/print/';
-			do{
-				$filename = date('YmdHis').'_'.rand(1, 10000);
-			}while(file_exists($savepath.$filename.'.pdf'));
-			$htmlFileName = "http://".$_SERVER['HTTP_HOST'].'/default/index/printfba1?orderId='.join(',', $order_id_arr);
-			$pdfFileName  = $savepath.$filename.'.pdf';
-			//shell调用xml
-			if(!file_exists($pdfFileName)){
-				shell_exec("wkhtmltopdf --page-height 150 --page-width 100 --margin-left 1 --margin-right 1 --margin-top 1 --margin-bottom 1 {$htmlFileName} {$pdfFileName}");
-    			//exec('/usr/local/wkhtmltox/bin/./wkhtmltopdf --page-height 150 --page-width 100 --margin-left 1 --margin-right 1 --margin-top 1 --margin-bottom 1 {$htmlFileName} {$pdfFileName}');
-			}
-			//创建失败
-			if(!file_exists($pdfFileName)){
-				exit("创建pdf失败");
+			$filename = md5(join(',', $order_id_arr));
+			$file_extension = 'pdf';
+			$file_name = $filename.'.'.$file_extension;
+			$condition = array();
+			$condition['find_key'] = $file_name;
+			$condition['status'] = 1;
+			$labellogRs	=Service_SaveLabellog::getByCondition($condition,'*',0,1,'createtime desc');
+			$labelsave = new Process_LabelSave('../label_temp/PDF',1);
+			$saveDir = $labelsave->getSavePath();
+			if(empty($labellogRs)){
+				$rs = $labelsave->save($file_name,false);
+				if($rs['ask']){
+					$labelsave->saveFileLog($file_name,$rs['data']['filePath'],$rs['data']['extension']);
+					$pdfFileName  = rtrim($saveDir,'\\/').DIRECTORY_SEPARATOR.$rs['data']['filePath'];
+				}
+				$htmlFileName = "http://".$_SERVER['HTTP_HOST'].'/default/index/printfba1/orderId/'.join(',', $order_id_arr).'/sign/'.md5('$Fjaj^Sn3NH9iVVP');
+				//shell调用xml
+				if(!file_exists($pdfFileName)){
+					shell_exec("wkhtmltopdf --page-height 150 --page-width 100 --margin-left 1 --margin-right 1 --margin-top 1 --margin-bottom 1 {$htmlFileName} {$pdfFileName}");
+					//exec("/usr/local/wkhtmltox/bin/./wkhtmltopdf --page-height 150 --page-width 100 --margin-left 1 --margin-right 1 --margin-top 1 --margin-bottom 1 {$htmlFileName} {$pdfFileName}");
+				}
+				//创建失败
+				if(!file_exists($pdfFileName)){
+					exit("创建pdf失败");
+				}
 			}else{
-				Common_Common::renderPdf($pdfFileName);
-				//$this->redirect("/fba/print/{$filename}.pdf");
+				$pdfFileName  = rtrim($saveDir,'\\/').DIRECTORY_SEPARATOR.$labellogRs[0]['savepath'];
 			}
+			Common_Common::renderPdf($pdfFileName);
 		}catch(Exception $e){
 			header("Content-type: text/html; charset=utf-8");
 			echo $e->getMessage();

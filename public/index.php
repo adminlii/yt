@@ -55,7 +55,7 @@ defined('APPLICATION_ENV')
     || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
 //定义数据过滤方法    
 defined('FILTER_METHOD')
-    || define('FILTER_METHOD','addslashes,htmlspecialchars');
+    || define('FILTER_METHOD','htmlspecialchars');
 // Ensure library/ is on include_path
 set_include_path(implode(PATH_SEPARATOR, array(
     realpath(APPLICATION_PATH . '/../libs'),

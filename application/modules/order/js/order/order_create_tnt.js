@@ -726,6 +726,12 @@ $('.tnt_tpacount').live('keyup',function(){
 	err_tip(this,reg,'小于13位');
 })
 
+//用户编码
+$('.tntcoustomer_code').live('keyup',function(){
+	var reg = /^[A-Za-z0-9]{8,10}$/;
+	err_tip(this,reg,'用户编码格式应为字母数字8到10位');
+})
+
 //描述 
 $('.customer_des').live('keyup',function(){
 	var reg = /^[\w\W]{0,46}?$/;

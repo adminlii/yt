@@ -152,39 +152,41 @@ class Common_FastReport
     }
 
 
-    public function CreatePdfFile($pdfData,$trackingCodes,$ajax=false){
-        //$pdfData = $return["data"]["Data"];
-        $pdfDir = APPLICATION_PATH . "/../public/PDF";
-        if(!is_dir($pdfDir)){
-            mkdir($pdfDir);
-        }
-
+    public function CreatePdfFile($pdfData,$trackingCodes){
         $mdTrackNum = "";
         foreach($trackingCodes as $trackingCode){
             $mdTrackNum .= $trackingCode;
         }
         $filename = md5($mdTrackNum);
-
-        $filename = $filename.".pdf";
-        $aimDir = $pdfDir."/".$filename;
-        if(!file_exists($aimDir)){
-            $fp=fopen($aimDir, "w+");
-            fclose($aimDir);
-            if($fp){
-                $pdfData = base64_decode($pdfData);
-                file_put_contents ($aimDir, $pdfData);
-            }
+        $file_extension = 'pdf';
+        $file_name = $filename.'.'.$file_extension;
+        $condition = array();
+        $condition['find_key'] = $file_name;
+        $condition['status'] = 1;
+        $labellogRs	=Service_SaveLabellog::getByCondition($condition,'*',0,1,'createtime desc');
+        $labelsave = new Process_LabelSave('../label_temp/PDF',1);
+        $saveDir = $labelsave->getSavePath();
+        if(empty($labellogRs)){
+        	//兼容之前的内容
+        	$filepath = rtrim($saveDir,'\\/').DIRECTORY_SEPARATOR."PDF/".$file_name;
+        	if(!file_exists($filepath)){
+        		$rs = $labelsave->save($file_name, base64_decode($pdfData));
+        		if(!$rs['ask']){
+        			//记录日志
+        			Ec::showError("**************start*************\r\n"
+        					. "\r\n" . print_r($file_name, true)
+        					. "\r\n" . print_r($rs, true)
+        					. "**************end*************\r\n",
+        					'TMS_API/Create_label_info'.date("Ymd"));
+        		}else{
+        			$labelsave->saveFileLog($file_name,$rs['data']['filePath'],$rs['data']['extension']);
+        			$filepath  = rtrim($saveDir,'\\/').DIRECTORY_SEPARATOR.$rs['data']['filePath'];
+        		}
+        	}
         }else{
-            /* $fp=fopen($pdfDir."/".$filename, "r");
-            if($fp){
-                fclose($aimDir);
-            } */
+        	$filepath  = rtrim($saveDir,'\\/').DIRECTORY_SEPARATOR.$labellogRs[0]['savepath'];
         }
-        if($ajax)
-        	$pdfFile = $_SERVER["REQUEST_SCHEME"]."://".$_SERVER["HTTP_HOST"]."/PDF/".$filename;
-        else
-        	$pdfFile = $pdfDir."/".$filename;
-        return $pdfFile;
+        return $filepath;
     }
 
     

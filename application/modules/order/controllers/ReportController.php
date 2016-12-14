@@ -882,7 +882,69 @@ class Order_ReportController extends Ec_Controller_Action
         }
     }
     
+    //一个标签公共下载页
     
+    public function labelDownloadAction()
+    {
+    	set_time_limit(0);
+    	ini_set('memory_limit', '500M');
+    	
+        $params = $this->getRequest()->getParams();
+        
+        $order_id_arr = $this->getParam('order_id', array());
+        if(empty($order_id_arr)){
+            header("Content-type: text/html; charset=utf-8");
+            echo Ec::Lang('没有需要打印的订单');
+            exit();
+            // throw new Exception(Ec::Lang('没有需要打印的订单'));
+        }
+        $errArr = array();
+       
+        $db = Common_Common::getAdapterForDb2();
+        foreach($order_id_arr as $order_id){
+            try{
+                $order = Service_CsdOrder::getByField($order_id, 'order_id');
+                if(! $order){
+                    throw new Exception(Ec::Lang('订单不存在'));
+                }
+                if($order['customer_id'] != Service_User::getCustomerId()){
+                    throw new Exception(Ec::Lang('非法操作'));
+                }
+                //获取打印标签
+                if(!empty($order['small_hawbcode'])){
+                	$order['server_hawbcode'] = $order['small_hawbcode'];
+                }
+                $printParam["Data"][] = $order['server_hawbcode'];
 
-    
+            }catch(Exception $e){
+            	$errArr[] = $e->getMessage();
+            }
+        }
+        if(! empty($errArr)){
+            header("Content-type: text/html; charset=utf-8");
+            foreach($errArr as $err){
+                echo $err . '<br/>';
+            }
+            exit();
+        }
+        $printParam["Version"] = "0.0.0.3";
+        $printParam["RequestTime"] = date("Y-m-d H:i:s");
+        $printParam["RequestId"] = "a2b23daa-a519-48cc-b5c6-e0ebbfeada2b";
+        $pdfPrintParamJson = Zend_Json::encode($printParam);
+        	
+        $process = new Common_FastReport ('TMS');
+        $return = $process->PrintLabel($pdfPrintParamJson, "POST");
+//         
+        if($return['ack'] == 1) {
+             $pdfData = $return["data"]["Data"];
+             $trackingCodes = $printParam["Data"];
+             $PdfReturn = $process->CreatePdfFile($pdfData,$trackingCodes);
+             Common_Common::renderPdf($PdfReturn);
+        	exit();
+        } else {
+        	header("Content-type: text/html; charset=utf-8");
+        	print_r($return['message']);
+        	exit();
+        }
+    }
 }

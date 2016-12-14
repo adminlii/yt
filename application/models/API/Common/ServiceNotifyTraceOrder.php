@@ -255,7 +255,7 @@ class API_Common_ServiceNotifyTraceOrder
     				$obj = new API_Common_TraceServiceCommonClass();
     				//调用TMS查询物流
     				$openobj = new API_YunExpress_ForApiService();
-    				$param = array('server_code'=>$val['shipper_hawbcode'],'channel'=>'YunTu');
+    				$param = array('server_code'=>$val['server_hawbcode'],'channel'=>'YunTu');
     				$productInfo = Common_Common::getProductAllByCode($val['product_code']);
     				$param['channel'] = $productInfo['ccode'];
     				if(!empty($val['small_hawbcode'])){

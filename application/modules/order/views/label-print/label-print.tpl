@@ -78,11 +78,11 @@
 	</form>
 </div>
 
-<object id="LODOP_OB"
+<!--<object id="LODOP_OB"
 	classid="clsid:2105C259-1E0C-4534-8141-A753534CB4CA" width=0 height=0>
 	<embed id="LODOP_EM" type="application/x-print-lodop" width=0 height=0
 		pluginspage="/lodop/install_lodop32.exe"></embed>
-</object>
+</object>-->
 <script>
 function setPrinter(){
 
@@ -111,7 +111,7 @@ function myInitPrinter(){
 $(function(){	
 	//myInitPrinter();
 	$('#order_code').focus();
-	$('.printBtn').click(function(){
+	var doPrintBtn = function(){
 		var param = $('#printForm').serialize();
 		var order_code = $('#order_code').val();
 		if($.trim(order_code)==''){
@@ -142,11 +142,12 @@ $(function(){
 				$('#order_code').focus().select();
 			}
 		});
-	});
+	}
+	$('.printBtn').click(doPrintBtn);
 	 $("#order_code").keyup(function (e) {
 	        var key = e.which;
 	        if (key == 13) {
-	        	$('.printBtn').click();
+	        	doPrintBtn();
 	        }
 	    }); 
 });
