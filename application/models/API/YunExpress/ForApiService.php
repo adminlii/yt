@@ -1332,7 +1332,7 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
  			
  		//获取渠道运输方式
  		$ChannelCode = $this->serverProductCode;
- 		$ParcelInformation["Weight"] = $this->orderKey["weight"]*1000;
+ 		$ParcelInformation["Weight"] = $this->orderKey["weight"];
  		$ParcelInformation["WeightUnit"] =3;
  		$ParcelInformation["Length"] = $this->orderKey["length"];
  		$ParcelInformation["Width"] = $this->orderKey["width"];
@@ -1469,6 +1469,14 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
  			if($rs_cisprs[0]){
  				//设定上发件人账号
  				$RedundancyField['AccuntNum'] = $rs_cisprs[0]['countnum'];
+ 				
+ 				$emsconfig = Service_CsiTntemsconfig::getByField($rs_cisprs[0]['countnum'],'acount');
+ 				
+ 				if(!empty($emsconfig)){
+ 					$RedundancyField['TNTPOSTCODE'] = $emsconfig['postcode'];
+ 					$RedundancyField['TNTCITY'] = $emsconfig['city'];
+ 				}
+ 				
  				if(!empty($this->orderData["tnt_tpacount"])){
  					$RedundancyField['AccuntNum'].='|'.$this->orderData["tnt_tpacount"];
  				}

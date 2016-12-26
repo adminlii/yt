@@ -25,18 +25,24 @@ $(".invoice h3").click(function(){
 	$('.opends').click(function(){
 		clearInvoice();
 		$("#servicecode").html(getservicecode(1));
-		$('#invoicediv').stop().fadeIn('fast');
+		/*$('#invoicediv').stop().fadeIn('fast');
 		$('#servicediv').stop().fadeOut('fast');
-		$('.invoice').stop().fadeIn('fast');
+		$('.invoice').stop().fadeIn('fast');*/
+		$('#invoicediv').show();
+		$('#servicediv').hide();
+		$('.invoice').show();
 		$('.activetable').show();
 	});
 	
 	$('.clogds').click(function(){
 		clearInvoice();
 		$("#servicecode").html(getservicecode(0));
-		$('#invoicediv').stop().fadeOut('fast');
+		/*$('#invoicediv').stop().fadeOut('fast');
 		$('#servicediv').stop().fadeIn('fast');
-		$('.invoice').stop().fadeOut('fast');
+		$('.invoice').stop().fadeOut('fast');*/
+		$('#invoicediv').hide();
+		$('#servicediv').show();
+		$('.invoice').hide();
 		$('.activetable').hide();
 	});
 });
@@ -99,6 +105,8 @@ $(function(){
 		//判断是否填写了包裹信息
 		if(!isEmptyTr($(this).parent().parent())){
 			$(this).next('.pop_box').slideDown('400');
+		}else{
+			alert('请先填写包裹信息');
 		}
 	})
 	$('.tbody1').on("click",".alonTr .closepop",function(){
@@ -642,10 +650,18 @@ function err_tip(obj,reg,msg){
 
 //公司
 $('.checkchar').live('keyup',function(){
-	if($(this).val()&&!/^[a-zA-Z0-9\s\.&,]{1,50}$/.test($(this).val())){
+	if($(this).val()&&!/^[a-zA-Z0-9\s\.&,\-\/\(\)']{1,50}$/.test($(this).val())){
 		alert('不允许出现非英文允许英文数字混合,长度最多50字符');
 	}
 })
+
+//公司
+$('.checkchar_company').live('keyup',function(){
+	if($(this).val()&&!/^[a-zA-Z0-9\s\.&,\-\/\(\)']{1,50}$/.test($(this).val())){
+		alert('不允许出现非英文允许英文数字混合,长度最多50字符');
+	}
+})
+
 //发件人
 $('.checkchar1').live('keyup',function(){
 	if($(this).val()&&!/^[a-zA-Z0-9\s\.&,]{1,25}$/.test($(this).val())){
@@ -695,7 +711,7 @@ $('.order_phone').live('keyup',function(){
 // 电话
 $('.order_phone_consignee').live('keyup',function(){
     //err_tip(this,/^\(\d+\)\d+-\d+$|^\d+\s\d+$/,'格式为(xxx)xxx-xxx 或xxx空格xxxxx');
-	err_tip(this,/(^\+[\d-\s]{7,15}$)|(^[\d-\s]{8,16}$)/,'电话格式不正确总长8-16位');
+	err_tip(this,/(^\+[\d-\s\(\)]{7,15}$)|(^[\d-\s\(\)]{8,16}$)/,'电话格式不正确总长8-16位');
 })
 
 // 申报价值
