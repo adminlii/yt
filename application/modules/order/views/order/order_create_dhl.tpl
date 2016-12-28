@@ -409,6 +409,7 @@ function formSubmit(status){
         	<h3>电话号码*</h3>
             <input type="text" name="shipper[shipper_telephone]"  class="order_phone" value="<{if isset($shipperConsignee["shipper_telephone"])}><{$shipperConsignee.shipper_telephone}><{/if}>">
         </div>
+    	
     	<div class="title widthLeft" style="float:left">3、收件人<input id="consigneeaddaddress" type="button" value="添加到地址簿" class="btn1"><input id="consigneeaddrs" type="button" value="收件人地址簿"></div>
         <div class="contentLeft contentType3 borderB">
         	<h3>公司名称*</h3>
@@ -466,7 +467,7 @@ function formSubmit(status){
             <input type="text" class="order_phone" value='<{if isset($shipperConsignee)}><{$shipperConsignee.consignee_telephone}><{/if}>'
 							name='consignee[consignee_telephone]' id=consignee_telephone />
         </div>
-        <div id="boxend" class="contentLeft contentType3 borderB" style="height:185px;">
+        <div id="boxend" class="contentLeft contentType3 borderB" style="height:243px;">
         	<div class="contentLeft contentType1" id="untreaddiv" style="display:none">
 	        	无法送达
 	        	<select class="select1 select" name="order[untread]" id="untread">
@@ -623,6 +624,15 @@ function formSubmit(status){
 			<label>保费</label>
 			<input type="text" disabled  class="use invoice_unitcharge" value="" placeholder="RMB" name="order[insurance_value]" disabled style="width:100px;">
 			</div>
+        </div>
+         <div class="contentLeft  contentType5 borderB" style="height:23px;line-hight:23px;">
+            <div class=""><span>目的地关税和税金</span>
+            	
+            <input type="radio" name="order[dutyPaymentType]" checked value="R" style="margin-left: 17px;"><span>收件人</span>
+			<input type="radio" name="order[dutyPaymentType]" value="S" style="margin-left: 10px;"><span>发件人</span></div>
+            
+        </div>
+         <div class="contentLeft  contentType5 borderB" style="height:23px;">
             <div class="seven"><div class="check" style="top:-2px; left:112px;"><input class="level7" id="makeinvoice" name="order[invoice_print]" type="checkbox" disabled value="1"></div><label>制作发票</label><label>是</label></div>
         
         </div>

@@ -238,7 +238,7 @@ function filter_input_m($data,$filter_method = false){
 			$data[$k] = filter_input_m($v,$filter_method);
 		}
 	}else if(is_string($data)){
-		$filter_methodArr = strpos($filter_method, ',')===false?$filter_method:explode(',',$filter_method);
+		$filter_methodArr =explode(',',$filter_method);
 		if(!empty($filter_methodArr)){
 			foreach ($filter_methodArr as $fmav){
 				if(function_exists($fmav)){

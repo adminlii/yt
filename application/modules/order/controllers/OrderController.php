@@ -484,6 +484,7 @@ class Order_OrderController extends Ec_Controller_Action
             	'pay_type'=> $order['pay_type'],
             	'fpnote'=> $order['fpnote'],
             	'untread'=>empty($order['untread'])?0:intval($order['untread']),
+            	'dutyPaymentType'=>empty($order['dutyPaymentType'])?'R':trim($order['dutyPaymentType']),
             );
             //添加一个发票类型
             if($orderArr["invoice_print"]==1){
@@ -632,6 +633,7 @@ class Order_OrderController extends Ec_Controller_Action
             	}
             	//ref里面设定上citycode
             	$orderArr['refer_hawbcode'] = $rs_cisprs[0]['citycode'];
+            	$shipperArr['shipper_province'] = $rs_cisprs[0]['province'];
             }
             $process = new Process_OrderDhl();
             $process->setVolume($volumeArr);
@@ -643,7 +645,7 @@ class Order_OrderController extends Ec_Controller_Action
             $process->setConsignee($consigneeArr);
             $process->setUuid($uuid);
             //             $process
-            $return = $process->createOrderTransactionApi($status);
+            $return = $process->createOrderTransaction($status);
     
             //             print_r($params);exit;
             die(Zend_Json::encode($return));
@@ -2112,7 +2114,6 @@ class Order_OrderController extends Ec_Controller_Action
 			if(empty($labellogRs)){
 				$rs = $labelsave->save($file_name,false);
 				if($rs['ask']){
-					$labelsave->saveFileLog($file_name,$rs['data']['filePath'],$rs['data']['extension']);
 					$pdfFileName  = rtrim($saveDir,'\\/').DIRECTORY_SEPARATOR.$rs['data']['filePath'];
 				}
 				$htmlFileName = "http://".$_SERVER['HTTP_HOST'].'/default/index/printfba1/orderId/'.join(',', $order_id_arr).'/sign/'.md5('$Fjaj^Sn3NH9iVVP');
@@ -2124,6 +2125,8 @@ class Order_OrderController extends Ec_Controller_Action
 				//创建失败
 				if(!file_exists($pdfFileName)){
 					exit("创建pdf失败");
+				}else{
+					$labelsave->saveFileLog($file_name,$rs['data']['filePath'],$rs['data']['extension']);
 				}
 			}else{
 				$pdfFileName  = rtrim($saveDir,'\\/').DIRECTORY_SEPARATOR.$labellogRs[0]['savepath'];

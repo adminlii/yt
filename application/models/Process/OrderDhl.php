@@ -433,6 +433,19 @@ class Process_OrderDhl
                 $this->_err[] = Ec::Lang('包装高度必须为数字');
             }
         }
+        if($this->_order['dutyPaymentType']){
+         	if(!in_array($this->_order['dutyPaymentType'], array('R','S'))){
+         		$this->_err[] = Ec::Lang('目的地关税和税金暂时只支持收件人，发件人付款');
+         	}
+         	if($this->_order['dutyPaymentType']=='S'){
+         		if($this->_shipper['shipper_province']!='JIANGSU'||$this->_order['country_code']!='US'){
+         			$this->_err[] = Ec::Lang('目的地关税和税金发件人付款 现在暂时仅支持江苏，并且需要寄往美国');
+         		}
+         	}
+        }else{
+        	$this->_order['dutyPaymentType'] = 'R';
+        }
+        
         
         if($this->_order['mail_cargo_type'] !== '') {
 			// TODO DBW
@@ -1010,6 +1023,7 @@ class Process_OrderDhl
             //'customer_channelid'=>$this->_order['customer_channelid']?$this->_order['customer_channelid']:Service_User::getChannelid(),
         	'untread'=>$this->_order['untread'],
         	'invoice_type'=>$this->_order['invoice_type'],
+        	'dutypaymenttype'=>$this->_order['dutyPaymentType'],
         );
         
         $order['order_weight'] =  empty($order['order_weight'])?0:$order['order_weight'];

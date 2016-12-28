@@ -1292,7 +1292,7 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
  		if($ChannelCode=="G_DHL"||$ChannelCode=="TNT"){
  			//上传REF和绑定的账号
  			//$data["reference"] 		 = $this->orderKey["refer_hawbcode"];
- 			$condtion_sp['citycode'] = $this->orderKey["refer_hawbcode"];
+ 			$condtion_sp['citycode'] = empty($this->orderKey["refer_hawbcode"])?'-1200':$this->orderKey["refer_hawbcode"];
  			$condtion_sp['status']   =   1;
  			$condtion_sp['productcode'] =   $ChannelCode;
  			$server_csi_prs=new Service_CsiProductRuleShipper();
@@ -1302,6 +1302,8 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
  				$RedundancyField['AccuntNum'] = $rs_cisprs[0]['countnum'];
  				$RedundancyField["Reference"] = $rs_cisprs[0]['citycode'];
  			}
+ 			//到付
+ 			$RedundancyField['DutyPaymentType'] = $this->orderData['dutypaymenttype'];
  		}
  		if($ChannelCode=="TNT"){
  			//是否废弃包裹
@@ -1461,7 +1463,7 @@ class API_YunExpress_ForApiService extends Common_APIChannelDataSet
  		}
  		if($ChannelCode=="TNT"){
  			//上传REF和绑定的账号
- 			$condtion_sp['citycode'] = $this->orderKey["refer_hawbcode"];
+ 			$condtion_sp['citycode'] = empty($this->orderKey["refer_hawbcode"])?'-1200':$this->orderKey["refer_hawbcode"];
  			$condtion_sp['status']   =   1;
  			$condtion_sp['productcode'] =   $ChannelCode;
  			$server_csi_prs=new Service_CsiProductRuleShipper();
