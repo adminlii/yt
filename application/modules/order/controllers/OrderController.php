@@ -201,15 +201,17 @@ class Order_OrderController extends Ec_Controller_Action
             );
             
             $consignee['shipper_account'] = ! empty($consignee['shipper_account']) ? $consignee['shipper_account'] : '';
-            $shipperArr = Service_CsiShipperTrailerAddress::getByField($consignee['shipper_account'], 'shipper_account');            
-            if($shipperArr['customer_id'] != Service_User::getCustomerId()){
-            	$return = array(
-            			'ask' => 0,
-            			'message' => Ec::Lang('订单操作失败')
-            	);
-            	$return["message"] = '非法操作';
-            	die(Zend_Json::encode($return));
-            }
+			if(!empty($consignee['shipper_account'])){
+	            $shipperArr = Service_CsiShipperTrailerAddress::getByField($consignee['shipper_account'], 'shipper_account');            
+	            if($shipperArr['customer_id'] != Service_User::getCustomerId()){
+	            	$return = array(
+	            			'ask' => 0,
+	            			'message' => Ec::Lang('订单操作失败')
+	            	);
+	            	$return["message"] = '非法操作';
+	            	die(Zend_Json::encode($return));
+	            }
+			}
             $invoiceArr = array();
             foreach($invoice as $column=>$v){
                 foreach($v as $kk=>$vv){

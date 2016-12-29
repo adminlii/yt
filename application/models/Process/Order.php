@@ -378,6 +378,15 @@ class Process_Order
             }else if(!preg_match('/^[a-zA-Z0-9\s\.&,]{1,36}$/',$this->_consignee['consignee_company'])){
             	$this->_err[] = "收件人公司不允许出现非英文允许英文数字混合,长度最多36字符";
             }
+            
+            //收件人州在赛程AU专线必填
+            if(in_array($this->_order['product_code'],array('AU_LZ','AU_DP'))){
+            	if(empty($this->_consignee['consignee_province'])){
+            		$this->_err[] = "澳洲专线需要填写收件人州";
+            	}else if(!in_array($this->_consignee['consignee_province'],array('NSW','ACT','QLD','VIC','TAS','SA','NT','WA'))){
+            		$this->_err[] = "澳洲专线8州为NSW, ACT, QLD, VIC, TAS, SA, NT, WA,请检查";
+            	}
+            }
         }
         
         // 验证必填项
