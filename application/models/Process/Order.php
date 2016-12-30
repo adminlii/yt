@@ -466,6 +466,10 @@ class Process_Order
                 	if($this->_order['order_weight']>50)
                 		$this->_err[] = Ec::Lang('货物重量必须小于等于50kg');
                 	
+                }else if($this->_order['product_code'] =='USZMTK'){
+                	if($this->_order['order_weight']>=30)
+                		$this->_err[] = Ec::Lang('货物重量必须小于30kg');
+                	
                 }else {
                 	if($this->_order['order_weight']>30){
                 		$this->_err[] = Ec::Lang('货物重量必须小于等于30KG');
@@ -487,23 +491,11 @@ class Process_Order
             }else{
             	if(!preg_match("/^\d+(\.\d)?$/",$this->_order['order_length'])){
             		$this->_err[] = Ec::Lang('包装长度必须是须为数字,且小数最多为1位');
+            	}else {
+            		if($this->_order['order_length']>=60){
+            			$this->_err[] = Ec::Lang('包装长度必须小于60cm');
+            		}
             	}
-            	/*
-            	if($this->_order['order_length']<=0){
-            		$this->_err[] = Ec::Lang('包装长度必须为大于0数字');
-            	}
-                if($this->_order['product_code'] =='ESB'){
-                    if(!preg_match("/^[1-9]\d*(\.0+)?$/",$this->_order['order_length'])){
-                        $this->_err[] = Ec::Lang('包装长度必须是大于0整数');
-                    }else if($this->_order['order_length']>60){
-                        $this->_err[] = Ec::Lang('包装长度必须小于等于60cm');
-                    }
-                }else{
-                	if($this->_order['order_length']>=10000){
-                		$this->_err[] = Ec::Lang('包装长度必须小于等于10000cm');
-                	}
-                }
-                */
             }
         }
         
@@ -513,22 +505,12 @@ class Process_Order
             }else{
             	if(!preg_match("/^\d+(\.\d)?$/",$this->_order['order_width'])){
             		$this->_err[] = Ec::Lang('包装宽度必须是须为数字,且小数最多为1位');
+            	}else {
+            		if($this->_order['order_width']>=40){
+            			$this->_err[] = Ec::Lang('包装宽度必须小于40cm');
+            		}
             	}
-                /* if($this->_order['product_code'] =='TNT'){
-                    if($this->_order['order_width']>120){
-                        $this->_err[] = Ec::Lang('包装宽度必须小于等于120cm');
-                    }
-                }else if($this->_order['product_code'] =='ESB'){
-                	if(!preg_match("/^[1-9]\d*(\.0+)?$/",$this->_order['order_width'])){
-                        $this->_err[] = Ec::Lang('包装宽度必须是大于0整数');
-                    }else  if($this->_order['order_width']>40){
-                        $this->_err[] = Ec::Lang('包装宽度必须小于等于40cm');
-                    }
-                }else{
-                	if($this->_order['order_width']>=10000){
-                		$this->_err[] = Ec::Lang('包装宽度必须小于等于10000cm');
-                	}
-                }  */
+                
             }
         }
         
@@ -539,22 +521,12 @@ class Process_Order
             }else{
             	if(!preg_match("/^\d+(\.\d)?$/",$this->_order['order_height'])){
             		$this->_err[] = Ec::Lang('包装高度必须是须为数字,且小数最多为1位');
+            	}else{
+            		if($this->_order['order_height']>=40){
+            			$this->_err[] = Ec::Lang('包装高度必须小于40cm');
+            		}
             	}
-                /* if($this->_order['product_code'] =='TNT'){
-                    if($this->_order['order_height']>150){
-                        $this->_err[] = Ec::Lang('包装高度必须小于等于150cm');
-                    }
-                }else if($this->_order['product_code'] =='ESB'){
-                	if(!preg_match("/^[1-9]\d*(\.0+)?$/",$this->_order['order_height'])){
-                        $this->_err[] = Ec::Lang('包装高度必须是大于0整数');
-                    }else if($this->_order['order_height']>40){
-                    	$this->_err[] = Ec::Lang('包装高度必须小于等于40cm');
-                    }
-                }else{
-                	if($this->_order['order_height']>=10000){
-                		$this->_err[] = Ec::Lang('包装高度必须小于等于10000cm');
-                	}
-                }  */
+              
             }
         }
         

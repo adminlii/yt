@@ -141,6 +141,8 @@ class API_Common_TraceServiceCommonClass
    			}else if($code{0}==2){
    				$_code = 'C_'.substr($code, 1);
    			}
+   		}else if($code>0&&$code<100){
+   			$_code = false;
    		}
    		return $_code;
    	}

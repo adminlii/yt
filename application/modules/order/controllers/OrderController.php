@@ -142,7 +142,6 @@ class Order_OrderController extends Ec_Controller_Action
             if(!empty($changeCode)){
             	$order['product_code'] = $changeCode;
             }
-            
             $orderArr = array(
                 'product_code' => strtoupper($order['product_code']),
                 'country_code' => strtoupper($order['country_code']),
@@ -337,7 +336,7 @@ class Order_OrderController extends Ec_Controller_Action
 		$countrys = Service_IddCountry::getByCondition(null, '*', 0, 0, '');
         $this->view->country = $countrys;
         $product_kind = Process_ProductRule::getProductKind();
-        $aviable_kind = array("ESB","ESBR");
+        $aviable_kind = array("ESB","ESBR","USZMTK");
         foreach ($product_kind as $pro_kind_k=>$pro_kind_v){
         	if(!in_array($pro_kind_v["product_code"], $aviable_kind)){
         		unset($product_kind[$pro_kind_k]);

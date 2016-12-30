@@ -31,7 +31,6 @@ class Common_APIChannelDataSet
         $this->orderCode = $orderCode;
         $this->channelId = $channelId;
         $this->serverProductCode = $serverProductCode;
-        
         // API 授权信息,如TOKEN等
         $api_authorize_file = Service_ApiAuthorizeFile::getByCondition(array("as_id" => $serviceRow['as_id']));
         foreach ($api_authorize_file as $k => $row) {

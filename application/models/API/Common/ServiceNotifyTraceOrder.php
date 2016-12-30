@@ -229,6 +229,7 @@ class API_Common_ServiceNotifyTraceOrder
     	$condition = "ems_status=1 and formal_code = '{$producttype}'  and  nextnotify_date<='{$date}' and ops_create_date>='{$lastdate}' ";
     	
     	$sql = 'select count(*) as count FROM `order_processing` a left join `csd_order` b on a.order_id = b.order_id where '.$condition;
+    	//echo $sql;die;
     	$count  = Common_Common::fetchOne($sql);
     	$totalPage = ceil($count / $pageSize);
     	//减少执行时间
@@ -334,9 +335,11 @@ class API_Common_ServiceNotifyTraceOrder
     					$trace_param.='<event_time_zone>+8</event_time_zone>';
     					$trace_param.='<event_status>'.$obj->getEventCode($traceV['Status']).'</event_status>';
     					$localtion = preg_split("/[-,]+/", $traceV['Location']);
-    					$trace_param.='<event_country>'.trim($localtion[0]).'</event_country>';
-    					$trace_param.='<event_city>'.trim($localtion[1]).'</event_city></request>';
-    					$sendEmsRs = $obj->sendEmsApi($val['shipper_hawbcode'],$trace_param);
+    					$trace_param.='<event_country>'.trim($localtion[1]).'</event_country>';
+    					$trace_param.='<event_city>'.trim($localtion[0]).'</event_city></request>';
+    					if($obj->getEventCode($traceV['Status'])!==false){
+    						$sendEmsRs = $obj->sendEmsApi($val['shipper_hawbcode'],$trace_param);
+    					}
     					if($sendEmsRs['ack']!=1||$sendEmsRs['data']['success']=='false'){
     						$_errorlist[]=$trace_param;
     					}
