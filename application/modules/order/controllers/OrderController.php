@@ -873,7 +873,12 @@ class Order_OrderController extends Ec_Controller_Action
             
             $invoiceArr = $invoice;
             //DHL 添加了规则，refer用来存取城市代码
-            $condtion_sp['cityname'] = $shipper['shipper_city'];
+            $_cityname = $shipper['shipper_city'];
+            $_cityname_exits = strpos($_cityname,"-");
+            if($_cityname_exits!==false){
+            	$_cityname=substr($_cityname,0,$_cityname_exits);
+            }
+            $condtion_sp['cityname'] = $_cityname;
             $condtion_sp['status'] =   1;
             $condtion_sp['productcode'] =   $orderArr["product_code"];
             $server_csi_prs=new Service_CsiProductRuleShipper();
