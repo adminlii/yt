@@ -308,7 +308,7 @@ class Process_OrderTnt
             }
             if(!$this->_shipper['shipper_company']){
             	$this->_err[] = Ec::Lang('发件人公司不可为空');
-            }else if(!preg_match('/^[a-zA-Z\d\s\.&,]{1,50}$/',$this->_shipper['shipper_company'])){
+            }else if(!preg_match("/^[a-zA-Z0-9\s\.&,\-\/\(\)']{1,50}$/",$this->_shipper['shipper_company'])){
             		$this->_err[] = "发件人公司不可为非英文，长度最多50字符";
             }
             if(!$this->_shipper['shipper_telephone']){
@@ -341,7 +341,7 @@ class Process_OrderTnt
             if(empty($this->_consignee['consignee_name'])){
                 $this->_err[] = Ec::Lang('收件人姓名不可为空');
             }else{
-                 if(!preg_match('/^[a-zA-Z\s]{1,25}$/', $this->_consignee['consignee_name'])){
+                 if(!preg_match('/^[a-zA-Z\s\.&,]{1,25}$/', $this->_consignee['consignee_name'])){
                    $this->_err[] = Ec::Lang('收件人姓名不允许出现非英文，长度最多25字符');
                  }
             }
@@ -374,7 +374,7 @@ class Process_OrderTnt
             if (empty($this->_consignee['consignee_city'])){
             	$this->_err[] = Ec::Lang('收件人城市不可为空');
             }else{
-                if(!preg_match('/^[a-zA-Z\s]{1,30}$/', $this->_consignee['consignee_city'])){
+                if(!preg_match('/^[a-zA-Z\s.-]{1,30}$/', $this->_consignee['consignee_city'])){
                    $this->_err[] = Ec::Lang('收件人城市不允许出现非英文，长度最多30字符');
                 }
             }
@@ -383,7 +383,7 @@ class Process_OrderTnt
             }
             if(empty($this->_consignee['consignee_company'])){
             	$this->_err[] = Ec::Lang('收件人公司不可为空');
-            }else if(!preg_match('/^[a-zA-Z\d\s\.&,]{1,50}$/',$this->_consignee['consignee_company'])){
+            }else if(!preg_match("/^[a-zA-Z0-9\s\.&,\-\/\(\)']{1,50}$/",$this->_consignee['consignee_company'])){
             		$this->_err[] = "收件人公司不可为非英文，长度最多50字符";
             }
         }
@@ -393,7 +393,7 @@ class Process_OrderTnt
         	/* if(preg_match('/^\(\d+\)\d+-\d+$|^\d+\s\d+$/', $this->_consignee['consignee_certificatetype'])){
         		$this->_err[] = Ec::Lang('收件人电话不正确');
         	} */
-        	if(!preg_match("/(^\+[\d-\s]{7,15}$)|(^[\d-\s]{8,16}$)/",$this->_consignee['consignee_telephone'])){
+        	if(!preg_match("/(^\+[\d-\s\(\)]{7,15}$)|(^[\d-\s\(\)]{8,16}$)/",$this->_consignee['consignee_telephone'])){
         		$this->_err[] = Ec::Lang('收件人电话格式不正确');
         	}
         }else{

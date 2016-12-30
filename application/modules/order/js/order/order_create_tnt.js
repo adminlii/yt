@@ -217,7 +217,6 @@ function deltr3(opp) {
 		alert("至少保留一行");
 	} else {
 		$(opp).parent().parent().remove();//移除当前行
-		
 	}
 }
 

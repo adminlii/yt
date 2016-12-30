@@ -223,7 +223,7 @@
 				<table cellspacing="0" cellpadding="0" border="0";>
 					<tr>
 						<td class="col"><em>*</em> 公司名称：</td>
-						<td><input type="text" class="checkchar" value="<{if isset($shipperConsignee)}><{$shipperConsignee.consignee_company}><{/if}>"
+						<td><input type="text" class="checkchar_company" value="<{if isset($shipperConsignee)}><{$shipperConsignee.consignee_company}><{/if}>"
 							name='consignee[consignee_company]' id='consignee_company' /></td>
 						<td class="col"><em>*</em> 联系人：</td>
 						<td><input type="text"  class="checkchar5" value='<{if isset($shipperConsignee)}><{$shipperConsignee.consignee_name}><{/if}>'
