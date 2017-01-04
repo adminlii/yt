@@ -231,10 +231,13 @@ class Default_IndexController extends Ec_Controller_DefaultAction
                     $rsArr = array();
                     foreach($order_code as $server_hawbcode){
                         $rs = Process_Track::getTrackDetail($server_hawbcode);
-                        
+                       
                         //调取信息
                         if($rs['ask']){
                         	$_server_hawbcode = $rs['data']['server_hawbcode'];
+                        	if($rs['data']['customer_id']!=Service_User::getCustomerId()){
+                        		throw new Exception(Ec::Lang('非法操作'));
+                        	}
                         	if(!empty($rs['data']['small_hawbcode'])){
                         		$_server_hawbcode = $rs['data']['small_hawbcode'];
                         	}
