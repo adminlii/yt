@@ -438,8 +438,8 @@ class Process_OrderDhl
          		$this->_err[] = Ec::Lang('目的地关税和税金暂时只支持收件人，发件人付款');
          	}
          	if($this->_order['dutyPaymentType']=='S'){
-         		if($this->_shipper['shipper_province']!='JIANGSU'||$this->_order['country_code']!='US'){
-         			$this->_err[] = Ec::Lang('目的地关税和税金发件人付款 现在暂时仅支持江苏，并且需要寄往美国');
+         		if(!in_array($this->_shipper['shipper_province'],array('JIANGSU','GUANGDONG','FUJIAN'))){
+         			$this->_err[] = Ec::Lang('该地区暂时未开通目的地关税和税金发件人付款');
          		}
          	}
         }else{
