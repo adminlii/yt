@@ -472,6 +472,10 @@ class Process_Order
                 	else if($this->_order['order_weight']<0.5)
                 		$this->_err[] = Ec::Lang('货物重量必须大于等于0.5kg');
                 	
+                }else if($this->_order['product_code'] =='IN_LZ'){
+                	if($this->_order['order_weight']>2)
+                    		$this->_err[] = Ec::Lang('货物重量必须小于等于2kg');
+                	
                 }else {
                 	if($this->_order['order_weight']>30){
                 		$this->_err[] = Ec::Lang('货物重量必须小于等于30KG');
@@ -487,6 +491,9 @@ class Process_Order
         }
         
         //TNT需要验证外包装的最大长宽高
+        $_existOrderLength = false;
+        $_existOrderWidth = false;
+        $_existOrderHeight = false;
         if($this->_order['order_length']!==''){
             if(! is_numeric($this->_order['order_length'])){
                 $this->_err[] = Ec::Lang('包装长度必须为数字');
@@ -494,7 +501,12 @@ class Process_Order
             	if(!preg_match("/^\d+(\.\d)?$/",$this->_order['order_length'])){
             		$this->_err[] = Ec::Lang('包装长度必须是须为数字,且小数最多为1位');
             	}else {
+            		$_existOrderLength = true;
             		if($this->_order['product_code'] =='USZMTK'){
+	            		if($this->_order['order_length']>60){
+	            			$this->_err[] = Ec::Lang('包装长度必须小于等于60cm');
+	            		}
+            		}else if($this->_order['product_code'] =='IN_LZ'){
 	            		if($this->_order['order_length']>60){
 	            			$this->_err[] = Ec::Lang('包装长度必须小于等于60cm');
 	            		}
@@ -510,6 +522,7 @@ class Process_Order
             	if(!preg_match("/^\d+(\.\d)?$/",$this->_order['order_width'])){
             		$this->_err[] = Ec::Lang('包装宽度必须是须为数字,且小数最多为1位');
             	}else {
+            		$_existOrderWidth = true;
             		if($this->_order['product_code'] =='USZMTK'){
 	            		if($this->_order['order_width']>40){
 	            			$this->_err[] = Ec::Lang('包装宽度必须小于等于40cm');
@@ -529,6 +542,7 @@ class Process_Order
             	if(!preg_match("/^\d+(\.\d)?$/",$this->_order['order_height'])){
             		$this->_err[] = Ec::Lang('包装高度必须是须为数字,且小数最多为1位');
             	}else{
+            		$_existOrderHeight = true;
             		if($this->_order['product_code'] =='USZMTK'){
 	            		if($this->_order['order_height']>40){
 	            			$this->_err[] = Ec::Lang('包装高度必须小于等于40cm');
@@ -538,6 +552,16 @@ class Process_Order
             	}
               
             }
+        }
+        
+        //合计包裹
+        if($_existOrderLength&&$_existOrderWidth&&$_existOrderHeight){
+        	if($this->_order['product_code'] =='IN_LZ'){
+        		if($this->_order['order_length']+$this->_order['order_width']+$this->_order['order_height']>90){
+        			$this->_err[] = Ec::Lang('包装长+宽+高≤90cm');
+        		}
+        	}
+        	
         }
         
         if($this->_order['mail_cargo_type'] !== '') {

@@ -953,12 +953,15 @@ class Common_Common
 	public static function getProductAllSaicheng($All=false){
     	$config = new Zend_Config_Ini(APPLICATION_PATH . '/configs/product.ini', APPLICATION_ENV);
     	$temp   = $config->ascode->channel->toArray();
+    	$temp_config  = $config->ascode->apichannel->toArray();
     	$return = array();
     	foreach ($temp as $k =>$v){
-    		if(strpos($k,'ESBR')===false){
-    			$return['ESB'][] = $v;
-    		}else 
-    			$return['ESBR'][] = $v;
+    		if(!empty($temp_config[$v])&&$temp_config[$v]['ccode']=='Saicheng'){
+    			if(strpos($k,'ESBR')===false){
+    				$return['ESB'][] = $v;
+    			}else
+    				$return['ESBR'][] = $v;
+    		}
     	}
     	if($All){
     		$return = array_merge($return['ESB'],$return['ESBR']);
