@@ -527,6 +527,10 @@ class Process_Order
 	            		if($this->_order['order_width']>40){
 	            			$this->_err[] = Ec::Lang('包装宽度必须小于等于40cm');
 	            		}
+            		}else if($this->_order['product_code'] =='IN_LZ'){
+	            		if($this->_order['order_width']>60){
+	            			$this->_err[] = Ec::Lang('包装宽度必须小于等于60cm');
+	            		}
             		}
             		
             	}
@@ -546,6 +550,10 @@ class Process_Order
             		if($this->_order['product_code'] =='USZMTK'){
 	            		if($this->_order['order_height']>40){
 	            			$this->_err[] = Ec::Lang('包装高度必须小于等于40cm');
+	            		}
+            		}else if($this->_order['product_code'] =='IN_LZ'){
+	            		if($this->_order['order_height']>60){
+	            			$this->_err[] = Ec::Lang('包装高度必须小于等于60cm');
 	            		}
             		}
             		
