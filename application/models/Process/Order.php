@@ -498,7 +498,9 @@ class Process_Order
             if(! is_numeric($this->_order['order_length'])){
                 $this->_err[] = Ec::Lang('包装长度必须为数字');
             }else{
-            	if(!preg_match("/^\d+(\.\d)?$/",$this->_order['order_length'])){
+            	if($this->_order['order_length']<=0){
+            		$this->_err[] = Ec::Lang('包装长度必须为大于0数字');
+            	}else if(!preg_match("/^\d+(\.\d)?$/",$this->_order['order_length'])){
             		$this->_err[] = Ec::Lang('包装长度必须是须为数字,且小数最多为1位');
             	}else {
             		$_existOrderLength = true;
@@ -519,7 +521,9 @@ class Process_Order
             if(! is_numeric($this->_order['order_width'])){
                 $this->_err[] = Ec::Lang('包装宽度必须为数字');
             }else{
-            	if(!preg_match("/^\d+(\.\d)?$/",$this->_order['order_width'])){
+            	if($this->_order['order_width']<=0){
+            		$this->_err[] = Ec::Lang('包装宽度必须为大于0数字');
+            	}else if(!preg_match("/^\d+(\.\d)?$/",$this->_order['order_width'])){
             		$this->_err[] = Ec::Lang('包装宽度必须是须为数字,且小数最多为1位');
             	}else {
             		$_existOrderWidth = true;
@@ -543,7 +547,9 @@ class Process_Order
             if(! is_numeric($this->_order['order_height'])){
                 $this->_err[] = Ec::Lang('包装高度必须为数字');
             }else{
-            	if(!preg_match("/^\d+(\.\d)?$/",$this->_order['order_height'])){
+            	if($this->_order['order_height']<=0){
+            		$this->_err[] = Ec::Lang('包装高度必须为大于0数字');
+            	}else if(!preg_match("/^\d+(\.\d)?$/",$this->_order['order_height'])){
             		$this->_err[] = Ec::Lang('包装高度必须是须为数字,且小数最多为1位');
             	}else{
             		$_existOrderHeight = true;
