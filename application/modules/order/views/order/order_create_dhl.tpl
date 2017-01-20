@@ -680,7 +680,7 @@ function formSubmit(status){
 		<tr><td>完整描述*</td><td>数量*</td><td>商品代码</td><td>单价*</td><td style="border-right:none">产地</td></tr>
 		<tr>
 			<td style="border-bottom:none"><input type="text" class="invoicelable" name="invoice1[invoice_note][]" value=""></td>
-			<td style="border-bottom:none"><input type="text" class="invoicelable quantity" name="invoice1[invoice_quantity][]" value=""></td>
+			<td style="border-bottom:none"><input type="text" class="invoicelable quantity_fp" name="invoice1[invoice_quantity][]" value=""></td>
 			<td style="border-bottom:none"><input type="text" class="invoicelable" name="invoice1[invoice_shipcode][]" value=""></td>
 			<td style="border-bottom:none"><input type="text" class="invoicelable invoice_unitcharge" name="invoice1[invoice_unitcharge][]" value=""></td>
 			<td style="border-bottom:none; border-right:none">
@@ -697,7 +697,7 @@ function formSubmit(status){
 		</tr>
 		<tr>
 			<td style="border-bottom:none"><input type="text" class="invoicelable" name="invoice1[invoice_note][]" value=""></td>
-			<td style="border-bottom:none"><input type="text" class="invoicelable quantity" name="invoice1[invoice_quantity][]" value=""></td>
+			<td style="border-bottom:none"><input type="text" class="invoicelable quantity_fp" name="invoice1[invoice_quantity][]" value=""></td>
 			<td style="border-bottom:none"><input type="text" class="invoicelable" name="invoice1[invoice_shipcode][]" value=""></td>
 			<td style="border-bottom:none"><input type="text" class="invoicelable invoice_unitcharge" name="invoice1[invoice_unitcharge][]" value=""></td>
 			<td style="border-bottom:none; border-right:none">

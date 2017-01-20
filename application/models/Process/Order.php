@@ -65,6 +65,9 @@ class Process_Order
     public function setOrder($order)
     {   
         $this->_order = $order;
+        $this->_order['order_length']=$this->_order['order_length']?$this->_order['order_length']:10;
+        $this->_order['order_width'] =$this->_order['order_width']?$this->_order['order_width']:10;
+        $this->_order['order_height']=$this->_order['order_height']?$this->_order['order_height']:10;
         unset($this->_order['order_id']);
         $this->_order_id = $order['order_id'];
     }
@@ -1157,9 +1160,9 @@ class Process_Order
             /*'length'=>$this->_volume['length']?$this->_volume['length']:0,
             'width'=>$this->_volume['width']?$this->_volume['width']:0,
             'height'=>$this->_volume['height']?$this->_volume['height']:0,*/
-            'length'=>$this->_order['order_length']?$this->_order['order_length']:10,
-            'width'=>$this->_order['order_width']?$this->_order['order_width']:10,
-            'height'=>$this->_order['order_height']?$this->_order['order_height']:10,
+            'length'=>$this->_order['order_length'],
+            'width'=>$this->_order['order_width'],
+            'height'=>$this->_order['order_height'],
             
             //'customer_channelid'=>$this->_order['customer_channelid']?$this->_order['customer_channelid']:Service_User::getChannelid(),
         );

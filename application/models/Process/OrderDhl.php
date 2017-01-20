@@ -650,8 +650,8 @@ class Process_OrderDhl
         		if(!$label['invoice_quantity'])
         			$this->_err[] = "(" . Ec::Lang('发票信息') . $labelk . ")" . Ec::Lang('数量不可为空');
         		else{
-        			if(!preg_match('/^[1-9][0-9]?$/', $label['invoice_quantity']) || intval($label['invoice_quantity']) <= 0){
-        				$this->_err[] = "(" . Ec::Lang('发票信息') . $labelk . ")"  . Ec::Lang('数量必须为1-99的整数');
+        			if(!preg_match('/^[1-9][0-9]{0,3}?$/', $label['invoice_quantity']) || intval($label['invoice_quantity']) <= 0){
+        				$this->_err[] = "(" . Ec::Lang('发票信息') . $labelk . ")"  . Ec::Lang('数量必须为1-9999的整数');
         			}else{
         				$totalpice +=$label['invoice_quantity'];
         			}
@@ -672,7 +672,7 @@ class Process_OrderDhl
         	//校验发票信息正确
         	if(!empty($this->_invoice[1]['invoice_totalcharge_all'])){
         		//校验总价值
-        		if($totalvalue!=$this->_invoice[1]['invoice_totalcharge_all']){
+        		if(bccomp($totalvalue,$this->_invoice[1]['invoice_totalcharge_all'],2)!=0){
         			$this->_err[] = "(" . Ec::Lang('发票信息') .")" . Ec::Lang('总价值和申报价值不一致');
         		}
         	}

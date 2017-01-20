@@ -253,6 +253,10 @@ $('.quantity').live('keyup',function(){
 	
 })
 
+$('.quantity_fp').live('keyup',function(){
+	err_tip(this,/^[1-9][0-9]{0,3}$/,'须为正整数，范围为1-9999');
+})
+
 // 海关商品名
 $('.invoename').live('keyup',function(){
 	var reg = /^[\w\s\.%&\(\)\{\},\$-;#@\*\[\]【】]+?$/;

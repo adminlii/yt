@@ -354,6 +354,7 @@ class Process_Orderfba
             'ask' => 0,
             'message' => Ec::Lang('订单操作失败')
         );
+       
         $db = Common_Common::getAdapter();
         $db->beginTransaction();
         $log = array();
@@ -367,7 +368,6 @@ class Process_Orderfba
                 throw new Exception(Ec::Lang('订单状态不合法'));
             }
             $this->createOrder($status);
-            
             $successTip = Ec::Lang('FBA(订单)保存成功');
             if($status == 'P'){
                 $successTip = Ec::Lang('订单提交预报成功');
@@ -402,12 +402,12 @@ class Process_Orderfba
         if(! empty($this->_err)){
             throw new Exception(Ec::Lang('订单验证失败'));
         }
-        
+
+      
         $this->_validate();
         if(! empty($this->_err)){
             throw new Exception(Ec::Lang('订单验证失败'));
         }
-       
         //验证地址异步处理的时候验证
         if(!empty($this->_shipper['shipper_city'])){
         	$positionename = $this->_shipper['shipper_city'];
@@ -418,19 +418,22 @@ class Process_Orderfba
         	$positionename = preg_replace('/\s/','',$positionename);
         	//在本地的对照库中找到地址，然后取出市 和 省
         	$graphicalcondition['positionpname'] = strtoupper($positionename);
+        	
         	$res = Service_CsiGeographical::getByCondition($graphicalcondition);
         	if(empty($res))
         		throw new Exception(Ec::Lang('请核实是否是中国地区的城市拼音，该地区无法通过中邮收寄接口'));
         }
-        
+       
         $statusArr = array(
           	"F"
         );
         if(! in_array($status, $statusArr)){
             throw new Exception(Ec::Lang('订单状态不合法'));
         }
+       
         //huanhao
         $shipper_hawbcode = $this->changeNO();
+    
         $this->changeNOadd($this->_order['boxnum']);
         $this->_order['shipper_hawbcode'] = $shipper_hawbcode;
         $order = array(
@@ -447,7 +450,7 @@ class Process_Orderfba
         	'invoicefile' =>	$this->invoicefile,
         	'order_status' =>	$status,
         );
-        
+        print_r($order);die;
        
         $customer_channelid = $this->_order['customer_channelid']?$this->_order['customer_channelid']:Service_User::getChannelid();
         if($customer_channelid){

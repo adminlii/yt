@@ -34,6 +34,11 @@ class Order_OrderController extends Ec_Controller_Action
                 throw new Exception(Ec::Lang('非法操作'));
             }
             $order['order_status'] = isset($statusArr[$order['order_status']])?$statusArr[$order['order_status']]['name']:$order['order_status'];
+            if(in_array($order['product_code'],array('GB_DP','DE_DP','USZMTK'))){
+            	$_tjWeight = $order['length']*$order['width']*$order['height']/8000;
+            	$order['order_weight'] = $order['order_weight']>$_tjWeight?$order['order_weight']:$_tjWeight; 
+            }
+           
             // 历史数据 start
             $con = array(
                     'order_id' => $order_id
@@ -2125,8 +2130,10 @@ class Order_OrderController extends Ec_Controller_Action
 				$htmlFileName = "http://".$_SERVER['HTTP_HOST'].'/default/index/printfba1/orderId/'.join(',', $order_id_arr).'/sign/'.md5('$Fjaj^Sn3NH9iVVP');
 				//shell调用xml
 				if(!file_exists($pdfFileName)){
-					shell_exec("wkhtmltopdf --page-height 150 --page-width 100 --margin-left 1 --margin-right 1 --margin-top 1 --margin-bottom 1 {$htmlFileName} {$pdfFileName}");
-					//exec("/usr/local/wkhtmltox/bin/./wkhtmltopdf --page-height 150 --page-width 100 --margin-left 1 --margin-right 1 --margin-top 1 --margin-bottom 1 {$htmlFileName} {$pdfFileName}");
+					if(ENVIRONMENT=='dev')
+						shell_exec("wkhtmltopdf --page-height 150 --page-width 100 --margin-left 1 --margin-right 1 --margin-top 1 --margin-bottom 1 {$htmlFileName} {$pdfFileName}");
+					else
+						exec("/usr/local/wkhtmltox/bin/./wkhtmltopdf --page-height 150 --page-width 100 --margin-left 1 --margin-right 1 --margin-top 1 --margin-bottom 1 {$htmlFileName} {$pdfFileName}");
 				}
 				//创建失败
 				if(!file_exists($pdfFileName)){
