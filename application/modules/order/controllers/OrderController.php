@@ -878,15 +878,22 @@ class Order_OrderController extends Ec_Controller_Action
             $invoiceArr = $invoice;
             //DHL 添加了规则，refer用来存取城市代码
             $_cityname = $shipper['shipper_city'];
-            $_cityname_exits = strpos($_cityname,"-");
-            if($_cityname_exits!==false){
-            	$_cityname=substr($_cityname,0,$_cityname_exits);
-            }
+            //先查一次全匹配
             $condtion_sp['cityname'] = $_cityname;
             $condtion_sp['status'] =   1;
             $condtion_sp['productcode'] =   $orderArr["product_code"];
             $server_csi_prs=new Service_CsiProductRuleShipper();
             $rs_cisprs = $server_csi_prs->getByCondition($condtion_sp);
+            if(empty($rs_cisprs)){
+            	$_cityname_exits = strpos($_cityname,"-");
+            	if($_cityname_exits!==false){
+            		$_cityname=substr($_cityname,0,$_cityname_exits);
+            		$condtion_sp['cityname'] = $_cityname;
+            		$rs_cisprs = $server_csi_prs->getByCondition($condtion_sp);
+            	}
+            }
+            
+            
             if($rs_cisprs[0]){
             	//如果是DHL不认的替换掉邮编和城市
             	if($rs_cisprs[0]['cityrname']&&$condtion_sp['productcode']=='G_DHL'){
@@ -1989,14 +1996,22 @@ class Order_OrderController extends Ec_Controller_Action
 									foreach ($res as $k=>$v){
 										foreach ($rs_cisprs as $vv){
 											$_cityname = $v['cityename'];
-											$_cityname_exits = strpos($_cityname,"-");
-											if($_cityname_exits!==false){
-												$_cityname=substr($_cityname,0,$_cityname_exits);
-											}
+											
 											if($_cityname==$vv['cityname']){
 												$res[$k]['dhlcount'] = $vv['countnum'];
 												$res[$k]['citycode'] = $vv['citycode'];
 												continue;
+											}else{
+												$_cityname_exits = strpos($_cityname,"-");
+												if($_cityname_exits!==false){
+													$_cityname=substr($_cityname,0,$_cityname_exits);
+													if($_cityname==$vv['cityname']){
+														$res[$k]['dhlcount'] = $vv['countnum'];
+														$res[$k]['citycode'] = $vv['citycode'];
+														continue;
+													}
+												}
+												
 											}
 										}
 									}
