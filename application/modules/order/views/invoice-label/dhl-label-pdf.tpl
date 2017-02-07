@@ -60,8 +60,8 @@
 	<div class="div3 bt1">
 		<div>
 			<div class="bt3 bt4 invoice" style="width:173px;float:left;"><p  class="p1">Commodity Code</p></div>
-			<div class="bt3 bt4 invoice" style="width:150px;float:left;"><p class="p1">Until Value</p></div>
-			<div class="bt3  invoice" style="width:173px;float:left;"><p class="p1">County of Origin</p></div>
+			<div class="bt3 bt4 invoice" style="width:150px;float:left;"><p class="p1">Unit Value</p></div>
+			<div class="bt3  invoice" style="width:173px;float:left;"><p class="p1">Country of Origin</p></div>
 			<div class="clear"></div>
 		</div>
 		<{foreach from=$o.label   name=inv1 item=inv1}>

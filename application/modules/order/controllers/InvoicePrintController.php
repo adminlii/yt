@@ -174,7 +174,11 @@ p{height:20px;line-height:20px;}
 			file_put_contents($htmlFileName, $html);
 		//shell调用xml
 		if(!file_exists($pdfFileName)){
-			shell_exec("wkhtmltopdf {$htmlFileName} {$pdfFileName}");
+			if(ENVIRONMENT=='dev')
+				shell_exec("wkhtmltopdf {$htmlFileName} {$pdfFileName}");
+			else
+				exec("/usr/local/wkhtmltox/bin/./wkhtmltopdf  {$htmlFileName} {$pdfFileName}");
+			
 			//exec('/usr/local/wkhtmltox/bin/./wkhtmltopdf  {$htmlFileName} {$pdfFileName}');
 		}
 		//创建失败

@@ -103,27 +103,6 @@ class API_Common_AsyncChangeNo
     		$query = array("server_channelid"=>$server_channelid,"order_id"=>$orderid,"formalCode"=>$formalCode,"uuid"=>$uuid);
     		$query = http_build_query($query);
     		$path = "/default/api/change-no?".$query;
-    		/* $host = $_SERVER["HTTP_HOST"];
-    		$query = array("server_channelid"=>$server_channelid,"order_id"=>$orderid,"formalCode"=>$formalCode);
-    		$query = http_build_query($query);
-    		$path = "/default/api/change-no?".$query;
-    		$cookie = Session_id();
-    		$fp = fsockopen($host, 80, $errno, $errstr, 1);
-    		if (!$fp) {
-    			$erromsg = "$errstr ($errno)";
-    			throw new Exception("$errstr ($errno)");
-    		}
-    		stream_set_blocking($fp,true);//开启了手册上说的非阻塞模式
-    		stream_set_timeout($fp,1);//设置超时
-    		$out = "GET ".$path." HTTP/1.1\r\n";
-    		$out .= "Host: ".$host."\r\n";
-    		$out .= "Connection: Close\r\n";
-    		$out .= "Cookie: ".$cookie."\r\n\r\n";
-    		fwrite($fp, $out); //将请求写入socket
-    		//也可以选择获取server端的响应
-    		//如果不等待server端响应直接关闭socket即可
-    		usleep(1000);
-    		fclose($fp); */
     		$ch = curl_init();
     		curl_setopt($ch,CURLOPT_URL,$_SERVER["HTTP_HOST"].$path);
     		curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);

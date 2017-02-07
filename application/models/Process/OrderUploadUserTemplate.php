@@ -265,7 +265,7 @@ class Process_OrderUploadUserTemplate extends Process_OrderUpload
                 throw new Exception(Ec::Lang('文件中必须包含有内容'));
             }
         	if(count($fileData)>500){
-                throw new Exception(Ec::Lang('当前批量导入仅支持400条数据，请拆分多个文件分批导入'));
+                throw new Exception(Ec::Lang('当前批量导入仅支持500条数据，请拆分多个文件分批导入'));
             }
             $clone = $fileData;
             

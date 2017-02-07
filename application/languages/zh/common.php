@@ -546,6 +546,7 @@ return array(
     'system' => '系统',
     'loginMessage' => '您输入的账户名和密码不匹配,请重新输入.',
     'userActivate' => '您的帐号未激活,请等待客服与您联系.',
+	'userActivate_forbiden' => '您的帐号已经被封禁.',
     'updateLastPass' => '温馨提示:您已超过60天未修改登录密码,请建议您尽快修改.',
     'verifyCodeMessage' => '验证码不正确或验证码已过期',
     'registerEbayAppMsg' => '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;欢迎您，来自eBay中国应用中心的朋友，您需要完善一点信息<br>以便可以通过账户和密码登录.',

@@ -238,8 +238,13 @@ class Service_User extends Common_Service
         $date = date('Y-m-d');
         $userLastDate = $userArr['user_password_update_time'];
         $days = round((strtotime($date) - strtotime($userLastDate)) / 3600 / 24);
-        
-        if ($userArr['user_status'] != '1') {
+        //判断用户是否被封禁
+        if($userArr['user_status']<0){
+        	$result['message'] = Ec::Lang('userActivate_forbiden');
+        	$result['state'] = 2;
+        	Service_UserLoginLog::add(array('user_id' => $userArr['user_id'], 'ull_status' => '0', 'ull_note' => 'Account is not activated'));
+        	return $result;
+        }else if ($userArr['user_status'] != '1') {
             $result['message'] = Ec::Lang('userActivate');
             $result['state'] = 2;
             Service_UserLoginLog::add(array('user_id' => $userArr['user_id'], 'ull_status' => '0', 'ull_note' => 'Account is not activated'));

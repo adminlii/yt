@@ -56,6 +56,8 @@ defined('APPLICATION_ENV')
 //定义数据过滤方法    
 defined('FILTER_METHOD')
     || define('FILTER_METHOD','htmlspecialchars');
+defined('ENVIRONMENT')
+    || define('ENVIRONMENT','dev');
 // Ensure library/ is on include_path
 set_include_path(implode(PATH_SEPARATOR, array(
     realpath(APPLICATION_PATH . '/../libs'),

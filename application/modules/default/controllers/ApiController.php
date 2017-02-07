@@ -169,7 +169,6 @@ class Default_ApiController extends Zend_Controller_Action
 			$db ->insert('logapi', $logrow);
 			//日志记录end
 			$result = $obj->sendToTms($param["uuid"]);
-			
 			$param["shipper_hawbcode"] = $scdOrder['shipper_hawbcode'];
 			$returnArr = array("ack"=>0,"message"=>"","param"=>$param);
 			if(!empty($result)){
@@ -336,10 +335,11 @@ class Default_ApiController extends Zend_Controller_Action
 		$sc = new Common_ApiService();
 		$req  = array(
 				'usercode'=>'1',
-				'userpwd'=>'123456',
+				'userpwd'=>'dca093a88b3f9946197927495098219a',
 				
 		);
 		$req['userpwd'] = urlencode(base64_encode($req['userpwd']));
+		print_r($req);
 		print_r($sc->setToken($req));
 	}
 	
@@ -675,6 +675,27 @@ public function test26Action(){
 				$return['ret']=0;
 				$return['data']=$rs;
 			}
+		} catch (Exception $e) {
+			$return ['msg'] = $e->getMessage();
+		}
+		echo json_encode($return);
+	}
+	
+	public function radmintoDoAction()
+	{
+		$return = array('ret'=>-1,'msg'=>'','data'=>array()); 
+		try {
+			$json = file_get_contents('php://input');
+			if (empty ($json)) {
+				throw new Exception ('无请求数据');
+			}
+			// 请求格式为json
+			$req = json_decode($json, true);
+			if (!$req) {
+				throw new Exception ('数据格式需为json格式');
+			}
+			$sc = new Common_ApiServiceAdmin();
+			$return = $sc->callService($req);
 		} catch (Exception $e) {
 			$return ['msg'] = $e->getMessage();
 		}

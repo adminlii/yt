@@ -797,8 +797,21 @@ class Common_ApiServiceV1
 		    	 if($type=='org'){
 		    	 	//如果订单不是已预报给出提示
 		    	 	if($order['order_status']=='D'){
+		    	 		$err_condition = array(
+		    	 				"order_id" => $order['order_id'],
+		    	 		);
+		    	 		$orderWrongMsg = Service_OrderProcessing::getByCondition(
+		    	 				$err_condition,
+		    	 				array("order_processing.ops_note", "order_processing.ops_status","order_processing.ems_status"),
+		    	 				20,
+		    	 				1,
+		    	 				array('order_processing.order_id'));
+		    	 		foreach($orderWrongMsg as $wk => $wv){
+		    	 			$error_msg = $wv['ops_note'];
+		    	 			//$ems_status = $wv['ems_status'];
+		    	 		}
 		    	 		$return['ret'] = 23;
-		    	 		$return['msg'] = Ec::Lang('该订单是问题件');
+		    	 		$return['msg'] = Ec::Lang('该订单是问题件;'.$error_msg);
 		    	 		break;
 		    	 	}
 		    	 	if($order['order_status']=='S'){
@@ -838,8 +851,10 @@ class Common_ApiServiceV1
 		    	 	$pdfFileName  = $savepath.$filename.'.pdf';
 		    	 	//shell调用xml
 		    	 	if(!file_exists($pdfFileName)){
-		    	 		shell_exec("wkhtmltopdf --page-height 150 --page-width 100 --margin-left 1 --margin-right 1 --margin-top 1 --margin-bottom 1 {$htmlFileName} {$pdfFileName}");
-		    	 		//exec('/usr/local/wkhtmltox/bin/./wkhtmltopdf --page-height 150 --page-width 100 --margin-left 1 --margin-right 1 --margin-top 1 --margin-bottom 1 {$htmlFileName} {$pdfFileName}');
+		    	 		if(ENVIRONMENT=='dev')
+		    	 			shell_exec("wkhtmltopdf --page-height 150 --page-width 100 --margin-left 1 --margin-right 1 --margin-top 1 --margin-bottom 1 {$htmlFileName} {$pdfFileName}");
+		    	 		else
+		    	 			exec("/usr/local/wkhtmltox/bin/./wkhtmltopdf --page-height 150 --page-width 100 --margin-left 1 --margin-right 1 --margin-top 1 --margin-bottom 1 {$htmlFileName} {$pdfFileName}");
 		    	 	}
 		    	 	//创建失败
 		    	 	if(!file_exists($pdfFileName)){
