@@ -9,6 +9,7 @@
 <title><{$system_title}></title>
 <script type="text/javascript" src="/js/jquery-1.8.3.min.js"></script>
 <script type="text/javascript" src="/js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="/js/area.js"></script>
 <link type="text/css" rel="stylesheet" href="/css/layout_index.css?20140305"/>
 <style type="text/css">
 
@@ -199,6 +200,16 @@
 						<label>手机：</label>
 						<input type="text" name="user_mobile_phone" id="user_mobile_phone"/>
 						<em class="showErr"></em>
+					</li>
+					<li>
+						<label><i>*</i> 地址：</label>
+						<select id="s_province3" name="s_province" style="width: 104px;"></select>
+                                <select id="s_city3" name="s_city" style="width: 104px;"></select>
+                                <select id="s_county3" name="s_county" style="width: 104px;"></select>
+                                 <script type="text/javascript">
+                                     _init_area3();
+                                    </script>
+						<em></em>
 					</li>
 					<li>
 						<label><i>*</i> 电话：</label>

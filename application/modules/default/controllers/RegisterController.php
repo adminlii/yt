@@ -36,7 +36,10 @@ public function indexAction()
                 	'tms_id'=>1,	
                     'user_password_update_time' => date('Y-m-d H:i:s'),
                 	'user_sources'=>$this->getParam('user_sources', ''),
-                	'platform_token'=>$this->getParam('platform_token', '')
+                	'platform_token'=>$this->getParam('platform_token', ''),
+                	'province'=>$this->getParam('s_province', ''),
+                	'city'=>$this->getParam('s_city', ''),
+                	'county'=>$this->getParam('s_county', ''),
                 );
                 if(empty($row['user_sources'])){
                 	unset($row['user_sources']);
@@ -46,6 +49,18 @@ public function indexAction()
                 }
                 $authCode = $this->getParam('authCode','');//验证码
                
+                if($row['province']=="省份"||empty($row['province'])){
+                	throw new Exception('省份不能为空');
+                }
+                
+                if($row['city']=="市"||empty($row['city'])){
+                	throw new Exception('市不能为空');
+                }
+                
+                if($row['county']=="区/县"||empty($row['county'])){
+                	throw new Exception('区/县不能为空');
+                }
+                
                 $codeExist = Service_User::getByField($row['user_code'], 'user_code');
                 if($codeExist){
                     throw new Exception('用户名已被使用');
