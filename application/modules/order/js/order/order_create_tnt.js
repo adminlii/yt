@@ -1187,8 +1187,11 @@ function getMorePostCode(that,cd,cn,pc,p){
 
 //判断是否是火狐浏览器
 function isFirefox(){
+	/*
 	var explorer =navigator.userAgent;
 	return explorer.indexOf("Firefox") >= 0;
+	*/
+	return window.showModalDialog;
 }
 
 var selectRow = function (that){
