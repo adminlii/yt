@@ -163,14 +163,22 @@ $('.checkchar1').live('keyup',function(){
 	
 		//err_tip(this,/^[a-zA-Z\s]{1,36}$/,'不允许出现非英文，长度最多36字符');
 })
-//城市 
+
+//发件城市 
+$('.checkchar6').live('keyup',function(){
+		if($(this).val()&&!/^[a-zA-Z\s,]{0,35}$/.test($(this).val())){
+			alert('不允许出现非英文，长度最多35字符');
+		}
+})
+
+//收件城市 
 $('.checkchar3').live('keyup',function(){
 	if($("#product_code").val()=="TNT"){
 		if($(this).val()&&!/^[a-zA-Z\s]{0,30}$/.test($(this).val())){
 			alert('不允许出现非英文，长度最多30字符');
 		}
 	}else{
-		if($(this).val()&&!/^[a-zA-Z\s]{0,35}$/.test($(this).val())){
+		if($(this).val()&&!/^[a-zA-Z\s,]{0,35}$/.test($(this).val())){
 			alert('不允许出现非英文，长度最多35字符');
 		}
 	}

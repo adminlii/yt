@@ -291,7 +291,7 @@ class Process_OrderDhl
             		$this->_err[] = "发件人姓名不可为非英文，长度最多35字符";
             }
             if(!empty($this->_shipper['shipper_city'])){
-            	if(!preg_match('/^[a-zA-Z\s]{1,35}$/',$this->_shipper['shipper_city'])){
+            	if(!preg_match('/^[a-zA-Z\s,]{1,35}$/',$this->_shipper['shipper_city'])){
             		$this->_err[] = "发件人城市不可为非英文，长度最多35字符";
             	}
             }else{
@@ -381,7 +381,7 @@ class Process_OrderDhl
             if (empty($this->_consignee['consignee_city'])){
             	$this->_err[] = Ec::Lang('收件人城市不可为空');
             }else{
-               if(!preg_match('/^[a-zA-Z\s]{1,35}$/', $this->_consignee['consignee_city'])){
+               if(!preg_match('/^[a-zA-Z\s,]{1,35}$/', $this->_consignee['consignee_city'])){
             		$this->_err[] = Ec::Lang('收件人城市不允许出现非英文，长度最多35字符');
             	}
             }

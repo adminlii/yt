@@ -390,7 +390,7 @@ function formSubmit(status){
         </div>
         <div class="contentLeft contentType4 borderR">
         	<h3>城市*</h3>
-            <input type="text" name="shipper[shipper_city]" class="checkchar2" value="<{if isset($shipperConsignee["shipper_city"])}><{$shipperConsignee.shipper_city}><{/if}>">
+            <input type="text" name="shipper[shipper_city]" class="checkchar6" value="<{if isset($shipperConsignee["shipper_city"])}><{$shipperConsignee.shipper_city}><{/if}>">
         	<div id="checkpostcodediv" style="position: absolute;min-width: 200px;height: 200px;background: #cfcfcf;z-index: 11100;top: 379px;overflow: scroll;display:none;">
 			<ul  class="checkul" id="checkpostcode" _type="postcode"></ul> 
 			</div>
