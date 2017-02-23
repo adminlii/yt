@@ -333,7 +333,10 @@ class API_Common_ServiceNotifyTraceOrder
     					$ckdate = date('Y-m-d H:i:s',strtotime($traceV['Datetime']));
     					$trace_param.='<event_time>'.$ckdate.'</event_time>';
     					$trace_param.='<event_time_zone>+8</event_time_zone>';
-    					$trace_param.='<event_status>'.$obj->getEventCode($traceV['Status']).'</event_status>';
+    					$trace_eventCode = $obj->getEventCode($traceV['Status']);
+    					if($trace_eventCode===false)
+    						continue;
+    					$trace_param.='<event_status>'.$trace_eventCode.'</event_status>';
     					$localtion = preg_split("/[-,]+/", $traceV['Location']);
     					$trace_param.='<event_country>'.trim($localtion[1]).'</event_country>';
     					$trace_param.='<event_city>'.trim($localtion[0]).'</event_city></request>';

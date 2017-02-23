@@ -834,6 +834,7 @@ class Common_ApiServiceV1
 		    	 		$pdfData = $res["data"]["Data"];
 		    	 		$return['ret'] = 0;
 		    	 		$return['data'] = $pdfData;
+		    	 		$return['TrackingNumber'] = !empty($order['small_hawbcode'])?$order['small_hawbcode']:$order['server_hawbcode'];
 		    	 		break;
 		    	 	} else {
 		    	 		$return['ret'] = 1001;
@@ -865,6 +866,7 @@ class Common_ApiServiceV1
 		    	 		$pdfData = base64_encode(file_get_contents($pdfFileName));
 		    	 		$return['ret'] = 0;
 		    	 		$return['data'] = $pdfData;
+		    	 		$return['TrackingNumber'] = !empty($order['small_hawbcode'])?$order['small_hawbcode']:$order['server_hawbcode'];
 		    	 		break;
 		    	 	}
 		    	 }
